@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thruver — Infraestructura confiable de mantenimiento y mejoras</title>
+  <meta name="description" content="Thruver conecta tu espacio con técnicos verificados, asignados por zona. Sin riesgos. Sin incertidumbre." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #0D2247;
+      --steel:  #1A4080;
+      --blue:   #1F3B6E;
+      --accent: #4A8FD4;
+      --light:  #6AB0E8;
+      --white:  #FFFFFF;
+      --gray:   #8BA4C0;
+      --dark:   #080F1E;
+      --card:   #112040;
+      --border: rgba(74,143,212,0.15);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--dark);
+      color: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.2rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      background: rgba(8,15,30,0.85);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--gray);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--accent);
+      color: var(--white) !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600 !important;
+      font-size: 0.875rem !important;
+      transition: background 0.2s, transform 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--light) !important;
+      color: var(--dark) !important;
+      transform: translateY(-1px);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 6rem;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(74,143,212,0.12) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -60%);
+      pointer-events: none;
+    }
+
+    .hero-glow-2 {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(26,64,128,0.2) 0%, transparent 70%);
+      bottom: 10%;
+      right: 10%;
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(74,143,212,0.1);
+      border: 1px solid rgba(74,143,212,0.3);
+      color: var(--light);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.4rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero-badge span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .hero h1 {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.5rem, 10vw, 7.5rem);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--gray);
+      max-width: 520px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+      line-height: 1.7;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--white);
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-primary:hover {
+      background: var(--light);
+      color: var(--dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(74,143,212,0.3);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--gray);
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .btn-secondary:hover {
+      color: var(--white);
+      border-color: rgba(74,143,212,0.5);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      justify-content: center;
+      margin-top: 4rem;
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+      animation: fadeUp 0.8s ease 0.4s both;
+      flex-wrap: wrap;
+    }
+
+    .hero-stat {
+      text-align: center;
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-family: 'Sora', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--white);
+      letter-spacing: -0.03em;
+    }
+
+    .hero-stat span {
+      font-size: 0.8rem;
+      color: var(--gray);
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+
+    .section-sub {
+      color: var(--gray);
+      font-size: 1rem;
+      font-weight: 300;
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* ── PROBLEM ── */
+    .problem {
+      padding: 7rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    .problem-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .problem-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(74,143,212,0.4);
+    }
+
+    .problem-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .problem-card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+
+    .problem-card p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how {
+      padding: 7rem 2rem;
+      background: linear-gradient(180deg, transparent, rgba(26,64,128,0.08), transparent);
+    }
+
+    .how-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .how-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin: 3rem 0 2.5rem;
+      background: var(--card);
+      padding: 0.4rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      width: fit-content;
+    }
+
+    .how-tab {
+      padding: 0.6rem 1.5rem;
+      border-radius: 7px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--gray);
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .how-tab.active {
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    .how-steps {
+      display: none;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .how-steps.active { display: grid; }
+
+    .how-step {
+      position: relative;
+      padding: 2rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .step-num {
+      font-family: 'Sora', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: rgba(74,143,212,0.15);
+      line-height: 1;
+      margin-bottom: 0.8rem;
+    }
+
+    .how-step h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .how-step p {
+      font-size: 0.875rem;
+      color: var(--gray);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    /* ── WHY ── */
+    .why {
+      padding: 7rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-top: 3.5rem;
+    }
+
+    @media (max-width: 700px) {
+      .why-grid { grid-template-columns: 1fr; }
+    }
+
+    .why-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem 2rem 2rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .why-card::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, var(--accent), var(--light));
+      border-radius: 0 2px 2px 0;
+    }
+
+    .why-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(74,143,212,0.4);
+    }
+
+    .why-card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.6rem;
+    }
+
+    .why-card p {
+      font-size: 0.875rem;
+      color: var(--gray);
+      line-height: 1.65;
+      font-weight: 300;
+    }
+
+    .why-card-large {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 2.5rem;
+    }
+
+    .why-card-large .why-icon {
+      font-size: 3rem;
+      flex-shrink: 0;
+    }
+
+    /* ── REGISTER ── */
+    .register {
+      padding: 7rem 2rem;
+      background: linear-gradient(180deg, transparent, rgba(26,64,128,0.1), transparent);
+    }
+
+    .register-inner {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .register-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+
+    @media (max-width: 700px) {
+      .register-grid { grid-template-columns: 1fr; }
+    }
+
+    .register-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .register-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(74,143,212,0.5);
+    }
+
+    .register-card h3 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .register-card p {
+      font-size: 0.875rem;
+      color: var(--gray);
+      margin-bottom: 1.8rem;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--gray);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--white);
+      font-size: 0.9rem;
+      font-family: 'DM Sans', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(139,164,192,0.5);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent);
+      background: rgba(74,143,212,0.06);
+    }
+
+    .form-group select option {
+      background: var(--navy);
+      color: var(--white);
+    }
+
+    .form-group textarea {
+      resize: none;
+      height: 80px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 0.9rem;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+      margin-top: 0.5rem;
+    }
+
+    .btn-submit:hover {
+      background: var(--light);
+      color: var(--dark);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(74,143,212,0.3);
+    }
+
+    .form-note {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-top: 0.8rem;
+      text-align: center;
+      font-weight: 300;
+    }
+
+    /* Success message */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .success-msg .check {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .success-msg h4 {
+      font-family: 'Sora', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .success-msg p {
+      font-size: 0.875rem;
+      color: var(--gray);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 1.8rem;
+      letter-spacing: -0.04em;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-tag {
+      font-size: 0.8rem;
+      color: var(--gray);
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 0.85rem;
+      color: var(--gray);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--white); }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      color: rgba(139,164,192,0.4);
+      font-weight: 300;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { display: none; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .hero-stats { gap: 1.5rem; }
+      .problem, .why, .register-inner { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .why-card-large { flex-direction: column; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">thruver</a>
+    <ul class="nav-links">
+      <li><a href="#como-funciona">Cómo funciona</a></li>
+      <li><a href="#por-que">Por qué Thruver</a></li>
+      <li><a href="#registro">Técnicos</a></li>
+      <li><a href="#registro" class="nav-cta">Solicitar servicio</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow-2"></div>
+
+    <div class="hero-badge">
+      <span></span>
+      Culiacán, Sinaloa · Lanzando pronto
+    </div>
+
+    <h1>thruver<span>.</span></h1>
+
+    <p class="hero-sub">
+      Infraestructura confiable de mantenimiento y mejoras.<br/>
+      Técnicos verificados. Asignados por zona. Sin riesgos.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#registro" class="btn-primary">Solicitar servicio</a>
+      <a href="#como-funciona" class="btn-secondary">Cómo funciona →</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <strong>100%</strong>
+        <span>Verificados</span>
+      </div>
+      <div class="hero-stat">
+        <strong>Por zona</strong>
+        <span>Red curada</span>
+      </div>
+      <div class="hero-stat">
+        <strong>Garantizado</strong>
+        <span>O lo resolvemos</span>
+      </div>
+      <div class="hero-stat">
+        <strong>$0</strong>
+        <span>Sin sorpresas</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="problem">
+    <div class="divider"></div>
+    <p class="section-label">El problema</p>
+    <h2 class="section-title">Encontrar un técnico confiable<br/>es una lotería.</h2>
+    <p class="section-sub">En México, contratar a alguien para tu hogar o empresa significa arriesgarte. Thruver termina con eso.</p>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-icon">😰</div>
+        <h3>Sin verificación</h3>
+        <p>Cualquiera puede llamarse técnico. No hay forma de saber quién entra a tu hogar o empresa antes de que llegue.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">📵</div>
+        <h3>Sin tecnología</h3>
+        <p>Todo se hace por WhatsApp, llamadas y recomendaciones. Sin plataforma, sin transparencia, sin trazabilidad.</p>
+      </div>
+      <div class="problem-card">
+        <div class="problem-icon">🔁</div>
+        <h3>Sin garantía</h3>
+        <p>Si el trabajo queda mal, no hay a quién reclamar. El cliente pierde tiempo y dinero sin solución real.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="como-funciona">
+    <div class="how-inner">
+      <div class="divider"></div>
+      <p class="section-label">Cómo funciona</p>
+      <h2 class="section-title">Simple por diseño.</h2>
+      <p class="section-sub">Para ti como cliente o como técnico, el proceso es claro desde el primer paso.</p>
+
+      <div class="how-tabs">
+        <button class="how-tab active" onclick="showTab('cliente')">Para clientes</button>
+        <button class="how-tab" onclick="showTab('tecnico')">Para técnicos</button>
+      </div>
+
+      <div class="how-steps active" id="tab-cliente">
+        <div class="how-step">
+          <div class="step-num">01</div>
+          <h3>Solicita tu servicio</h3>
+          <p>Dinos qué necesitas — plomería, electricidad, limpieza, remodelación. Tipo de espacio y horario.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-num">02</div>
+          <h3>Asignamos al técnico</h3>
+          <p>Thruver asigna automáticamente al técnico verificado disponible en tu zona. Tú no eliges — nosotros garantizamos.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-num">03</div>
+          <h3>El servicio se realiza</h3>
+          <p>El técnico llega en el horario acordado, identificado como técnico Thruver. Profesional, puntual, verificado.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-num">04</div>
+          <h3>Pagas y calificas</h3>
+          <p>Cobro transparente a través de la plataforma. Sin efectivo inesperado. Califica el servicio y listo.</p>
+        </div>
+      </div>
+
+      <div class="how-steps" id="tab-tecnico">
+        <div class="how-step">
+          <div class="step-num">01</div>
+          <h3>Regístrate y verifica</h3>
+          <p>INE, carta de antecedentes no penales y prueba práctica. Solo los mejores entran a la red Thruver.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-num">02</div>
+          <h3>Obtén tu zona</h3>
+          <p>Los cupos son limitados por especialidad y zona. Si hay lugar para ti, es tuyo. Sin competencia interna.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-num">03</div>
+          <h3>Recibe trabajo constante</h3>
+          <p>Thruver te asigna servicios en tu zona. Tú te concentras en trabajar bien — nosotros en traerte clientes.</p>
+        </div>
+        <div class="how-step">
+          <div class="step-num">04</div>
+          <h3>Cobra por cada servicio</h3>
+          <p>Sin suscripción, sin cuotas. Thruver retiene una comisión por servicio. Si no hay trabajo, no pagas nada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="why" id="por-que">
+    <div class="divider"></div>
+    <p class="section-label">Por qué Thruver</p>
+    <h2 class="section-title">No es una app de técnicos.<br/>Es infraestructura de confianza.</h2>
+
+    <div class="why-grid">
+      <div class="why-card why-card-large">
+        <div class="why-icon">👤</div>
+        <div>
+          <h3>El técnico es invisible. La marca lo es todo.</h3>
+          <p>No buscas a una persona — confías en Thruver. Igual que confías en FedEx sin saber quién entrega tu paquete. Eso es un estándar, no una persona.</p>
+        </div>
+      </div>
+      <div class="why-card">
+        <h3>Red curada, no abierta</h3>
+        <p>No hay 500 técnicos compitiendo. Hay cupos limitados por zona y especialidad. Los que están adentro, trabajan bien y trabajan siempre.</p>
+      </div>
+      <div class="why-card">
+        <h3>Verificación real</h3>
+        <p>INE verificado, antecedentes no penales y prueba práctica supervisada. Sin esos tres, no hay cupo. Sin excepciones.</p>
+      </div>
+      <div class="why-card">
+        <h3>Hogares y empresas</h3>
+        <p>Thruver funciona para tu casa, tu oficina, tu local o tu industria. Un solo proveedor para todos tus espacios.</p>
+      </div>
+      <div class="why-card">
+        <h3>Garantía real</h3>
+        <p>Si el servicio no cumple el estándar, Thruver responde. No hay pretextos, no hay "llama al técnico directo". Hay solución.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTER -->
+  <section class="register" id="registro">
+    <div class="register-inner">
+      <div style="text-align:center; margin-bottom:1rem;">
+        <div class="divider" style="margin:0 auto 1rem;"></div>
+        <p class="section-label">Únete a Thruver</p>
+        <h2 class="section-title">Sé de los primeros.</h2>
+        <p class="section-sub" style="margin:0 auto;">Thruver está lanzando en Culiacán. Regístrate ahora y recibe prioridad de atención desde el primer día.</p>
+      </div>
+
+      <div class="register-grid">
+
+        <!-- CLIENTE FORM -->
+        <div class="register-card">
+          <h3>Solicitar servicio</h3>
+          <p>Para hogares, empresas e industria en Culiacán.</p>
+
+          <div id="form-cliente">
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" id="c-nombre" placeholder="Tu nombre" />
+            </div>
+            <div class="form-group">
+              <label>WhatsApp</label>
+              <input type="tel" id="c-telefono" placeholder="667 000 0000" />
+            </div>
+            <div class="form-group">
+              <label>Correo electrónico</label>
+              <input type="email" id="c-email" placeholder="tu@correo.com" />
+            </div>
+            <div class="form-group">
+              <label>Tipo de espacio</label>
+              <select id="c-espacio">
+                <option value="">Selecciona...</option>
+                <option>Hogar / Casa</option>
+                <option>Oficina / Empresa</option>
+                <option>Local comercial</option>
+                <option>Industria / Planta</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>¿Qué servicio necesitas?</label>
+              <select id="c-servicio">
+                <option value="">Selecciona...</option>
+                <option>Plomería</option>
+                <option>Electricidad</option>
+                <option>Limpieza</option>
+                <option>Pintura</option>
+                <option>Carpintería</option>
+                <option>Jardinería</option>
+                <option>Otro / No sé aún</option>
+              </select>
+            </div>
+            <button class="btn-submit" onclick="submitForm('cliente')">Registrarme como cliente →</button>
+            <p class="form-note">Te contactamos por WhatsApp para agendar.</p>
+          </div>
+
+          <div class="success-msg" id="success-cliente">
+            <div class="check">✅</div>
+            <h4>¡Registro exitoso!</h4>
+            <p>Te contactamos por WhatsApp en las próximas horas para agendar tu servicio.</p>
+          </div>
+        </div>
+
+        <!-- TÉCNICO FORM -->
+        <div class="register-card">
+          <h3>Quiero ser técnico Thruver</h3>
+          <p>Cupos limitados por zona. Sin suscripción. Solo trabajo constante.</p>
+
+          <div id="form-tecnico">
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" id="t-nombre" placeholder="Tu nombre" />
+            </div>
+            <div class="form-group">
+              <label>WhatsApp</label>
+              <input type="tel" id="t-telefono" placeholder="667 000 0000" />
+            </div>
+            <div class="form-group">
+              <label>Correo electrónico</label>
+              <input type="email" id="t-email" placeholder="tu@correo.com" />
+            </div>
+            <div class="form-group">
+              <label>Tu especialidad</label>
+              <select id="t-especialidad">
+                <option value="">Selecciona...</option>
+                <option>Plomero</option>
+                <option>Electricista</option>
+                <option>Limpieza</option>
+                <option>Pintor</option>
+                <option>Carpintero</option>
+                <option>Jardinero</option>
+                <option>Multi-servicio</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Colonia donde trabajas</label>
+              <input type="text" id="t-zona" placeholder="Ej. Las Quintas, Tres Ríos..." />
+            </div>
+            <div class="form-group">
+              <label>Años de experiencia</label>
+              <select id="t-experiencia">
+                <option value="">Selecciona...</option>
+                <option>Menos de 1 año</option>
+                <option>1 a 3 años</option>
+                <option>3 a 5 años</option>
+                <option>Más de 5 años</option>
+              </select>
+            </div>
+            <button class="btn-submit" onclick="submitForm('tecnico')">Solicitar mi cupo →</button>
+            <p class="form-note">Los cupos son limitados. Te notificamos si hay disponibilidad en tu zona.</p>
+          </div>
+
+          <div class="success-msg" id="success-tecnico">
+            <div class="check">✅</div>
+            <h4>¡Solicitud recibida!</h4>
+            <p>Revisamos tu zona y especialidad. Si hay cupo disponible, te contactamos por WhatsApp.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">thruver</div>
+    <p class="footer-tag">Infraestructura confiable de mantenimiento y mejoras.</p>
+    <div class="footer-links">
+      <a href="#como-funciona">Cómo funciona</a>
+      <a href="#registro">Solicitar servicio</a>
+      <a href="#registro">Ser técnico</a>
+      <a href="https://wa.me/526670000000" target="_blank">WhatsApp</a>
+    </div>
+    <p class="footer-copy">© 2025 Thruver · Culiacán, Sinaloa, México · thruver.com</p>
+  </footer>
+
+  <script>
+    // ── TABS
+    function showTab(tab) {
+      document.querySelectorAll('.how-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.how-steps').forEach(s => s.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tab).classList.add('active');
+    }
+
+    // ── FORM SUBMIT
+    // INSTRUCCIONES: Reemplaza SCRIPT_URL con tu URL de Google Apps Script
+    const SCRIPT_URL = 'TU_GOOGLE_APPS_SCRIPT_URL_AQUI';
+
+    function submitForm(tipo) {
+      let data = {};
+
+      if (tipo === 'cliente') {
+        const nombre = document.getElementById('c-nombre').value.trim();
+        const telefono = document.getElementById('c-telefono').value.trim();
+        const email = document.getElementById('c-email').value.trim();
+        const espacio = document.getElementById('c-espacio').value;
+        const servicio = document.getElementById('c-servicio').value;
+
+        if (!nombre || !telefono || !espacio || !servicio) {
+          alert('Por favor completa todos los campos requeridos.');
+          return;
+        }
+
+        data = { tipo: 'CLIENTE', nombre, telefono, email, espacio, servicio };
+      }
+
+      if (tipo === 'tecnico') {
+        const nombre = document.getElementById('t-nombre').value.trim();
+        const telefono = document.getElementById('t-telefono').value.trim();
+        const email = document.getElementById('t-email').value.trim();
+        const especialidad = document.getElementById('t-especialidad').value;
+        const zona = document.getElementById('t-zona').value.trim();
+        const experiencia = document.getElementById('t-experiencia').value;
+
+        if (!nombre || !telefono || !especialidad || !zona) {
+          alert('Por favor completa todos los campos requeridos.');
+          return;
+        }
+
+        data = { tipo: 'TECNICO', nombre, telefono, email, especialidad, zona, experiencia };
+      }
+
+      // Envía a Google Apps Script
+      if (SCRIPT_URL !== 'TU_GOOGLE_APPS_SCRIPT_URL_AQUI') {
+        fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+      }
+
+      // Muestra éxito
+      document.getElementById('form-' + tipo).style.display = 'none';
+      document.getElementById('success-' + tipo).style.display = 'block';
+    }
+
+    // ── SCROLL REVEAL
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.problem-card, .how-step, .why-card, .register-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
