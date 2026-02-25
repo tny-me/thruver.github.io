@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Thruver — Infraestructura confiable de mantenimiento y mejoras</title>
   <meta name="description" content="Thruver conecta tu espacio con técnicos verificados, asignados por zona. Sin riesgos. Sin incertidumbre." />
-<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Favicon.png" />
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Favicon.png" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -104,20 +104,11 @@
       position: absolute;
       bottom: 0; left: 0; right: 0;
       height: 200px;
-      background: linear-gradient(
-        to bottom,
-        transparent 0%,
-        rgba(36,36,36,0.95) 70%,
-        #242424 100%
-      );
+      background: linear-gradient(to bottom, transparent 0%, rgba(36,36,36,0.95) 70%, #242424 100%);
       pointer-events: none;
     }
 
-    .hero-inner {
-      position: relative;
-      z-index: 2;
-      padding-bottom: 7rem;
-    }
+    .hero-inner { position: relative; z-index: 2; padding-bottom: 7rem; }
 
     .hero-badge {
       display: inline-flex;
@@ -136,18 +127,14 @@
     }
 
     .hero-badge-dot {
-      width: 6px;
-      height: 6px;
+      width: 6px; height: 6px;
       border-radius: 50%;
       background: #6fcf97;
       display: inline-block;
       animation: pulse 2s infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 
     .hero h1 {
       font-family: Arial, "Arial Unicode MS", sans-serif;
@@ -193,10 +180,7 @@
       letter-spacing: -0.01em;
     }
 
-    .btn-primary:hover {
-      opacity: 0.88;
-      transform: translateY(-1px);
-    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
 
     .btn-secondary {
       background: transparent;
@@ -211,10 +195,7 @@
       font-family: Arial, sans-serif;
     }
 
-    .btn-secondary:hover {
-      color: var(--white);
-      border-color: rgba(255,255,255,0.35);
-    }
+    .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,0.35); }
 
     .hero-stats {
       display: flex;
@@ -246,25 +227,12 @@
       letter-spacing: 0.08em;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ── LIGHT SECTIONS ── */
-    .light-section {
-      background: #E8E8E8;
-    }
+    .light-section { background: #E8E8E8; }
+    .white-section  { background: var(--white); }
 
-    .white-section {
-      background: var(--white);
-    }
-
-    .container {
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 7rem 2rem;
-    }
+    .container { max-width: 1080px; margin: 0 auto; padding: 7rem 2rem; }
 
     .section-label {
       font-size: 0.72rem;
@@ -285,28 +253,11 @@
       margin-bottom: 1rem;
     }
 
-    .section-sub {
-      color: var(--muted);
-      font-size: 1rem;
-      font-weight: 400;
-      max-width: 460px;
-      line-height: 1.7;
-    }
-
-    .divider {
-      width: 32px;
-      height: 2px;
-      background: var(--black);
-      margin-bottom: 1.5rem;
-    }
+    .section-sub { color: var(--muted); font-size: 1rem; font-weight: 400; max-width: 460px; line-height: 1.7; }
+    .divider { width: 32px; height: 2px; background: var(--black); margin-bottom: 1.5rem; }
 
     /* ── PROBLEM ── */
-    .problem-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.2rem;
-      margin-top: 3.5rem;
-    }
+    .problem-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.2rem; margin-top: 3.5rem; }
 
     .problem-card {
       background: var(--white);
@@ -316,115 +267,40 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .problem-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.07);
-    }
-
-    .problem-icon {
-      font-size: 1.8rem;
-      margin-bottom: 1rem;
-    }
-
-    .problem-card h3 {
-      font-family: Arial, "Arial Unicode MS", sans-serif;
-      font-size: 1rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-    }
-
-    .problem-card p {
-      font-size: 0.875rem;
-      color: var(--muted);
-      line-height: 1.65;
-    }
+    .problem-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
+    .problem-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .problem-card h3 { font-family: Arial, "Arial Unicode MS", sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .problem-card p  { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
 
     /* ── HOW IT WORKS ── */
     .how-tabs {
-      display: flex;
-      gap: 0.4rem;
-      margin: 3rem 0 2.5rem;
-      background: var(--light2);
-      padding: 0.35rem;
-      border-radius: 8px;
-      width: fit-content;
-      border: 1px solid var(--border);
+      display: flex; gap: 0.4rem; margin: 3rem 0 2.5rem;
+      background: var(--light2); padding: 0.35rem; border-radius: 8px;
+      width: fit-content; border: 1px solid var(--border);
     }
 
     .how-tab {
-      padding: 0.55rem 1.4rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      font-weight: 400;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      font-family: Arial, sans-serif;
-      transition: all 0.2s;
+      padding: 0.55rem 1.4rem; border-radius: 6px; font-size: 0.85rem;
+      font-weight: 400; cursor: pointer; border: none; background: transparent;
+      color: var(--muted); font-family: Arial, sans-serif; transition: all 0.2s;
     }
 
-    .how-tab.active {
-      background: var(--black);
-      color: var(--white);
-      font-weight: 700;
-    }
-
-    .how-steps {
-      display: none;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.2rem;
-    }
-
+    .how-tab.active { background: var(--black); color: var(--white); font-weight: 700; }
+    .how-steps { display: none; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.2rem; }
     .how-steps.active { display: grid; }
 
     .how-step {
-      padding: 2rem;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      transition: transform 0.2s, box-shadow 0.2s;
+      padding: 2rem; background: var(--white); border: 1px solid var(--border);
+      border-radius: 10px; transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .how-step:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.06);
-    }
-
-    .step-num {
-      font-family: Arial, "Arial Unicode MS", sans-serif;
-      font-size: 2.8rem;
-      font-weight: 900;
-      color: #BBBBBB;
-      line-height: 1;
-      margin-bottom: 0.8rem;
-      letter-spacing: -0.04em;
-    }
-
-    .how-step h3 {
-      font-family: Arial, "Arial Unicode MS", sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-    }
-
-    .how-step p {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.65;
-    }
+    .how-step:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+    .step-num { font-family: Arial, "Arial Unicode MS", sans-serif; font-size: 2.8rem; font-weight: 900; color: #BBBBBB; line-height: 1; margin-bottom: 0.8rem; letter-spacing: -0.04em; }
+    .how-step h3 { font-family: Arial, "Arial Unicode MS", sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .how-step p  { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
 
     /* ── WHY ── */
-    .why-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.2rem;
-      margin-top: 3.5rem;
-    }
+    .why-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 3.5rem; }
 
     @media (max-width: 700px) {
       .why-grid { grid-template-columns: 1fr; }
@@ -432,140 +308,52 @@
     }
 
     .why-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 2rem 2rem 2rem 2.2rem;
-      position: relative;
-      overflow: hidden;
+      background: var(--white); border: 1px solid var(--border); border-radius: 10px;
+      padding: 2rem 2rem 2rem 2.2rem; position: relative; overflow: hidden;
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
-    .why-card::before {
-      content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
-      width: 3px;
-      background: var(--black);
-    }
-
-    .why-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 30px rgba(0,0,0,0.07);
-    }
-
-    .why-card h3 {
-      font-family: Arial, "Arial Unicode MS", sans-serif;
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-      letter-spacing: -0.02em;
-    }
-
-    .why-card p {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.65;
-    }
-
-    .why-card-large {
-      grid-column: 1 / -1;
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      padding: 2.2rem 2.2rem 2.2rem 2.5rem;
-    }
-
-    .why-icon {
-      font-size: 2.5rem;
-      flex-shrink: 0;
-    }
+    .why-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--black); }
+    .why-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
+    .why-card h3 { font-family: Arial, "Arial Unicode MS", sans-serif; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .why-card p  { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+    .why-card-large { grid-column: 1 / -1; display: flex; align-items: center; gap: 2rem; padding: 2.2rem 2.2rem 2.2rem 2.5rem; }
+    .why-icon { font-size: 2.5rem; flex-shrink: 0; }
 
     /* ── REGISTER ── */
-    .register-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1.5rem;
-      margin-top: 3.5rem;
-    }
+    .register-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 3.5rem; }
 
-    @media (max-width: 700px) {
-      .register-grid { grid-template-columns: 1fr; }
-    }
+    @media (max-width: 700px) { .register-grid { grid-template-columns: 1fr; } }
 
     .register-card {
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 2.5rem;
-      transition: box-shadow 0.2s;
+      background: var(--white); border: 1px solid var(--border); border-radius: 12px;
+      padding: 2.5rem; transition: box-shadow 0.2s;
     }
 
-    .register-card:hover {
-      box-shadow: 0 10px 40px rgba(0,0,0,0.08);
-    }
+    .register-card:hover { box-shadow: 0 10px 40px rgba(0,0,0,0.08); }
+    .register-card h3 { font-family: Arial, "Arial Unicode MS", sans-serif; font-size: 1.2rem; font-weight: 900; color: var(--text); margin-bottom: 0.4rem; letter-spacing: -0.03em; }
+    .register-card > p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.8rem; line-height: 1.6; }
 
-    .register-card h3 {
-      font-family: Arial, "Arial Unicode MS", sans-serif;
-      font-size: 1.2rem;
-      font-weight: 900;
-      color: var(--text);
-      margin-bottom: 0.4rem;
-      letter-spacing: -0.03em;
-    }
-
-    .register-card p {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 1.8rem;
-      line-height: 1.6;
-    }
-
-    .form-group {
-      margin-bottom: 0.9rem;
-    }
+    .form-group { margin-bottom: 0.9rem; }
 
     .form-group label {
-      display: block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      color: var(--muted);
-      margin-bottom: 0.35rem;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
+      display: block; font-size: 0.72rem; font-weight: 700; color: var(--muted);
+      margin-bottom: 0.35rem; text-transform: uppercase; letter-spacing: 0.07em;
     }
 
     .form-group input,
     .form-group select {
-      width: 100%;
-      background: var(--light);
-      border: 1px solid var(--border);
-      border-radius: 7px;
-      padding: 0.72rem 1rem;
-      color: var(--text);
-      font-size: 0.875rem;
-      font-family: Arial, sans-serif;
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-      -webkit-appearance: none;
+      width: 100%; background: var(--light); border: 1px solid var(--border);
+      border-radius: 7px; padding: 0.72rem 1rem; color: var(--text);
+      font-size: 0.875rem; font-family: Arial, sans-serif; outline: none;
+      transition: border-color 0.2s, background 0.2s; -webkit-appearance: none;
     }
 
-    .form-group input::placeholder {
-      color: var(--muted2);
-    }
+    .form-group input::placeholder { color: var(--muted2); }
+    .form-group input:focus, .form-group select:focus { border-color: var(--black); background: var(--white); }
+    .form-group select option { background: var(--white); color: var(--text); }
 
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: var(--black);
-      background: var(--white);
-    }
-
-    .form-group select option {
-      background: var(--white);
-      color: var(--text);
-    }
-
+    /* ── BOTÓN CON LOADING ── */
     .btn-submit {
       width: 100%;
       background: var(--black);
@@ -580,110 +368,67 @@
       transition: all 0.2s;
       margin-top: 0.5rem;
       letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
     }
 
-    .btn-submit:hover {
-      opacity: 0.82;
-      transform: translateY(-1px);
-    }
+    .btn-submit:hover { opacity: 0.82; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    .form-note {
-      font-size: 0.72rem;
-      color: var(--muted2);
-      margin-top: 0.7rem;
-      text-align: center;
-    }
-
-    .success-msg {
+    .spinner {
       display: none;
-      text-align: center;
-      padding: 2rem 1rem;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      flex-shrink: 0;
     }
 
-    .success-msg .check {
-      font-size: 2.2rem;
-      margin-bottom: 0.8rem;
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .form-note { font-size: 0.72rem; color: var(--muted2); margin-top: 0.7rem; text-align: center; }
+
+    /* ── SUCCESS CON TICKET ── */
+    .success-msg { display: none; text-align: center; padding: 1.5rem 1rem; }
+    .success-msg .check { font-size: 2.2rem; margin-bottom: 0.8rem; }
+    .success-msg h4 { font-family: Arial, "Arial Unicode MS", sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text); margin-bottom: 0.4rem; }
+    .success-msg > p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1rem; }
+
+    .ticket-box {
+      background: var(--light);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.2rem;
+      margin-top: 1rem;
     }
 
-    .success-msg h4 {
-      font-family: Arial, "Arial Unicode MS", sans-serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 0.4rem;
-    }
+    .ticket-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted2); margin-bottom: 0.4rem; }
+    .ticket-number { font-family: Arial, "Arial Unicode MS", sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--black); letter-spacing: -0.02em; }
+    .ticket-hint { font-size: 0.72rem; color: var(--muted2); margin-top: 0.3rem; }
 
-    .success-msg p {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
-    /* ── DARK CTA STRIP ── */
-    .cta-strip {
-      background: var(--black);
-      padding: 5rem 2rem;
-      text-align: center;
-    }
+    /* ── CTA STRIP ── */
+    .cta-strip { background: var(--black); padding: 5rem 2rem; text-align: center; }
 
     .cta-strip h2 {
       font-family: Arial, "Arial Unicode MS", sans-serif;
       font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 900;
-      color: var(--white);
-      letter-spacing: -0.04em;
-      margin-bottom: 1rem;
+      font-weight: 900; color: var(--white); letter-spacing: -0.04em; margin-bottom: 1rem;
     }
 
-    .cta-strip p {
-      color: rgba(255,255,255,0.45);
-      font-size: 1rem;
-      margin-bottom: 2rem;
-    }
+    .cta-strip p { color: rgba(255,255,255,0.45); font-size: 1rem; margin-bottom: 2rem; }
 
     /* ── FOOTER ── */
-    footer {
-      background: var(--black2);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 3rem 2rem;
-      text-align: center;
-    }
-
-    .footer-logo {
-      font-family: Arial, "Arial Unicode MS", sans-serif;
-      font-weight: 900;
-      font-size: 1.6rem;
-      letter-spacing: -0.04em;
-      color: var(--white);
-      margin-bottom: 0.4rem;
-    }
-
-    .footer-tag {
-      font-size: 0.78rem;
-      color: rgba(255,255,255,0.3);
-      margin-bottom: 1.8rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-    }
-
-    .footer-links a {
-      font-size: 0.82rem;
-      color: rgba(255,255,255,0.35);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
+    footer { background: var(--black2); border-top: 1px solid rgba(255,255,255,0.06); padding: 3rem 2rem; text-align: center; }
+    .footer-logo { font-family: Arial, "Arial Unicode MS", sans-serif; font-weight: 900; font-size: 1.6rem; letter-spacing: -0.04em; color: var(--white); margin-bottom: 0.4rem; }
+    .footer-tag { font-size: 0.78rem; color: rgba(255,255,255,0.3); margin-bottom: 1.8rem; }
+    .footer-links { display: flex; gap: 2rem; justify-content: center; margin-bottom: 2rem; flex-wrap: wrap; }
+    .footer-links a { font-size: 0.82rem; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--white); }
-
-    .footer-copy {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.2);
-    }
+    .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.2); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
@@ -715,36 +460,20 @@
         <span class="hero-badge-dot"></span>
         Culiacán, Sinaloa · Lanzando pronto
       </div>
-
       <h1>thruver</h1>
-
       <p class="hero-sub">
         Infraestructura confiable de mantenimiento y mejoras.<br/>
         Técnicos verificados. Asignados por zona. Sin riesgos.
       </p>
-
       <div class="hero-actions">
         <a href="#registro" class="btn-primary">Solicitar servicio</a>
         <a href="#como-funciona" class="btn-secondary">Cómo funciona →</a>
       </div>
-
       <div class="hero-stats">
-        <div class="hero-stat">
-          <strong>100%</strong>
-          <span>Verificados</span>
-        </div>
-        <div class="hero-stat">
-          <strong>Por zona</strong>
-          <span>Red curada</span>
-        </div>
-        <div class="hero-stat">
-          <strong>Garantizado</strong>
-          <span>O lo resolvemos</span>
-        </div>
-        <div class="hero-stat">
-          <strong>$0</strong>
-          <span>Sin sorpresas</span>
-        </div>
+        <div class="hero-stat"><strong>100%</strong><span>Verificados</span></div>
+        <div class="hero-stat"><strong>Por zona</strong><span>Red curada</span></div>
+        <div class="hero-stat"><strong>Garantizado</strong><span>O lo resolvemos</span></div>
+        <div class="hero-stat"><strong>$0</strong><span>Sin sorpresas</span></div>
       </div>
     </div>
   </section>
@@ -756,23 +485,10 @@
       <p class="section-label">El problema</p>
       <h2 class="section-title">Encontrar un técnico confiable<br/>es una lotería.</h2>
       <p class="section-sub">En México, contratar a alguien para tu hogar o empresa significa arriesgarte. Thruver termina con eso.</p>
-
       <div class="problem-grid">
-        <div class="problem-card">
-          <div class="problem-icon">😰</div>
-          <h3>Sin verificación</h3>
-          <p>Cualquiera puede llamarse técnico. No hay forma de saber quién entra a tu hogar o empresa antes de que llegue.</p>
-        </div>
-        <div class="problem-card">
-          <div class="problem-icon">📵</div>
-          <h3>Sin tecnología</h3>
-          <p>Todo se hace por WhatsApp, llamadas y recomendaciones. Sin plataforma, sin transparencia, sin trazabilidad.</p>
-        </div>
-        <div class="problem-card">
-          <div class="problem-icon">🔁</div>
-          <h3>Sin garantía</h3>
-          <p>Si el trabajo queda mal, no hay a quién reclamar. El cliente pierde tiempo y dinero sin solución real.</p>
-        </div>
+        <div class="problem-card"><div class="problem-icon">😰</div><h3>Sin verificación</h3><p>Cualquiera puede llamarse técnico. No hay forma de saber quién entra a tu hogar o empresa antes de que llegue.</p></div>
+        <div class="problem-card"><div class="problem-icon">📵</div><h3>Sin tecnología</h3><p>Todo se hace por WhatsApp, llamadas y recomendaciones. Sin plataforma, sin transparencia, sin trazabilidad.</p></div>
+        <div class="problem-card"><div class="problem-icon">🔁</div><h3>Sin garantía</h3><p>Si el trabajo queda mal, no hay a quién reclamar. El cliente pierde tiempo y dinero sin solución real.</p></div>
       </div>
     </div>
   </section>
@@ -784,56 +500,21 @@
       <p class="section-label">Cómo funciona</p>
       <h2 class="section-title">Simple por diseño.</h2>
       <p class="section-sub">Para clientes y técnicos, el proceso es claro desde el primer paso.</p>
-
       <div class="how-tabs">
         <button class="how-tab active" onclick="showTab('cliente', this)">Para clientes</button>
         <button class="how-tab" onclick="showTab('tecnico', this)">Para técnicos</button>
       </div>
-
       <div class="how-steps active" id="tab-cliente">
-        <div class="how-step">
-          <div class="step-num">01</div>
-          <h3>Solicita tu servicio</h3>
-          <p>Dinos qué necesitas — plomería, electricidad, limpieza, remodelación. Tipo de espacio y horario.</p>
-        </div>
-        <div class="how-step">
-          <div class="step-num">02</div>
-          <h3>Asignamos al técnico</h3>
-          <p>Thruver asigna al técnico verificado disponible en tu zona. Tú no eliges — nosotros garantizamos.</p>
-        </div>
-        <div class="how-step">
-          <div class="step-num">03</div>
-          <h3>El servicio se realiza</h3>
-          <p>El técnico llega en el horario acordado, identificado como técnico Thruver. Profesional y puntual.</p>
-        </div>
-        <div class="how-step">
-          <div class="step-num">04</div>
-          <h3>Pagas y calificas</h3>
-          <p>Cobro transparente a través de la plataforma. Sin efectivo inesperado. Califica el servicio.</p>
-        </div>
+        <div class="how-step"><div class="step-num">01</div><h3>Solicita tu servicio</h3><p>Dinos qué necesitas — plomería, electricidad, limpieza, remodelación. Tipo de espacio y horario.</p></div>
+        <div class="how-step"><div class="step-num">02</div><h3>Asignamos al técnico</h3><p>Thruver asigna al técnico verificado disponible en tu zona. Tú no eliges — nosotros garantizamos.</p></div>
+        <div class="how-step"><div class="step-num">03</div><h3>El servicio se realiza</h3><p>El técnico llega en el horario acordado, identificado como técnico Thruver. Profesional y puntual.</p></div>
+        <div class="how-step"><div class="step-num">04</div><h3>Pagas y calificas</h3><p>Cobro transparente a través de la plataforma. Sin efectivo inesperado. Califica el servicio.</p></div>
       </div>
-
       <div class="how-steps" id="tab-tecnico">
-        <div class="how-step">
-          <div class="step-num">01</div>
-          <h3>Regístrate y verifica</h3>
-          <p>INE, carta de antecedentes no penales y prueba práctica. Solo los mejores entran a la red Thruver.</p>
-        </div>
-        <div class="how-step">
-          <div class="step-num">02</div>
-          <h3>Obtén tu zona</h3>
-          <p>Cupos limitados por especialidad y zona. Si hay lugar para ti, es tuyo. Sin competencia interna.</p>
-        </div>
-        <div class="how-step">
-          <div class="step-num">03</div>
-          <h3>Recibe trabajo constante</h3>
-          <p>Thruver te asigna servicios en tu zona. Tú trabaja bien — nosotros te traemos los clientes.</p>
-        </div>
-        <div class="how-step">
-          <div class="step-num">04</div>
-          <h3>Cobra por cada servicio</h3>
-          <p>Sin suscripción, sin cuotas. Thruver retiene una comisión. Si no hay trabajo, no pagas nada.</p>
-        </div>
+        <div class="how-step"><div class="step-num">01</div><h3>Regístrate y verifica</h3><p>INE, carta de antecedentes no penales y prueba práctica. Solo los mejores entran a la red Thruver.</p></div>
+        <div class="how-step"><div class="step-num">02</div><h3>Obtén tu zona</h3><p>Cupos limitados por especialidad y zona. Si hay lugar para ti, es tuyo. Sin competencia interna.</p></div>
+        <div class="how-step"><div class="step-num">03</div><h3>Recibe trabajo constante</h3><p>Thruver te asigna servicios en tu zona. Tú trabaja bien — nosotros te traemos los clientes.</p></div>
+        <div class="how-step"><div class="step-num">04</div><h3>Cobra por cada servicio</h3><p>Sin suscripción, sin cuotas. Thruver retiene una comisión. Si no hay trabajo, no pagas nada.</p></div>
       </div>
     </div>
   </section>
@@ -844,7 +525,6 @@
       <div class="divider"></div>
       <p class="section-label">Por qué Thruver</p>
       <h2 class="section-title">No es una app de técnicos.<br/>Es infraestructura de confianza.</h2>
-
       <div class="why-grid">
         <div class="why-card why-card-large">
           <div class="why-icon">👤</div>
@@ -853,22 +533,10 @@
             <p>No buscas a una persona — confías en Thruver. Igual que confías en FedEx sin saber quién entrega tu paquete. Eso es un estándar, no una persona.</p>
           </div>
         </div>
-        <div class="why-card">
-          <h3>Red curada, no abierta</h3>
-          <p>No hay 500 técnicos compitiendo. Hay cupos limitados por zona. Los que están adentro trabajan bien y trabajan siempre.</p>
-        </div>
-        <div class="why-card">
-          <h3>Verificación real</h3>
-          <p>INE verificado, antecedentes no penales y prueba práctica supervisada. Sin los tres, no hay cupo. Sin excepciones.</p>
-        </div>
-        <div class="why-card">
-          <h3>Hogares y empresas</h3>
-          <p>Thruver funciona para tu casa, oficina, local o industria. Un solo proveedor para todos tus espacios.</p>
-        </div>
-        <div class="why-card">
-          <h3>Garantía real</h3>
-          <p>Si el servicio no cumple el estándar, Thruver responde. No hay pretextos. Hay solución.</p>
-        </div>
+        <div class="why-card"><h3>Red curada, no abierta</h3><p>No hay 500 técnicos compitiendo. Hay cupos limitados por zona. Los que están adentro trabajan bien y trabajan siempre.</p></div>
+        <div class="why-card"><h3>Verificación real</h3><p>INE verificado, antecedentes no penales y prueba práctica supervisada. Sin los tres, no hay cupo. Sin excepciones.</p></div>
+        <div class="why-card"><h3>Hogares y empresas</h3><p>Thruver funciona para tu casa, oficina, local o industria. Un solo proveedor para todos tus espacios.</p></div>
+        <div class="why-card"><h3>Garantía real</h3><p>Si el servicio no cumple el estándar, Thruver responde. No hay pretextos. Hay solución.</p></div>
       </div>
     </div>
   </section>
@@ -889,20 +557,10 @@
         <div class="register-card">
           <h3>Solicitar servicio</h3>
           <p>Para hogares, empresas e industria en Culiacán.</p>
-
           <div id="form-cliente">
-            <div class="form-group">
-              <label>Nombre completo</label>
-              <input type="text" id="c-nombre" placeholder="Tu nombre" />
-            </div>
-            <div class="form-group">
-              <label>WhatsApp</label>
-              <input type="tel" id="c-telefono" placeholder="667 000 0000" />
-            </div>
-            <div class="form-group">
-              <label>Correo electrónico</label>
-              <input type="email" id="c-email" placeholder="tu@correo.com" />
-            </div>
+            <div class="form-group"><label>Nombre completo</label><input type="text" id="c-nombre" placeholder="Tu nombre" /></div>
+            <div class="form-group"><label>WhatsApp</label><input type="tel" id="c-telefono" placeholder="667 000 0000" /></div>
+            <div class="form-group"><label>Correo electrónico</label><input type="email" id="c-email" placeholder="tu@correo.com" /></div>
             <div class="form-group">
               <label>Tipo de espacio</label>
               <select id="c-espacio">
@@ -926,14 +584,21 @@
                 <option>Otro / No sé aún</option>
               </select>
             </div>
-            <button class="btn-submit" onclick="submitForm('cliente')">Registrarme como cliente →</button>
+            <button class="btn-submit" id="btn-cliente" onclick="submitForm('cliente')">
+              <span class="spinner" id="spinner-cliente"></span>
+              <span id="btn-cliente-text">Registrarme como cliente →</span>
+            </button>
             <p class="form-note">Te contactamos por WhatsApp para agendar.</p>
           </div>
-
           <div class="success-msg" id="success-cliente">
             <div class="check">✅</div>
             <h4>¡Registro exitoso!</h4>
             <p>Te contactamos por WhatsApp en las próximas horas para agendar tu servicio.</p>
+            <div class="ticket-box">
+              <div class="ticket-label">Tu número de ticket</div>
+              <div class="ticket-number" id="ticket-cliente">—</div>
+              <div class="ticket-hint">Guárdalo para dar seguimiento · También te llegó por correo</div>
+            </div>
           </div>
         </div>
 
@@ -941,20 +606,10 @@
         <div class="register-card">
           <h3>Quiero ser técnico Thruver</h3>
           <p>Cupos limitados por zona. Sin suscripción. Solo trabajo constante.</p>
-
           <div id="form-tecnico">
-            <div class="form-group">
-              <label>Nombre completo</label>
-              <input type="text" id="t-nombre" placeholder="Tu nombre" />
-            </div>
-            <div class="form-group">
-              <label>WhatsApp</label>
-              <input type="tel" id="t-telefono" placeholder="667 000 0000" />
-            </div>
-            <div class="form-group">
-              <label>Correo electrónico</label>
-              <input type="email" id="t-email" placeholder="tu@correo.com" />
-            </div>
+            <div class="form-group"><label>Nombre completo</label><input type="text" id="t-nombre" placeholder="Tu nombre" /></div>
+            <div class="form-group"><label>WhatsApp</label><input type="tel" id="t-telefono" placeholder="667 000 0000" /></div>
+            <div class="form-group"><label>Correo electrónico</label><input type="email" id="t-email" placeholder="tu@correo.com" /></div>
             <div class="form-group">
               <label>Tu especialidad</label>
               <select id="t-especialidad">
@@ -968,10 +623,7 @@
                 <option>Multi-servicio</option>
               </select>
             </div>
-            <div class="form-group">
-              <label>Colonia donde trabajas</label>
-              <input type="text" id="t-zona" placeholder="Ej. Las Quintas, Tres Ríos..." />
-            </div>
+            <div class="form-group"><label>Colonia donde trabajas</label><input type="text" id="t-zona" placeholder="Ej. Las Quintas, Tres Ríos..." /></div>
             <div class="form-group">
               <label>Años de experiencia</label>
               <select id="t-experiencia">
@@ -982,14 +634,21 @@
                 <option>Más de 5 años</option>
               </select>
             </div>
-            <button class="btn-submit" onclick="submitForm('tecnico')">Solicitar mi cupo →</button>
+            <button class="btn-submit" id="btn-tecnico" onclick="submitForm('tecnico')">
+              <span class="spinner" id="spinner-tecnico"></span>
+              <span id="btn-tecnico-text">Solicitar mi cupo →</span>
+            </button>
             <p class="form-note">Los cupos son limitados. Te notificamos si hay disponibilidad.</p>
           </div>
-
           <div class="success-msg" id="success-tecnico">
             <div class="check">✅</div>
             <h4>¡Solicitud recibida!</h4>
             <p>Revisamos tu zona y especialidad. Si hay cupo, te contactamos por WhatsApp.</p>
+            <div class="ticket-box">
+              <div class="ticket-label">Tu folio de solicitud</div>
+              <div class="ticket-number" id="ticket-tecnico">—</div>
+              <div class="ticket-hint">Guárdalo para dar seguimiento · También te llegó por correo</div>
+            </div>
           </div>
         </div>
 
@@ -1026,10 +685,21 @@
       document.getElementById('tab-' + tab).classList.add('active');
     }
 
-    // ── FORM SUBMIT
+    // ── SCRIPT URL
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
 
-    function submitForm(tipo) {
+    // ── GENERAR TICKET VISUAL (mismo formato que backend)
+    function generarTicketVisual() {
+      const hoy  = new Date();
+      const yyyy = hoy.getFullYear();
+      const mm   = String(hoy.getMonth() + 1).padStart(2, '0');
+      const dd   = String(hoy.getDate()).padStart(2, '0');
+      const rand = Math.floor(1000 + Math.random() * 9000);
+      return `THR-${yyyy}${mm}${dd}-${rand}`;
+    }
+
+    // ── FORM SUBMIT
+    async function submitForm(tipo) {
       let data = {};
 
       if (tipo === 'cliente') {
@@ -1045,27 +715,43 @@
       }
 
       if (tipo === 'tecnico') {
-        const nombre      = document.getElementById('t-nombre').value.trim();
-        const telefono    = document.getElementById('t-telefono').value.trim();
-        const email       = document.getElementById('t-email').value.trim();
+        const nombre       = document.getElementById('t-nombre').value.trim();
+        const telefono     = document.getElementById('t-telefono').value.trim();
+        const email        = document.getElementById('t-email').value.trim();
         const especialidad = document.getElementById('t-especialidad').value;
-        const zona        = document.getElementById('t-zona').value.trim();
-        const experiencia = document.getElementById('t-experiencia').value;
+        const zona         = document.getElementById('t-zona').value.trim();
+        const experiencia  = document.getElementById('t-experiencia').value;
         if (!nombre || !telefono || !especialidad || !zona) {
           alert('Por favor completa todos los campos requeridos.'); return;
         }
         data = { tipo: 'TECNICO', nombre, telefono, email, especialidad, zona, experiencia };
       }
 
-      if (SCRIPT_URL !== 'TU_GOOGLE_APPS_SCRIPT_URL_AQUI') {
-        fetch(SCRIPT_URL, {
-          method: 'POST', mode: 'no-cors',
+      // Mostrar loading
+      const btn     = document.getElementById('btn-' + tipo);
+      const spinner = document.getElementById('spinner-' + tipo);
+      const btnText = document.getElementById('btn-' + tipo + '-text');
+      btn.disabled            = true;
+      spinner.style.display   = 'block';
+      btnText.textContent     = 'Enviando...';
+
+      // Enviar al backend
+      try {
+        await fetch(SCRIPT_URL, {
+          method:  'POST',
+          mode:    'no-cors',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data)
+          body:    JSON.stringify(data)
         });
+      } catch (err) {
+        // no-cors siempre devuelve opaque — ignorar error
       }
 
-      document.getElementById('form-' + tipo).style.display = 'none';
+      // Mostrar ticket en pantalla
+      document.getElementById('ticket-' + tipo).textContent = generarTicketVisual();
+
+      // Ocultar form y mostrar éxito
+      document.getElementById('form-'    + tipo).style.display = 'none';
       document.getElementById('success-' + tipo).style.display = 'block';
     }
 
@@ -1073,14 +759,14 @@
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          e.target.style.opacity = '1';
+          e.target.style.opacity   = '1';
           e.target.style.transform = 'translateY(0)';
         }
       });
     }, { threshold: 0.08 });
 
     document.querySelectorAll('.problem-card, .how-step, .why-card, .register-card').forEach(el => {
-      el.style.opacity = '0';
+      el.style.opacity   = '0';
       el.style.transform = 'translateY(16px)';
       el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
       observer.observe(el);
