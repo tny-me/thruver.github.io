@@ -1343,7 +1343,7 @@
 <body>
 
 <!-- NAV -->
-<nav>
+<nav id="main-nav">
   <a href="#" class="nav-logo">thruver</a>
   <ul class="nav-center">
     <li><a href="#servicios">Servicios</a></li>
@@ -1734,7 +1734,7 @@
 <!-- DASHBOARD -->
 <div id="dashboard">
   <nav class="dash-nav">
-    <a href="#" class="dash-nav-logo" onclick="closeDashboard()">thruver</a>
+    <a href="javascript:void(0)" class="dash-nav-logo" onclick="closeDashboard()">thruver</a>
     <div class="dash-nav-right">
       <div class="dash-user">
         <div class="dash-avatar">CR</div>
@@ -1951,7 +1951,7 @@
   // LOGIN MODAL
   function openLogin() {
     document.getElementById('loginModal').classList.add('open');
-    setTimeout(() => document.getElementById('login-email').focus(), 100);
+    setTimeout(function() { document.getElementById('login-email').focus(); }, 100);
   }
 
   function closeLogin() {
@@ -1959,55 +1959,54 @@
     document.getElementById('login-error').style.display = 'none';
     document.getElementById('login-email').value = '';
     document.getElementById('login-pass').value = '';
+    var btn = document.getElementById('btn-login-text');
+    var spinner = document.getElementById('spinner-login');
+    var loginBtn = document.querySelector('#loginModal .btn-submit');
+    if (loginBtn) loginBtn.disabled = false;
+    if (spinner) spinner.style.display = 'none';
+    if (btn) btn.textContent = 'Entrar →';
   }
 
   function closeLoginOutside(e) {
-    if (e.target === document.getElementById('loginModal')) closeLogin();
+    if (e.target.id === 'loginModal') closeLogin();
   }
 
-  async function doLogin() {
-    const email = document.getElementById('login-email').value.trim().toLowerCase();
-    const pass  = document.getElementById('login-pass').value;
-    const btn   = document.querySelector('#loginModal .btn-submit');
-    const spinner = document.getElementById('spinner-login');
-    const btnText = document.getElementById('btn-login-text');
+  function doLogin() {
+    var email = document.getElementById('login-email').value.trim();
+    var pass  = document.getElementById('login-pass').value.trim();
+    var btn   = document.querySelector('#loginModal .btn-submit');
+    var spinner = document.getElementById('spinner-login');
+    var btnText = document.getElementById('btn-login-text');
+
+    if (!email || !pass) {
+      document.getElementById('login-error').style.display = 'block';
+      return;
+    }
 
     btn.disabled = true;
     spinner.style.display = 'block';
     btnText.textContent = 'Verificando...';
 
-    await new Promise(r => setTimeout(r, 900));
-
-    if (email && pass) {
+    setTimeout(function() {
       closeLogin();
       showDashboard();
-    } else {
-      document.getElementById('login-error').style.display = 'block';
-      btn.disabled = false;
-      spinner.style.display = 'none';
-      btnText.textContent = 'Entrar →';
-    }
+    }, 900);
   }
 
   function showDashboard() {
-    const dash = document.getElementById('dashboard');
-    dash.style.display = 'block';
-    dash.style.position = 'fixed';
-    dash.style.inset = '0';
-    dash.style.zIndex = '500';
-    dash.style.overflowY = 'auto';
-    dash.style.paddingTop = '60px';
+    var dash = document.getElementById('dashboard');
+    var mainNav = document.getElementById('main-nav');
+    dash.style.cssText = 'display:block; position:fixed; top:0; left:0; right:0; bottom:0; z-index:500; overflow-y:auto; background:#f3f3f3; padding-top:60px;';
+    if (mainNav) mainNav.style.display = 'none';
     document.body.style.overflow = 'hidden';
-    dash.scrollTop = 0;
-    // hide main site nav
-    document.querySelector('nav:not(.dash-nav)').style.display = 'none';
   }
 
   function closeDashboard() {
-    const dash = document.getElementById('dashboard');
+    var dash = document.getElementById('dashboard');
+    var mainNav = document.getElementById('main-nav');
     dash.style.display = 'none';
+    if (mainNav) mainNav.style.display = 'flex';
     document.body.style.overflow = '';
-    document.querySelector('nav:not(.dash-nav)').style.display = 'flex';
   }
 
   // CAROUSEL
