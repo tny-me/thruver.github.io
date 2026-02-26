@@ -854,6 +854,490 @@
       .hero-stats { flex-wrap: wrap; }
       .hero-stat  { min-width: 48%; border-right: none; border-bottom: 1px solid var(--border); }
     }
+
+    /* ══ LOGIN MODAL ══ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(6px);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    .modal-box {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 380px;
+      margin: 1rem;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+      animation: slideUp 0.25s ease;
+    }
+
+    @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+
+    .modal-box h2 {
+      font-family: var(--font);
+      font-size: 1.3rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: var(--black);
+      margin-bottom: 0.3rem;
+    }
+
+    .modal-box .modal-sub {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.8rem;
+    }
+
+    .modal-hint {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.7rem 1rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      line-height: 1.5;
+    }
+
+    .modal-hint b { color: var(--black); }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: var(--bg);
+      border: none;
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted);
+      transition: background 0.15s;
+    }
+
+    .modal-close:hover { background: var(--bg3); }
+    .modal-box { position: relative; }
+
+    .modal-error {
+      display: none;
+      background: #fff0f0;
+      border: 1px solid #fcc;
+      border-radius: 7px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.78rem;
+      color: #cc3333;
+      margin-bottom: 0.8rem;
+    }
+
+    /* ══ DASHBOARD ══ */
+    #dashboard {
+      display: none;
+      min-height: 100vh;
+      background: var(--bg);
+      padding-top: 60px;
+    }
+
+    .dash-nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2.5rem;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dash-nav-logo {
+      font-family: var(--font);
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: -0.04em;
+      color: var(--black);
+      text-decoration: none;
+    }
+
+    .dash-nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .dash-user {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.83rem;
+      color: var(--text);
+      font-family: var(--font);
+    }
+
+    .dash-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--black);
+      color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      font-family: var(--font);
+    }
+
+    .dash-body {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 2.5rem;
+    }
+
+    .dash-greeting {
+      margin-bottom: 2rem;
+    }
+
+    .dash-greeting h1 {
+      font-family: var(--font);
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--black);
+      margin-bottom: 0.2rem;
+    }
+
+    .dash-greeting p { font-size: 0.85rem; color: var(--muted); }
+
+    /* Stats row */
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .dash-stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.3rem 1.5rem;
+    }
+
+    .dash-stat-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      margin-bottom: 0.4rem;
+      font-family: var(--font);
+    }
+
+    .dash-stat-value {
+      font-family: var(--font);
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--black);
+      letter-spacing: -0.04em;
+      line-height: 1;
+      margin-bottom: 0.25rem;
+    }
+
+    .dash-stat-sub { font-size: 0.72rem; color: var(--muted); }
+
+    /* Two col layout */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .dash-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .dash-card-header {
+      padding: 1.2rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .dash-card-header h3 {
+      font-family: var(--font);
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .dash-card-header a {
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .dash-card-header a:hover { color: var(--black); }
+
+    /* Active service */
+    .active-service {
+      padding: 1.5rem;
+    }
+
+    .active-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #16a34a;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.28rem 0.75rem;
+      border-radius: 100px;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      font-family: var(--font);
+    }
+
+    .active-dot { width: 5px; height: 5px; border-radius: 50%; background: #16a34a; animation: pulse 2s infinite; }
+
+    .active-service h4 {
+      font-family: var(--font);
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--black);
+      margin-bottom: 0.3rem;
+    }
+
+    .active-service-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 1.3rem;
+    }
+
+    .active-tech {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 1rem 1.2rem;
+      background: var(--bg);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      margin-bottom: 1.2rem;
+    }
+
+    .tech-avatar {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--black);
+      color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      font-family: var(--font);
+      flex-shrink: 0;
+    }
+
+    .tech-info strong {
+      display: block;
+      font-family: var(--font);
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--black);
+    }
+
+    .tech-info span { font-size: 0.75rem; color: var(--muted); }
+
+    .tech-verified {
+      margin-left: auto;
+      background: #0098cf;
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 100px;
+      font-family: var(--font);
+    }
+
+    /* Progress steps */
+    .progress-steps {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .pstep {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex: 1;
+    }
+
+    .pstep-dot {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      background: var(--bg3);
+      border: 2px solid var(--bg3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.6rem;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+      transition: all 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pstep.done .pstep-dot  { background: var(--black); border-color: var(--black); color: white; }
+    .pstep.active .pstep-dot { background: #0098cf; border-color: #0098cf; color: white; }
+
+    .pstep-label { font-size: 0.62rem; color: var(--muted2); text-align: center; font-family: var(--font); }
+    .pstep.done .pstep-label  { color: var(--black); font-weight: 700; }
+    .pstep.active .pstep-label { color: #0098cf; font-weight: 700; }
+
+    .pstep-line {
+      flex: 1;
+      height: 2px;
+      background: var(--bg3);
+      margin-bottom: 1.1rem;
+      margin-top: -0.05rem;
+    }
+
+    .pstep-line.done { background: var(--black); }
+
+    /* Service history */
+    .service-row {
+      display: flex;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      gap: 1rem;
+      transition: background 0.15s;
+    }
+
+    .service-row:last-child { border-bottom: none; }
+    .service-row:hover { background: var(--bg); }
+
+    .service-row-icon {
+      width: 36px; height: 36px;
+      border-radius: 9px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .service-row-info { flex: 1; }
+    .service-row-info strong { display: block; font-family: var(--font); font-size: 0.83rem; font-weight: 700; color: var(--black); }
+    .service-row-info span  { font-size: 0.72rem; color: var(--muted); }
+
+    .service-row-right { text-align: right; }
+    .service-row-price { font-family: var(--font); font-size: 0.85rem; font-weight: 700; color: var(--black); }
+    .service-row-status {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.18rem 0.55rem;
+      border-radius: 100px;
+      margin-top: 0.15rem;
+      font-family: var(--font);
+    }
+
+    .status-done     { background: #f0fdf4; color: #16a34a; }
+    .status-pending  { background: #fffbeb; color: #d97706; }
+    .status-canceled { background: #fef2f2; color: #dc2626; }
+
+    /* Upcoming & Profile */
+    .upcoming-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.15s;
+    }
+
+    .upcoming-item:last-child { border-bottom: none; }
+    .upcoming-item:hover { background: var(--bg); }
+
+    .upcoming-date {
+      width: 40px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .upcoming-date strong {
+      display: block;
+      font-family: var(--font);
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: var(--black);
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .upcoming-date span { font-size: 0.65rem; color: var(--muted2); text-transform: uppercase; }
+
+    .upcoming-info strong { display: block; font-family: var(--font); font-size: 0.83rem; font-weight: 700; color: var(--black); }
+    .upcoming-info span   { font-size: 0.72rem; color: var(--muted); }
+
+    .profile-section { padding: 1.5rem; }
+
+    .profile-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .profile-avatar-lg {
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--black);
+      color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: var(--font);
+      flex-shrink: 0;
+    }
+
+    .profile-name { font-family: var(--font); font-size: 0.95rem; font-weight: 700; color: var(--black); }
+    .profile-email { font-size: 0.78rem; color: var(--muted); }
+
+    .profile-field {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.8rem;
+    }
+
+    .profile-field:last-child { border-bottom: none; }
+    .profile-field span:first-child { color: var(--muted); font-family: var(--font); }
+    .profile-field span:last-child  { color: var(--black); font-weight: 700; font-family: var(--font); }
+
+    @media(max-width:800px){
+      .dash-stats { grid-template-columns: repeat(2,1fr); }
+      .dash-grid  { grid-template-columns: 1fr; }
+      .dash-body  { padding: 1.5rem 1.2rem; }
+      .dash-nav   { padding: 0 1.2rem; }
+    }
   </style>
 </head>
 <body>
@@ -868,7 +1352,7 @@
     <li><a href="#registro">Técnicos</a></li>
   </ul>
   <div class="nav-right">
-    <a href="#registro" class="btn-ghost">Iniciar sesión</a>
+    <button class="btn-ghost" onclick="openLogin()">Iniciar sesión</button>
     <a href="#registro" class="btn-solid">Solicitar servicio</a>
   </div>
 </nav>
@@ -1225,7 +1709,301 @@
   <p class="footer-copy">© 2025 Thruver · Culiacán, Sinaloa, México</p>
 </footer>
 
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal" onclick="closeLoginOutside(event)">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeLogin()">✕</button>
+    <h2>Iniciar sesión</h2>
+    <p class="modal-sub">Accede a tu cuenta Thruver</p>
+    <div class="modal-error" id="login-error">Por favor ingresa tu correo y contraseña.</div>
+    <div class="form-group">
+      <label>Correo electrónico</label>
+      <input type="email" id="login-email" placeholder="tu@correo.com" />
+    </div>
+    <div class="form-group">
+      <label>Contraseña</label>
+      <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
+    </div>
+    <button class="btn-submit" onclick="doLogin()" style="margin-top:0.8rem;">
+      <span class="spinner" id="spinner-login"></span>
+      <span id="btn-login-text">Entrar →</span>
+    </button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <nav class="dash-nav">
+    <a href="#" class="dash-nav-logo" onclick="closeDashboard()">thruver</a>
+    <div class="dash-nav-right">
+      <div class="dash-user">
+        <div class="dash-avatar">CR</div>
+        <span>Carlos Ramírez</span>
+      </div>
+      <button class="btn-ghost" onclick="closeDashboard()" style="font-size:0.78rem; padding:0.35rem 0.85rem;">Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <div class="dash-body">
+
+    <div class="dash-greeting">
+      <h1>Buen día, Carlos 👋</h1>
+      <p>Aquí tienes un resumen de tus servicios con Thruver.</p>
+    </div>
+
+    <!-- Stats -->
+    <div class="dash-stats">
+      <div class="dash-stat-card">
+        <div class="dash-stat-label">Servicios totales</div>
+        <div class="dash-stat-value">7</div>
+        <div class="dash-stat-sub">Desde enero 2025</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-label">En curso</div>
+        <div class="dash-stat-value">1</div>
+        <div class="dash-stat-sub">Hoy · 10:00 AM</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-label">Próximos</div>
+        <div class="dash-stat-value">2</div>
+        <div class="dash-stat-sub">Esta semana</div>
+      </div>
+      <div class="dash-stat-card">
+        <div class="dash-stat-label">Calificación promedio</div>
+        <div class="dash-stat-value">4.9</div>
+        <div class="dash-stat-sub">⭐ Últimos servicios</div>
+      </div>
+    </div>
+
+    <!-- Main grid -->
+    <div class="dash-grid">
+
+      <!-- LEFT col -->
+      <div style="display:flex;flex-direction:column;gap:1.2rem;">
+
+        <!-- Active service -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>Servicio en curso</h3>
+            <span style="font-size:0.72rem;color:var(--muted);">Hoy · 10:00 AM</span>
+          </div>
+          <div class="active-service">
+            <div class="active-badge"><span class="active-dot"></span> En progreso</div>
+            <h4>Reparación de plomería</h4>
+            <p class="active-service-meta">Hogar · Las Quintas, Culiacán</p>
+            <div class="active-tech">
+              <div class="tech-avatar">MG</div>
+              <div class="tech-info">
+                <strong>Miguel González</strong>
+                <span>Plomero · 6 años de experiencia</span>
+              </div>
+              <div class="tech-verified">✓ Verificado</div>
+            </div>
+            <!-- Progress -->
+            <div class="progress-steps">
+              <div class="pstep done">
+                <div class="pstep-dot">✓</div>
+                <div class="pstep-label">Asignado</div>
+              </div>
+              <div class="pstep-line done"></div>
+              <div class="pstep done">
+                <div class="pstep-dot">✓</div>
+                <div class="pstep-label">En camino</div>
+              </div>
+              <div class="pstep-line done"></div>
+              <div class="pstep active">
+                <div class="pstep-dot">●</div>
+                <div class="pstep-label">En trabajo</div>
+              </div>
+              <div class="pstep-line"></div>
+              <div class="pstep">
+                <div class="pstep-dot"></div>
+                <div class="pstep-label">Completado</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- History -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>Historial de servicios</h3>
+            <a href="#">Ver todos →</a>
+          </div>
+          <div class="service-row">
+            <div class="service-row-icon">⚡</div>
+            <div class="service-row-info">
+              <strong>Instalación eléctrica</strong>
+              <span>15 Nov 2025 · Oficina Centro</span>
+            </div>
+            <div class="service-row-right">
+              <div class="service-row-price">$850</div>
+              <span class="service-row-status status-done">Completado</span>
+            </div>
+          </div>
+          <div class="service-row">
+            <div class="service-row-icon">🧹</div>
+            <div class="service-row-info">
+              <strong>Limpieza profunda</strong>
+              <span>02 Nov 2025 · Hogar Las Quintas</span>
+            </div>
+            <div class="service-row-right">
+              <div class="service-row-price">$600</div>
+              <span class="service-row-status status-done">Completado</span>
+            </div>
+          </div>
+          <div class="service-row">
+            <div class="service-row-icon">🖌️</div>
+            <div class="service-row-info">
+              <strong>Pintura de interiores</strong>
+              <span>18 Oct 2025 · Hogar Las Quintas</span>
+            </div>
+            <div class="service-row-right">
+              <div class="service-row-price">$1,200</div>
+              <span class="service-row-status status-done">Completado</span>
+            </div>
+          </div>
+          <div class="service-row">
+            <div class="service-row-icon">❄️</div>
+            <div class="service-row-info">
+              <strong>Mantenimiento de A/C</strong>
+              <span>05 Sep 2025 · Oficina Centro</span>
+            </div>
+            <div class="service-row-right">
+              <div class="service-row-price">$750</div>
+              <span class="service-row-status status-pending">Pendiente pago</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT col -->
+      <div style="display:flex;flex-direction:column;gap:1.2rem;">
+
+        <!-- Upcoming -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>Próximos servicios</h3>
+            <a href="#registro">+ Agendar</a>
+          </div>
+          <div class="upcoming-item">
+            <div class="upcoming-date">
+              <strong>28</strong>
+              <span>Feb</span>
+            </div>
+            <div class="upcoming-info">
+              <strong>Jardinería y poda</strong>
+              <span>09:00 AM · Hogar Las Quintas</span>
+            </div>
+          </div>
+          <div class="upcoming-item">
+            <div class="upcoming-date">
+              <strong>03</strong>
+              <span>Mar</span>
+            </div>
+            <div class="upcoming-info">
+              <strong>Revisión eléctrica</strong>
+              <span>11:00 AM · Oficina Centro</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Profile -->
+        <div class="dash-card">
+          <div class="dash-card-header">
+            <h3>Mi perfil</h3>
+            <a href="#">Editar</a>
+          </div>
+          <div class="profile-section">
+            <div class="profile-row">
+              <div class="profile-avatar-lg">CR</div>
+              <div>
+                <div class="profile-name">Carlos Ramírez</div>
+                <div class="profile-email">demo@thruver.com</div>
+              </div>
+            </div>
+            <div class="profile-field">
+              <span>Teléfono</span>
+              <span>667 123 4567</span>
+            </div>
+            <div class="profile-field">
+              <span>Tipo de cliente</span>
+              <span>Hogar + Empresa</span>
+            </div>
+            <div class="profile-field">
+              <span>Zona</span>
+              <span>Culiacán Norte</span>
+            </div>
+            <div class="profile-field">
+              <span>Miembro desde</span>
+              <span>Enero 2025</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+  // LOGIN MODAL
+  function openLogin() {
+    document.getElementById('loginModal').classList.add('open');
+    setTimeout(() => document.getElementById('login-email').focus(), 100);
+  }
+
+  function closeLogin() {
+    document.getElementById('loginModal').classList.remove('open');
+    document.getElementById('login-error').style.display = 'none';
+    document.getElementById('login-email').value = '';
+    document.getElementById('login-pass').value = '';
+  }
+
+  function closeLoginOutside(e) {
+    if (e.target === document.getElementById('loginModal')) closeLogin();
+  }
+
+  async function doLogin() {
+    const email = document.getElementById('login-email').value.trim().toLowerCase();
+    const pass  = document.getElementById('login-pass').value;
+    const btn   = document.querySelector('#loginModal .btn-submit');
+    const spinner = document.getElementById('spinner-login');
+    const btnText = document.getElementById('btn-login-text');
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent = 'Verificando...';
+
+    await new Promise(r => setTimeout(r, 900));
+
+    if (email && pass) {
+      closeLogin();
+      showDashboard();
+    } else {
+      document.getElementById('login-error').style.display = 'block';
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Entrar →';
+    }
+  }
+
+  function showDashboard() {
+    document.getElementById('dashboard').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+    document.getElementById('dashboard').scrollTop = 0;
+    window.scrollTo(0, 0);
+    // hide main site nav
+    document.querySelector('nav:not(.dash-nav)').style.display = 'none';
+  }
+
+  function closeDashboard() {
+    document.getElementById('dashboard').style.display = 'none';
+    document.body.style.overflow = '';
+    document.querySelector('nav:not(.dash-nav)').style.display = 'flex';
+  }
+
   // CAROUSEL
   const slides  = document.querySelectorAll('.carousel-slide');
   const dotsEl  = document.getElementById('carouselDots');
