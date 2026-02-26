@@ -663,6 +663,137 @@
     .footer-links a:hover { color: var(--black); }
     .footer-copy { font-size: 0.7rem; color: var(--muted2); }
 
+    /* WHY THRUVER STRIP */
+    .why-strip {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .why-strip-inner {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 5rem 2.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .why-strip-left {}
+
+    .why-strip-eyebrow {
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: 0.13em;
+      margin-bottom: 0.5rem;
+    }
+
+    .why-strip-title {
+      font-family: var(--font);
+      font-size: clamp(1.5rem, 3vw, 2rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      color: var(--black);
+      margin-bottom: 2.5rem;
+    }
+
+    .why-strip-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .why-strip-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .why-strip-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .why-strip-item-text {}
+    .why-strip-item-text strong {
+      display: block;
+      font-family: var(--font);
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--black);
+      margin-bottom: 0.2rem;
+    }
+
+    .why-strip-item-text p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .why-strip-item-text p b {
+      color: var(--black);
+      font-weight: 700;
+    }
+
+    /* RIGHT — Badge card */
+    .why-strip-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .why-badge-card {
+      background: #f0f8fd;
+      border: 1px solid rgba(0,152,207,0.15);
+      border-radius: 24px;
+      padding: 3.5rem 3rem;
+      text-align: center;
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 8px 40px rgba(0,152,207,0.1);
+    }
+
+    .why-badge-icon {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .why-badge-card h3 {
+      font-family: var(--font);
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--black);
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .why-badge-card p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    @media(max-width:900px){
+      .why-strip-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .why-strip-right { display: none; }
+    }
+
     /* RESPONSIVE */
     @media(max-width:900px){
       .services-grid { grid-template-columns: repeat(4,1fr); }
@@ -799,6 +930,69 @@
       </div>
       <div class="carousel-dots" id="carouselDots"></div>
     </div>
+  </div>
+</section>
+
+<!-- WHY THRUVER STRIP -->
+<section class="why-strip">
+  <div class="why-strip-inner">
+
+    <div class="why-strip-left">
+      <p class="why-strip-eyebrow">¿Por qué Thruver?</p>
+      <h2 class="why-strip-title">La forma más confiable de contratar servicios para tu hogar o empresa.</h2>
+
+      <div class="why-strip-list">
+
+        <div class="why-strip-item">
+          <div class="why-strip-icon">⭐</div>
+          <div class="why-strip-item-text">
+            <strong>Experiencia de servicio</strong>
+            <p>Una experiencia estandarizada, segura y de alta calidad. Sin importar qué técnico llegue a tu puerta, el nivel de atención siempre es el mismo.</p>
+          </div>
+        </div>
+
+        <div class="why-strip-item">
+          <div class="why-strip-icon">🛡️</div>
+          <div class="why-strip-item-text">
+            <strong>Red verificada</strong>
+            <p>No cualquiera puede ofrecer servicios en Thruver. Cada profesional pasa por entrevistas, pruebas técnicas y una revisión estricta de antecedentes. Contratar a alguien no debería sentirse como un riesgo — y con Thruver, no lo es.</p>
+          </div>
+        </div>
+
+        <div class="why-strip-item">
+          <div class="why-strip-icon">🔩</div>
+          <div class="why-strip-item-text">
+            <strong>Experiencia comprobada</strong>
+            <p>Nuestros técnicos no solo dicen que saben — <b>lo demuestran</b>. Capacitados, con experiencia real y supervisados por Thruver.</p>
+          </div>
+        </div>
+
+        <div class="why-strip-item">
+          <div class="why-strip-icon">✅</div>
+          <div class="why-strip-item-text">
+            <strong>Garantía y responsabilidad</strong>
+            <p>Si algo no queda bien, Thruver lo resuelve. Asumimos la responsabilidad sin pretextos, sin excusas y sin desaparecer.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="why-strip-right">
+      <div class="why-badge-card">
+        <div class="why-badge-icon">
+          <!-- Shield SVG con colores de Thruver -->
+          <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M48 6L14 20V44C14 63.8 28.8 82.4 48 88C67.2 82.4 82 63.8 82 44V20L48 6Z" fill="#0098cf"/>
+            <circle cx="48" cy="40" r="13" fill="#000000"/>
+            <path d="M27 68C27 57.5 36.5 49 48 49C59.5 49 69 57.5 69 68" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3>100% calidad asegurada</h3>
+        <p>Si no le gusta nuestro servicio, lo solucionaremos.</p>
+      </div>
+    </div>
+
   </div>
 </section>
 
