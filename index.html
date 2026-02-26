@@ -61,9 +61,25 @@
       font-weight: 900;
       font-size: 1.45rem;
       letter-spacing: -0.04em;
-      color: var(--white);
+      color: #111111;
       text-decoration: none;
+      transition: color 0.4s;
     }
+
+    nav.scrolled .nav-logo { color: var(--white); }
+
+    .nav-links a {
+      color: rgba(0,0,0,0.55);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 400;
+      transition: color 0.2s;
+    }
+
+    nav.scrolled .nav-links a { color: rgba(255,255,255,0.55); }
+
+    .nav-links a:hover { color: #111111; }
+    nav.scrolled .nav-links a:hover { color: var(--white); }
 
     .nav-links {
       display: flex;
@@ -71,16 +87,6 @@
       list-style: none;
       align-items: center;
     }
-
-    .nav-links a {
-      color: rgba(255,255,255,0.55);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 400;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover { color: var(--white); }
 
     .nav-cta {
       background: var(--white) !important;
@@ -97,7 +103,7 @@
     /* ── HERO ── */
     .hero {
       position: relative;
-      background: #0a0a0a;
+      background: #f0f0f0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -108,24 +114,25 @@
       overflow: hidden;
     }
 
-    /* Mesh gradient animado */
+    /* Mesh gradient gris → carbón */
     .hero-mesh {
       position: absolute;
       inset: 0;
       z-index: 0;
       background:
-        radial-gradient(ellipse 80% 60% at 20% 30%, rgba(99,102,241,0.18) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 20%, rgba(168,85,247,0.14) 0%, transparent 55%),
-        radial-gradient(ellipse 70% 60% at 60% 80%, rgba(59,130,246,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 10% 80%, rgba(16,185,129,0.08) 0%, transparent 50%);
-      animation: meshMove 12s ease-in-out infinite alternate;
+        linear-gradient(160deg, #e8e8e8 0%, #c8c8c8 25%, #888888 55%, #333333 78%, #111111 100%),
+        radial-gradient(ellipse 70% 50% at 30% 20%, rgba(255,255,255,0.55) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 75% 70%, rgba(30,30,30,0.6) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 15% 75%, rgba(80,80,80,0.3) 0%, transparent 50%);
+      background-blend-mode: multiply, screen, screen, normal;
+      animation: meshMove 14s ease-in-out infinite alternate;
     }
 
     @keyframes meshMove {
-      0%   { filter: hue-rotate(0deg) brightness(1); transform: scale(1); }
-      33%  { filter: hue-rotate(15deg) brightness(1.05); transform: scale(1.03) translate(1%, -1%); }
-      66%  { filter: hue-rotate(-10deg) brightness(0.97); transform: scale(0.98) translate(-1%, 1%); }
-      100% { filter: hue-rotate(20deg) brightness(1.08); transform: scale(1.04) translate(1.5%, 0.5%); }
+      0%   { filter: brightness(1); transform: scale(1); }
+      33%  { filter: brightness(1.04); transform: scale(1.02) translate(0.5%, -0.5%); }
+      66%  { filter: brightness(0.97); transform: scale(0.99) translate(-0.5%, 0.5%); }
+      100% { filter: brightness(1.06); transform: scale(1.03) translate(1%, 0.3%); }
     }
 
     /* Canvas partículas */
@@ -133,7 +140,7 @@
       position: absolute;
       inset: 0;
       z-index: 1;
-      opacity: 0.35;
+      opacity: 0.25;
     }
 
     .hero::after {
@@ -141,7 +148,7 @@
       position: absolute;
       bottom: 0; left: 0; right: 0;
       height: 220px;
-      background: linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.95) 65%, #0a0a0a 100%);
+      background: linear-gradient(to bottom, transparent 0%, rgba(17,17,17,0.92) 65%, #111111 100%);
       pointer-events: none;
       z-index: 2;
     }
@@ -152,9 +159,9 @@
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.65);
+      background: rgba(0,0,0,0.08);
+      border: 1px solid rgba(0,0,0,0.15);
+      color: rgba(0,0,0,0.65);
       font-size: 0.78rem;
       font-weight: 400;
       padding: 0.4rem 1rem;
@@ -168,13 +175,13 @@
     .hero-badge-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: #6fcf97;
+      background: #1a1a1a;
       display: inline-block;
       animation: pulse 2s infinite;
-      box-shadow: 0 0 8px #6fcf97;
+      box-shadow: 0 0 6px rgba(0,0,0,0.4);
     }
 
-    @keyframes pulse { 0%, 100% { opacity: 1; box-shadow: 0 0 8px #6fcf97; } 50% { opacity: 0.4; box-shadow: 0 0 2px #6fcf97; } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
 
     .hero h1 {
       font-family: Arial, "Arial Unicode MS", sans-serif;
@@ -182,13 +189,13 @@
       font-size: clamp(5rem, 15vw, 11rem);
       letter-spacing: -0.055em;
       line-height: 0.92;
-      background: linear-gradient(135deg, #ffffff 0%, #a78bfa 35%, #818cf8 55%, #ffffff 80%);
+      background: linear-gradient(150deg, #111111 0%, #2a2a2a 25%, #444444 50%, #111111 75%, #000000 100%);
       background-size: 300% 300%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 1.8rem;
-      animation: fadeUp 0.7s ease 0.1s both, gradientShift 6s ease-in-out infinite;
+      animation: fadeUp 0.7s ease 0.1s both, gradientShift 8s ease-in-out infinite;
     }
 
     @keyframes gradientShift {
@@ -199,7 +206,7 @@
 
     .hero-sub {
       font-size: clamp(1rem, 2vw, 1.15rem);
-      color: rgba(255,255,255,0.5);
+      color: rgba(0,0,0,0.55);
       max-width: 480px;
       margin: 0 auto 2.5rem;
       font-weight: 400;
@@ -216,8 +223,8 @@
     }
 
     .btn-primary {
-      background: var(--white);
-      color: var(--black);
+      background: #111111;
+      color: #ffffff;
       padding: 0.8rem 1.8rem;
       border-radius: 7px;
       font-weight: 700;
@@ -230,22 +237,23 @@
       letter-spacing: -0.01em;
     }
 
-    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary:hover { opacity: 0.82; transform: translateY(-1px); }
 
     .btn-secondary {
-      background: transparent;
-      color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.4);
+      color: rgba(0,0,0,0.7);
       padding: 0.8rem 1.8rem;
       border-radius: 7px;
-      font-weight: 400;
+      font-weight: 500;
       font-size: 0.9rem;
       text-decoration: none;
-      border: 1px solid rgba(255,255,255,0.15);
+      border: 1px solid rgba(0,0,0,0.18);
       transition: all 0.2s;
       font-family: Arial, sans-serif;
+      backdrop-filter: blur(8px);
     }
 
-    .btn-secondary:hover { color: var(--white); border-color: rgba(255,255,255,0.35); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.6); border-color: rgba(0,0,0,0.3); }
 
     .hero-stats {
       display: flex;
@@ -253,9 +261,10 @@
       justify-content: center;
       margin-top: 4rem;
       padding: 2rem 3rem;
-      background: #181818;
+      background: rgba(255,255,255,0.25);
       border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(0,0,0,0.1);
+      backdrop-filter: blur(12px);
       animation: fadeUp 0.7s ease 0.4s both;
       flex-wrap: wrap;
     }
@@ -265,13 +274,13 @@
       font-family: Arial, "Arial Unicode MS", sans-serif;
       font-size: 1.6rem;
       font-weight: 900;
-      color: var(--white);
+      color: #111111;
       letter-spacing: -0.03em;
     }
 
     .hero-stat span {
       font-size: 0.75rem;
-      color: rgba(255,255,255,0.35);
+      color: rgba(0,0,0,0.4);
       font-weight: 400;
       text-transform: uppercase;
       letter-spacing: 0.08em;
@@ -759,7 +768,7 @@
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 120) {
             ctx.beginPath();
-            ctx.strokeStyle = `rgba(167,139,250,${0.08 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(60,60,60,${0.07 * (1 - dist / 120)})`;
             ctx.lineWidth   = 0.5;
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
@@ -772,7 +781,7 @@
       particles.forEach(p => {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(200,190,255,${p.o})`;
+        ctx.fillStyle = `rgba(30,30,30,${p.o})`;
         ctx.fill();
 
         p.x += p.vx;
