@@ -1920,7 +1920,7 @@
               <div class="profile-avatar-lg">CR</div>
               <div>
                 <div class="profile-name">Carlos Ramírez</div>
-                <div class="profile-email">demo@thruver.com</div>
+                <div class="profile-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="690d0c0406291d011b1c1f0c1b470a0604">[email&#160;protected]</a></div>
               </div>
             </div>
             <div class="profile-field">
@@ -1947,7 +1947,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // LOGIN MODAL
   function openLogin() {
     document.getElementById('loginModal').classList.add('open');
@@ -1990,16 +1990,22 @@
   }
 
   function showDashboard() {
-    document.getElementById('dashboard').style.display = 'block';
+    const dash = document.getElementById('dashboard');
+    dash.style.display = 'block';
+    dash.style.position = 'fixed';
+    dash.style.inset = '0';
+    dash.style.zIndex = '500';
+    dash.style.overflowY = 'auto';
+    dash.style.paddingTop = '60px';
     document.body.style.overflow = 'hidden';
-    document.getElementById('dashboard').scrollTop = 0;
-    window.scrollTo(0, 0);
+    dash.scrollTop = 0;
     // hide main site nav
     document.querySelector('nav:not(.dash-nav)').style.display = 'none';
   }
 
   function closeDashboard() {
-    document.getElementById('dashboard').style.display = 'none';
+    const dash = document.getElementById('dashboard');
+    dash.style.display = 'none';
     document.body.style.overflow = '';
     document.querySelector('nav:not(.dash-nav)').style.display = 'flex';
   }
@@ -2090,12 +2096,4 @@
     });
   }, { threshold: 0.06 });
 
-  document.querySelectorAll('.problem-card, .how-step, .why-card, .service-pill').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(10px)';
-    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
-    obs.observe(el);
-  });
-</script>
-</body>
-</html>
+  document.querySelectorAll('.problem-card, .how-step, .why-card,
