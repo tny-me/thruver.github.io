@@ -1352,7 +1352,7 @@
     <li><a href="#registro">Técnicos</a></li>
   </ul>
   <div class="nav-right">
-    <button class="btn-ghost" onclick="openLogin()">Iniciar sesión</button>
+    <button class="btn-ghost" id="btn-open-login">Iniciar sesión</button>
     <a href="#registro" class="btn-solid">Solicitar servicio</a>
   </div>
 </nav>
@@ -1534,8 +1534,8 @@
 
     <div class="how-block">
       <div class="block-tabs">
-        <button class="block-tab active" onclick="switchTab('how','cliente',this)">Para clientes</button>
-        <button class="block-tab" onclick="switchTab('how','tecnico',this)">Para técnicos</button>
+        <button class="block-tab active" data-tab="how" data-target="how-cliente">Para clientes</button>
+        <button class="block-tab" data-tab="how" data-target="how-tecnico">Para técnicos</button>
       </div>
       <div class="tab-panel active" id="how-cliente">
         <div class="how-step"><div class="step-num">01</div><div><h3>Solicita tu servicio</h3><p>Dinos qué necesitas — plomería, electricidad, limpieza. Tipo de espacio y horario preferido.</p></div></div>
@@ -1596,8 +1596,8 @@
 
     <div class="register-block">
       <div class="block-tabs">
-        <button class="block-tab active" onclick="switchTab('reg','cliente',this)">Solicitar servicio</button>
-        <button class="block-tab" onclick="switchTab('reg','tecnico',this)">Ser técnico</button>
+        <button class="block-tab active" data-tab="reg" data-target="reg-cliente">Solicitar servicio</button>
+        <button class="block-tab" data-tab="reg" data-target="reg-tecnico">Ser técnico</button>
       </div>
 
       <div class="register-form-panel active" id="reg-cliente">
@@ -1632,7 +1632,7 @@
               </select>
             </div>
           </div>
-          <button class="btn-submit" id="btn-cliente" onclick="submitForm('cliente')">
+          <button class="btn-submit" id="btn-cliente">
             <span class="spinner" id="spinner-cliente"></span>
             <span id="btn-cliente-text">Registrarme como cliente →</span>
           </button>
@@ -1678,7 +1678,7 @@
             </div>
           </div>
           <div class="form-group"><label>Colonia donde trabajas</label><input type="text" id="t-zona" placeholder="Ej. Las Quintas, Tres Ríos..." /></div>
-          <button class="btn-submit" id="btn-tecnico" onclick="submitForm('tecnico')">
+          <button class="btn-submit" id="btn-tecnico">
             <span class="spinner" id="spinner-tecnico"></span>
             <span id="btn-tecnico-text">Solicitar mi cupo →</span>
           </button>
@@ -1710,9 +1710,9 @@
 </footer>
 
 <!-- LOGIN MODAL -->
-<div class="modal-overlay" id="loginModal" onclick="closeLoginOutside(event)">
+<div class="modal-overlay" id="loginModal">
   <div class="modal-box">
-    <button class="modal-close" onclick="closeLogin()">✕</button>
+    <button class="modal-close" id="btn-close-login">✕</button>
     <h2>Iniciar sesión</h2>
     <p class="modal-sub">Accede a tu cuenta Thruver</p>
     <div class="modal-error" id="login-error">Por favor ingresa tu correo y contraseña.</div>
@@ -1722,9 +1722,9 @@
     </div>
     <div class="form-group">
       <label>Contraseña</label>
-      <input type="password" id="login-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()" />
+      <input type="password" id="login-pass" placeholder="••••••••" />
     </div>
-    <button class="btn-submit" onclick="doLogin()" style="margin-top:0.8rem;">
+    <button class="btn-submit" id="btn-do-login" style="margin-top:0.8rem;">
       <span class="spinner" id="spinner-login"></span>
       <span id="btn-login-text">Entrar →</span>
     </button>
@@ -1734,13 +1734,13 @@
 <!-- DASHBOARD -->
 <div id="dashboard">
   <nav class="dash-nav">
-    <a href="javascript:void(0)" class="dash-nav-logo" onclick="closeDashboard()">thruver</a>
+    <a href="javascript:void(0)" class="dash-nav-logo" id="btn-dash-logo">thruver</a>
     <div class="dash-nav-right">
       <div class="dash-user">
         <div class="dash-avatar">CR</div>
         <span>Carlos Ramírez</span>
       </div>
-      <button class="btn-ghost" onclick="closeDashboard()" style="font-size:0.78rem; padding:0.35rem 0.85rem;">Cerrar sesión</button>
+      <button class="btn-ghost" id="btn-logout" style="font-size:0.78rem; padding:0.35rem 0.85rem;">Cerrar sesión</button>
     </div>
   </nav>
 
@@ -1947,77 +1947,100 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // LOGIN MODAL
-  function openLogin() {
-    document.getElementById('loginModal').classList.add('open');
-    setTimeout(function() { document.getElementById('login-email').focus(); }, 100);
-  }
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ── LOGIN MODAL
+  var loginModal  = document.getElementById('loginModal');
+  var loginEmail  = document.getElementById('login-email');
+  var loginPass   = document.getElementById('login-pass');
+  var loginError  = document.getElementById('login-error');
+  var loginBtn    = document.getElementById('btn-do-login');
+  var loginText   = document.getElementById('btn-login-text');
+  var loginSpinner= document.getElementById('spinner-login');
+
+  document.getElementById('btn-open-login').addEventListener('click', function() {
+    loginModal.classList.add('open');
+    setTimeout(function(){ loginEmail.focus(); }, 100);
+  });
+
+  document.getElementById('btn-close-login').addEventListener('click', closeLogin);
+
+  loginModal.addEventListener('click', function(e) {
+    if (e.target === loginModal) closeLogin();
+  });
+
+  loginBtn.addEventListener('click', doLogin);
+  loginPass.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLogin();
+  });
 
   function closeLogin() {
-    document.getElementById('loginModal').classList.remove('open');
-    document.getElementById('login-error').style.display = 'none';
-    document.getElementById('login-email').value = '';
-    document.getElementById('login-pass').value = '';
-    var btn = document.getElementById('btn-login-text');
-    var spinner = document.getElementById('spinner-login');
-    var loginBtn = document.querySelector('#loginModal .btn-submit');
-    if (loginBtn) loginBtn.disabled = false;
-    if (spinner) spinner.style.display = 'none';
-    if (btn) btn.textContent = 'Entrar →';
-  }
-
-  function closeLoginOutside(e) {
-    if (e.target.id === 'loginModal') closeLogin();
+    loginModal.classList.remove('open');
+    loginError.style.display = 'none';
+    loginEmail.value = '';
+    loginPass.value = '';
+    loginBtn.disabled = false;
+    loginSpinner.style.display = 'none';
+    loginText.textContent = 'Entrar →';
   }
 
   function doLogin() {
-    var email = document.getElementById('login-email').value.trim();
-    var pass  = document.getElementById('login-pass').value.trim();
-    var btn   = document.querySelector('#loginModal .btn-submit');
-    var spinner = document.getElementById('spinner-login');
-    var btnText = document.getElementById('btn-login-text');
-
+    var email = loginEmail.value.trim();
+    var pass  = loginPass.value.trim();
     if (!email || !pass) {
-      document.getElementById('login-error').style.display = 'block';
+      loginError.style.display = 'block';
       return;
     }
-
-    btn.disabled = true;
-    spinner.style.display = 'block';
-    btnText.textContent = 'Verificando...';
-
+    loginError.style.display = 'none';
+    loginBtn.disabled = true;
+    loginSpinner.style.display = 'block';
+    loginText.textContent = 'Verificando...';
     setTimeout(function() {
       closeLogin();
       showDashboard();
     }, 900);
   }
 
+  // ── DASHBOARD
+  var dashboard = document.getElementById('dashboard');
+  var mainNav   = document.getElementById('main-nav');
+
   function showDashboard() {
-    var dash = document.getElementById('dashboard');
-    var mainNav = document.getElementById('main-nav');
-    dash.style.cssText = 'display:block; position:fixed; top:0; left:0; right:0; bottom:0; z-index:500; overflow-y:auto; background:#f3f3f3; padding-top:60px;';
-    if (mainNav) mainNav.style.display = 'none';
+    dashboard.style.display    = 'block';
+    dashboard.style.position   = 'fixed';
+    dashboard.style.top        = '0';
+    dashboard.style.left       = '0';
+    dashboard.style.right      = '0';
+    dashboard.style.bottom     = '0';
+    dashboard.style.zIndex     = '500';
+    dashboard.style.overflowY  = 'auto';
+    dashboard.style.background = '#f3f3f3';
+    dashboard.style.paddingTop = '60px';
+    mainNav.style.display      = 'none';
     document.body.style.overflow = 'hidden';
+    dashboard.scrollTop = 0;
   }
 
   function closeDashboard() {
-    var dash = document.getElementById('dashboard');
-    var mainNav = document.getElementById('main-nav');
-    dash.style.display = 'none';
-    if (mainNav) mainNav.style.display = 'flex';
+    dashboard.style.display      = 'none';
+    mainNav.style.display        = 'flex';
     document.body.style.overflow = '';
   }
 
-  // CAROUSEL
-  const slides  = document.querySelectorAll('.carousel-slide');
-  const dotsEl  = document.getElementById('carouselDots');
-  let cur = 0, timer;
+  document.getElementById('btn-dash-logo').addEventListener('click', closeDashboard);
+  document.getElementById('btn-logout').addEventListener('click', closeDashboard);
 
-  slides.forEach((_, i) => {
-    const d = document.createElement('div');
+  // ── CAROUSEL
+  var slides = document.querySelectorAll('.carousel-slide');
+  var dotsEl = document.getElementById('carouselDots');
+  var cur    = 0;
+  var timer;
+
+  slides.forEach(function(_, i) {
+    var d = document.createElement('div');
     d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    d.onclick = () => goTo(i);
+    d.addEventListener('click', function(){ goTo(i); });
     dotsEl.appendChild(d);
   });
 
@@ -2027,72 +2050,88 @@
     cur = (n + slides.length) % slides.length;
     slides[cur].classList.add('active');
     dotsEl.children[cur].classList.add('active');
-    document.getElementById('carouselSlides').style.transform = `translateX(-${cur * 100}%)`;
+    document.getElementById('carouselSlides').style.transform = 'translateX(-' + (cur * 100) + '%)';
     clearInterval(timer);
-    timer = setInterval(() => goTo(cur + 1), 4200);
+    timer = setInterval(function(){ goTo(cur + 1); }, 4200);
   }
 
-  timer = setInterval(() => goTo(cur + 1), 4200);
+  timer = setInterval(function(){ goTo(cur + 1); }, 4200);
 
-  // GENERIC TAB SWITCHER
-  // prefix = 'how' or 'reg'
-  function switchTab(prefix, tab, btn) {
-    const allBtns = btn.closest('.block-tabs').querySelectorAll('.block-tab');
-    allBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    // find sibling panels
-    const parent = btn.closest('.how-block, .register-block');
-    parent.querySelectorAll('.tab-panel, .register-form-panel').forEach(p => p.classList.remove('active'));
-    const target = document.getElementById(prefix + '-' + tab);
-    if (target) target.classList.add('active');
-  }
+  // ── TABS (how + register)
+  document.querySelectorAll('.block-tab[data-tab]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var group  = btn.getAttribute('data-tab');
+      var target = btn.getAttribute('data-target');
+      var parent = btn.closest('.how-block, .register-block');
+      parent.querySelectorAll('.block-tab').forEach(function(b){ b.classList.remove('active'); });
+      parent.querySelectorAll('.tab-panel, .register-form-panel').forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      var panel = document.getElementById(target);
+      if (panel) panel.classList.add('active');
+    });
+  });
 
-  // FORM SUBMIT
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
+  // ── FORMS
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
 
-  async function submitForm(tipo) {
-    let data = {};
+  document.getElementById('btn-cliente').addEventListener('click', function(){ submitForm('cliente'); });
+  document.getElementById('btn-tecnico').addEventListener('click', function(){ submitForm('tecnico'); });
 
+  function submitForm(tipo) {
+    var data = {};
     if (tipo === 'cliente') {
-      const nombre   = document.getElementById('c-nombre').value.trim();
-      const telefono = document.getElementById('c-telefono').value.trim();
-      const email    = document.getElementById('c-email').value.trim();
-      const espacio  = document.getElementById('c-espacio').value;
-      const servicio = document.getElementById('c-servicio').value;
+      var nombre   = document.getElementById('c-nombre').value.trim();
+      var telefono = document.getElementById('c-telefono').value.trim();
+      var email    = document.getElementById('c-email').value.trim();
+      var espacio  = document.getElementById('c-espacio').value;
+      var servicio = document.getElementById('c-servicio').value;
       if (!nombre || !telefono || !espacio || !servicio) { alert('Por favor completa todos los campos.'); return; }
-      data = { tipo: 'CLIENTE', nombre, telefono, email, espacio, servicio };
+      data = { tipo: 'CLIENTE', nombre: nombre, telefono: telefono, email: email, espacio: espacio, servicio: servicio };
     }
-
     if (tipo === 'tecnico') {
-      const nombre       = document.getElementById('t-nombre').value.trim();
-      const telefono     = document.getElementById('t-telefono').value.trim();
-      const email        = document.getElementById('t-email').value.trim();
-      const especialidad = document.getElementById('t-especialidad').value;
-      const zona         = document.getElementById('t-zona').value.trim();
-      const experiencia  = document.getElementById('t-experiencia').value;
-      if (!nombre || !telefono || !especialidad || !zona) { alert('Por favor completa todos los campos.'); return; }
-      data = { tipo: 'TECNICO', nombre, telefono, email, especialidad, zona, experiencia };
+      var tnombre      = document.getElementById('t-nombre').value.trim();
+      var ttelefono    = document.getElementById('t-telefono').value.trim();
+      var temail       = document.getElementById('t-email').value.trim();
+      var especialidad = document.getElementById('t-especialidad').value;
+      var zona         = document.getElementById('t-zona').value.trim();
+      var experiencia  = document.getElementById('t-experiencia').value;
+      if (!tnombre || !ttelefono || !especialidad || !zona) { alert('Por favor completa todos los campos.'); return; }
+      data = { tipo: 'TECNICO', nombre: tnombre, telefono: ttelefono, email: temail, especialidad: especialidad, zona: zona, experiencia: experiencia };
     }
 
-    const btn     = document.getElementById('btn-' + tipo);
-    const spinner = document.getElementById('spinner-' + tipo);
-    const btnText = document.getElementById('btn-' + tipo + '-text');
+    var btn     = document.getElementById('btn-' + tipo);
+    var spinner = document.getElementById('spinner-' + tipo);
+    var btnText = document.getElementById('btn-' + tipo + '-text');
     btn.disabled = true;
     spinner.style.display = 'block';
     btnText.textContent = 'Enviando...';
 
-    try {
-      await fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
-    } catch(e) {}
-
-    document.getElementById('rform-' + tipo).style.display = 'none';
-    document.getElementById('success-' + tipo).style.display = 'block';
+    fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
+      .catch(function(){})
+      .finally(function() {
+        document.getElementById('rform-' + tipo).style.display = 'none';
+        document.getElementById('success-' + tipo).style.display = 'block';
+      });
   }
 
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0) translateX(0)'; }
+  // ── SCROLL REVEAL
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
     });
   }, { threshold: 0.06 });
 
-  document.querySelectorAll('.problem-card, .how-step, .why-card,
+  document.querySelectorAll('.problem-card, .how-step, .why-card, .service-pill, .why-strip-item').forEach(function(el) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(10px)';
+    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    obs.observe(el);
+  });
+
+});
+</script>
+</body>
+</html>
