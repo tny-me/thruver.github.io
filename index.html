@@ -131,6 +131,14 @@
       background-size: 48px 48px;
       pointer-events: none;
       z-index: 0;
+      animation: gridBreathe 6s ease-in-out infinite;
+      transform-origin: center center;
+    }
+
+    @keyframes gridBreathe {
+      0%   { transform: scale(1);    opacity: 1; }
+      50%  { transform: scale(1.06); opacity: 0.5; }
+      100% { transform: scale(1);    opacity: 1; }
     }
 
     .hero-left {
@@ -1103,13 +1111,6 @@
     document.getElementById('success-' + tipo).style.display = 'block';
   }
 
-  // SCROLL PARALLAX GRID
-  const gridPattern = document.querySelector('.hero-grid-pattern');
-
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    gridPattern.style.transform = `translateY(${scrollY * 0.3}px)`;
-  });
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0) translateX(0)'; }
