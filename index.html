@@ -659,17 +659,50 @@
     @media(max-width:900px){
       .services-grid { grid-template-columns: repeat(4,1fr); }
       .main-content  { grid-template-columns: 1fr; }
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { display: none; }
     }
 
     @media(max-width:600px){
       nav { padding: 0 1.2rem; }
       .nav-center { display: none; }
+      .nav-right .btn-ghost { display: none; }
+
       .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-left { padding: 3rem 1.5rem 2rem; }
+      .hero-left { padding: 2.5rem 1.2rem 2rem; }
       .hero-right { display: none; }
+
+      .hero-h1 { font-size: 1.7rem; }
+      .hero-sub { font-size: 0.88rem; max-width: 100%; }
+
+      .hero-stats { width: 100%; border-radius: var(--rsm); }
+      .hero-stat  { padding: 0.85rem 0.6rem; flex: 1; }
+      .hero-stat strong { font-size: 1rem; }
+      .hero-stat span   { font-size: 0.6rem; }
+
+      .services-grid { grid-template-columns: repeat(4,1fr); gap: 0.5rem; }
+      .service-pill  { padding: 0.9rem 0.4rem; }
+      .service-pill-icon { font-size: 1.3rem; }
+      .service-pill-label { font-size: 0.65rem; }
+
+      .main-content { padding: 2rem 1.2rem; gap: 1.5rem; }
+      .block-title  { font-size: 1.15rem; }
+
+      .why-2col { grid-template-columns: 1fr; }
+
+      .form-row { grid-template-columns: 1fr; }
+
+      footer { flex-direction: column; align-items: flex-start; padding: 1.5rem 1.2rem; gap: 0.8rem; }
+      .footer-links { gap: 1rem; }
+
+      .services-bar-inner { padding: 1.5rem 1.2rem; }
+      .services-bar-top { flex-direction: column; align-items: flex-start; gap: 0.3rem; }
+    }
+
+    @media(max-width:380px){
       .services-grid { grid-template-columns: repeat(4,1fr); }
-      .main-content { padding: 2.5rem 1.2rem; }
-      footer { flex-direction: column; align-items: flex-start; }
+      .hero-stats { flex-wrap: wrap; }
+      .hero-stat  { min-width: 48%; border-right: none; border-bottom: 1px solid var(--border); }
     }
   </style>
 </head>
@@ -1060,7 +1093,31 @@
     document.getElementById('success-' + tipo).style.display = 'block';
   }
 
-  // SCROLL REVEAL
+  // MOUSE FOLLOW GRID
+  const gridPattern = document.querySelector('.hero-grid-pattern');
+  let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
+
+  document.querySelector('.hero').addEventListener('mousemove', (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 18;
+    const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 18;
+    targetX = x;
+    targetY = y;
+  });
+
+  document.querySelector('.hero').addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+  });
+
+  function animateGrid() {
+    currentX += (targetX - currentX) * 0.06;
+    currentY += (targetY - currentY) * 0.06;
+    gridPattern.style.transform = `translate(${currentX}px, ${currentY}px)`;
+    requestAnimationFrame(animateGrid);
+  }
+
+  animateGrid();
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0) translateX(0)'; }
