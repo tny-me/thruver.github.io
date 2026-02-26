@@ -660,7 +660,12 @@
       .services-grid { grid-template-columns: repeat(4,1fr); }
       .main-content  { grid-template-columns: 1fr; }
       .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-right { display: none; }
+      .hero-right {
+        height: auto;
+        padding: 0 1.5rem 3rem;
+        justify-content: center;
+      }
+      .carousel-wrap { max-width: 100%; }
     }
 
     @media(max-width:600px){
@@ -669,8 +674,14 @@
       .nav-right .btn-ghost { display: none; }
 
       .hero { grid-template-columns: 1fr; min-height: auto; }
-      .hero-left { padding: 2.5rem 1.2rem 2rem; }
-      .hero-right { display: none; }
+      .hero-left { padding: 2.5rem 1.2rem 1.5rem; }
+      .hero-right {
+        height: auto;
+        padding: 0 1.2rem 2.5rem;
+        display: flex;
+      }
+      .carousel-wrap { max-width: 100%; }
+      .carousel-frame { border-radius: 14px; }
 
       .hero-h1 { font-size: 1.7rem; }
       .hero-sub { font-size: 0.88rem; max-width: 100%; }
@@ -700,7 +711,6 @@
     }
 
     @media(max-width:380px){
-      .services-grid { grid-template-columns: repeat(4,1fr); }
       .hero-stats { flex-wrap: wrap; }
       .hero-stat  { min-width: 48%; border-right: none; border-bottom: 1px solid var(--border); }
     }
@@ -1093,31 +1103,13 @@
     document.getElementById('success-' + tipo).style.display = 'block';
   }
 
-  // MOUSE FOLLOW GRID
+  // SCROLL PARALLAX GRID
   const gridPattern = document.querySelector('.hero-grid-pattern');
-  let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
 
-  document.querySelector('.hero').addEventListener('mousemove', (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width - 0.5) * 18;
-    const y = ((e.clientY - rect.top)  / rect.height - 0.5) * 18;
-    targetX = x;
-    targetY = y;
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    gridPattern.style.transform = `translateY(${scrollY * 0.3}px)`;
   });
-
-  document.querySelector('.hero').addEventListener('mouseleave', () => {
-    targetX = 0;
-    targetY = 0;
-  });
-
-  function animateGrid() {
-    currentX += (targetX - currentX) * 0.06;
-    currentY += (targetY - currentY) * 0.06;
-    gridPattern.style.transform = `translate(${currentX}px, ${currentY}px)`;
-    requestAnimationFrame(animateGrid);
-  }
-
-  animateGrid();
   const obs = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0) translateX(0)'; }
