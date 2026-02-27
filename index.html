@@ -1394,6 +1394,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
 
+  /* ─────────────────────────────────────────────
+     HELPER: Guardar en Firebase Firestore
+     Guarda en la colección indicada.
+     Si Firebase no está listo, lo ignora sin romper nada.
+  ───────────────────────────────────────────── */
+  function saveToFirebase(coleccion, data) {
+    return new Promise(function(resolve) {
+      if (window.db && window.fbAddDoc && window.fbCollection) {
+        var docData = Object.assign({}, data, { creadoEn: new Date().toISOString() });
+        window.fbAddDoc(window.fbCollection(window.db, coleccion), docData)
+          .then(function(docRef) {
+            console.log('[Thruver Firebase] Guardado en "' + coleccion + '" ID: ' + docRef.id);
+            resolve(docRef.id);
+          })
+          .catch(function(err) {
+            console.warn('[Thruver Firebase] Error al guardar:', err);
+            resolve(null);
+          });
+      } else {
+        console.warn('[Thruver Firebase] SDK no listo, omitiendo.');
+        resolve(null);
+      }
+    });
+  }
+
   /* ═══════════════════════════════════════════
      HAMBURGER / DRAWER
   ═══════════════════════════════════════════ */
@@ -1669,21 +1694,26 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('tnl-spinner').style.display = 'block';
     document.getElementById('tnl-submit-txt').textContent = 'Enviando...';
 
-    /* Envío a Google Apps Script */
-    fetch(SCRIPT_URL, {
-      method:  'POST',
-      mode:    'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload)
-    })
-    .catch(function(){})
-    .finally(function(){
-      /* Pantalla de éxito — sin ticker visible */
+    /* Función que muestra pantalla de éxito */
+    function mostrarExito() {
       document.querySelectorAll('.tnl-view').forEach(function(v){ v.classList.remove('tnl-active','tnl-back'); });
       fill.style.width = '100%';
       dots.forEach(function(d){ d.classList.add('done'); d.classList.remove('active'); });
       success.classList.add('tnl-show');
       overlay.scrollTop = 0;
+    }
+
+    /* 1. Envío a Google Apps Script (correo + ticket) — fire & forget */
+    fetch(SCRIPT_URL, {
+      method:  'POST',
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    }).catch(function(){});
+
+    /* 2. Guardar en Firebase Firestore (colección: solicitudes) */
+    saveToFirebase('solicitudes', payload).finally(function(){
+      mostrarExito();
     });
   });
 
@@ -1807,8 +1837,19 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     var btn=document.getElementById('btn-'+tipo), sp=document.getElementById('spinner-'+tipo), bt=document.getElementById('btn-'+tipo+'-text');
     btn.disabled=true; sp.style.display='block'; bt.textContent='Enviando...';
+
+    /* Determinar colección de Firebase según tipo */
+    var coleccion = (tipo === 'tecnico') ? 'tecnicos' : 'clientes';
+
+    /* 1. Envío a Google Apps Script (correo) — fire & forget */
     fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .catch(function(){}).finally(function(){ document.getElementById('rform-'+tipo).style.display='none'; document.getElementById('success-'+tipo).style.display='block'; });
+      .catch(function(){});
+
+    /* 2. Guardar en Firebase Firestore */
+    saveToFirebase(coleccion, data).finally(function(){
+      document.getElementById('rform-'+tipo).style.display='none';
+      document.getElementById('success-'+tipo).style.display='block';
+    });
   }
 
   /* ═══════════════════════════════════════════
@@ -1825,6 +1866,39 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
 });
+</script>
+
+<!-- ═══════════════════════════════════════════
+     FIREBASE — Conexión a base de datos
+═══════════════════════════════════════════ -->
+<script type="module">
+  import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAnalytics }                         from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+  import { getFirestore, collection, addDoc }     from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+  import { getAuth }                              from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyCJlo2i_MsotnrCJ9VnnXsZidGKospvw2k",
+    authDomain:        "thruver-3de75.firebaseapp.com",
+    projectId:         "thruver-3de75",
+    storageBucket:     "thruver-3de75.firebasestorage.app",
+    messagingSenderId: "31613785682",
+    appId:             "1:31613785682:web:10158e532742050689318b",
+    measurementId:     "G-NPFGT5G82D"
+  };
+
+  const app       = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db        = getFirestore(app);
+  const auth      = getAuth(app);
+
+  /* Exponer al scope global para que el script principal los use */
+  window.db         = db;
+  window.auth       = auth;
+  window.fbCollection = collection;
+  window.fbAddDoc     = addDoc;
+
+  console.log("🔥 Firebase conectado con éxito a Thruver Platforms!");
 </script>
 </body>
 </html>
