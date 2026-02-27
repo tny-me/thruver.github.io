@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thruver — Únete como técnico verificado</title>
+  <meta name="description" content="Únete a la red de técnicos verificados de Thruver. Más clientes, más trabajo, respaldo garantizado." />
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Favicon.png" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #f3f3f3;
+      --bg2:     #eaeaea;
+      --bg3:     #e0e0e0;
+      --white:   #ffffff;
+      --black:   #111111;
+      --text:    #111111;
+      --muted:   #777777;
+      --muted2:  #aaaaaa;
+      --border:  rgba(0,0,0,0.08);
+      --radius:  14px;
+      --rsm:     8px;
+      --font:    Arial, "Arial Unicode MS", sans-serif;
+      --accent:  #111111;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+    /* ══ NAV ══ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      height: 60px; display: flex; align-items: center;
+      justify-content: space-between; padding: 0 2.5rem;
+      background: var(--bg); border-bottom: 1px solid var(--border);
+    }
+    .nav-logo { font-weight: 900; font-size: 1.3rem; letter-spacing: -0.04em; color: var(--black); text-decoration: none; }
+    .nav-tag { font-size: 0.7rem; color: var(--muted); background: var(--bg2); border-radius: 20px; padding: 0.18rem 0.65rem; margin-left: 0.5rem; letter-spacing: 0.04em; border: 1px solid var(--border); }
+    .nav-right { display: flex; gap: 0.5rem; align-items: center; }
+    .btn-ghost {
+      background: transparent; color: var(--text); border: 1px solid var(--border);
+      padding: 0.42rem 1rem; border-radius: var(--rsm); font-size: 0.83rem;
+      cursor: pointer; font-family: var(--font); text-decoration: none;
+      min-height: 44px; display: inline-flex; align-items: center;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .btn-ghost:hover { border-color: rgba(0,0,0,0.18); background: var(--bg2); }
+    .btn-solid {
+      background: var(--black); color: var(--white) !important; border: none;
+      padding: 0.48rem 1.1rem; border-radius: var(--rsm); font-size: 0.83rem;
+      font-weight: 700; cursor: pointer; font-family: var(--font);
+      text-decoration: none; min-height: 44px; display: inline-flex;
+      align-items: center; transition: opacity 0.15s;
+    }
+    .btn-solid:hover { opacity: 0.78; }
+    .nav-hamburger {
+      display: none; flex-direction: column; justify-content: center;
+      align-items: center; gap: 5px; width: 44px; height: 44px;
+      background: transparent; border: 1px solid var(--border);
+      border-radius: var(--rsm); cursor: pointer;
+    }
+    .nav-hamburger span { display: block; width: 20px; height: 2px; background: var(--black); border-radius: 2px; transition: all 0.25s ease; }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+    .mobile-menu {
+      display: none; position: fixed; top: 60px; left: 0; right: 0; bottom: 0;
+      z-index: 250; background: var(--white); padding: 1.2rem 1.5rem 2rem;
+      flex-direction: column; gap: 0.2rem; overflow-y: auto;
+      animation: slideDown 0.22s ease;
+    }
+    .mobile-menu.open { display: flex; }
+    @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
+    .mobile-menu a { display: flex; align-items: center; padding: 0.9rem 1rem; font-size: 0.97rem; font-weight: 600; color: var(--text); text-decoration: none; border-radius: var(--radius); min-height: 52px; transition: background 0.15s; }
+    .mm-divider { height: 1px; background: var(--border); margin: 0.5rem 0; }
+    .mm-cta { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.4rem; }
+    .mm-cta .btn-solid, .mm-cta .btn-ghost { width: 100%; justify-content: center; font-size: 0.95rem; padding: 0.85rem; border-radius: var(--radius); }
+    .mm-cta .btn-solid { background: var(--black) !important; color: #ffffff !important; }
+
+    /* ══ HERO ══ */
+    .hero {
+      margin-top: 60px; min-height: calc(100vh - 60px);
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; position: relative; overflow: hidden;
+    }
+    .hero-left {
+      padding: 4rem 3rem 4rem 4rem;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.72rem; font-weight: 700; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 0.12em;
+      background: var(--white); border: 1px solid var(--border);
+      padding: 0.35rem 0.85rem; border-radius: 20px; margin-bottom: 1.4rem;
+      width: fit-content;
+    }
+    .hero-eyebrow span { color: var(--black); }
+    .hero-h1 {
+      font-size: clamp(2rem, 4.5vw, 3.2rem);
+      font-weight: 900; letter-spacing: -0.05em;
+      line-height: 1.05; color: var(--black);
+      margin-bottom: 1.1rem;
+    }
+    .hero-h1 em { font-style: normal; position: relative; display: inline-block; }
+    .hero-h1 em::after {
+      content: ''; position: absolute; bottom: 2px; left: 0; right: 0;
+      height: 4px; background: var(--black); border-radius: 2px;
+    }
+    .hero-sub { font-size: 1rem; color: var(--muted); line-height: 1.7; max-width: 440px; margin-bottom: 2rem; }
+    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .hero-actions .btn-solid { padding: 0.85rem 1.6rem; font-size: 0.95rem; border-radius: var(--radius); }
+    .hero-actions .btn-ghost { padding: 0.85rem 1.4rem; font-size: 0.95rem; border-radius: var(--radius); }
+
+    .hero-stats {
+      display: flex; gap: 0; border: 1px solid var(--border);
+      border-radius: var(--radius); background: var(--white);
+      overflow: hidden; max-width: 400px;
+    }
+    .hero-stat { padding: 1.1rem 1.4rem; flex: 1; border-right: 1px solid var(--border); }
+    .hero-stat:last-child { border-right: none; }
+    .hero-stat strong { display: block; font-size: 1.4rem; font-weight: 900; letter-spacing: -0.04em; color: var(--black); line-height: 1; }
+    .hero-stat span { font-size: 0.63rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.2rem; display: block; }
+
+    .hero-right {
+      height: calc(100vh - 60px); background: var(--black);
+      display: flex; flex-direction: column; justify-content: center;
+      align-items: center; padding: 3rem; position: relative; overflow: hidden;
+    }
+    .hero-right-bg {
+      position: absolute; inset: 0; opacity: 0.04;
+      background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.5) 39px, rgba(255,255,255,0.5) 40px),
+                        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,255,255,0.5) 39px, rgba(255,255,255,0.5) 40px);
+    }
+    .hero-badge-stack { display: flex; flex-direction: column; gap: 0.9rem; width: 100%; max-width: 320px; position: relative; z-index: 1; }
+    .hero-badge {
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: var(--radius); padding: 1.1rem 1.3rem;
+      display: flex; align-items: center; gap: 1rem;
+      animation: fadeUp 0.5s ease both;
+    }
+    .hero-badge:nth-child(2) { animation-delay: 0.1s; }
+    .hero-badge:nth-child(3) { animation-delay: 0.2s; }
+    .hero-badge:nth-child(4) { animation-delay: 0.3s; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .hero-badge-icon { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+    .hero-badge-text strong { display: block; font-size: 0.87rem; font-weight: 700; color: #fff; }
+    .hero-badge-text span { font-size: 0.72rem; color: rgba(255,255,255,0.45); }
+
+    /* ══ BENEFIT STRIP ══ */
+    .benefit-strip { background: var(--white); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .benefit-strip-inner { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2.5rem; display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; }
+    .benefit-item { display: flex; flex-direction: column; gap: 0.5rem; }
+    .benefit-icon { font-size: 1.6rem; margin-bottom: 0.3rem; }
+    .benefit-title { font-size: 0.9rem; font-weight: 800; color: var(--black); }
+    .benefit-desc { font-size: 0.78rem; color: var(--muted); line-height: 1.6; }
+
+    /* ══ HOW IT WORKS ══ */
+    .how-section { max-width: 860px; margin: 0 auto; padding: 5rem 2.5rem; }
+    .section-eyebrow { font-size: 0.65rem; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 0.6rem; }
+    .section-title { font-size: clamp(1.5rem, 3vw, 2.1rem); font-weight: 900; letter-spacing: -0.04em; color: var(--black); margin-bottom: 0.5rem; }
+    .section-sub { font-size: 0.9rem; color: var(--muted); line-height: 1.7; max-width: 520px; margin-bottom: 3rem; }
+    .how-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; }
+    .how-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; position: relative; overflow: hidden; }
+    .how-card::before { content: attr(data-num); position: absolute; top: -0.5rem; right: 0.8rem; font-size: 5rem; font-weight: 900; color: var(--bg2); line-height: 1; pointer-events: none; }
+    .how-card-icon { font-size: 1.7rem; margin-bottom: 0.8rem; }
+    .how-card h3 { font-size: 0.95rem; font-weight: 800; color: var(--black); margin-bottom: 0.35rem; }
+    .how-card p { font-size: 0.78rem; color: var(--muted); line-height: 1.65; }
+
+    /* ══ CTA BANNER ══ */
+    .cta-banner { background: var(--black); padding: 5rem 2.5rem; text-align: center; }
+    .cta-banner h2 { font-size: clamp(1.6rem, 3.5vw, 2.4rem); font-weight: 900; letter-spacing: -0.04em; color: var(--white); margin-bottom: 0.7rem; }
+    .cta-banner p { font-size: 0.95rem; color: rgba(255,255,255,0.5); margin-bottom: 2rem; }
+    .cta-banner .btn-white { background: var(--white); color: var(--black) !important; border: none; padding: 1rem 2rem; border-radius: var(--radius); font-size: 0.96rem; font-weight: 700; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; transition: opacity 0.15s, transform 0.15s; }
+    .cta-banner .btn-white:hover { opacity: 0.88; transform: translateY(-2px); }
+
+    /* ══ FOOTER ══ */
+    footer { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 2.5rem; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 0.5rem; }
+    .footer-logo { font-weight: 900; font-size: 1rem; letter-spacing: -0.04em; color: var(--black); text-decoration: none; }
+    .footer-copy { font-size: 0.72rem; color: var(--muted2); }
+    .footer-links { display: flex; gap: 0; }
+    .footer-links a { font-size: 0.72rem; color: var(--muted); text-decoration: none; padding: 0.4rem 0.85rem; min-height: 44px; display: flex; align-items: center; }
+    .footer-links a:hover { color: var(--black); }
+
+    /* ══ TUNNEL OVERLAY ══ */
+    .tnl-overlay {
+      display: none; position: fixed; inset: 0; z-index: 400;
+      background: var(--bg); overflow-y: auto;
+    }
+    .tnl-overlay.tnl-open { display: block; animation: tnlIn 0.3s cubic-bezier(0.4,0,0.2,1) both; }
+    @keyframes tnlIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+    .tnl-header {
+      position: sticky; top: 0; z-index: 10;
+      height: 64px; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(243,243,243,0.94); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .tnl-logo { font-weight: 900; font-size: 1.25rem; letter-spacing: -0.04em; color: var(--black); }
+    .tnl-close {
+      display: flex; align-items: center; gap: 0.35rem;
+      background: transparent; border: 1px solid var(--border);
+      border-radius: var(--rsm); padding: 0.42rem 0.9rem;
+      color: var(--muted); font-size: 0.8rem; font-family: var(--font);
+      cursor: pointer; min-height: 40px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .tnl-close:hover { background: var(--bg3); color: var(--black); }
+
+    .tnl-progress-bar { position: sticky; top: 64px; z-index: 9; height: 3px; background: var(--bg3); }
+    .tnl-progress-fill { height: 100%; background: var(--black); border-radius: 0 2px 2px 0; transition: width 0.45s cubic-bezier(0.4,0,0.2,1); }
+
+    .tnl-step-indicator { display: flex; justify-content: center; gap: 0.6rem; padding: 1.6rem 1rem 0; }
+    .tnl-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--bg3); transition: background 0.3s, transform 0.3s; }
+    .tnl-dot.active { background: var(--black); transform: scale(1.5); }
+    .tnl-dot.done   { background: var(--black); opacity: 0.3; }
+
+    .tnl-body { max-width: 780px; margin: 0 auto; padding: 2.2rem 1.5rem 6rem; }
+    .tnl-view { display: none; }
+    .tnl-view.tnl-active { display: block; animation: tnlStepIn 0.32s cubic-bezier(0.4,0,0.2,1) both; }
+    .tnl-view.tnl-back   { display: block; animation: tnlStepBack 0.32s cubic-bezier(0.4,0,0.2,1) both; }
+    @keyframes tnlStepIn   { from{opacity:0;transform:translateX(28px)}  to{opacity:1;transform:translateX(0)} }
+    @keyframes tnlStepBack { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
+
+    .tnl-eyebrow { font-size: 0.65rem; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 0.5rem; }
+    .tnl-title { font-size: clamp(1.55rem,4vw,2.1rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; color: var(--black); margin-bottom: 0.45rem; }
+    .tnl-sub { font-size: 0.88rem; color: var(--muted); line-height: 1.65; margin-bottom: 2rem; }
+
+    /* Paso 1: Grid especialidades */
+    .tnl-svc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 0.75rem; }
+    .tnl-svc-card {
+      background: var(--white); border: 2px solid var(--border);
+      border-radius: var(--radius); padding: 1.6rem 0.8rem;
+      text-align: center; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 0.55rem;
+      transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+      user-select: none;
+    }
+    .tnl-svc-card:hover { border-color: rgba(0,0,0,0.2); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+    .tnl-svc-card.tnl-svc-selected { border-color: var(--black); background: var(--black); }
+    .tnl-svc-card.tnl-svc-selected .tnl-svc-icon { filter: grayscale(1) brightness(10); }
+    .tnl-svc-card.tnl-svc-selected .tnl-svc-name { color: var(--white); }
+    .tnl-svc-icon { font-size: 2.1rem; line-height: 1; }
+    .tnl-svc-name { font-size: 0.83rem; font-weight: 700; color: var(--text); }
+
+    /* Paso 2 */
+    .tnl-back-btn { display: inline-flex; align-items: center; gap: 0.35rem; background: transparent; border: none; cursor: pointer; font-family: var(--font); font-size: 0.82rem; color: var(--muted); padding: 0.4rem 0; margin-bottom: 1.4rem; transition: color 0.15s; }
+    .tnl-back-btn:hover { color: var(--black); }
+
+    .tnl-field { margin-bottom: 1.1rem; }
+    .tnl-field label { display: block; font-size: 0.66rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.38rem; }
+    .tnl-field select,
+    .tnl-field textarea,
+    .tnl-field input[type="text"],
+    .tnl-field input[type="email"],
+    .tnl-field input[type="tel"],
+    .tnl-field input[type="password"],
+    .tnl-field input[type="number"] {
+      width: 100%; background: var(--white); border: 1.5px solid var(--border);
+      border-radius: var(--radius); padding: 0.9rem 1.05rem;
+      font-size: 1rem; font-family: var(--font); color: var(--text);
+      outline: none; -webkit-appearance: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .tnl-field textarea { min-height: 90px; resize: none; line-height: 1.55; }
+    .tnl-field select:focus, .tnl-field textarea:focus, .tnl-field input:focus { border-color: var(--black); box-shadow: 0 0 0 3px rgba(17,17,17,0.06); }
+    .tnl-field input::placeholder, .tnl-field textarea::placeholder { color: var(--muted2); }
+    .tnl-field input.tnl-error, .tnl-field select.tnl-error { border-color: #e53e3e; box-shadow: 0 0 0 3px rgba(229,62,62,0.08); }
+
+    /* Toggle buttons (disponibilidad, herramientas) */
+    .tnl-toggle-row { display: grid; gap: 0.6rem; margin-bottom: 1.1rem; }
+    .tnl-toggle-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .tnl-toggle-row.cols-4 { grid-template-columns: repeat(4,1fr); }
+    .tnl-toggle-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+      background: var(--white); border: 2px solid var(--border);
+      border-radius: var(--radius); padding: 0.85rem 0.5rem;
+      font-family: var(--font); font-size: 0.82rem; font-weight: 600;
+      color: var(--muted); cursor: pointer; min-height: 50px; text-align: center;
+      transition: all 0.18s; user-select: none;
+    }
+    .tnl-toggle-btn:hover { border-color: rgba(0,0,0,0.2); color: var(--black); }
+    .tnl-toggle-btn.selected { border-color: var(--black); background: var(--black); color: var(--white); }
+
+    /* Paso 3: layout */
+    .tnl-step3-layout { display: grid; grid-template-columns: 1fr 1.15fr; gap: 1.4rem; align-items: start; }
+
+    /* Recibo del técnico */
+    .tnl-receipt { background: var(--black); border-radius: var(--radius); padding: 1.5rem; position: sticky; top: 84px; }
+    .tnl-receipt-title { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: rgba(255,255,255,0.35); margin-bottom: 1.1rem; }
+    .tnl-rrow { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.7rem 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .tnl-rrow:last-of-type { border-bottom: none; margin-bottom: 1rem; }
+    .tnl-rrow-ico { width: 30px; height: 30px; border-radius: 7px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+    .tnl-rrow-info small { display: block; font-size: 0.6rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.1rem; }
+    .tnl-rrow-info span  { display: block; font-size: 0.83rem; font-weight: 700; color: var(--white); word-break: break-word; }
+    .tnl-receipt-badge { display: flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.06); border-radius: 9px; padding: 0.85rem 1rem; }
+    .tnl-receipt-badge p { font-size: 0.73rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+    .tnl-receipt-badge p b { color: var(--white); }
+
+    /* Form card */
+    .tnl-form-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; }
+    .tnl-form-title { font-size: 1.05rem; font-weight: 900; letter-spacing: -0.03em; color: var(--black); margin-bottom: 0.25rem; }
+    .tnl-form-sub { font-size: 0.77rem; color: var(--muted); margin-bottom: 1.4rem; line-height: 1.55; }
+
+    /* Auth fields */
+    .tnl-google-btn {
+      width: 100%; background: var(--white); color: #3c3c3c;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 0.9rem 1rem; font-size: 0.9rem; font-weight: 700;
+      font-family: var(--font); cursor: pointer; min-height: 52px;
+      display: flex; align-items: center; justify-content: center; gap: 0.65rem;
+      transition: border-color 0.18s, box-shadow 0.18s;
+      margin-bottom: 1.2rem;
+    }
+    .tnl-google-btn:hover { border-color: rgba(0,0,0,0.22); box-shadow: 0 2px 10px rgba(0,0,0,0.07); }
+    .tnl-google-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .tnl-auth-divider { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; color: var(--muted2); font-size: 0.72rem; }
+    .tnl-auth-divider::before, .tnl-auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .tnl-auth-error { display: none; background: #fff0f0; border: 1px solid #fcc; border-radius: var(--rsm); padding: 0.65rem 0.9rem; font-size: 0.78rem; color: #cc3333; margin-bottom: 0.9rem; line-height: 1.5; }
+    .tnl-auth-error.visible { display: block; }
+    .tnl-mode-toggle { font-size: 0.74rem; color: var(--muted); text-align: center; margin-top: 0.6rem; }
+    .tnl-mode-toggle button { background: none; border: none; color: var(--black); font-weight: 700; cursor: pointer; font-family: var(--font); font-size: 0.74rem; text-decoration: underline; padding: 0; }
+    .tnl-pass-wrap { position: relative; }
+    .tnl-pass-wrap input { padding-right: 3rem; }
+    .tnl-pass-toggle { position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); display: flex; align-items: center; padding: 0.25rem; }
+    .tnl-pass-toggle:hover { color: var(--black); }
+    .tnl-addr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+    .tnl-session-banner { display: none; align-items: center; gap: 0.7rem; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius); padding: 0.85rem 1rem; margin-bottom: 1.2rem; }
+    .tnl-session-banner.visible { display: flex; }
+    .tnl-session-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--black); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
+    .tnl-session-info { flex: 1; }
+    .tnl-session-info strong { display: block; font-size: 0.82rem; font-weight: 700; color: #16a34a; }
+    .tnl-session-info span { font-size: 0.72rem; color: var(--muted); }
+    .tnl-session-out { background: none; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px; font-size: 0.7rem; color: var(--muted); cursor: pointer; padding: 0.3rem 0.6rem; font-family: var(--font); }
+    .tnl-auth-fields.hidden { display: none; }
+    .tnl-forgot-wrap { text-align: right; margin-top: -0.3rem; margin-bottom: 0.6rem; }
+    .tnl-forgot-btn { background: none; border: none; cursor: pointer; font-family: var(--font); font-size: 0.72rem; color: var(--muted); text-decoration: underline; padding: 0; }
+
+    /* CTA */
+    .tnl-cta {
+      width: 100%; background: var(--black); color: var(--white) !important; border: none;
+      border-radius: var(--radius); padding: 1.05rem; font-size: 0.96rem; font-weight: 700;
+      font-family: var(--font); cursor: pointer; min-height: 54px;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      transition: opacity 0.18s, transform 0.18s, box-shadow 0.18s; margin-top: 0.3rem;
+    }
+    .tnl-cta:hover:not(:disabled) { opacity: 0.83; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+    .tnl-cta:disabled { opacity: 0.42; cursor: not-allowed; transform: none; }
+    .tnl-cta-note { font-size: 0.64rem; color: var(--muted2); margin-top: 0.55rem; text-align: center; }
+
+    .spinner {
+      width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.35);
+      border-top-color: #fff; border-radius: 50%; display: none;
+      animation: spin 0.6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Éxito */
+    .tnl-success { display: none; text-align: center; padding: 5rem 2rem 4rem; }
+    .tnl-success.tnl-show { display: block; animation: fadeUp 0.5s ease both; }
+    .tnl-success-ring { width: 80px; height: 80px; border-radius: 50%; background: var(--black); display: flex; align-items: center; justify-content: center; margin: 0 auto 1.6rem; }
+    .check-svg { width: 44px; height: 44px; display: block; }
+    .check-circle { stroke: rgba(255,255,255,0.15); stroke-width: 2; fill: none; }
+    .check-mark { stroke: #ffffff; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; fill: none; stroke-dasharray: 36; stroke-dashoffset: 36; transition: stroke-dashoffset 0.6s cubic-bezier(0.4,0,0.2,1); }
+    .tnl-success.tnl-show .check-mark { stroke-dashoffset: 0; transition-delay: 0.25s; }
+    .tnl-success.tnl-show .tnl-success-ring { animation: successPop 0.5s cubic-bezier(0.175,0.885,0.32,1.275) both; }
+    @keyframes successPop { 0%{transform:scale(0.7);opacity:0} 60%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+    .tnl-success h2 { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.04em; color: var(--black); margin-bottom: 0.55rem; }
+    .tnl-success p  { font-size: 0.9rem; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 2rem; }
+    .tnl-success-status { display: inline-flex; align-items: center; gap: 0.5rem; background: #fffbeb; border: 1px solid #fde68a; border-radius: 20px; padding: 0.4rem 1rem; font-size: 0.76rem; font-weight: 700; color: #92400e; margin-bottom: 1.5rem; }
+
+    /* ══ RESPONSIVE ══ */
+    @media(max-width:900px){
+      .hero { grid-template-columns: 1fr; min-height: auto; }
+      .hero-right { height: auto; padding: 3rem 2rem; min-height: 340px; }
+      .benefit-strip-inner { grid-template-columns: repeat(2,1fr); }
+      .how-steps { grid-template-columns: 1fr; }
+      .tnl-step3-layout { grid-template-columns: 1fr; }
+      .tnl-receipt { position: static; }
+    }
+    @media(max-width:600px){
+      nav { padding: 0 1.2rem; }
+      .nav-right .btn-ghost, .nav-right .btn-solid { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero-left { padding: 2rem 1.2rem 1.5rem; }
+      .hero-right { padding: 2rem 1.2rem; min-height: 260px; }
+      .hero-h1 { font-size: 1.8rem; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn-solid, .hero-actions .btn-ghost { width: 100%; justify-content: center; }
+      .benefit-strip-inner { grid-template-columns: 1fr; padding: 2rem 1.2rem; gap: 1.5rem; }
+      .how-section { padding: 3rem 1.2rem; }
+      .tnl-svc-grid { grid-template-columns: repeat(2,1fr); }
+      .tnl-toggle-row.cols-4 { grid-template-columns: repeat(2,1fr); }
+      .tnl-addr-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; align-items: flex-start; padding: 1.5rem 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="index.html" class="nav-logo">thruver <span class="nav-tag">para técnicos</span></a>
+  <div class="nav-right">
+    <a href="index.html" class="btn-ghost">Solicitar servicio</a>
+    <button class="btn-solid tnl-trigger">Registrarme ahora</button>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html">← Volver al inicio</a>
+  <a href="#como-funciona">Cómo funciona</a>
+  <a href="#beneficios">Beneficios</a>
+  <div class="mm-divider"></div>
+  <div class="mm-cta">
+    <button class="btn-solid tnl-trigger">Registrarme ahora</button>
+    <a href="index.html" class="btn-ghost">Solicitar servicio</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TUNNEL OVERLAY
+══════════════════════════════════════ -->
+<div class="tnl-overlay" id="tnlOverlay">
+  <div class="tnl-header">
+    <span class="tnl-logo">thruver</span>
+    <button class="tnl-close" id="tnlClose">✕ Cerrar</button>
+  </div>
+  <div class="tnl-progress-bar">
+    <div class="tnl-progress-fill" id="tnlFill" style="width:33%"></div>
+  </div>
+  <div class="tnl-step-indicator">
+    <div class="tnl-dot active" id="dot0"></div>
+    <div class="tnl-dot" id="dot1"></div>
+    <div class="tnl-dot" id="dot2"></div>
+  </div>
+
+  <div class="tnl-body">
+
+    <!-- ─── PASO 1: Especialidad ─── -->
+    <div class="tnl-view tnl-active" id="tnl-v1">
+      <p class="tnl-eyebrow">Paso 1 de 3</p>
+      <h1 class="tnl-title">¿Cuál es tu especialidad?</h1>
+      <p class="tnl-sub">Selecciona el área donde tienes más experiencia. Puedes agregar más especialidades después de unirte.</p>
+      <div class="tnl-svc-grid">
+        <div class="tnl-svc-card" data-svc="Plomería"      data-ico="🔧"><span class="tnl-svc-icon">🔧</span><span class="tnl-svc-name">Plomería</span></div>
+        <div class="tnl-svc-card" data-svc="Electricidad"  data-ico="⚡"><span class="tnl-svc-icon">⚡</span><span class="tnl-svc-name">Electricidad</span></div>
+        <div class="tnl-svc-card" data-svc="Limpieza"      data-ico="🧹"><span class="tnl-svc-icon">🧹</span><span class="tnl-svc-name">Limpieza</span></div>
+        <div class="tnl-svc-card" data-svc="Pintura"       data-ico="🖌️"><span class="tnl-svc-icon">🖌️</span><span class="tnl-svc-name">Pintura</span></div>
+        <div class="tnl-svc-card" data-svc="Carpintería"   data-ico="🪚"><span class="tnl-svc-icon">🪚</span><span class="tnl-svc-name">Carpintería</span></div>
+        <div class="tnl-svc-card" data-svc="Jardinería"    data-ico="🌿"><span class="tnl-svc-icon">🌿</span><span class="tnl-svc-name">Jardinería</span></div>
+        <div class="tnl-svc-card" data-svc="Aire / Clima"  data-ico="❄️"><span class="tnl-svc-icon">❄️</span><span class="tnl-svc-name">Aire / Clima</span></div>
+        <div class="tnl-svc-card" data-svc="Remodelación"  data-ico="🏗️"><span class="tnl-svc-icon">🏗️</span><span class="tnl-svc-name">Remodelación</span></div>
+        <div class="tnl-svc-card" data-svc="Otro"          data-ico="💬"><span class="tnl-svc-icon">💬</span><span class="tnl-svc-name">Otro</span></div>
+      </div>
+    </div>
+
+    <!-- ─── PASO 2: Experiencia y disponibilidad ─── -->
+    <div class="tnl-view" id="tnl-v2">
+      <button class="tnl-back-btn" id="tnl-back2">← Cambiar especialidad</button>
+      <p class="tnl-eyebrow">Paso 2 de 3</p>
+      <h1 class="tnl-title">Cuéntanos sobre ti</h1>
+      <p class="tnl-sub">Necesitamos conocer tu experiencia y disponibilidad para conectarte con los clientes correctos.</p>
+
+      <div class="tnl-field">
+        <label>Años de experiencia</label>
+        <select id="tnl-exp">
+          <option value="">Selecciona...</option>
+          <option value="Menos de 1 año">Menos de 1 año</option>
+          <option value="1 a 2 años">1 a 2 años</option>
+          <option value="3 a 5 años">3 a 5 años</option>
+          <option value="6 a 10 años">6 a 10 años</option>
+          <option value="Más de 10 años">Más de 10 años</option>
+        </select>
+      </div>
+
+      <div class="tnl-field">
+        <label>Zona donde trabajas</label>
+        <input type="text" id="tnl-zona" placeholder="Ej. Mazatlán centro, Lomas de Mazatlán..." />
+      </div>
+
+      <div class="tnl-field">
+        <label>¿Tienes herramientas propias?</label>
+      </div>
+      <div class="tnl-toggle-row cols-2" style="margin-top:-0.6rem;">
+        <button class="tnl-toggle-btn" id="tnl-tools-si"  data-val="Sí">✅ Sí, tengo mis herramientas</button>
+        <button class="tnl-toggle-btn" id="tnl-tools-no"  data-val="No">❌ No tengo herramientas</button>
+      </div>
+
+      <div class="tnl-field" style="margin-top:0.5rem;">
+        <label>Disponibilidad</label>
+      </div>
+      <div class="tnl-toggle-row cols-2" style="margin-top:-0.6rem;">
+        <button class="tnl-toggle-btn" id="tnl-disp-full"  data-val="Tiempo completo">🕐 Tiempo completo</button>
+        <button class="tnl-toggle-btn" id="tnl-disp-part"  data-val="Medio tiempo">🕔 Medio tiempo</button>
+        <button class="tnl-toggle-btn" id="tnl-disp-week"  data-val="Fines de semana">📅 Fines de semana</button>
+        <button class="tnl-toggle-btn" id="tnl-disp-flex"  data-val="Flexible">🔄 Flexible</button>
+      </div>
+
+      <div class="tnl-field" style="margin-top:0.5rem;">
+        <label>Cuéntanos brevemente tu experiencia <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:0.7rem;color:var(--muted2);">(opcional)</span></label>
+        <textarea id="tnl-bio" placeholder="Ej. Llevo 8 años instalando sistemas eléctricos en residencias y locales comerciales..."></textarea>
+      </div>
+
+      <button class="tnl-cta" id="tnl-next2">Continuar →</button>
+    </div>
+
+    <!-- ─── PASO 3: Datos + cuenta ─── -->
+    <div class="tnl-view" id="tnl-v3">
+      <button class="tnl-back-btn" id="tnl-back3">← Editar experiencia</button>
+      <p class="tnl-eyebrow">Paso 3 de 3</p>
+      <h1 class="tnl-title">Crea tu cuenta</h1>
+      <p class="tnl-sub" style="margin-bottom:1.5rem;">Un último paso. Revisa tu perfil y crea tu cuenta para enviar tu solicitud.</p>
+
+      <div class="tnl-step3-layout">
+
+        <!-- Recibo del técnico -->
+        <div class="tnl-receipt">
+          <p class="tnl-receipt-title">Tu perfil</p>
+          <div class="tnl-rrow">
+            <div class="tnl-rrow-ico" id="r-ico">🔧</div>
+            <div class="tnl-rrow-info">
+              <small>Especialidad</small>
+              <span id="r-svc">—</span>
+            </div>
+          </div>
+          <div class="tnl-rrow">
+            <div class="tnl-rrow-ico">📅</div>
+            <div class="tnl-rrow-info">
+              <small>Disponibilidad</small>
+              <span id="r-disp">—</span>
+            </div>
+          </div>
+          <div class="tnl-rrow">
+            <div class="tnl-rrow-ico">⭐</div>
+            <div class="tnl-rrow-info">
+              <small>Experiencia</small>
+              <span id="r-exp">—</span>
+            </div>
+          </div>
+          <div class="tnl-rrow">
+            <div class="tnl-rrow-ico">📍</div>
+            <div class="tnl-rrow-info">
+              <small>Zona</small>
+              <span id="r-zona">—</span>
+            </div>
+          </div>
+          <div class="tnl-receipt-badge">
+            <span style="font-size:1rem;flex-shrink:0;">🛡️</span>
+            <p><b>Revisión en 48 hrs.</b> Thruver validará tu perfil y te contactará por WhatsApp con los próximos pasos.</p>
+          </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="tnl-form-card">
+          <h3 class="tnl-form-title">Datos de contacto</h3>
+          <p class="tnl-form-sub">Crea tu cuenta para enviar tu solicitud y dar seguimiento al proceso.</p>
+
+          <div id="tnl-form-fields">
+
+            <!-- Banner sesión activa -->
+            <div class="tnl-session-banner" id="tnl-session-banner">
+              <div class="tnl-session-avatar" id="tnl-session-avatar">?</div>
+              <div class="tnl-session-info">
+                <strong id="tnl-session-name">—</strong>
+                <span id="tnl-session-email">—</span>
+              </div>
+              <button class="tnl-session-out" id="tnl-session-out">Salir</button>
+            </div>
+
+            <div class="tnl-auth-error" id="tnl-auth-error"></div>
+
+            <!-- Bloque auth -->
+            <div class="tnl-auth-fields" id="tnl-auth-fields">
+              <button class="tnl-google-btn" id="tnl-google-btn" type="button">
+                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+                  <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+                  <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+                  <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/>
+                </svg>
+                Continuar con Google
+              </button>
+              <div class="tnl-auth-divider">o con tu correo</div>
+            </div>
+
+            <div class="tnl-field">
+              <label>Nombre completo</label>
+              <input type="text" id="tnl-nombre" placeholder="Tu nombre completo" autocomplete="given-name" />
+            </div>
+
+            <div class="tnl-auth-fields" id="tnl-auth-fields-email">
+              <div class="tnl-field">
+                <label>Correo electrónico</label>
+                <input type="email" id="tnl-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" />
+              </div>
+              <div class="tnl-field">
+                <label>Contraseña <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted2);font-size:0.7rem;"> — mínimo 6 caracteres</span></label>
+                <div class="tnl-pass-wrap">
+                  <input type="password" id="tnl-pass" placeholder="••••••••" autocomplete="new-password" />
+                  <button class="tnl-pass-toggle" id="tnl-pass-toggle" type="button">
+                    <svg id="tnl-eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="tnl-mode-toggle">
+                <span id="tnl-mode-text">¿Ya tienes cuenta?</span>
+                <button id="tnl-mode-switch" type="button">Iniciar sesión</button>
+              </div>
+              <div class="tnl-forgot-wrap" id="tnl-forgot-wrap" style="display:none;">
+                <button class="tnl-forgot-btn" id="tnl-forgot-btn" type="button">¿Olvidaste tu contraseña?</button>
+              </div>
+            </div>
+
+            <div class="tnl-field">
+              <label>WhatsApp</label>
+              <input type="tel" id="tnl-tel" placeholder="667 000 0000" autocomplete="tel" inputmode="tel" />
+            </div>
+
+            <div class="tnl-field">
+              <label>Calle</label>
+              <input type="text" id="tnl-calle" placeholder="Nombre de la calle" />
+            </div>
+            <div class="tnl-addr-grid">
+              <div class="tnl-field">
+                <label>Número</label>
+                <input type="text" id="tnl-numero" placeholder="Ej. 142" />
+              </div>
+              <div class="tnl-field">
+                <label>Colonia</label>
+                <input type="text" id="tnl-colonia" placeholder="Tu colonia" />
+              </div>
+            </div>
+
+            <button class="tnl-cta" id="tnl-submit">
+              <span class="spinner" id="tnl-spinner"></span>
+              <span id="tnl-submit-txt">Enviar solicitud ✓</span>
+            </button>
+            <p class="tnl-cta-note">Tu solicitud será revisada por Thruver. Te contactamos en menos de 48 horas.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─── ÉXITO ─── -->
+    <div class="tnl-success" id="tnl-success">
+      <div class="tnl-success-ring">
+        <svg class="check-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+          <circle class="check-circle" cx="26" cy="26" r="22"/>
+          <path class="check-mark" d="M14 26 l8 9 l16 -18"/>
+        </svg>
+      </div>
+      <div class="tnl-success-status">⏳ En revisión</div>
+      <h2>¡Solicitud enviada!</h2>
+      <p>Recibimos tu solicitud para unirte a la red Thruver. Revisaremos tu perfil y <strong>te contactamos por WhatsApp en menos de 48 horas</strong> con los próximos pasos.</p>
+      <button class="tnl-cta" id="tnl-ok" style="max-width:260px;margin:0 auto;">Entendido</button>
+    </div>
+
+  </div><!-- /tnl-body -->
+</div><!-- /tnl-overlay -->
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">🛡️ Red verificada · <span>Thruver para técnicos</span></div>
+    <h1 class="hero-h1">Trabaja más.<br><em>Preocúpate menos.</em></h1>
+    <p class="hero-sub">Únete a la red de técnicos verificados de Thruver. Nosotros conseguimos los clientes, tú haces el trabajo. Sin intermediarios, sin incertidumbre.</p>
+    <div class="hero-actions">
+      <button class="btn-solid tnl-trigger" style="font-size:1rem;padding:1rem 1.8rem;border-radius:var(--radius);">Registrarme ahora →</button>
+      <a href="#como-funciona" class="btn-ghost" style="font-size:1rem;padding:1rem 1.4rem;border-radius:var(--radius);">Ver cómo funciona</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>+120</strong><span>técnicos activos</span></div>
+      <div class="hero-stat"><strong>48h</strong><span>tiempo de respuesta</span></div>
+      <div class="hero-stat"><strong>100%</strong><span>verificados</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-bg"></div>
+    <div class="hero-badge-stack">
+      <div class="hero-badge">
+        <div class="hero-badge-icon">📲</div>
+        <div class="hero-badge-text">
+          <strong>Clientes directos</strong>
+          <span>Thruver te asigna trabajos en tu zona sin que tengas que buscarlos</span>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <div class="hero-badge-icon">💰</div>
+        <div class="hero-badge-text">
+          <strong>Cobro garantizado</strong>
+          <span>Olvida los clientes que no pagan — Thruver respalda cada servicio</span>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <div class="hero-badge-icon">🏆</div>
+        <div class="hero-badge-text">
+          <strong>Reputación real</strong>
+          <span>Construye tu historial de calificaciones y destaca entre los mejores</span>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <div class="hero-badge-icon">📋</div>
+        <div class="hero-badge-text">
+          <strong>Sin papeleo</strong>
+          <span>Regístrate en minutos. Sin contratos complicados ni costos ocultos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     BENEFITS
+══════════════════════════════════════ -->
+<section class="benefit-strip" id="beneficios">
+  <div class="benefit-strip-inner">
+    <div class="benefit-item">
+      <div class="benefit-icon">📍</div>
+      <div class="benefit-title">Trabajo en tu zona</div>
+      <div class="benefit-desc">Solo recibes solicitudes cerca de ti. Sin perder tiempo en traslados innecesarios.</div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🔔</div>
+      <div class="benefit-title">Notificaciones en tiempo real</div>
+      <div class="benefit-desc">Te avisamos al instante cuando hay un nuevo cliente esperando por tu especialidad.</div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">⭐</div>
+      <div class="benefit-title">Perfil profesional</div>
+      <div class="benefit-desc">Tu historial, calificaciones y especialidades visibles para los clientes de Thruver.</div>
+    </div>
+    <div class="benefit-item">
+      <div class="benefit-icon">🛡️</div>
+      <div class="benefit-title">Respaldo Thruver</div>
+      <div class="benefit-desc">Soporte ante disputas, problemas de pago o situaciones inesperadas en cada servicio.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     HOW IT WORKS
+══════════════════════════════════════ -->
+<section class="how-section" id="como-funciona">
+  <p class="section-eyebrow">Proceso de registro</p>
+  <h2 class="section-title">3 pasos para unirte a la red.</h2>
+  <p class="section-sub">El proceso es rápido. En menos de 5 minutos envías tu solicitud y en 48 horas tienes respuesta.</p>
+  <div class="how-steps">
+    <div class="how-card" data-num="01">
+      <div class="how-card-icon">🔧</div>
+      <h3>Elige tu especialidad</h3>
+      <p>Dinos en qué área eres experto: electricidad, plomería, limpieza u otro. Puedes tener más de una.</p>
+    </div>
+    <div class="how-card" data-num="02">
+      <div class="how-card-icon">📝</div>
+      <h3>Comparte tu experiencia</h3>
+      <p>Años de experiencia, zona de trabajo y disponibilidad. Así conectamos contigo solo cuando tiene sentido.</p>
+    </div>
+    <div class="how-card" data-num="03">
+      <div class="how-card-icon">✅</div>
+      <h3>Espera la validación</h3>
+      <p>Thruver revisa tu perfil en menos de 48 horas. Si aplicas, te contactamos por WhatsApp para los siguientes pasos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+     CTA BANNER
+══════════════════════════════════════ -->
+<section class="cta-banner">
+  <h2>¿Listo para más trabajo?</h2>
+  <p>Únete hoy a la red de técnicos verificados de Thruver y empieza a recibir clientes.</p>
+  <button class="btn-white tnl-trigger">Registrarme gratis →</button>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="index.html" class="footer-logo">thruver</a>
+  <span class="footer-copy">© 2025 Thruver · Culiacán, Sinaloa</span>
+  <div class="footer-links">
+    <a href="index.html">Solicitar servicio</a>
+    <a href="#">Términos</a>
+    <a href="#">Privacidad</a>
+  </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
+
+  /* ── Estado del túnel ── */
+  var T = { especialidad:'', ico:'🔧', experiencia:'', zona:'', herramientas:'', disponibilidad:'', bio:'', nombre:'', email:'', tel:'', calle:'', numero:'', colonia:'' };
+
+  /* ── Elementos ── */
+  var overlay  = document.getElementById('tnlOverlay');
+  var fill     = document.getElementById('tnlFill');
+  var dots     = [document.getElementById('dot0'), document.getElementById('dot1'), document.getElementById('dot2')];
+  var success  = document.getElementById('tnl-success');
+  var views    = [document.getElementById('tnl-v1'), document.getElementById('tnl-v2'), document.getElementById('tnl-v3')];
+
+  /* ── Auth mode ── */
+  var tnlAuthMode = 'register';
+
+  /* ── Helpers ── */
+  function saveToFirebase(col, data) {
+    return new Promise(function(resolve) {
+      if (window.db && window.fbAddDoc && window.fbCollection) {
+        window.fbAddDoc(window.fbCollection(window.db, col), Object.assign({}, data, { creadoEn: new Date().toISOString() }))
+          .then(function(r){ console.log('[Thruver] Firebase OK:', col, r.id); resolve(r.id); })
+          .catch(function(e){ console.warn('[Thruver] Firebase error:', e); resolve(null); });
+      } else { resolve(null); }
+    });
+  }
+
+  function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
+  function markError(id) { var el=document.getElementById(id); if(el) el.classList.add('tnl-error'); }
+  function clearErrors() { document.querySelectorAll('.tnl-error').forEach(function(el){ el.classList.remove('tnl-error'); }); }
+
+  /* ── Progress ── */
+  var fills = ['33%','66%','100%'];
+  function showView(idx, forward) {
+    views.forEach(function(v){ v.classList.remove('tnl-active','tnl-back'); });
+    views[idx].classList.add(forward ? 'tnl-active' : 'tnl-back');
+    fill.style.width = fills[idx];
+    dots.forEach(function(d,i){
+      d.classList.remove('active','done');
+      if (i < idx) d.classList.add('done');
+      else if (i === idx) d.classList.add('active');
+    });
+    overlay.scrollTop = 0;
+  }
+
+  /* ── Actualizar recibo ── */
+  function updateReceipt() {
+    document.getElementById('r-svc').textContent   = T.especialidad  || '—';
+    document.getElementById('r-ico').textContent   = T.ico           || '🔧';
+    document.getElementById('r-disp').textContent  = T.disponibilidad || '—';
+    document.getElementById('r-exp').textContent   = T.experiencia   || '—';
+    document.getElementById('r-zona').textContent  = T.zona          || '—';
+  }
+
+  /* ── Abrir / cerrar tunnel ── */
+  function openTunnel() {
+    resetTunnel();
+    overlay.classList.add('tnl-open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeTunnel() {
+    overlay.classList.remove('tnl-open');
+    document.body.style.overflow = '';
+  }
+  function resetTunnel() {
+    T = { especialidad:'', ico:'🔧', experiencia:'', zona:'', herramientas:'', disponibilidad:'', bio:'', nombre:'', email:'', tel:'', calle:'', numero:'', colonia:'' };
+    document.querySelectorAll('.tnl-svc-card').forEach(function(c){ c.classList.remove('tnl-svc-selected'); });
+    document.querySelectorAll('.tnl-toggle-btn').forEach(function(b){ b.classList.remove('selected'); });
+    ['tnl-exp','tnl-zona','tnl-bio','tnl-nombre','tnl-email','tnl-tel','tnl-calle','tnl-numero','tnl-colonia'].forEach(function(id){
+      var el = document.getElementById(id); if(el) el.value = '';
+    });
+    var passEl = document.getElementById('tnl-pass'); if(passEl) passEl.value = '';
+    var errEl  = document.getElementById('tnl-auth-error'); if(errEl) errEl.classList.remove('visible');
+    tnlAuthMode = 'register';
+    var txt = document.getElementById('tnl-submit-txt'); if(txt) txt.textContent = 'Enviar solicitud ✓';
+    success.classList.remove('tnl-show');
+    showView(0, true);
+  }
+
+  /* ── Triggers ── */
+  document.querySelectorAll('.tnl-trigger').forEach(function(el){
+    el.addEventListener('click', function(e){ e.preventDefault(); openTunnel(); });
+  });
+  document.getElementById('tnlClose').addEventListener('click', closeTunnel);
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape' && overlay.classList.contains('tnl-open')) closeTunnel(); });
+  document.getElementById('tnl-ok').addEventListener('click', closeTunnel);
+
+  /* ── PASO 1: click en especialidad ── */
+  document.querySelectorAll('.tnl-svc-card').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.tnl-svc-card').forEach(function(c){ c.classList.remove('tnl-svc-selected'); });
+      card.classList.add('tnl-svc-selected');
+      T.especialidad = card.getAttribute('data-svc');
+      T.ico          = card.getAttribute('data-ico') || '🔧';
+      setTimeout(function(){ showView(1, true); }, 220);
+    });
+  });
+
+  /* ── PASO 2: toggles ── */
+  ['tnl-tools-si','tnl-tools-no'].forEach(function(id){
+    document.getElementById(id).addEventListener('click', function(){
+      document.getElementById('tnl-tools-si').classList.remove('selected');
+      document.getElementById('tnl-tools-no').classList.remove('selected');
+      this.classList.add('selected');
+      T.herramientas = this.getAttribute('data-val');
+    });
+  });
+  ['tnl-disp-full','tnl-disp-part','tnl-disp-week','tnl-disp-flex'].forEach(function(id){
+    document.getElementById(id).addEventListener('click', function(){
+      ['tnl-disp-full','tnl-disp-part','tnl-disp-week','tnl-disp-flex'].forEach(function(i){ document.getElementById(i).classList.remove('selected'); });
+      this.classList.add('selected');
+      T.disponibilidad = this.getAttribute('data-val');
+    });
+  });
+
+  /* ── PASO 2: continuar ── */
+  document.getElementById('tnl-next2').addEventListener('click', function(){
+    clearErrors();
+    var exp  = document.getElementById('tnl-exp').value;
+    var zona = document.getElementById('tnl-zona').value.trim();
+    var valid = true;
+    if (!exp)  { markError('tnl-exp');  valid = false; }
+    if (!zona) { markError('tnl-zona'); valid = false; }
+    if (!T.disponibilidad) {
+      ['tnl-disp-full','tnl-disp-part','tnl-disp-week','tnl-disp-flex'].forEach(function(id){ document.getElementById(id).style.borderColor='#e53e3e'; });
+      valid = false;
+    }
+    if (!valid) return;
+    T.experiencia    = exp;
+    T.zona           = zona;
+    T.bio            = document.getElementById('tnl-bio').value.trim();
+    updateReceipt();
+    showView(2, true);
+  });
+
+  document.getElementById('tnl-back2').addEventListener('click', function(){ showView(0, false); });
+  document.getElementById('tnl-back3').addEventListener('click', function(){ showView(1, false); });
+
+  /* ── Hamburger ── */
+  var hamburger  = document.getElementById('nav-hamburger');
+  var mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', function(){
+    var open = mobileMenu.classList.contains('open');
+    mobileMenu.classList.toggle('open', !open);
+    hamburger.classList.toggle('open', !open);
+    document.body.style.overflow = open ? '' : 'hidden';
+  });
+
+  /* ── SESSION BANNER ── */
+  window.onUserLoggedIn = function(user) {
+    var banner = document.getElementById('tnl-session-banner');
+    if (!banner) return;
+    document.getElementById('tnl-session-avatar').textContent = (user.displayName || user.email || '?').charAt(0).toUpperCase();
+    document.getElementById('tnl-session-name').textContent   = user.displayName || 'Usuario';
+    document.getElementById('tnl-session-email').textContent  = user.email || '';
+    banner.classList.add('visible');
+    document.querySelectorAll('.tnl-auth-fields').forEach(function(el){ el.classList.add('hidden'); });
+    var nEl = document.getElementById('tnl-nombre'); if(nEl && user.displayName) nEl.value = user.displayName;
+    var eEl = document.getElementById('tnl-email');  if(eEl && user.email) eEl.value = user.email;
+    document.getElementById('tnl-submit-txt').textContent = 'Enviar solicitud ✓';
+  };
+  window.onUserLoggedOut = function() {
+    var banner = document.getElementById('tnl-session-banner');
+    if (banner) banner.classList.remove('visible');
+    document.querySelectorAll('.tnl-auth-fields').forEach(function(el){ el.classList.remove('hidden'); });
+  };
+  document.getElementById('tnl-session-out').addEventListener('click', function(){
+    if (window.fbSignOut && window.auth) window.fbSignOut(window.auth).catch(function(){});
+  });
+
+  /* ── Eye toggle ── */
+  var svgEyeOpen  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var svgEyeSlash = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+  document.getElementById('tnl-pass-toggle').addEventListener('click', function(){
+    var inp = document.getElementById('tnl-pass');
+    if (inp.type === 'password') { inp.type = 'text'; this.innerHTML = svgEyeSlash; }
+    else { inp.type = 'password'; this.innerHTML = svgEyeOpen; }
+  });
+
+  /* ── Mode switch (login / register) ── */
+  document.getElementById('tnl-mode-switch').addEventListener('click', function(){
+    var fw = document.getElementById('tnl-forgot-wrap');
+    var rm = document.getElementById('tnl-auth-error');
+    if (tnlAuthMode === 'register') {
+      tnlAuthMode = 'login';
+      document.getElementById('tnl-mode-text').textContent  = '¿No tienes cuenta?';
+      this.textContent = 'Crear cuenta';
+      document.getElementById('tnl-submit-txt').textContent = 'Iniciar sesión y enviar ✓';
+      document.getElementById('tnl-pass').setAttribute('autocomplete','current-password');
+      if (fw) fw.style.display = 'block';
+    } else {
+      tnlAuthMode = 'register';
+      document.getElementById('tnl-mode-text').textContent  = '¿Ya tienes cuenta?';
+      this.textContent = 'Iniciar sesión';
+      document.getElementById('tnl-submit-txt').textContent = 'Enviar solicitud ✓';
+      document.getElementById('tnl-pass').setAttribute('autocomplete','new-password');
+      if (fw) fw.style.display = 'none';
+      if (rm) { rm.className = 'tnl-auth-error'; rm.textContent = ''; }
+    }
+  });
+
+  /* ── Forgot password ── */
+  document.getElementById('tnl-forgot-btn').addEventListener('click', function(){
+    var emailEl = document.getElementById('tnl-email');
+    var errEl   = document.getElementById('tnl-auth-error');
+    var email   = emailEl ? emailEl.value.trim() : '';
+    errEl.className = 'tnl-auth-error'; errEl.textContent = '';
+    if (!email || !isValidEmail(email)) {
+      errEl.textContent = 'Ingresa tu correo arriba primero.';
+      errEl.classList.add('visible');
+      if (emailEl) emailEl.focus();
+      return;
+    }
+    var btn = this; btn.disabled = true; btn.textContent = 'Enviando...';
+    if (window.auth && window.fbSendPasswordReset) {
+      window.fbSendPasswordReset(window.auth, email)
+        .then(function(){ errEl.textContent = '✅ Correo enviado a ' + email + '. Revisa tu bandeja.'; errEl.style.background='#f0fdf4'; errEl.style.borderColor='#bbf7d0'; errEl.style.color='#16a34a'; errEl.classList.add('visible'); })
+        .catch(function(e){ errEl.textContent = e.code==='auth/user-not-found' ? 'No encontramos esa cuenta.' : 'Error: '+e.message; errEl.classList.add('visible'); })
+        .finally(function(){ btn.disabled=false; btn.textContent='¿Olvidaste tu contraseña?'; });
+    }
+  });
+
+  /* ── Google Sign-In ── */
+  document.getElementById('tnl-google-btn').addEventListener('click', function(){
+    var errEl = document.getElementById('tnl-auth-error');
+    errEl.classList.remove('visible');
+    if (!window.fbSignInWithPopup || !window.auth || !window.fbGoogleProvider) {
+      errEl.textContent = 'Firebase no está listo. Recarga la página.'; errEl.classList.add('visible'); return;
+    }
+    var btn = this; btn.disabled = true; btn.textContent = 'Conectando...';
+    window.fbSignInWithPopup(window.auth, window.fbGoogleProvider)
+      .then(function(r){ console.log('[Thruver] Google OK:', r.user.uid); })
+      .catch(function(e){ errEl.textContent = 'Error con Google: '+e.message; errEl.classList.add('visible'); })
+      .finally(function(){
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg> Continuar con Google';
+      });
+  });
+
+  /* ── PASO 3: Envío final ── */
+  document.getElementById('tnl-submit').addEventListener('click', function(){
+    clearErrors();
+    var errEl  = document.getElementById('tnl-auth-error');
+    errEl.className = 'tnl-auth-error'; errEl.textContent = '';
+    var nombre  = document.getElementById('tnl-nombre').value.trim();
+    var emailEl = document.getElementById('tnl-email');
+    var email   = emailEl ? emailEl.value.trim() : '';
+    var passEl  = document.getElementById('tnl-pass');
+    var pass    = passEl ? passEl.value : '';
+    var tel     = document.getElementById('tnl-tel').value.trim();
+    var calle   = document.getElementById('tnl-calle') ? document.getElementById('tnl-calle').value.trim() : '';
+    var numero  = document.getElementById('tnl-numero') ? document.getElementById('tnl-numero').value.trim() : '';
+    var colonia = document.getElementById('tnl-colonia') ? document.getElementById('tnl-colonia').value.trim() : '';
+    var valid = true;
+    var haySession = window.currentUser != null;
+
+    if (!nombre)  { markError('tnl-nombre');  valid = false; }
+    if (!tel)     { markError('tnl-tel');      valid = false; }
+    if (!calle)   { markError('tnl-calle');    valid = false; }
+    if (!colonia) { markError('tnl-colonia');  valid = false; }
+    if (!haySession) {
+      if (!isValidEmail(email)) { markError('tnl-email'); valid = false; }
+      if (!pass || pass.length < 6) { if(passEl) passEl.classList.add('tnl-error'); valid = false; }
+    }
+    if (!valid) {
+      var fe = document.querySelector('.tnl-error'); if(fe) fe.scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+
+    T.nombre  = nombre;
+    T.email   = email || (window.currentUser ? window.currentUser.email : '');
+    T.tel     = tel; T.calle = calle; T.numero = numero; T.colonia = colonia;
+
+    var btn = document.getElementById('tnl-submit');
+    btn.disabled = true;
+    document.getElementById('tnl-spinner').style.display = 'block';
+    document.getElementById('tnl-submit-txt').textContent = 'Procesando...';
+
+    function enviarSolicitud(uid, userEmail, userName) {
+      var direccion = [calle, numero ? 'No.'+numero : '', colonia].filter(Boolean).join(', ');
+      var payload = {
+        tipo:          'TECNICO',
+        uid:           uid,
+        especialidad:  T.especialidad,
+        experiencia:   T.experiencia,
+        zona:          T.zona,
+        herramientas:  T.herramientas,
+        disponibilidad: T.disponibilidad,
+        bio:           T.bio,
+        nombre:        userName || T.nombre,
+        email:         userEmail || T.email,
+        telefono:      T.tel,
+        direccion:     direccion,
+        calle:         T.calle,
+        numero:        T.numero,
+        colonia:       T.colonia,
+        estado:        'pendiente',
+        timestamp:     new Date().toISOString()
+      };
+      /* Apps Script — fire & forget */
+      fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }).catch(function(){});
+      /* Firestore */
+      saveToFirebase('tecnicos', payload).finally(function(){
+        views.forEach(function(v){ v.classList.remove('tnl-active','tnl-back'); });
+        fill.style.width = '100%';
+        dots.forEach(function(d){ d.classList.add('done'); d.classList.remove('active'); });
+        success.classList.add('tnl-show');
+        overlay.scrollTop = 0;
+      });
+    }
+
+    if (haySession) {
+      var u = window.currentUser;
+      enviarSolicitud(u.uid, u.email, u.displayName || T.nombre);
+      return;
+    }
+
+    if (!window.fbCreateUser || !window.auth) {
+      errEl.textContent = 'Firebase no está listo. Recarga la página.';
+      errEl.classList.add('visible');
+      btn.disabled = false;
+      document.getElementById('tnl-spinner').style.display = 'none';
+      document.getElementById('tnl-submit-txt').textContent = 'Enviar solicitud ✓';
+      return;
+    }
+
+    var authPromise = tnlAuthMode === 'register'
+      ? window.fbCreateUser(window.auth, email, pass)
+      : window.fbSignIn(window.auth, email, pass);
+
+    authPromise
+      .then(function(result){
+        window.currentUser = result.user;
+        enviarSolicitud(result.user.uid, result.user.email, T.nombre);
+      })
+      .catch(function(err){
+        var msgs = {
+          'auth/email-already-in-use': 'Este correo ya tiene cuenta. Usa "Iniciar sesión".',
+          'auth/wrong-password':       'Contraseña incorrecta.',
+          'auth/invalid-credential':   'Correo o contraseña incorrectos.',
+          'auth/user-not-found':       'No encontramos esta cuenta.',
+          'auth/weak-password':        'La contraseña debe tener al menos 6 caracteres.'
+        };
+        errEl.textContent = msgs[err.code] || ('Error: ' + err.message);
+        errEl.classList.add('visible');
+        errEl.scrollIntoView({ behavior:'smooth', block:'center' });
+        btn.disabled = false;
+        document.getElementById('tnl-spinner').style.display = 'none';
+        document.getElementById('tnl-submit-txt').textContent = tnlAuthMode === 'register' ? 'Enviar solicitud ✓' : 'Iniciar sesión y enviar ✓';
+      });
+  });
+
+}); // end DOMContentLoaded
+</script>
+
+<!-- ═══════════════════════════════════════════
+     FIREBASE
+═══════════════════════════════════════════ -->
+<script type="module">
+  import { initializeApp }                                                      from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAnalytics }                                                       from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, query, where, getDocs }           from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+  import {
+    getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut, sendPasswordResetEmail
+  } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey:            "AIzaSyCJlo2i_MsotnrCJ9VnnXsZidGKospvw2k",
+    authDomain:        "thruver-3de75.firebaseapp.com",
+    projectId:         "thruver-3de75",
+    storageBucket:     "thruver-3de75.firebasestorage.app",
+    messagingSenderId: "31613785682",
+    appId:             "1:31613785682:web:10158e532742050689318b",
+    measurementId:     "G-NPFGT5G82D"
+  };
+
+  const app            = initializeApp(firebaseConfig);
+  const analytics      = getAnalytics(app);
+  const db             = getFirestore(app);
+  const auth           = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
+
+  window.db                   = db;
+  window.auth                 = auth;
+  window.fbCollection         = collection;
+  window.fbAddDoc             = addDoc;
+  window.fbQuery              = query;
+  window.fbWhere              = where;
+  window.fbGetDocs            = getDocs;
+  window.fbCreateUser         = createUserWithEmailAndPassword;
+  window.fbSignIn             = signInWithEmailAndPassword;
+  window.fbSignInWithPopup    = signInWithPopup;
+  window.fbGoogleProvider     = googleProvider;
+  window.fbSignOut            = signOut;
+  window.fbSendPasswordReset  = sendPasswordResetEmail;
+  window.fbOnAuthStateChanged = onAuthStateChanged;
+
+  onAuthStateChanged(auth, function(user) {
+    if (user) {
+      window.currentUser = user;
+      if (typeof window.onUserLoggedIn === 'function') window.onUserLoggedIn(user);
+    } else {
+      window.currentUser = null;
+      if (typeof window.onUserLoggedOut === 'function') window.onUserLoggedOut();
+    }
+  });
+
+  console.log("🔥 Firebase conectado — Thruver Técnicos");
+</script>
+</body>
+</html>
