@@ -36,308 +36,140 @@
 
     /* ══ NAV ══ */
     nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 300;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2.5rem;
-      background: var(--bg);
-      border-bottom: 1px solid var(--border);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 300;
+      height: 60px; display: flex; align-items: center;
+      justify-content: space-between; padding: 0 2.5rem;
+      background: var(--bg); border-bottom: 1px solid var(--border);
     }
-
-    .nav-logo {
-      font-weight: 900; font-size: 1.3rem;
-      letter-spacing: -0.04em; color: var(--black);
-      text-decoration: none;
-    }
-
+    .nav-logo { font-weight: 900; font-size: 1.3rem; letter-spacing: -0.04em; color: var(--black); text-decoration: none; }
     .nav-center { display: flex; gap: 0.2rem; list-style: none; }
-    .nav-center a {
-      color: var(--muted); text-decoration: none; font-size: 0.85rem;
-      padding: 0.4rem 0.85rem; border-radius: 6px;
-      transition: color 0.15s, background 0.15s;
-    }
+    .nav-center a { color: var(--muted); text-decoration: none; font-size: 0.85rem; padding: 0.4rem 0.85rem; border-radius: 6px; transition: color 0.15s, background 0.15s; }
     .nav-center a:hover { color: var(--black); background: var(--bg3); }
-
     .nav-right { display: flex; gap: 0.5rem; align-items: center; }
 
     .btn-ghost {
-      background: transparent; color: var(--text);
-      border: 1px solid var(--border);
-      padding: 0.42rem 1rem; border-radius: var(--rsm);
-      font-size: 0.83rem; cursor: pointer; font-family: var(--font);
-      text-decoration: none; min-height: 44px;
-      display: inline-flex; align-items: center;
+      background: transparent; color: var(--text); border: 1px solid var(--border);
+      padding: 0.42rem 1rem; border-radius: var(--rsm); font-size: 0.83rem;
+      cursor: pointer; font-family: var(--font); text-decoration: none;
+      min-height: 44px; display: inline-flex; align-items: center;
       transition: border-color 0.15s, background 0.15s;
     }
     .btn-ghost:hover { border-color: rgba(0,0,0,0.18); background: var(--bg2); }
 
     .btn-solid {
       background: var(--black); color: var(--white); border: none;
-      padding: 0.48rem 1.1rem; border-radius: var(--rsm);
-      font-size: 0.83rem; font-weight: 700; cursor: pointer;
-      font-family: var(--font); text-decoration: none; min-height: 44px;
-      display: inline-flex; align-items: center;
-      transition: opacity 0.15s;
+      padding: 0.48rem 1.1rem; border-radius: var(--rsm); font-size: 0.83rem;
+      font-weight: 700; cursor: pointer; font-family: var(--font);
+      text-decoration: none; min-height: 44px; display: inline-flex;
+      align-items: center; transition: opacity 0.15s;
     }
     .btn-solid:hover { opacity: 0.78; }
 
-    /* Hamburger */
     .nav-hamburger {
       display: none; flex-direction: column; justify-content: center;
       align-items: center; gap: 5px; width: 44px; height: 44px;
       background: transparent; border: 1px solid var(--border);
       border-radius: var(--rsm); cursor: pointer;
     }
-    .nav-hamburger span {
-      display: block; width: 20px; height: 2px;
-      background: var(--black); border-radius: 2px;
-      transition: all 0.25s ease;
-    }
+    .nav-hamburger span { display: block; width: 20px; height: 2px; background: var(--black); border-radius: 2px; transition: all 0.25s ease; }
     .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-    /* Mobile drawer */
     .mobile-menu {
-      display: none; position: fixed;
-      top: 60px; left: 0; right: 0; bottom: 0;
-      z-index: 250; background: var(--white);
-      padding: 1.2rem 1.5rem 2rem;
-      flex-direction: column; gap: 0.2rem;
-      overflow-y: auto; animation: slideDown 0.22s ease;
+      display: none; position: fixed; top: 60px; left: 0; right: 0; bottom: 0;
+      z-index: 250; background: var(--white); padding: 1.2rem 1.5rem 2rem;
+      flex-direction: column; gap: 0.2rem; overflow-y: auto;
+      animation: slideDown 0.22s ease;
     }
     .mobile-menu.open { display: flex; }
     @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
-
-    .mobile-menu a {
-      display: flex; align-items: center;
-      padding: 0.9rem 1rem; font-size: 0.97rem; font-weight: 600;
-      color: var(--text); text-decoration: none;
-      border-radius: var(--radius); min-height: 52px;
-      transition: background 0.15s;
-    }
+    .mobile-menu a { display: flex; align-items: center; padding: 0.9rem 1rem; font-size: 0.97rem; font-weight: 600; color: var(--text); text-decoration: none; border-radius: var(--radius); min-height: 52px; transition: background 0.15s; }
     .mobile-menu a:active { background: var(--bg); }
-
     .mm-divider { height: 1px; background: var(--border); margin: 0.5rem 0; }
-
     .mm-cta { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.4rem; }
-    .mm-cta .btn-solid, .mm-cta .btn-ghost {
-      width: 100%; justify-content: center;
-      font-size: 0.95rem; padding: 0.85rem; border-radius: var(--radius);
-    }
+    .mm-cta .btn-solid, .mm-cta .btn-ghost { width: 100%; justify-content: center; font-size: 0.95rem; padding: 0.85rem; border-radius: var(--radius); }
 
     /* ══ HERO ══ */
     .hero {
       margin-top: 60px; min-height: calc(100vh - 60px);
       display: grid; grid-template-columns: 1fr 1fr;
-      align-items: center; position: relative;
-      overflow: hidden; background: var(--bg);
+      align-items: center; position: relative; overflow: hidden; background: var(--bg);
     }
-
     .hero-grid-pattern {
       position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+      background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
       background-size: 48px 48px; pointer-events: none; z-index: 0;
       animation: gridBreathe 6s ease-in-out infinite;
     }
-    @keyframes gridBreathe {
-      0%,100% { transform: scale(1); opacity: 1; }
-      50%      { transform: scale(1.06); opacity: 0.5; }
-    }
-    @media (prefers-reduced-motion: reduce) { .hero-grid-pattern { animation: none; } }
-
-    .hero-left {
-      position: relative; z-index: 1;
-      padding: 5rem 3rem 5rem 4rem;
-      display: flex; flex-direction: column;
-    }
-
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.45rem;
-      background: var(--white); border: 1px solid var(--border);
-      color: var(--muted); font-size: 0.74rem;
-      padding: 0.34rem 0.9rem; border-radius: 100px;
-      margin-bottom: 2rem; width: fit-content;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-      animation: fadeUp 0.5s ease both;
-    }
-    .badge-dot {
-      width: 6px; height: 6px; border-radius: 50%;
-      background: #22c55e; animation: pulse 2s infinite; flex-shrink: 0;
-    }
+    @keyframes gridBreathe { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.06);opacity:0.5} }
+    @media(prefers-reduced-motion:reduce){ .hero-grid-pattern{animation:none} }
+    .hero-left { position: relative; z-index: 1; padding: 5rem 3rem 5rem 4rem; display: flex; flex-direction: column; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.45rem; background: var(--white); border: 1px solid var(--border); color: var(--muted); font-size: 0.74rem; padding: 0.34rem 0.9rem; border-radius: 100px; margin-bottom: 2rem; width: fit-content; box-shadow: 0 1px 4px rgba(0,0,0,0.05); animation: fadeUp 0.5s ease both; }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; flex-shrink: 0; }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
-
-    .hero-h1 {
-      font-weight: 900;
-      font-size: clamp(1.9rem, 3.2vw, 2.65rem);
-      letter-spacing: -0.04em; line-height: 1.08;
-      color: var(--black); margin-bottom: 1.2rem;
-      animation: fadeUp 0.5s ease 0.07s both;
-    }
-
-    .hero-sub {
-      font-size: 0.95rem; color: var(--muted); line-height: 1.75;
-      max-width: 400px; margin-bottom: 2.2rem;
-      animation: fadeUp 0.5s ease 0.14s both;
-    }
-
-    .hero-actions {
-      display: flex; gap: 0.6rem; flex-wrap: wrap;
-      margin-bottom: 3rem; animation: fadeUp 0.5s ease 0.21s both;
-    }
+    .hero-h1 { font-weight: 900; font-size: clamp(1.9rem, 3.2vw, 2.65rem); letter-spacing: -0.04em; line-height: 1.08; color: var(--black); margin-bottom: 1.2rem; animation: fadeUp 0.5s ease 0.07s both; }
+    .hero-sub { font-size: 0.95rem; color: var(--muted); line-height: 1.75; max-width: 400px; margin-bottom: 2.2rem; animation: fadeUp 0.5s ease 0.14s both; }
+    .hero-actions { display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 3rem; animation: fadeUp 0.5s ease 0.21s both; }
     .hero-actions .btn-solid { padding: 0.72rem 1.6rem; font-size: 0.88rem; }
-    .hero-actions .btn-ghost {
-      padding: 0.72rem 1.6rem; font-size: 0.88rem;
-      background: var(--white); border-color: var(--white);
-    }
+    .hero-actions .btn-ghost { padding: 0.72rem 1.6rem; font-size: 0.88rem; background: var(--white); border-color: var(--white); }
     .hero-actions .btn-ghost:hover { background: var(--bg3); border-color: var(--bg3); }
-
-    .hero-stats {
-      display: flex; background: var(--white);
-      border: 1px solid var(--border); border-radius: var(--radius);
-      overflow: hidden; width: fit-content;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-      animation: fadeUp 0.5s ease 0.28s both;
-    }
-    .hero-stat {
-      padding: 1.1rem 1.4rem; border-right: 1px solid var(--border);
-      text-align: center;
-    }
+    .hero-stats { display: flex; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; width: fit-content; box-shadow: 0 2px 12px rgba(0,0,0,0.04); animation: fadeUp 0.5s ease 0.28s both; }
+    .hero-stat { padding: 1.1rem 1.4rem; border-right: 1px solid var(--border); text-align: center; }
     .hero-stat:last-child { border-right: none; }
     .hero-stat strong { display: block; font-size: 1.3rem; font-weight: 900; color: var(--black); letter-spacing: -0.03em; }
     .hero-stat span   { font-size: 0.68rem; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.08em; }
-
     @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
-    /* CAROUSEL */
-    .hero-right {
-      position: relative; z-index: 1;
-      height: calc(100vh - 60px);
-      display: flex; align-items: center; justify-content: center;
-      padding: 3rem 3.5rem 3rem 1.5rem;
-    }
+    .hero-right { position: relative; z-index: 1; height: calc(100vh - 60px); display: flex; align-items: center; justify-content: center; padding: 3rem 3.5rem 3rem 1.5rem; }
     .carousel-wrap { width: 100%; max-width: 500px; }
-    .carousel-frame {
-      width: 100%; aspect-ratio: 4/3; border-radius: 20px;
-      overflow: hidden; border: 1px solid rgba(0,0,0,0.09);
-      box-shadow: 0 24px 64px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.06);
-      background: var(--bg3); animation: fadeUp 0.6s ease 0.1s both;
-    }
-    .carousel-slides {
-      display: flex; width: 100%; height: 100%;
-      transition: transform 0.9s cubic-bezier(0.4,0,0.2,1);
-    }
+    .carousel-frame { width: 100%; aspect-ratio: 4/3; border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.09); box-shadow: 0 24px 64px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.06); background: var(--bg3); animation: fadeUp 0.6s ease 0.1s both; }
+    .carousel-slides { display: flex; width: 100%; height: 100%; transition: transform 0.9s cubic-bezier(0.4,0,0.2,1); }
     .carousel-slide { flex-shrink: 0; width: 100%; height: 100%; overflow: hidden; }
-    .carousel-slide img {
-      width: 100%; height: 100%; object-fit: cover; display: block;
-      transition: transform 6s ease; transform: scale(1.06);
-    }
+    .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 6s ease; transform: scale(1.06); }
     .carousel-slide.active img { transform: scale(1); }
     .carousel-dots { display: flex; gap: 0.45rem; justify-content: center; margin-top: 1rem; }
-    .carousel-dot {
-      width: 8px; height: 8px; border-radius: 50%;
-      background: var(--bg3); transition: background 0.3s, transform 0.3s;
-      cursor: pointer; position: relative;
-    }
+    .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--bg3); transition: background 0.3s, transform 0.3s; cursor: pointer; position: relative; }
     .carousel-dot::after { content: ''; position: absolute; inset: -8px; }
     .carousel-dot.active { background: var(--black); transform: scale(1.4); }
 
     /* ══ SERVICES BAR ══ */
     .services-bar { background: #3c3c3c; }
     .services-bar-inner { max-width: 1140px; margin: 0 auto; padding: 2.5rem; }
-    .services-bar-top {
-      display: flex; justify-content: space-between;
-      align-items: center; margin-bottom: 1.4rem;
-    }
+    .services-bar-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.4rem; }
     .services-bar h2 { font-weight: 900; font-size: 1.05rem; letter-spacing: -0.03em; color: var(--white); }
     .link-muted { font-size: 0.8rem; color: rgba(255,255,255,0.45); text-decoration: none; transition: color 0.15s; }
     .link-muted:hover { color: var(--white); }
     .services-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 0.7rem; }
-    .service-pill {
-      background: var(--bg); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.2rem 0.6rem;
-      text-align: center; cursor: pointer; text-decoration: none;
-      color: var(--text); display: flex; flex-direction: column;
-      align-items: center; gap: 0.4rem; min-height: 80px;
-      transition: all 0.18s;
-    }
+    .service-pill { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.2rem 0.6rem; text-align: center; cursor: pointer; text-decoration: none; color: var(--text); display: flex; flex-direction: column; align-items: center; gap: 0.4rem; min-height: 80px; transition: all 0.18s; }
     .service-pill:hover { background: var(--bg3); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(0,0,0,0.06); }
     .service-pill-icon  { font-size: 1.6rem; }
     .service-pill-label { font-size: 0.72rem; font-weight: 700; }
 
     /* ══ MAIN CONTENT ══ */
-    .main-content {
-      max-width: 1140px; margin: 0 auto; padding: 4rem 2.5rem;
-      display: grid; grid-template-columns: 1.1fr 0.9fr;
-      gap: 2rem; align-items: start;
-    }
+    .main-content { max-width: 1140px; margin: 0 auto; padding: 4rem 2.5rem; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 2rem; align-items: start; }
     .main-left, .main-right { display: flex; flex-direction: column; gap: 1.2rem; }
-
-    .eyebrow {
-      font-size: 0.68rem; font-weight: 700; color: var(--muted2);
-      text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.3rem;
-    }
-    .block-title {
-      font-size: 1.35rem; font-weight: 900; letter-spacing: -0.035em;
-      line-height: 1.15; color: var(--black); margin-bottom: 0.8rem;
-    }
-
-    /* Problem cards */
+    .eyebrow { font-size: 0.68rem; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.3rem; }
+    .block-title { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.035em; line-height: 1.15; color: var(--black); margin-bottom: 0.8rem; }
     .problem-grid { display: flex; flex-direction: column; gap: 0.7rem; }
-    .problem-card {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.3rem 1.5rem;
-      display: flex; align-items: flex-start; gap: 1rem;
-      transition: transform 0.18s, box-shadow 0.18s;
-    }
+    .problem-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.3rem 1.5rem; display: flex; align-items: flex-start; gap: 1rem; transition: transform 0.18s, box-shadow 0.18s; }
     .problem-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
-    .problem-icon {
-      font-size: 1.3rem; flex-shrink: 0; width: 38px; height: 38px;
-      background: var(--bg); border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .problem-icon { font-size: 1.3rem; flex-shrink: 0; width: 38px; height: 38px; background: var(--bg); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
     .problem-card h3 { font-size: 0.87rem; font-weight: 700; margin-bottom: 0.2rem; }
     .problem-card p  { font-size: 0.79rem; color: var(--muted); line-height: 1.65; }
-
-    /* How block */
     .how-block { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
     .block-tabs { display: flex; border-bottom: 1px solid var(--border); }
-    .block-tab {
-      flex: 1; padding: 0.8rem; font-size: 0.81rem; cursor: pointer;
-      border: none; background: transparent; color: var(--muted);
-      font-family: var(--font); transition: all 0.15s;
-      border-bottom: 2px solid transparent; margin-bottom: -1px; min-height: 48px;
-    }
+    .block-tab { flex: 1; padding: 0.8rem; font-size: 0.81rem; cursor: pointer; border: none; background: transparent; color: var(--muted); font-family: var(--font); transition: all 0.15s; border-bottom: 2px solid transparent; margin-bottom: -1px; min-height: 48px; }
     .block-tab.active { color: var(--black); font-weight: 700; border-bottom-color: var(--black); background: var(--bg); }
     .tab-panel { display: none; padding: 1.1rem; flex-direction: column; gap: 0.55rem; }
     .tab-panel.active { display: flex; }
-    .how-step {
-      display: flex; gap: 0.9rem; align-items: flex-start;
-      padding: 0.85rem 0.9rem; background: var(--bg);
-      border-radius: var(--rsm); border: 1px solid var(--border); transition: transform 0.15s;
-    }
+    .how-step { display: flex; gap: 0.9rem; align-items: flex-start; padding: 0.85rem 0.9rem; background: var(--bg); border-radius: var(--rsm); border: 1px solid var(--border); transition: transform 0.15s; }
     .how-step:hover { transform: translateX(2px); }
     .step-num { font-size: 1rem; font-weight: 900; color: var(--bg3); width: 24px; flex-shrink: 0; padding-top: 1px; }
     .how-step h3 { font-size: 0.82rem; font-weight: 700; margin-bottom: 0.15rem; }
     .how-step p  { font-size: 0.77rem; color: var(--muted); line-height: 1.6; }
-
-    /* Why cards */
-    .why-card {
-      background: var(--white); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 1.4rem 1.6rem;
-      transition: transform 0.18s, box-shadow 0.18s;
-      position: relative; overflow: hidden;
-    }
-    .why-card::after {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 3px; background: var(--black);
-    }
+    .why-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem 1.6rem; transition: transform 0.18s, box-shadow 0.18s; position: relative; overflow: hidden; }
+    .why-card::after { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--black); }
     .why-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
     .why-card h3 { font-size: 0.87rem; font-weight: 700; margin-bottom: 0.3rem; }
     .why-card p  { font-size: 0.79rem; color: var(--muted); line-height: 1.65; }
@@ -347,42 +179,19 @@
     .why-card-dark p  { color: rgba(255,255,255,0.45); }
     .why-card-icon { font-size: 1.7rem; margin-bottom: 0.7rem; }
     .why-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
-
-    /* Register */
     .register-block { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem; }
     .form-group { margin-bottom: 0.7rem; }
-    .form-group label {
-      display: block; font-size: 0.67rem; font-weight: 700;
-      color: var(--muted); margin-bottom: 0.26rem;
-      text-transform: uppercase; letter-spacing: 0.07em;
-    }
-    .form-group input, .form-group select {
-      width: 100%; background: var(--bg); border: 1px solid var(--border);
-      border-radius: var(--rsm); padding: 0.7rem 0.85rem;
-      color: var(--text); font-size: 1rem; /* 1rem prevents iOS zoom */
-      font-family: var(--font); outline: none; min-height: 48px;
-      -webkit-appearance: none;
-      transition: border-color 0.15s, background 0.15s;
-    }
+    .form-group label { display: block; font-size: 0.67rem; font-weight: 700; color: var(--muted); margin-bottom: 0.26rem; text-transform: uppercase; letter-spacing: 0.07em; }
+    .form-group input, .form-group select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--rsm); padding: 0.7rem 0.85rem; color: var(--text); font-size: 1rem; font-family: var(--font); outline: none; min-height: 48px; -webkit-appearance: none; transition: border-color 0.15s, background 0.15s; }
     .form-group input::placeholder { color: var(--muted2); }
     .form-group input:focus, .form-group select:focus { border-color: var(--black); background: var(--white); }
     .register-form-panel { display: none; padding: 1.3rem 1.4rem; }
     .register-form-panel.active { display: block; }
-    .btn-submit {
-      width: 100%; background: var(--black); color: var(--white); border: none;
-      padding: 0.9rem; border-radius: var(--rsm); font-size: 0.9rem; font-weight: 700;
-      cursor: pointer; font-family: var(--font); min-height: 52px;
-      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      transition: all 0.18s; margin-top: 0.2rem;
-    }
+    .btn-submit { width: 100%; background: var(--black); color: var(--white); border: none; padding: 0.9rem; border-radius: var(--rsm); font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.18s; margin-top: 0.2rem; }
     .btn-submit:hover { opacity: 0.78; transform: translateY(-1px); }
     .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
-    .spinner {
-      display: none; width: 14px; height: 14px;
-      border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff;
-      border-radius: 50%; animation: spin 0.7s linear infinite;
-    }
+    .spinner { display: none; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin { to{transform:rotate(360deg)} }
     .form-note { font-size: 0.67rem; color: var(--muted2); margin-top: 0.5rem; text-align: center; }
     .success-msg { display: none; text-align: center; padding: 2rem 1rem; }
@@ -390,93 +199,50 @@
     .success-msg h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.3rem; }
     .success-msg p  { font-size: 0.79rem; color: var(--muted); }
 
+    /* ══ WHY STRIP ══ */
+    .why-strip { background: var(--white); border-bottom: 1px solid var(--border); }
+    .why-strip-inner { max-width: 1140px; margin: 0 auto; padding: 5rem 2.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .why-strip-eyebrow { font-size: 0.68rem; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 0.5rem; }
+    .why-strip-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; color: var(--black); margin-bottom: 2.5rem; }
+    .why-strip-list { display: flex; flex-direction: column; gap: 1.5rem; }
+    .why-strip-item { display: flex; gap: 1rem; align-items: flex-start; }
+    .why-strip-icon { width: 38px; height: 38px; border-radius: 9px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+    .why-strip-item-text strong { display: block; font-size: 0.88rem; font-weight: 700; color: var(--black); margin-bottom: 0.2rem; }
+    .why-strip-item-text p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
+    .why-strip-item-text p b { color: var(--black); font-weight: 700; }
+    .why-strip-right { display: flex; align-items: center; justify-content: center; }
+    .why-badge-card { background: #0098cf; border-radius: 24px; padding: 3.5rem 3rem; text-align: center; width: 100%; max-width: 340px; box-shadow: 0 8px 40px rgba(0,152,207,0.25); }
+    .why-badge-icon { width: 96px; height: 96px; margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center; }
+    .why-badge-card h3 { font-size: 1.15rem; font-weight: 900; color: #000; letter-spacing: -0.03em; margin-bottom: 0.5rem; white-space: nowrap; }
+    .why-badge-card p { font-size: 0.82rem; color: rgba(255,255,255,0.75); line-height: 1.65; }
+
     /* ══ FOOTER ══ */
-    footer {
-      background: var(--white); border-top: 1px solid var(--border);
-      padding: 2rem 2.5rem; display: flex; align-items: center;
-      justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-    }
+    footer { background: var(--white); border-top: 1px solid var(--border); padding: 2rem 2.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
     .footer-logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.04em; color: var(--black); }
     .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
     .footer-links a { font-size: 0.78rem; color: var(--muted); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; transition: color 0.15s; }
     .footer-links a:hover { color: var(--black); }
     .footer-copy { font-size: 0.7rem; color: var(--muted2); }
 
-    /* ══ WHY STRIP ══ */
-    .why-strip { background: var(--white); border-bottom: 1px solid var(--border); }
-    .why-strip-inner {
-      max-width: 1140px; margin: 0 auto; padding: 5rem 2.5rem;
-      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
-    }
-    .why-strip-eyebrow { font-size: 0.68rem; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 0.5rem; }
-    .why-strip-title { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; color: var(--black); margin-bottom: 2.5rem; }
-    .why-strip-list { display: flex; flex-direction: column; gap: 1.5rem; }
-    .why-strip-item { display: flex; gap: 1rem; align-items: flex-start; }
-    .why-strip-icon {
-      width: 38px; height: 38px; border-radius: 9px; background: var(--bg);
-      border: 1px solid var(--border); display: flex; align-items: center;
-      justify-content: center; font-size: 1.1rem; flex-shrink: 0; margin-top: 1px;
-    }
-    .why-strip-item-text strong { display: block; font-size: 0.88rem; font-weight: 700; color: var(--black); margin-bottom: 0.2rem; }
-    .why-strip-item-text p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; }
-    .why-strip-item-text p b { color: var(--black); font-weight: 700; }
-    .why-strip-right { display: flex; align-items: center; justify-content: center; }
-    .why-badge-card {
-      background: #0098cf; border-radius: 24px; padding: 3.5rem 3rem;
-      text-align: center; width: 100%; max-width: 340px;
-      box-shadow: 0 8px 40px rgba(0,152,207,0.25);
-    }
-    .why-badge-icon { width: 96px; height: 96px; margin: 0 auto 2rem; display: flex; align-items: center; justify-content: center; }
-    .why-badge-card h3 { font-size: 1.15rem; font-weight: 900; color: #000; letter-spacing: -0.03em; margin-bottom: 0.5rem; white-space: nowrap; }
-    .why-badge-card p { font-size: 0.82rem; color: rgba(255,255,255,0.75); line-height: 1.65; }
-
     /* ══ LOGIN MODAL ══ */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0; z-index: 1000;
-      background: rgba(0,0,0,0.45); backdrop-filter: blur(6px);
-      align-items: center; justify-content: center;
-    }
+    .modal-overlay { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
     .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
     @keyframes fadeIn { from{opacity:0} to{opacity:1} }
-    .modal-box {
-      background: var(--white); border-radius: 18px; padding: 2.5rem;
-      width: 100%; max-width: 380px; margin: 1rem;
-      box-shadow: 0 24px 80px rgba(0,0,0,0.18);
-      animation: slideUp 0.25s ease; position: relative;
-    }
+    .modal-box { background: var(--white); border-radius: 18px; padding: 2.5rem; width: 100%; max-width: 380px; margin: 1rem; box-shadow: 0 24px 80px rgba(0,0,0,0.18); animation: slideUp 0.25s ease; position: relative; }
     @keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
     .modal-box h2 { font-size: 1.3rem; font-weight: 900; letter-spacing: -0.03em; color: var(--black); margin-bottom: 0.3rem; }
     .modal-box .modal-sub { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.8rem; }
-    .modal-close {
-      position: absolute; top: 1rem; right: 1rem;
-      background: var(--bg); border: none; width: 36px; height: 36px;
-      border-radius: 50%; cursor: pointer; font-size: 1rem;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--muted); transition: background 0.15s;
-    }
+    .modal-close { position: absolute; top: 1rem; right: 1rem; background: var(--bg); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: background 0.15s; }
     .modal-close:hover { background: var(--bg3); }
-    .modal-error {
-      display: none; background: #fff0f0; border: 1px solid #fcc;
-      border-radius: 7px; padding: 0.6rem 0.9rem;
-      font-size: 0.78rem; color: #cc3333; margin-bottom: 0.8rem;
-    }
+    .modal-error { display: none; background: #fff0f0; border: 1px solid #fcc; border-radius: 7px; padding: 0.6rem 0.9rem; font-size: 0.78rem; color: #cc3333; margin-bottom: 0.8rem; }
 
     /* ══ DASHBOARD ══ */
     #dashboard { display: none; min-height: 100vh; background: var(--bg); padding-top: 60px; }
-    .dash-nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-      height: 60px; display: flex; align-items: center;
-      justify-content: space-between; padding: 0 2.5rem;
-      background: var(--white); border-bottom: 1px solid var(--border);
-    }
+    .dash-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; background: var(--white); border-bottom: 1px solid var(--border); }
     .dash-nav-logo { font-weight: 900; font-size: 1.3rem; letter-spacing: -0.04em; color: var(--black); text-decoration: none; }
     .dash-nav-right { display: flex; align-items: center; gap: 1rem; }
     .dash-user { display: flex; align-items: center; gap: 0.6rem; font-size: 0.83rem; color: var(--text); }
-    .dash-avatar {
-      width: 32px; height: 32px; border-radius: 50%; background: var(--black);
-      color: var(--white); display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
-    }
+    .dash-avatar { width: 32px; height: 32px; border-radius: 50%; background: var(--black); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; flex-shrink: 0; }
     .dash-body { max-width: 1100px; margin: 0 auto; padding: 2.5rem; }
     .dash-greeting { margin-bottom: 2rem; }
     .dash-greeting h1 { font-size: 1.6rem; font-weight: 900; letter-spacing: -0.04em; color: var(--black); margin-bottom: 0.2rem; }
@@ -493,37 +259,18 @@
     .dash-card-header a { font-size: 0.75rem; color: var(--muted); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
     .dash-card-header a:hover { color: var(--black); }
     .active-service { padding: 1.5rem; }
-    .active-badge {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      background: #f0fdf4; border: 1px solid #bbf7d0; color: #16a34a;
-      font-size: 0.7rem; font-weight: 700; padding: 0.28rem 0.75rem;
-      border-radius: 100px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.07em;
-    }
+    .active-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: #f0fdf4; border: 1px solid #bbf7d0; color: #16a34a; font-size: 0.7rem; font-weight: 700; padding: 0.28rem 0.75rem; border-radius: 100px; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.07em; }
     .active-dot { width: 5px; height: 5px; border-radius: 50%; background: #16a34a; animation: pulse 2s infinite; }
     .active-service h4 { font-size: 1.05rem; font-weight: 900; color: var(--black); margin-bottom: 0.3rem; }
     .active-service-meta { font-size: 0.8rem; color: var(--muted); margin-bottom: 1.3rem; }
-    .active-tech {
-      display: flex; align-items: center; gap: 0.8rem;
-      padding: 1rem 1.2rem; background: var(--bg); border-radius: 10px;
-      border: 1px solid var(--border); margin-bottom: 1.2rem;
-    }
-    .tech-avatar {
-      width: 40px; height: 40px; border-radius: 50%; background: var(--black);
-      color: var(--white); display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 0.85rem; flex-shrink: 0;
-    }
+    .active-tech { display: flex; align-items: center; gap: 0.8rem; padding: 1rem 1.2rem; background: var(--bg); border-radius: 10px; border: 1px solid var(--border); margin-bottom: 1.2rem; }
+    .tech-avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--black); color: var(--white); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
     .tech-info strong { display: block; font-size: 0.85rem; font-weight: 700; color: var(--black); }
     .tech-info span { font-size: 0.75rem; color: var(--muted); }
     .tech-verified { margin-left: auto; background: #0098cf; color: white; font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 100px; white-space: nowrap; }
     .progress-steps { display: flex; align-items: center; }
     .pstep { display: flex; flex-direction: column; align-items: center; flex: 1; }
-    .pstep-dot {
-      width: 20px; height: 20px; border-radius: 50%;
-      background: var(--bg3); border: 2px solid var(--bg3);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.6rem; color: var(--muted); margin-bottom: 0.4rem;
-      transition: all 0.3s; position: relative; z-index: 1;
-    }
+    .pstep-dot { width: 20px; height: 20px; border-radius: 50%; background: var(--bg3); border: 2px solid var(--bg3); display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: var(--muted); margin-bottom: 0.4rem; transition: all 0.3s; position: relative; z-index: 1; }
     .pstep.done .pstep-dot   { background: var(--black); border-color: var(--black); color: white; }
     .pstep.active .pstep-dot { background: #0098cf; border-color: #0098cf; color: white; }
     .pstep-label { font-size: 0.62rem; color: var(--muted2); text-align: center; }
@@ -531,11 +278,7 @@
     .pstep.active .pstep-label { color: #0098cf; font-weight: 700; }
     .pstep-line { flex: 1; height: 2px; background: var(--bg3); margin-bottom: 1.1rem; }
     .pstep-line.done { background: var(--black); }
-    .service-row {
-      display: flex; align-items: center; padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border); gap: 1rem;
-      transition: background 0.15s; min-height: 60px;
-    }
+    .service-row { display: flex; align-items: center; padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); gap: 1rem; transition: background 0.15s; min-height: 60px; }
     .service-row:last-child { border-bottom: none; }
     .service-row:hover { background: var(--bg); }
     .service-row-icon { width: 36px; height: 36px; border-radius: 9px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
@@ -566,9 +309,226 @@
     .profile-field span:first-child { color: var(--muted); }
     .profile-field span:last-child  { color: var(--black); font-weight: 700; text-align: right; }
 
-    /* ══════════════════════════════
-       TABLET — 900px
-    ══════════════════════════════ */
+    /* ═══════════════════════════════════════════════
+       TÚNEL DE CONVERSIÓN — 3 Pasos
+    ═══════════════════════════════════════════════ */
+
+    /* Overlay de pantalla completa */
+    .tnl-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 800;
+      background: #f5f5f5;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .tnl-overlay.tnl-open {
+      display: block;
+      animation: tnlIn 0.3s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    @keyframes tnlIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
+
+    /* Header del túnel */
+    .tnl-header {
+      position: sticky; top: 0; z-index: 10;
+      height: 64px; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      background: rgba(245,245,245,0.94);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .tnl-logo { font-weight: 900; font-size: 1.25rem; letter-spacing: -0.04em; color: var(--black); }
+    .tnl-close {
+      display: flex; align-items: center; gap: 0.35rem;
+      background: transparent; border: 1px solid var(--border);
+      border-radius: var(--rsm); padding: 0.42rem 0.9rem;
+      color: var(--muted); font-size: 0.8rem; font-family: var(--font);
+      cursor: pointer; min-height: 40px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .tnl-close:hover { background: var(--bg3); color: var(--black); border-color: rgba(0,0,0,0.16); }
+
+    /* Barra de progreso */
+    .tnl-progress-bar {
+      position: sticky; top: 64px; z-index: 9;
+      height: 3px; background: var(--bg3);
+    }
+    .tnl-progress-fill {
+      height: 100%; background: var(--black);
+      border-radius: 0 2px 2px 0;
+      transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    /* Indicador de pasos */
+    .tnl-step-indicator {
+      display: flex; justify-content: center; align-items: center;
+      gap: 0.6rem; padding: 1.6rem 1rem 0;
+    }
+    .tnl-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--bg3);
+      transition: background 0.3s, transform 0.3s, width 0.3s;
+    }
+    .tnl-dot.active  { background: var(--black); transform: scale(1.5); }
+    .tnl-dot.done    { background: var(--black); opacity: 0.3; }
+
+    /* Contenedor central de los pasos */
+    .tnl-body { max-width: 780px; margin: 0 auto; padding: 2.2rem 1.5rem 6rem; }
+
+    /* Cada vista de paso */
+    .tnl-view { display: none; }
+    .tnl-view.tnl-active {
+      display: block;
+      animation: tnlStepIn 0.32s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    .tnl-view.tnl-back {
+      display: block;
+      animation: tnlStepBack 0.32s cubic-bezier(0.4,0,0.2,1) both;
+    }
+    @keyframes tnlStepIn   { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes tnlStepBack { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
+
+    /* Tipografía de paso */
+    .tnl-eyebrow { font-size: 0.65rem; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 0.5rem; }
+    .tnl-title   { font-size: clamp(1.55rem, 4vw, 2.1rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; color: var(--black); margin-bottom: 0.45rem; }
+    .tnl-sub     { font-size: 0.88rem; color: var(--muted); line-height: 1.65; margin-bottom: 2rem; }
+
+    /* ── PASO 1: Grid de servicios ── */
+    .tnl-svc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+    }
+    .tnl-svc-card {
+      background: var(--white); border: 2px solid var(--border);
+      border-radius: var(--radius); padding: 1.6rem 0.8rem;
+      text-align: center; cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 0.55rem;
+      transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+      -webkit-tap-highlight-color: transparent; user-select: none;
+    }
+    .tnl-svc-card:hover {
+      border-color: rgba(0,0,0,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .tnl-svc-card.tnl-svc-selected {
+      border-color: var(--black); background: var(--black);
+    }
+    .tnl-svc-card.tnl-svc-selected .tnl-svc-icon { filter: grayscale(1) brightness(10); }
+    .tnl-svc-card.tnl-svc-selected .tnl-svc-name { color: var(--white); }
+    .tnl-svc-icon { font-size: 2.1rem; line-height: 1; }
+    .tnl-svc-name { font-size: 0.83rem; font-weight: 700; color: var(--text); }
+
+    /* ── PASO 2: Formulario de contexto ── */
+    .tnl-back-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: transparent; border: none; cursor: pointer;
+      font-family: var(--font); font-size: 0.82rem; color: var(--muted);
+      padding: 0.4rem 0; margin-bottom: 1.4rem;
+      transition: color 0.15s;
+    }
+    .tnl-back-btn:hover { color: var(--black); }
+
+    .tnl-field { margin-bottom: 1.1rem; }
+    .tnl-field label { display: block; font-size: 0.66rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.38rem; }
+    .tnl-field select,
+    .tnl-field textarea,
+    .tnl-field input {
+      width: 100%; background: var(--white); border: 1.5px solid var(--border);
+      border-radius: var(--radius); padding: 0.9rem 1.05rem;
+      font-size: 1rem; font-family: var(--font); color: var(--text);
+      outline: none; -webkit-appearance: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .tnl-field textarea { min-height: 96px; resize: none; line-height: 1.55; }
+    .tnl-field select:focus,
+    .tnl-field textarea:focus,
+    .tnl-field input:focus { border-color: var(--black); box-shadow: 0 0 0 3px rgba(17,17,17,0.06); }
+    .tnl-field input::placeholder,
+    .tnl-field textarea::placeholder { color: var(--muted2); }
+    .tnl-field input.tnl-error,
+    .tnl-field select.tnl-error { border-color: #e53e3e; box-shadow: 0 0 0 3px rgba(229,62,62,0.08); }
+
+    /* Urgencia */
+    .tnl-urgency-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.2rem; }
+    .tnl-urgency-btn {
+      display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+      background: var(--white); border: 2px solid var(--border);
+      border-radius: var(--radius); padding: 0.9rem 0.6rem;
+      font-family: var(--font); font-size: 0.84rem; font-weight: 600;
+      color: var(--muted); cursor: pointer; min-height: 52px;
+      transition: all 0.18s; -webkit-tap-highlight-color: transparent;
+    }
+    .tnl-urgency-btn:hover { border-color: rgba(0,0,0,0.2); color: var(--black); }
+    .tnl-urgency-btn.tnl-urg-sel { border-color: var(--black); background: var(--black); color: var(--white); }
+
+    /* Trust box */
+    .tnl-trust {
+      display: flex; gap: 0.9rem; align-items: flex-start;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1rem 1.2rem; margin-bottom: 1.5rem;
+    }
+    .tnl-trust-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: 1px; }
+    .tnl-trust p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+    .tnl-trust p b { color: var(--black); }
+
+    /* ── PASO 3: Grid resumen + formulario ── */
+    .tnl-step3-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      gap: 1.4rem;
+      align-items: start;
+    }
+
+    /* Recibo */
+    .tnl-receipt {
+      background: var(--black); border-radius: var(--radius);
+      padding: 1.5rem; position: sticky; top: 84px;
+    }
+    .tnl-receipt-title { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: rgba(255,255,255,0.35); margin-bottom: 1.1rem; }
+    .tnl-rrow { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.7rem 0; border-bottom: 1px solid rgba(255,255,255,0.07); }
+    .tnl-rrow:last-of-type { border-bottom: none; margin-bottom: 1rem; }
+    .tnl-rrow-ico { width: 30px; height: 30px; border-radius: 7px; background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+    .tnl-rrow-info { flex: 1; min-width: 0; }
+    .tnl-rrow-info small { display: block; font-size: 0.6rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.1rem; }
+    .tnl-rrow-info span  { display: block; font-size: 0.83rem; font-weight: 700; color: var(--white); word-break: break-word; }
+    .tnl-receipt-badge { display: flex; align-items: center; gap: 0.6rem; background: rgba(255,255,255,0.06); border-radius: 9px; padding: 0.85rem 1rem; }
+    .tnl-receipt-badge p { font-size: 0.73rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
+    .tnl-receipt-badge p b { color: var(--white); }
+
+    /* Formulario paso 3 */
+    .tnl-form-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; }
+    .tnl-form-title { font-size: 1.05rem; font-weight: 900; letter-spacing: -0.03em; color: var(--black); margin-bottom: 0.25rem; }
+    .tnl-form-sub   { font-size: 0.77rem; color: var(--muted); margin-bottom: 1.4rem; line-height: 1.55; }
+
+    /* CTA principal */
+    .tnl-cta {
+      width: 100%; background: var(--black); color: var(--white); border: none;
+      border-radius: var(--radius); padding: 1.05rem; font-size: 0.96rem; font-weight: 700;
+      font-family: var(--font); cursor: pointer; min-height: 54px;
+      display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      transition: opacity 0.18s, transform 0.18s, box-shadow 0.18s;
+      margin-top: 0.3rem;
+    }
+    .tnl-cta:hover:not(:disabled) { opacity: 0.83; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+    .tnl-cta:disabled { opacity: 0.42; cursor: not-allowed; transform: none; box-shadow: none; }
+    .tnl-cta-note { font-size: 0.64rem; color: var(--muted2); margin-top: 0.55rem; text-align: center; }
+
+    /* ── Éxito ── */
+    .tnl-success { display: none; text-align: center; padding: 5rem 2rem 4rem; }
+    .tnl-success.tnl-show { display: block; animation: fadeUp 0.5s ease both; }
+    .tnl-success-ring {
+      width: 76px; height: 76px; border-radius: 50%;
+      background: var(--black); display: flex; align-items: center;
+      justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem;
+    }
+    .tnl-success h2 { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.04em; color: var(--black); margin-bottom: 0.55rem; }
+    .tnl-success p  { font-size: 0.9rem; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 2rem; }
+    .tnl-success-ref { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1.2rem; display: inline-block; margin-bottom: 2rem; }
+    .tnl-success-ref small { display: block; font-size: 0.6rem; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.1em; }
+    .tnl-success-ref strong { font-size: 1rem; font-weight: 900; color: var(--black); letter-spacing: -0.02em; }
+
+    /* ══ RESPONSIVE ══ */
     @media(max-width:900px){
       .why-strip-inner  { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 2rem; }
       .why-strip-right  { display: none; }
@@ -581,21 +541,16 @@
       .dash-grid        { grid-template-columns: 1fr; }
       .dash-body        { padding: 2rem; }
       .dash-nav         { padding: 0 1.5rem; }
+      .tnl-step3-layout { grid-template-columns: 1fr; }
+      .tnl-receipt      { position: static; }
     }
 
-    /* ══════════════════════════════
-       MOBILE — 600px
-    ══════════════════════════════ */
     @media(max-width:600px){
-
-      /* NAV — show hamburger, hide desktop items */
       nav { padding: 0 1.2rem; }
       .nav-center { display: none; }
       .nav-right .btn-ghost { display: none; }
       .nav-right .btn-solid { display: none; }
       .nav-hamburger { display: flex; }
-
-      /* HERO */
       .hero { grid-template-columns: 1fr; min-height: auto; }
       .hero-left { padding: 2rem 1.2rem 1.5rem; }
       .hero-right { height: auto; padding: 0 1.2rem 2.5rem; }
@@ -603,61 +558,37 @@
       .carousel-frame { border-radius: 14px; }
       .hero-h1 { font-size: 1.75rem; line-height: 1.1; }
       .hero-sub { font-size: 0.9rem; max-width: 100%; margin-bottom: 1.8rem; }
-
-      /* Full-width stacked CTA buttons */
       .hero-actions { flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
-      .hero-actions .btn-solid,
-      .hero-actions .btn-ghost {
-        width: 100%; justify-content: center;
-        padding: 0.9rem; font-size: 0.95rem; border-radius: var(--radius);
-      }
-
-      /* Stats — 2×2 grid */
-      .hero-stats {
-        display: grid; grid-template-columns: 1fr 1fr; width: 100%; border-radius: var(--radius);
-      }
+      .hero-actions .btn-solid, .hero-actions .btn-ghost { width: 100%; justify-content: center; padding: 0.9rem; font-size: 0.95rem; border-radius: var(--radius); }
+      .hero-stats { display: grid; grid-template-columns: 1fr 1fr; width: 100%; border-radius: var(--radius); }
       .hero-stat { padding: 1rem; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); }
       .hero-stat:nth-child(2) { border-right: none; }
       .hero-stat:nth-child(3) { border-bottom: none; }
       .hero-stat:nth-child(4) { border-right: none; border-bottom: none; }
       .hero-stat strong { font-size: 1.1rem; }
       .hero-stat span   { font-size: 0.6rem; }
-
-      /* WHY STRIP */
       .why-strip-inner  { padding: 2.5rem 1.2rem; gap: 2rem; }
       .why-strip-title  { font-size: 1.4rem; margin-bottom: 1.8rem; }
       .why-strip-right  { display: none; }
       .why-strip-list   { gap: 1.2rem; }
-
-      /* SERVICES — 4 cols, todos visibles */
       .services-bar-inner { padding: 1.5rem 1.2rem; }
       .services-bar-top { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
       .services-grid { grid-template-columns: repeat(4,1fr); gap: 0.45rem; }
       .service-pill { padding: 0.8rem 0.3rem; border-radius: 10px; min-height: 70px; gap: 0.3rem; }
       .service-pill-icon  { font-size: 1.35rem; }
       .service-pill-label { font-size: 0.6rem; }
-
-      /* MAIN CONTENT */
       .main-content { padding: 2rem 1.2rem; gap: 2rem; }
       .block-title  { font-size: 1.2rem; }
       .problem-card { padding: 1.1rem 1.2rem; }
       .how-step { padding: 0.9rem; }
       .block-tab { font-size: 0.79rem; padding: 0.7rem 0.4rem; }
-
-      /* WHY CARDS */
       .why-2col { grid-template-columns: 1fr; }
       .why-card { padding: 1.2rem 1.3rem; }
-
-      /* REGISTER FORM */
       .register-form-panel { padding: 1.2rem; }
       .form-row { grid-template-columns: 1fr; gap: 0; }
-
-      /* FOOTER */
       footer { flex-direction: column; align-items: flex-start; padding: 1.5rem 1.2rem; }
       .footer-links { display: grid; grid-template-columns: 1fr 1fr; gap: 0; width: 100%; }
       .footer-links a { min-height: 48px; }
-
-      /* DASHBOARD NAV — hide name on mobile, show only avatar */
       .dash-nav { padding: 0 1.2rem; }
       .dash-user .dash-name { display: none; }
       .dash-body { padding: 1.5rem 1.2rem 2rem; }
@@ -678,19 +609,30 @@
       .service-row-info span { font-size: 0.68rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 120px; display: block; }
       .upcoming-item { padding: 0.9rem 1.2rem; }
       .profile-section { padding: 1.2rem; }
-
-      /* MODAL */
       .modal-box { padding: 2rem 1.4rem; margin: 0.8rem; }
       .modal-box h2 { font-size: 1.15rem; }
+      /* Túnel móvil */
+      .tnl-header  { padding: 0 1.2rem; height: 58px; }
+      .tnl-body    { padding: 1.5rem 1.2rem 5rem; }
+      .tnl-title   { font-size: 1.45rem; }
+      .tnl-svc-grid { grid-template-columns: repeat(3, 1fr); gap: 0.55rem; }
+      .tnl-svc-card { padding: 1.2rem 0.4rem; }
+      .tnl-svc-icon { font-size: 1.7rem; }
+      .tnl-svc-name { font-size: 0.72rem; }
+      .tnl-urgency-row { grid-template-columns: 1fr 1fr; }
+      .tnl-step3-layout { grid-template-columns: 1fr; }
+      .tnl-receipt  { position: static; }
     }
 
-    /* ══ Very small — 380px ══ */
     @media(max-width:380px){
       .hero-h1 { font-size: 1.5rem; }
       .services-grid { gap: 0.3rem; }
       .service-pill-icon  { font-size: 1.2rem; }
       .service-pill-label { font-size: 0.56rem; }
       .dash-stat-value { font-size: 1.25rem; }
+      .tnl-svc-grid { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+      .tnl-svc-icon { font-size: 1.5rem; }
+      .tnl-svc-name { font-size: 0.65rem; }
     }
   </style>
 </head>
@@ -707,7 +649,7 @@
   </ul>
   <div class="nav-right">
     <button class="btn-ghost" id="btn-open-login">Iniciar sesión</button>
-    <a href="#registro" class="btn-solid">Solicitar servicio</a>
+    <a href="#" class="btn-solid tnl-trigger">Solicitar servicio</a>
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú">
       <span></span><span></span><span></span>
     </button>
@@ -723,9 +665,183 @@
   <div class="mm-divider"></div>
   <div class="mm-cta">
     <button class="btn-ghost" id="btn-open-login-mobile">Iniciar sesión</button>
-    <a href="#registro" class="btn-solid" id="mm-cta">Solicitar servicio →</a>
+    <button class="btn-solid tnl-trigger" id="mm-cta">Solicitar servicio →</button>
   </div>
 </div>
+
+<!-- ═══════════════════════════════════════════════════════
+     TÚNEL DE CONVERSIÓN — FULL SCREEN OVERLAY
+═══════════════════════════════════════════════════════ -->
+<div class="tnl-overlay" id="tnlOverlay" role="dialog" aria-modal="true" aria-label="Solicitar servicio">
+
+  <!-- Header limpio sin distracciones -->
+  <header class="tnl-header">
+    <span class="tnl-logo">thruver</span>
+    <button class="tnl-close" id="tnlClose" aria-label="Cerrar">✕ Cancelar</button>
+  </header>
+
+  <!-- Barra de progreso -->
+  <div class="tnl-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33">
+    <div class="tnl-progress-fill" id="tnlFill" style="width:33%"></div>
+  </div>
+
+  <!-- Dots de progreso -->
+  <div class="tnl-step-indicator" id="tnlDots">
+    <div class="tnl-dot active"></div>
+    <div class="tnl-dot"></div>
+    <div class="tnl-dot"></div>
+  </div>
+
+  <div class="tnl-body">
+
+    <!-- ─────────────── PASO 1 ─────────────── -->
+    <div class="tnl-view tnl-active" id="tnl-s1">
+      <p class="tnl-eyebrow">Paso 1 de 3</p>
+      <h2 class="tnl-title">¿En qué te podemos ayudar hoy?</h2>
+      <p class="tnl-sub">Selecciona el tipo de servicio y te asignamos un técnico verificado en tu zona.</p>
+
+      <div class="tnl-svc-grid">
+        <div class="tnl-svc-card" data-svc="Plomería"      data-ico="🔧"><span class="tnl-svc-icon">🔧</span><span class="tnl-svc-name">Plomería</span></div>
+        <div class="tnl-svc-card" data-svc="Electricidad"  data-ico="⚡"><span class="tnl-svc-icon">⚡</span><span class="tnl-svc-name">Electricidad</span></div>
+        <div class="tnl-svc-card" data-svc="Limpieza"      data-ico="🧹"><span class="tnl-svc-icon">🧹</span><span class="tnl-svc-name">Limpieza</span></div>
+        <div class="tnl-svc-card" data-svc="Pintura"       data-ico="🖌️"><span class="tnl-svc-icon">🖌️</span><span class="tnl-svc-name">Pintura</span></div>
+        <div class="tnl-svc-card" data-svc="Aire / Clima"  data-ico="❄️"><span class="tnl-svc-icon">❄️</span><span class="tnl-svc-name">Aire / Clima</span></div>
+        <div class="tnl-svc-card" data-svc="Carpintería"   data-ico="🪚"><span class="tnl-svc-icon">🪚</span><span class="tnl-svc-name">Carpintería</span></div>
+        <div class="tnl-svc-card" data-svc="Jardinería"    data-ico="🌿"><span class="tnl-svc-icon">🌿</span><span class="tnl-svc-name">Jardinería</span></div>
+        <div class="tnl-svc-card" data-svc="Remodelación"  data-ico="🏗️"><span class="tnl-svc-icon">🏗️</span><span class="tnl-svc-name">Remodelación</span></div>
+        <div class="tnl-svc-card" data-svc="Otro"          data-ico="💬"><span class="tnl-svc-icon">💬</span><span class="tnl-svc-name">Otro</span></div>
+      </div>
+    </div>
+
+    <!-- ─────────────── PASO 2 ─────────────── -->
+    <div class="tnl-view" id="tnl-s2">
+      <button class="tnl-back-btn" id="tnl-back2">← Volver</button>
+      <p class="tnl-eyebrow">Paso 2 de 3</p>
+      <h2 class="tnl-title">Danos un poco más de contexto</h2>
+      <p class="tnl-sub">Nos ayuda a asignarte al técnico correcto mucho más rápido.</p>
+
+      <div class="tnl-field">
+        <label>Tipo de espacio</label>
+        <select id="tnl-espacio">
+          <option value="">Selecciona tu tipo de espacio...</option>
+          <option value="Casa / Hogar">🏠  Casa / Hogar</option>
+          <option value="Oficina / Empresa">🏢  Oficina / Empresa</option>
+          <option value="Local comercial">🏪  Local comercial</option>
+          <option value="Industria / Planta">🏭  Industria / Planta</option>
+        </select>
+      </div>
+
+      <div class="tnl-field">
+        <label>¿Qué está fallando exactamente?</label>
+        <textarea id="tnl-desc" placeholder="Ej: Se tapó el fregadero y hay una gotera pequeña debajo del lavabo..."></textarea>
+      </div>
+
+      <div style="margin-bottom:0.4rem;">
+        <p style="font-size:0.66rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.09em;margin-bottom:0.55rem;">¿Cuándo lo necesitas?</p>
+        <div class="tnl-urgency-row">
+          <button class="tnl-urgency-btn tnl-urg-sel" id="tnl-u1" data-val="Lo antes posible">⚡ Lo antes posible</button>
+          <button class="tnl-urgency-btn"              id="tnl-u2" data-val="Agendar fecha">📅 Agendar fecha</button>
+        </div>
+      </div>
+
+      <div class="tnl-trust">
+        <span class="tnl-trust-icon">🛡️</span>
+        <p>Thruver te asignará a un técnico <b>verificado con antecedentes revisados</b> y respaldará el trabajo con nuestra <b>Garantía Total</b>. Si no queda bien, regresa sin costo.</p>
+      </div>
+
+      <button class="tnl-cta" id="tnl-next2">Continuar →</button>
+    </div>
+
+    <!-- ─────────────── PASO 3 ─────────────── -->
+    <div class="tnl-view" id="tnl-s3">
+      <button class="tnl-back-btn" id="tnl-back3">← Volver</button>
+      <p class="tnl-eyebrow">Paso 3 de 3 — Ya casi terminamos</p>
+
+      <div class="tnl-step3-layout">
+
+        <!-- Recibo / Resumen -->
+        <div class="tnl-receipt">
+          <p class="tnl-receipt-title">Tu solicitud</p>
+
+          <div class="tnl-rrow">
+            <div class="tnl-rrow-ico" id="r-svc-ico">🔧</div>
+            <div class="tnl-rrow-info">
+              <small>Servicio</small>
+              <span id="r-svc">—</span>
+            </div>
+          </div>
+          <div class="tnl-rrow">
+            <div class="tnl-rrow-ico">🏠</div>
+            <div class="tnl-rrow-info">
+              <small>Espacio</small>
+              <span id="r-esp">—</span>
+            </div>
+          </div>
+          <div class="tnl-rrow">
+            <div class="tnl-rrow-ico">⏱️</div>
+            <div class="tnl-rrow-info">
+              <small>Urgencia</small>
+              <span id="r-urg">—</span>
+            </div>
+          </div>
+          <div class="tnl-rrow">
+            <div class="tnl-rrow-ico">📝</div>
+            <div class="tnl-rrow-info">
+              <small>Detalle</small>
+              <span id="r-desc" style="font-size:0.77rem;opacity:0.65;font-weight:500;">—</span>
+            </div>
+          </div>
+
+          <div class="tnl-receipt-badge">
+            <span style="font-size:1rem;flex-shrink:0;">✅</span>
+            <p><b>Garantía Thruver.</b> Si el trabajo no cumple, el técnico regresa sin costo adicional.</p>
+          </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="tnl-form-card">
+          <h3 class="tnl-form-title">¿A dónde enviamos a tu experto?</h3>
+          <p class="tnl-form-sub">Ingresa tus datos para confirmar y gestionar tu servicio por WhatsApp.</p>
+
+          <div id="tnl-form-fields">
+            <div class="tnl-field">
+              <label>Nombre completo</label>
+              <input type="text"  id="tnl-nombre"    placeholder="Tu nombre" autocomplete="given-name" />
+            </div>
+            <div class="tnl-field">
+              <label>WhatsApp</label>
+              <input type="tel"   id="tnl-tel"        placeholder="667 000 0000" autocomplete="tel" inputmode="tel" />
+            </div>
+            <div class="tnl-field">
+              <label>Dirección exacta</label>
+              <input type="text"  id="tnl-dir"        placeholder="Calle, número, colonia..." autocomplete="street-address" />
+            </div>
+
+            <button class="tnl-cta" id="tnl-submit">
+              <span class="spinner" id="tnl-spinner"></span>
+              <span id="tnl-submit-txt">Confirmar solicitud ✓</span>
+            </button>
+            <p class="tnl-cta-note">Al confirmar, Thruver te contactará por WhatsApp para coordinar tu servicio.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─────────────── ÉXITO ─────────────── -->
+    <div class="tnl-success" id="tnl-success">
+      <div class="tnl-success-ring">✓</div>
+      <h2>¡Solicitud enviada!</h2>
+      <p>Tu solicitud está en camino. Un técnico <strong>verificado por Thruver</strong> se pondrá en contacto por WhatsApp en los próximos minutos.</p>
+      <div class="tnl-success-ref">
+        <small>Número de seguimiento</small>
+        <strong id="tnl-ref-num">THR-000000</strong>
+      </div>
+      <button class="tnl-cta" id="tnl-ok" style="max-width:260px;margin:0 auto;">Volver al inicio</button>
+    </div>
+
+  </div><!-- /tnl-body -->
+</div><!-- /tnl-overlay -->
 
 <!-- HERO -->
 <section class="hero">
@@ -739,7 +855,7 @@
     <h1 class="hero-h1">Infraestructura de mantenimiento y mejoras para hogares y empresas.</h1>
     <p class="hero-sub">Thruver es la infraestructura confiable para reparar, mantener y mejorar tu hogar o empresa.</p>
     <div class="hero-actions">
-      <a href="#registro" class="btn-solid">Solicitar servicio →</a>
+      <a href="#" class="btn-solid tnl-trigger">Solicitar servicio →</a>
       <a href="#como-funciona" class="btn-ghost">Cómo funciona</a>
     </div>
     <div class="hero-stats">
@@ -831,24 +947,23 @@
   <div class="services-bar-inner">
     <div class="services-bar-top">
       <h2>¿Qué necesitas hoy?</h2>
-      <a href="#registro" class="link-muted">Ver todos →</a>
+      <a href="#" class="link-muted tnl-trigger">Ver todos →</a>
     </div>
     <div class="services-grid">
-      <a href="#registro" class="service-pill"><span class="service-pill-icon">🔧</span><span class="service-pill-label">Plomería</span></a>
-      <a href="#registro" class="service-pill"><span class="service-pill-icon">⚡</span><span class="service-pill-label">Electricidad</span></a>
-      <a href="#registro" class="service-pill"><span class="service-pill-icon">🧹</span><span class="service-pill-label">Limpieza</span></a>
-      <a href="#registro" class="service-pill"><span class="service-pill-icon">🖌️</span><span class="service-pill-label">Pintura</span></a>
-      <a href="#registro" class="service-pill"><span class="service-pill-icon">🪚</span><span class="service-pill-label">Carpintería</span></a>
-      <a href="#registro" class="service-pill"><span class="service-pill-icon">🌿</span><span class="service-pill-label">Jardinería</span></a>
-      <a href="#registro" class="service-pill"><span class="service-pill-icon">❄️</span><span class="service-pill-label">Aire / Clima</span></a>
-      <a href="#registro" class="service-pill"><span class="service-pill-icon">🏗️</span><span class="service-pill-label">Remodelación</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Plomería"><span class="service-pill-icon">🔧</span><span class="service-pill-label">Plomería</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Electricidad"><span class="service-pill-icon">⚡</span><span class="service-pill-label">Electricidad</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Limpieza"><span class="service-pill-icon">🧹</span><span class="service-pill-label">Limpieza</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Pintura"><span class="service-pill-icon">🖌️</span><span class="service-pill-label">Pintura</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Carpintería"><span class="service-pill-icon">🪚</span><span class="service-pill-label">Carpintería</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Jardinería"><span class="service-pill-icon">🌿</span><span class="service-pill-label">Jardinería</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Aire / Clima"><span class="service-pill-icon">❄️</span><span class="service-pill-label">Aire / Clima</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Remodelación"><span class="service-pill-icon">🏗️</span><span class="service-pill-label">Remodelación</span></a>
     </div>
   </div>
 </section>
 
 <!-- MAIN CONTENT -->
 <div class="main-content">
-
   <div class="main-left">
     <div>
       <p class="eyebrow">El problema</p>
@@ -868,7 +983,6 @@
         <div><h3>Sin garantía</h3><p>Si el trabajo queda mal, no hay a quién reclamar. El cliente pierde tiempo y dinero sin solución.</p></div>
       </div>
     </div>
-
     <div id="como-funciona">
       <p class="eyebrow" style="margin-top:0.3rem;">Cómo funciona</p>
       <h2 class="block-title">Simple por diseño.</h2>
@@ -995,7 +1109,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 <!-- FOOTER -->
@@ -1004,7 +1117,7 @@
   <div class="footer-links">
     <a href="#servicios">Servicios</a>
     <a href="#como-funciona">Cómo funciona</a>
-    <a href="#registro">Solicitar servicio</a>
+    <a href="#" class="tnl-trigger">Solicitar servicio</a>
     <a href="#registro">Ser técnico</a>
     <a href="https://wa.me/526670000000" target="_blank">WhatsApp</a>
   </div>
@@ -1045,53 +1158,28 @@
       <button class="btn-ghost" id="btn-logout" style="font-size:0.78rem;padding:0.35rem 0.85rem;">Cerrar sesión</button>
     </div>
   </nav>
-
   <div class="dash-body">
     <div class="dash-greeting">
       <h1>Buen día, Antonio 👋</h1>
       <p>Aquí tienes un resumen de tus servicios con Thruver.</p>
     </div>
-
     <div class="dash-stats">
-      <div class="dash-stat-card">
-        <div class="dash-stat-label">Servicios totales</div>
-        <div class="dash-stat-value">7</div>
-        <div class="dash-stat-sub">Desde enero 2025</div>
-      </div>
-      <div class="dash-stat-card">
-        <div class="dash-stat-label">En curso</div>
-        <div class="dash-stat-value">1</div>
-        <div class="dash-stat-sub">Hoy · 10:00 AM</div>
-      </div>
-      <div class="dash-stat-card">
-        <div class="dash-stat-label">Próximos</div>
-        <div class="dash-stat-value">2</div>
-        <div class="dash-stat-sub">Esta semana</div>
-      </div>
-      <div class="dash-stat-card">
-        <div class="dash-stat-label">Calificación</div>
-        <div class="dash-stat-value">4.9</div>
-        <div class="dash-stat-sub">⭐ Últimos servicios</div>
-      </div>
+      <div class="dash-stat-card"><div class="dash-stat-label">Servicios totales</div><div class="dash-stat-value">7</div><div class="dash-stat-sub">Desde enero 2025</div></div>
+      <div class="dash-stat-card"><div class="dash-stat-label">En curso</div><div class="dash-stat-value">1</div><div class="dash-stat-sub">Hoy · 10:00 AM</div></div>
+      <div class="dash-stat-card"><div class="dash-stat-label">Próximos</div><div class="dash-stat-value">2</div><div class="dash-stat-sub">Esta semana</div></div>
+      <div class="dash-stat-card"><div class="dash-stat-label">Calificación</div><div class="dash-stat-value">4.9</div><div class="dash-stat-sub">⭐ Últimos servicios</div></div>
     </div>
-
     <div class="dash-grid">
       <div style="display:flex;flex-direction:column;gap:1.2rem;">
         <div class="dash-card">
-          <div class="dash-card-header">
-            <h3>Servicio en curso</h3>
-            <span style="font-size:0.72rem;color:var(--muted);">Hoy · 10:00 AM</span>
-          </div>
+          <div class="dash-card-header"><h3>Servicio en curso</h3><span style="font-size:0.72rem;color:var(--muted);">Hoy · 10:00 AM</span></div>
           <div class="active-service">
             <div class="active-badge"><span class="active-dot"></span> En progreso</div>
             <h4>Reparación de plomería</h4>
             <p class="active-service-meta">Hogar · Las Quintas, Culiacán</p>
             <div class="active-tech">
               <div class="tech-avatar">MG</div>
-              <div class="tech-info">
-                <strong>Miguel González</strong>
-                <span>Plomero · 6 años de experiencia</span>
-              </div>
+              <div class="tech-info"><strong>Miguel González</strong><span>Plomero · 6 años de experiencia</span></div>
               <div class="tech-verified">✓ Verificado</div>
             </div>
             <div class="progress-steps">
@@ -1105,54 +1193,26 @@
             </div>
           </div>
         </div>
-
         <div class="dash-card">
           <div class="dash-card-header"><h3>Historial de servicios</h3><a href="#">Ver todos →</a></div>
-          <div class="service-row">
-            <div class="service-row-icon">⚡</div>
-            <div class="service-row-info"><strong>Instalación eléctrica</strong><span>15 Nov 2025 · Oficina Centro</span></div>
-            <div class="service-row-right"><div class="service-row-price">$850</div><span class="service-row-status status-done">Completado</span></div>
-          </div>
-          <div class="service-row">
-            <div class="service-row-icon">🧹</div>
-            <div class="service-row-info"><strong>Limpieza profunda</strong><span>02 Nov 2025 · Las Quintas</span></div>
-            <div class="service-row-right"><div class="service-row-price">$600</div><span class="service-row-status status-done">Completado</span></div>
-          </div>
-          <div class="service-row">
-            <div class="service-row-icon">🖌️</div>
-            <div class="service-row-info"><strong>Pintura de interiores</strong><span>18 Oct 2025 · Las Quintas</span></div>
-            <div class="service-row-right"><div class="service-row-price">$1,200</div><span class="service-row-status status-done">Completado</span></div>
-          </div>
-          <div class="service-row">
-            <div class="service-row-icon">❄️</div>
-            <div class="service-row-info"><strong>Mantenimiento A/C</strong><span>05 Sep 2025 · Oficina Centro</span></div>
-            <div class="service-row-right"><div class="service-row-price">$750</div><span class="service-row-status status-pending">Pend. pago</span></div>
-          </div>
+          <div class="service-row"><div class="service-row-icon">⚡</div><div class="service-row-info"><strong>Instalación eléctrica</strong><span>15 Nov 2025 · Oficina Centro</span></div><div class="service-row-right"><div class="service-row-price">$850</div><span class="service-row-status status-done">Completado</span></div></div>
+          <div class="service-row"><div class="service-row-icon">🧹</div><div class="service-row-info"><strong>Limpieza profunda</strong><span>02 Nov 2025 · Las Quintas</span></div><div class="service-row-right"><div class="service-row-price">$600</div><span class="service-row-status status-done">Completado</span></div></div>
+          <div class="service-row"><div class="service-row-icon">🖌️</div><div class="service-row-info"><strong>Pintura de interiores</strong><span>18 Oct 2025 · Las Quintas</span></div><div class="service-row-right"><div class="service-row-price">$1,200</div><span class="service-row-status status-done">Completado</span></div></div>
+          <div class="service-row"><div class="service-row-icon">❄️</div><div class="service-row-info"><strong>Mantenimiento A/C</strong><span>05 Sep 2025 · Oficina Centro</span></div><div class="service-row-right"><div class="service-row-price">$750</div><span class="service-row-status status-pending">Pend. pago</span></div></div>
         </div>
       </div>
-
       <div style="display:flex;flex-direction:column;gap:1.2rem;">
         <div class="dash-card">
-          <div class="dash-card-header"><h3>Próximos servicios</h3><a href="#registro">+ Agendar</a></div>
-          <div class="upcoming-item">
-            <div class="upcoming-date"><strong>28</strong><span>Feb</span></div>
-            <div class="upcoming-info"><strong>Jardinería y poda</strong><span>09:00 AM · Hogar Las Quintas</span></div>
-          </div>
-          <div class="upcoming-item">
-            <div class="upcoming-date"><strong>03</strong><span>Mar</span></div>
-            <div class="upcoming-info"><strong>Revisión eléctrica</strong><span>11:00 AM · Oficina Centro</span></div>
-          </div>
+          <div class="dash-card-header"><h3>Próximos servicios</h3><a href="#" class="tnl-trigger">+ Agendar</a></div>
+          <div class="upcoming-item"><div class="upcoming-date"><strong>28</strong><span>Feb</span></div><div class="upcoming-info"><strong>Jardinería y poda</strong><span>09:00 AM · Hogar Las Quintas</span></div></div>
+          <div class="upcoming-item"><div class="upcoming-date"><strong>03</strong><span>Mar</span></div><div class="upcoming-info"><strong>Revisión eléctrica</strong><span>11:00 AM · Oficina Centro</span></div></div>
         </div>
-
         <div class="dash-card">
           <div class="dash-card-header"><h3>Mi perfil</h3><a href="#">Editar</a></div>
           <div class="profile-section">
             <div class="profile-row">
               <div class="profile-avatar-lg">AM</div>
-              <div>
-                <div class="profile-name">Antonio Moreno</div>
-                <div class="profile-email">antonio@correo.com</div>
-              </div>
+              <div><div class="profile-name">Antonio Moreno</div><div class="profile-email">antonio@correo.com</div></div>
             </div>
             <div class="profile-field"><span>Teléfono</span><span>667 123 4567</span></div>
             <div class="profile-field"><span>Tipo de cliente</span><span>Hogar + Empresa</span></div>
@@ -1166,9 +1226,16 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
-  // ── HAMBURGER
+  /* ═══════════════════════════════════════════
+     CONFIGURACIÓN
+  ═══════════════════════════════════════════ */
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
+
+  /* ═══════════════════════════════════════════
+     HAMBURGER / DRAWER
+  ═══════════════════════════════════════════ */
   var hamburger  = document.getElementById('nav-hamburger');
   var mobileMenu = document.getElementById('mobile-menu');
 
@@ -1178,26 +1245,233 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.style.overflow = '';
   }
 
-  hamburger.addEventListener('click', function() {
-    var isOpen = mobileMenu.classList.contains('open');
-    if (isOpen) { closeMobileMenu(); }
-    else {
-      hamburger.classList.add('open');
-      mobileMenu.classList.add('open');
-      document.body.style.overflow = 'hidden';
+  hamburger.addEventListener('click', function () {
+    var open = mobileMenu.classList.contains('open');
+    if (open) { closeMobileMenu(); }
+    else { hamburger.classList.add('open'); mobileMenu.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  });
+
+  mobileMenu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', closeMobileMenu); });
+
+  document.getElementById('btn-open-login-mobile').addEventListener('click', function () {
+    closeMobileMenu(); openLogin();
+  });
+
+  /* ═══════════════════════════════════════════
+     TÚNEL DE CONVERSIÓN
+  ═══════════════════════════════════════════ */
+  var overlay  = document.getElementById('tnlOverlay');
+  var fill     = document.getElementById('tnlFill');
+  var dots     = document.querySelectorAll('.tnl-dot');
+  var success  = document.getElementById('tnl-success');
+
+  /* Estado acumulado */
+  var T = { servicio:'', ico:'🔧', espacio:'', desc:'', urgencia:'Lo antes posible', nombre:'', tel:'', dir:'' };
+
+  /* Progreso por paso */
+  var PROG = { 1:'14%', 2:'58%', 3:'90%' };
+
+  /* ── Abrir túnel ── */
+  function openTunnel(presetSvc) {
+    resetTunnel();
+    overlay.classList.add('tnl-open');
+    document.body.style.overflow = 'hidden';
+    overlay.scrollTop = 0;
+    if (presetSvc) preselectService(presetSvc);
+  }
+
+  /* ── Cerrar túnel ── */
+  function closeTunnel() {
+    overlay.classList.remove('tnl-open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── Reset completo ── */
+  function resetTunnel() {
+    T = { servicio:'', ico:'🔧', espacio:'', desc:'', urgencia:'Lo antes posible', nombre:'', tel:'', dir:'' };
+    showView(1, true);
+    success.classList.remove('tnl-show');
+    document.getElementById('tnl-form-fields').style.display = '';
+    document.getElementById('tnl-espacio').value = '';
+    document.getElementById('tnl-desc').value = '';
+    document.getElementById('tnl-nombre').value = '';
+    document.getElementById('tnl-tel').value = '';
+    document.getElementById('tnl-dir').value = '';
+    document.getElementById('tnl-u1').classList.add('tnl-urg-sel');
+    document.getElementById('tnl-u2').classList.remove('tnl-urg-sel');
+    document.querySelectorAll('.tnl-svc-card').forEach(function(c){ c.classList.remove('tnl-svc-selected'); });
+    var submitBtn = document.getElementById('tnl-submit');
+    submitBtn.disabled = false;
+    document.getElementById('tnl-spinner').style.display = 'none';
+    document.getElementById('tnl-submit-txt').textContent = 'Confirmar solicitud ✓';
+    clearErrors();
+  }
+
+  /* ── Mostrar vista de paso ── */
+  function showView(n, forward) {
+    document.querySelectorAll('.tnl-view').forEach(function(v){
+      v.classList.remove('tnl-active','tnl-back');
+    });
+    var v = document.getElementById('tnl-s' + n);
+    if (v) {
+      v.classList.add(forward === false ? 'tnl-back' : 'tnl-active');
     }
+    /* Progreso */
+    fill.style.width = PROG[n] || '90%';
+    /* Dots */
+    dots.forEach(function(d, i){
+      d.classList.remove('active','done');
+      if (i + 1 < n)  d.classList.add('done');
+      if (i + 1 === n) d.classList.add('active');
+    });
+    overlay.scrollTop = 0;
+  }
+
+  /* ── Pre-seleccionar servicio (desde pills de servicios) ── */
+  function preselectService(svc) {
+    var card = document.querySelector('.tnl-svc-card[data-svc="' + svc + '"]');
+    if (card) {
+      card.classList.add('tnl-svc-selected');
+      T.servicio = svc;
+      T.ico = card.getAttribute('data-ico') || '🔧';
+      /* Auto-avance al paso 2 */
+      setTimeout(function(){ showView(2, true); }, 200);
+    }
+  }
+
+  /* ── Actualizar recibo ── */
+  function updateReceipt() {
+    document.getElementById('r-svc-ico').textContent = T.ico;
+    document.getElementById('r-svc').textContent  = T.servicio  || '—';
+    document.getElementById('r-esp').textContent  = T.espacio   || '—';
+    document.getElementById('r-urg').textContent  = T.urgencia  || '—';
+    var d = T.desc || '—';
+    document.getElementById('r-desc').textContent = d.length > 70 ? d.slice(0,70) + '…' : d;
+  }
+
+  /* ── Helpers de validación ── */
+  function markError(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.add('tnl-error');
+  }
+  function clearErrors() {
+    document.querySelectorAll('.tnl-error').forEach(function(el){ el.classList.remove('tnl-error'); });
+  }
+
+  /* ─────── Triggers de apertura ─────── */
+  document.querySelectorAll('.tnl-trigger').forEach(function (el) {
+    el.addEventListener('click', function (e) {
+      e.preventDefault();
+      closeMobileMenu();
+      var preset = el.getAttribute('data-preset') || null;
+      openTunnel(preset);
+    });
   });
 
-  mobileMenu.querySelectorAll('a').forEach(function(a) {
-    a.addEventListener('click', closeMobileMenu);
+  /* ─────── Cerrar ─────── */
+  document.getElementById('tnlClose').addEventListener('click', closeTunnel);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && overlay.classList.contains('tnl-open')) closeTunnel(); });
+
+  /* ─────── PASO 1: clic en tarjeta de servicio ─────── */
+  document.querySelectorAll('.tnl-svc-card').forEach(function (card) {
+    card.addEventListener('click', function () {
+      document.querySelectorAll('.tnl-svc-card').forEach(function(c){ c.classList.remove('tnl-svc-selected'); });
+      card.classList.add('tnl-svc-selected');
+      T.servicio = card.getAttribute('data-svc');
+      T.ico      = card.getAttribute('data-ico') || '🔧';
+      /* Auto-avance suave */
+      setTimeout(function(){ showView(2, true); }, 240);
+    });
   });
 
-  document.getElementById('btn-open-login-mobile').addEventListener('click', function() {
-    closeMobileMenu();
-    openLogin();
+  /* ─────── PASO 2: urgencia toggle ─────── */
+  document.getElementById('tnl-u1').addEventListener('click', function () {
+    T.urgencia = 'Lo antes posible';
+    this.classList.add('tnl-urg-sel');
+    document.getElementById('tnl-u2').classList.remove('tnl-urg-sel');
+  });
+  document.getElementById('tnl-u2').addEventListener('click', function () {
+    T.urgencia = 'Agendar fecha';
+    this.classList.add('tnl-urg-sel');
+    document.getElementById('tnl-u1').classList.remove('tnl-urg-sel');
   });
 
-  // ── LOGIN MODAL
+  /* ─────── PASO 2: continuar ─────── */
+  document.getElementById('tnl-next2').addEventListener('click', function () {
+    clearErrors();
+    var esp = document.getElementById('tnl-espacio').value;
+    if (!esp) { markError('tnl-espacio'); document.getElementById('tnl-espacio').focus(); return; }
+    T.espacio = esp;
+    T.desc    = document.getElementById('tnl-desc').value.trim();
+    updateReceipt();
+    showView(3, true);
+  });
+
+  /* ─────── Botones de volver ─────── */
+  document.getElementById('tnl-back2').addEventListener('click', function(){ showView(1, false); });
+  document.getElementById('tnl-back3').addEventListener('click', function(){ showView(2, false); });
+
+  /* ─────── PASO 3: envío final ─────── */
+  document.getElementById('tnl-submit').addEventListener('click', function () {
+    clearErrors();
+    var nombre   = document.getElementById('tnl-nombre').value.trim();
+    var tel      = document.getElementById('tnl-tel').value.trim();
+    var dir      = document.getElementById('tnl-dir').value.trim();
+    var valid = true;
+    if (!nombre) { markError('tnl-nombre');  valid = false; }
+    if (!tel)    { markError('tnl-tel');     valid = false; }
+    if (!dir)    { markError('tnl-dir');     valid = false; }
+    if (!valid)  { document.querySelector('.tnl-error').focus(); return; }
+
+    T.nombre = nombre; T.tel = tel; T.dir = dir;
+
+    /* ── Payload JSON completo ── */
+    var ref = 'THR-' + Math.random().toString(36).slice(2,8).toUpperCase();
+    var payload = {
+      tipo:        'SOLICITUD_TUNEL',
+      referencia:  ref,
+      servicio:    T.servicio,
+      espacio:     T.espacio,
+      descripcion: T.desc,
+      urgencia:    T.urgencia,
+      nombre:      T.nombre,
+      telefono:    T.tel,
+      direccion:   T.dir,
+      timestamp:   new Date().toISOString()
+    };
+    console.log('[Thruver] Payload listo para enviar:', JSON.stringify(payload, null, 2));
+
+    /* ── Spinner ── */
+    var btn = document.getElementById('tnl-submit');
+    btn.disabled = true;
+    document.getElementById('tnl-spinner').style.display = 'block';
+    document.getElementById('tnl-submit-txt').textContent = 'Enviando...';
+
+    /* ── Envío a Google Apps Script ── */
+    fetch(SCRIPT_URL, {
+      method:  'POST',
+      mode:    'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    })
+    .catch(function(){/* no-cors siempre lanza network error aparente, ignoramos */})
+    .finally(function(){
+      /* ── Pantalla de éxito ── */
+      document.querySelectorAll('.tnl-view').forEach(function(v){ v.classList.remove('tnl-active','tnl-back'); });
+      fill.style.width = '100%';
+      dots.forEach(function(d){ d.classList.add('done'); d.classList.remove('active'); });
+      document.getElementById('tnl-ref-num').textContent = ref;
+      success.classList.add('tnl-show');
+      overlay.scrollTop = 0;
+    });
+  });
+
+  /* ─────── Éxito: volver al inicio ─────── */
+  document.getElementById('tnl-ok').addEventListener('click', closeTunnel);
+
+  /* ═══════════════════════════════════════════
+     LOGIN MODAL
+  ═══════════════════════════════════════════ */
   var loginModal   = document.getElementById('loginModal');
   var loginEmail   = document.getElementById('login-email');
   var loginPass    = document.getElementById('login-pass');
@@ -1206,17 +1480,7 @@ document.addEventListener('DOMContentLoaded', function() {
   var loginText    = document.getElementById('btn-login-text');
   var loginSpinner = document.getElementById('spinner-login');
 
-  function openLogin() {
-    loginModal.classList.add('open');
-    setTimeout(function(){ loginEmail.focus(); }, 100);
-  }
-
-  document.getElementById('btn-open-login').addEventListener('click', openLogin);
-  document.getElementById('btn-close-login').addEventListener('click', closeLogin);
-  loginModal.addEventListener('click', function(e){ if (e.target === loginModal) closeLogin(); });
-  loginBtn.addEventListener('click', doLogin);
-  loginPass.addEventListener('keydown', function(e){ if (e.key === 'Enter') doLogin(); });
-
+  function openLogin() { loginModal.classList.add('open'); setTimeout(function(){ loginEmail.focus(); }, 100); }
   function closeLogin() {
     loginModal.classList.remove('open');
     loginError.style.display = 'none';
@@ -1225,19 +1489,21 @@ document.addEventListener('DOMContentLoaded', function() {
     loginSpinner.style.display = 'none';
     loginText.textContent = 'Entrar →';
   }
-
   function doLogin() {
-    if (!loginEmail.value.trim() || !loginPass.value.trim()) {
-      loginError.style.display = 'block'; return;
-    }
+    if (!loginEmail.value.trim() || !loginPass.value.trim()) { loginError.style.display = 'block'; return; }
     loginError.style.display = 'none';
-    loginBtn.disabled = true;
-    loginSpinner.style.display = 'block';
-    loginText.textContent = 'Verificando...';
+    loginBtn.disabled = true; loginSpinner.style.display = 'block'; loginText.textContent = 'Verificando...';
     setTimeout(function(){ closeLogin(); showDashboard(); }, 900);
   }
+  document.getElementById('btn-open-login').addEventListener('click', openLogin);
+  document.getElementById('btn-close-login').addEventListener('click', closeLogin);
+  loginModal.addEventListener('click', function(e){ if (e.target === loginModal) closeLogin(); });
+  loginBtn.addEventListener('click', doLogin);
+  loginPass.addEventListener('keydown', function(e){ if (e.key === 'Enter') doLogin(); });
 
-  // ── DASHBOARD
+  /* ═══════════════════════════════════════════
+     DASHBOARD
+  ═══════════════════════════════════════════ */
   var dashboard = document.getElementById('dashboard');
   var mainNav   = document.getElementById('main-nav');
 
@@ -1247,17 +1513,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.style.overflow = 'hidden';
     dashboard.scrollTop = 0;
   }
-
-  function closeDashboard() {
-    dashboard.style.display = 'none';
-    mainNav.style.display = 'flex';
-    document.body.style.overflow = '';
-  }
+  function closeDashboard() { dashboard.style.display='none'; mainNav.style.display='flex'; document.body.style.overflow=''; }
 
   document.getElementById('btn-dash-logo').addEventListener('click', closeDashboard);
   document.getElementById('btn-logout').addEventListener('click', closeDashboard);
 
-  // ── CAROUSEL
+  /* ═══════════════════════════════════════════
+     CAROUSEL
+  ═══════════════════════════════════════════ */
   var slides = document.querySelectorAll('.carousel-slide');
   var dotsEl = document.getElementById('carouselDots');
   var cur = 0, timer;
@@ -1280,78 +1543,63 @@ document.addEventListener('DOMContentLoaded', function() {
     timer = setInterval(function(){ goTo(cur + 1); }, 4200);
   }
 
-  // Swipe on mobile
   var tsX = 0;
-  var cf = document.querySelector('.carousel-frame');
-  cf.addEventListener('touchstart', function(e){ tsX = e.touches[0].clientX; }, { passive: true });
-  cf.addEventListener('touchend',   function(e){
-    var diff = tsX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 40) goTo(diff > 0 ? cur + 1 : cur - 1);
-  }, { passive: true });
-
+  var cf  = document.querySelector('.carousel-frame');
+  cf.addEventListener('touchstart', function(e){ tsX = e.touches[0].clientX; }, { passive:true });
+  cf.addEventListener('touchend',   function(e){ var d = tsX - e.changedTouches[0].clientX; if (Math.abs(d) > 40) goTo(d > 0 ? cur+1 : cur-1); }, { passive:true });
   timer = setInterval(function(){ goTo(cur + 1); }, 4200);
 
-  // ── TABS
-  document.querySelectorAll('.block-tab[data-tab]').forEach(function(btn) {
-    btn.addEventListener('click', function() {
+  /* ═══════════════════════════════════════════
+     TABS (How it works / Register)
+  ═══════════════════════════════════════════ */
+  document.querySelectorAll('.block-tab[data-tab]').forEach(function(btn){
+    btn.addEventListener('click', function(){
       var target = btn.getAttribute('data-target');
-      var parent = btn.closest('.how-block, .register-block');
+      var parent = btn.closest('.how-block,.register-block');
       parent.querySelectorAll('.block-tab').forEach(function(b){ b.classList.remove('active'); });
-      parent.querySelectorAll('.tab-panel, .register-form-panel').forEach(function(p){ p.classList.remove('active'); });
+      parent.querySelectorAll('.tab-panel,.register-form-panel').forEach(function(p){ p.classList.remove('active'); });
       btn.classList.add('active');
       var panel = document.getElementById(target);
       if (panel) panel.classList.add('active');
     });
   });
 
-  // ── FORMS
-  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
+  /* ═══════════════════════════════════════════
+     FORM SIMPLE (sección de registro existente)
+  ═══════════════════════════════════════════ */
+  document.getElementById('btn-cliente').addEventListener('click', function(){ submitSimpleForm('cliente'); });
+  document.getElementById('btn-tecnico').addEventListener('click', function(){ submitSimpleForm('tecnico'); });
 
-  document.getElementById('btn-cliente').addEventListener('click', function(){ submitForm('cliente'); });
-  document.getElementById('btn-tecnico').addEventListener('click', function(){ submitForm('tecnico'); });
-
-  function submitForm(tipo) {
+  function submitSimpleForm(tipo) {
     var data = {};
     if (tipo === 'cliente') {
-      var nombre   = document.getElementById('c-nombre').value.trim();
-      var telefono = document.getElementById('c-telefono').value.trim();
-      var email    = document.getElementById('c-email').value.trim();
-      var espacio  = document.getElementById('c-espacio').value;
-      var servicio = document.getElementById('c-servicio').value;
-      if (!nombre || !telefono || !espacio || !servicio) { alert('Por favor completa todos los campos.'); return; }
-      data = { tipo:'CLIENTE', nombre, telefono, email, espacio, servicio };
+      var nombre=document.getElementById('c-nombre').value.trim(), tel=document.getElementById('c-telefono').value.trim(),
+          email=document.getElementById('c-email').value.trim(), esp=document.getElementById('c-espacio').value, svc=document.getElementById('c-servicio').value;
+      if (!nombre||!tel||!esp||!svc){ alert('Por favor completa todos los campos.'); return; }
+      data = { tipo:'CLIENTE', nombre, telefono:tel, email, espacio:esp, servicio:svc };
     } else {
-      var tnombre      = document.getElementById('t-nombre').value.trim();
-      var ttelefono    = document.getElementById('t-telefono').value.trim();
-      var temail       = document.getElementById('t-email').value.trim();
-      var especialidad = document.getElementById('t-especialidad').value;
-      var zona         = document.getElementById('t-zona').value.trim();
-      var experiencia  = document.getElementById('t-experiencia').value;
-      if (!tnombre || !ttelefono || !especialidad || !zona) { alert('Por favor completa todos los campos.'); return; }
-      data = { tipo:'TECNICO', nombre:tnombre, telefono:ttelefono, email:temail, especialidad, zona, experiencia };
+      var tn=document.getElementById('t-nombre').value.trim(), tt=document.getElementById('t-telefono').value.trim(),
+          te=document.getElementById('t-email').value.trim(), tesp=document.getElementById('t-especialidad').value,
+          tz=document.getElementById('t-zona').value.trim(), tx=document.getElementById('t-experiencia').value;
+      if (!tn||!tt||!tesp||!tz){ alert('Por favor completa todos los campos.'); return; }
+      data = { tipo:'TECNICO', nombre:tn, telefono:tt, email:te, especialidad:tesp, zona:tz, experiencia:tx };
     }
-    var btn     = document.getElementById('btn-' + tipo);
-    var spinner = document.getElementById('spinner-' + tipo);
-    var btnText = document.getElementById('btn-' + tipo + '-text');
-    btn.disabled = true; spinner.style.display = 'block'; btnText.textContent = 'Enviando...';
-    fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data) })
-      .catch(function(){})
-      .finally(function(){
-        document.getElementById('rform-' + tipo).style.display = 'none';
-        document.getElementById('success-' + tipo).style.display = 'block';
-      });
+    var btn=document.getElementById('btn-'+tipo), sp=document.getElementById('spinner-'+tipo), bt=document.getElementById('btn-'+tipo+'-text');
+    btn.disabled=true; sp.style.display='block'; bt.textContent='Enviando...';
+    fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
+      .catch(function(){}).finally(function(){ document.getElementById('rform-'+tipo).style.display='none'; document.getElementById('success-'+tipo).style.display='block'; });
   }
 
-  // ── SCROLL REVEAL
-  var obs = new IntersectionObserver(function(entries) {
-    entries.forEach(function(e) {
-      if (e.isIntersecting) { e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }
-    });
+  /* ═══════════════════════════════════════════
+     SCROLL REVEAL
+  ═══════════════════════════════════════════ */
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){ if (e.isIntersecting){ e.target.style.opacity='1'; e.target.style.transform='translateY(0)'; }});
   }, { threshold: 0.06 });
 
-  document.querySelectorAll('.problem-card,.how-step,.why-card,.service-pill,.why-strip-item').forEach(function(el) {
-    el.style.opacity = '0'; el.style.transform = 'translateY(10px)';
-    el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+  document.querySelectorAll('.problem-card,.how-step,.why-card,.service-pill,.why-strip-item').forEach(function(el){
+    el.style.opacity='0'; el.style.transform='translateY(10px)';
+    el.style.transition='opacity 0.4s ease, transform 0.4s ease';
     obs.observe(el);
   });
 
