@@ -432,6 +432,7 @@
     .tnl-field input[type="text"],
     .tnl-field input[type="email"],
     .tnl-field input[type="tel"],
+    .tnl-field input[type="password"],
     .tnl-field input[type="date"],
     .tnl-field input[type="time"] {
       width: 100%; background: var(--white); border: 1.5px solid var(--border);
@@ -1094,7 +1095,7 @@
                 <label id="tnl-pass-label">Contraseña <span id="tnl-pass-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted2);"> — mínimo 6 caracteres</span></label>
                 <div class="tnl-pass-wrap">
                   <input type="password" id="tnl-pass" placeholder="••••••••" autocomplete="new-password" />
-                  <button class="tnl-pass-toggle" id="tnl-pass-toggle" type="button" aria-label="Ver contraseña">👁️</button>
+                  <button class="tnl-pass-toggle" id="tnl-pass-toggle" type="button" aria-label="Ver contraseña"><svg id="tnl-eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
                 </div>
               </div>
 
@@ -1115,9 +1116,19 @@
               <label>WhatsApp</label>
               <input type="tel" id="tnl-tel" placeholder="667 000 0000" autocomplete="tel" inputmode="tel" />
             </div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 1rem;">
+            <div class="tnl-field" style="grid-column:1/-1;">
+              <label>Calle</label>
+              <input type="text" id="tnl-calle" placeholder="Nombre de la calle" autocomplete="address-line1" />
+            </div>
             <div class="tnl-field">
-              <label>Dirección exacta</label>
-              <input type="text" id="tnl-dir" placeholder="Calle, número, colonia..." autocomplete="street-address" />
+              <label>Número</label>
+              <input type="text" id="tnl-numero" placeholder="Ej. 142" />
+            </div>
+            <div class="tnl-field">
+              <label>Colonia</label>
+              <input type="text" id="tnl-colonia" placeholder="Tu colonia" autocomplete="address-level2" />
+            </div>
             </div>
 
             <button class="tnl-cta" id="tnl-submit">
@@ -1127,7 +1138,7 @@
             <!-- Nota de correo — movida debajo del botón -->
             <div class="tnl-email-note" style="margin-top:0.9rem;">
               <span>✉️</span>
-              <p>Recibirás tu <b>ticket de soporte</b> desde <b>soporte@thruver.com</b> con todos los detalles de tu servicio.</p>
+              <p>Recibirás tu <b>ticket de soporte</b> desde <b><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dba8b4abb4a9afbe9bafb3a9aeadbea9f5b8b4b6">[email&#160;protected]</a></b> con todos los detalles de tu servicio.</p>
             </div>
             <p class="tnl-cta-note">Al confirmar podrás ver tu historial de servicios desde tu cuenta.</p>
           </div>
@@ -1537,7 +1548,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 document.addEventListener('DOMContentLoaded', function () {
 
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
@@ -1631,7 +1642,9 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('tnl-nombre').value = '';
     document.getElementById('tnl-email').value = '';
     document.getElementById('tnl-tel').value = '';
-    document.getElementById('tnl-dir').value = '';
+    var calleEl   = document.getElementById('tnl-calle');   if(calleEl)   calleEl.value   = '';
+    var numeroEl  = document.getElementById('tnl-numero');  if(numeroEl)  numeroEl.value  = '';
+    var coloniaEl = document.getElementById('tnl-colonia'); if(coloniaEl) coloniaEl.value = '';
     document.getElementById('tnl-fecha').value = '';
     document.getElementById('tnl-hora').value = '10:00';
     var passEl2 = document.getElementById('tnl-pass'); if(passEl2) passEl2.value = '';
@@ -1833,8 +1846,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.getElementById('tnl-pass-toggle').addEventListener('click', function() {
     var inp = document.getElementById('tnl-pass');
-    if (inp.type === 'password') { inp.type = 'text'; this.innerHTML = '🕶️'; }
-    else { inp.type = 'password'; this.innerHTML = '👁️'; }
+    var eyeOpen  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    var eyeSlash = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    if (inp.type === 'password') { inp.type = 'text';     this.innerHTML = eyeSlash; }
+    else                         { inp.type = 'password'; this.innerHTML = eyeOpen;  }
   });
 
   document.getElementById('tnl-mode-switch').addEventListener('click', function() {
@@ -1920,14 +1935,18 @@ document.addEventListener('DOMContentLoaded', function () {
     var emailEl = document.getElementById('tnl-email');
     var email   = emailEl ? emailEl.value.trim() : '';
     var tel     = document.getElementById('tnl-tel').value.trim();
-    var dir     = document.getElementById('tnl-dir').value.trim();
+    var calle   = document.getElementById('tnl-calle') ? document.getElementById('tnl-calle').value.trim() : '';
+    var numero  = document.getElementById('tnl-numero') ? document.getElementById('tnl-numero').value.trim() : '';
+    var colonia = document.getElementById('tnl-colonia') ? document.getElementById('tnl-colonia').value.trim() : '';
+    var dir     = [calle, numero ? 'No.' + numero : '', colonia].filter(Boolean).join(', ');
     var passEl  = document.getElementById('tnl-pass');
     var pass    = passEl ? passEl.value : '';
     var valid   = true;
     var haySession = window.currentUser != null;
     if (!nombre) { markError('tnl-nombre'); valid = false; }
     if (!tel)    { markError('tnl-tel');    valid = false; }
-    if (!dir)    { markError('tnl-dir');    valid = false; }
+    if (!calle)   { markError('tnl-calle');   valid = false; }
+    if (!colonia) { markError('tnl-colonia');  valid = false; }
     if (!haySession) {
       if (!isValidEmail(email)) { markError('tnl-email'); valid = false; }
       if (!pass || pass.length < 6) { if(passEl) passEl.classList.add('tnl-error'); valid = false; }
@@ -1935,7 +1954,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!valid) { var fe = document.querySelector('.tnl-error'); if(fe) fe.scrollIntoView({behavior:'smooth',block:'center'}); return; }
     T.nombre = nombre;
     T.email  = email || (window.currentUser ? window.currentUser.email : '');
-    T.tel = tel; T.dir = dir;
+    T.tel = tel; T.dir = dir; T.calle = calle; T.numero = numero; T.colonia = colonia;
     var btn = document.getElementById('tnl-submit');
     btn.disabled = true;
     document.getElementById('tnl-spinner').style.display = 'block';
@@ -1947,7 +1966,7 @@ document.addEventListener('DOMContentLoaded', function () {
         descripcion:T.desc, urgencia:T.urgencia,
         fecha_programada: T.urgencia==='Agendar fecha' ? formatFecha(T.fecha,T.hora) : '',
         nombre:userName||T.nombre, email:userEmail||T.email,
-        telefono:T.tel, direccion:T.dir, estado:'nueva',
+        telefono:T.tel, direccion:T.dir, calle:T.calle, numero:T.numero, colonia:T.colonia, estado:'nueva',
         timestamp:new Date().toISOString()
       };
       fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){});
