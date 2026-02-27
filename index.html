@@ -57,7 +57,7 @@
     .btn-ghost:hover { border-color: rgba(0,0,0,0.18); background: var(--bg2); }
 
     .btn-solid {
-      background: var(--black); color: var(--white); border: none;
+      background: var(--black); color: var(--white) !important; border: none;
       padding: 0.48rem 1.1rem; border-radius: var(--rsm); font-size: 0.83rem;
       font-weight: 700; cursor: pointer; font-family: var(--font);
       text-decoration: none; min-height: 44px; display: inline-flex;
@@ -88,7 +88,10 @@
     .mobile-menu a:active { background: var(--bg); }
     .mm-divider { height: 1px; background: var(--border); margin: 0.5rem 0; }
     .mm-cta { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.4rem; }
-    .mm-cta .btn-solid, .mm-cta .btn-ghost { width: 100%; justify-content: center; font-size: 0.95rem; padding: 0.85rem; border-radius: var(--radius); }
+    .mm-cta .btn-solid,
+    .mm-cta .btn-ghost { width: 100%; justify-content: center; font-size: 0.95rem; padding: 0.85rem; border-radius: var(--radius); }
+    /* FIX: Asegurar que el texto del botón solicitar servicio sea blanco en el menú móvil */
+    .mm-cta .btn-solid { background: var(--black) !important; color: #ffffff !important; }
 
     /* ══ HERO ══ */
     .hero {
@@ -188,7 +191,7 @@
     .form-group input:focus, .form-group select:focus { border-color: var(--black); background: var(--white); }
     .register-form-panel { display: none; padding: 1.3rem 1.4rem; }
     .register-form-panel.active { display: block; }
-    .btn-submit { width: 100%; background: var(--black); color: var(--white); border: none; padding: 0.9rem; border-radius: var(--rsm); font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.18s; margin-top: 0.2rem; }
+    .btn-submit { width: 100%; background: var(--black); color: var(--white) !important; border: none; padding: 0.9rem; border-radius: var(--rsm); font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.18s; margin-top: 0.2rem; }
     .btn-submit:hover { opacity: 0.78; transform: translateY(-1px); }
     .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
     .spinner { display: none; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
@@ -313,7 +316,6 @@
        TÚNEL DE CONVERSIÓN — 3 Pasos
     ═══════════════════════════════════════════════ */
 
-    /* Overlay de pantalla completa */
     .tnl-overlay {
       display: none;
       position: fixed; inset: 0; z-index: 800;
@@ -327,7 +329,6 @@
     }
     @keyframes tnlIn { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
 
-    /* Header del túnel */
     .tnl-header {
       position: sticky; top: 0; z-index: 10;
       height: 64px; padding: 0 2rem;
@@ -347,7 +348,6 @@
     }
     .tnl-close:hover { background: var(--bg3); color: var(--black); border-color: rgba(0,0,0,0.16); }
 
-    /* Barra de progreso */
     .tnl-progress-bar {
       position: sticky; top: 64px; z-index: 9;
       height: 3px; background: var(--bg3);
@@ -358,7 +358,6 @@
       transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
     }
 
-    /* Indicador de pasos */
     .tnl-step-indicator {
       display: flex; justify-content: center; align-items: center;
       gap: 0.6rem; padding: 1.6rem 1rem 0;
@@ -371,10 +370,8 @@
     .tnl-dot.active  { background: var(--black); transform: scale(1.5); }
     .tnl-dot.done    { background: var(--black); opacity: 0.3; }
 
-    /* Contenedor central de los pasos */
     .tnl-body { max-width: 780px; margin: 0 auto; padding: 2.2rem 1.5rem 6rem; }
 
-    /* Cada vista de paso */
     .tnl-view { display: none; }
     .tnl-view.tnl-active {
       display: block;
@@ -387,7 +384,6 @@
     @keyframes tnlStepIn   { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
     @keyframes tnlStepBack { from{opacity:0;transform:translateX(-28px)} to{opacity:1;transform:translateX(0)} }
 
-    /* Tipografía de paso */
     .tnl-eyebrow { font-size: 0.65rem; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.13em; margin-bottom: 0.5rem; }
     .tnl-title   { font-size: clamp(1.55rem, 4vw, 2.1rem); font-weight: 900; letter-spacing: -0.04em; line-height: 1.1; color: var(--black); margin-bottom: 0.45rem; }
     .tnl-sub     { font-size: 0.88rem; color: var(--muted); line-height: 1.65; margin-bottom: 2rem; }
@@ -433,7 +429,11 @@
     .tnl-field label { display: block; font-size: 0.66rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 0.38rem; }
     .tnl-field select,
     .tnl-field textarea,
-    .tnl-field input {
+    .tnl-field input[type="text"],
+    .tnl-field input[type="email"],
+    .tnl-field input[type="tel"],
+    .tnl-field input[type="date"],
+    .tnl-field input[type="time"] {
       width: 100%; background: var(--white); border: 1.5px solid var(--border);
       border-radius: var(--radius); padding: 0.9rem 1.05rem;
       font-size: 1rem; font-family: var(--font); color: var(--text);
@@ -450,7 +450,7 @@
     .tnl-field select.tnl-error { border-color: #e53e3e; box-shadow: 0 0 0 3px rgba(229,62,62,0.08); }
 
     /* Urgencia */
-    .tnl-urgency-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 1.2rem; }
+    .tnl-urgency-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.8rem; }
     .tnl-urgency-btn {
       display: flex; align-items: center; justify-content: center; gap: 0.4rem;
       background: var(--white); border: 2px solid var(--border);
@@ -461,6 +461,73 @@
     }
     .tnl-urgency-btn:hover { border-color: rgba(0,0,0,0.2); color: var(--black); }
     .tnl-urgency-btn.tnl-urg-sel { border-color: var(--black); background: var(--black); color: var(--white); }
+
+    /* ── CALENDARIO DE FECHA Y HORA ── */
+    .tnl-datetime-wrap {
+      display: none;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 1.1rem;
+      animation: tnlIn 0.22s ease both;
+    }
+    .tnl-datetime-wrap.visible { display: block; }
+    .tnl-datetime-header {
+      padding: 0.85rem 1.1rem;
+      background: var(--black);
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .tnl-datetime-header span { font-size: 0.75rem; font-weight: 700; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 0.1em; }
+    .tnl-datetime-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .tnl-datetime-col {
+      padding: 1rem 1.1rem;
+      border-right: 1px solid var(--border);
+    }
+    .tnl-datetime-col:last-child { border-right: none; }
+    .tnl-datetime-col label {
+      display: block;
+      font-size: 0.62rem;
+      font-weight: 700;
+      color: var(--muted2);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    .tnl-datetime-col input[type="date"],
+    .tnl-datetime-col input[type="time"] {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-size: 1rem;
+      font-family: var(--font);
+      color: var(--black);
+      font-weight: 700;
+      outline: none;
+      padding: 0;
+      cursor: pointer;
+      min-height: 36px;
+      -webkit-appearance: none;
+    }
+    .tnl-datetime-col input[type="date"]::-webkit-calendar-picker-indicator,
+    .tnl-datetime-col input[type="time"]::-webkit-calendar-picker-indicator {
+      opacity: 0.5;
+      cursor: pointer;
+    }
+    .tnl-fecha-note {
+      padding: 0.65rem 1.1rem;
+      background: #fffbeb;
+      border-top: 1px solid #fef3c7;
+      font-size: 0.72rem;
+      color: #92400e;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
 
     /* Trust box */
     .tnl-trust {
@@ -496,14 +563,29 @@
     .tnl-receipt-badge p { font-size: 0.73rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
     .tnl-receipt-badge p b { color: var(--white); }
 
+    /* Fila de fecha en recibo - oculta por defecto */
+    .tnl-rrow-fecha { display: none; }
+    .tnl-rrow-fecha.visible { display: flex; }
+
     /* Formulario paso 3 */
     .tnl-form-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.6rem; }
     .tnl-form-title { font-size: 1.05rem; font-weight: 900; letter-spacing: -0.03em; color: var(--black); margin-bottom: 0.25rem; }
     .tnl-form-sub   { font-size: 0.77rem; color: var(--muted); margin-bottom: 1.4rem; line-height: 1.55; }
 
+    /* Nota de correo */
+    .tnl-email-note {
+      display: flex; align-items: flex-start; gap: 0.5rem;
+      background: #f0f9ff; border: 1px solid #bae6fd;
+      border-radius: var(--rsm); padding: 0.65rem 0.85rem;
+      margin-top: -0.5rem; margin-bottom: 1rem;
+    }
+    .tnl-email-note span { font-size: 0.92rem; flex-shrink: 0; }
+    .tnl-email-note p { font-size: 0.72rem; color: #0369a1; line-height: 1.5; }
+    .tnl-email-note p b { color: #0c4a6e; }
+
     /* CTA principal */
     .tnl-cta {
-      width: 100%; background: var(--black); color: var(--white); border: none;
+      width: 100%; background: var(--black); color: var(--white) !important; border: none;
       border-radius: var(--radius); padding: 1.05rem; font-size: 0.96rem; font-weight: 700;
       font-family: var(--font); cursor: pointer; min-height: 54px;
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
@@ -514,19 +596,55 @@
     .tnl-cta:disabled { opacity: 0.42; cursor: not-allowed; transform: none; box-shadow: none; }
     .tnl-cta-note { font-size: 0.64rem; color: var(--muted2); margin-top: 0.55rem; text-align: center; }
 
-    /* ── Éxito ── */
+    /* ── ÉXITO con palomita animada ── */
     .tnl-success { display: none; text-align: center; padding: 5rem 2rem 4rem; }
     .tnl-success.tnl-show { display: block; animation: fadeUp 0.5s ease both; }
+
+    /* Círculo negro con SVG animado */
     .tnl-success-ring {
-      width: 76px; height: 76px; border-radius: 50%;
-      background: var(--black); display: flex; align-items: center;
-      justify-content: center; margin: 0 auto 1.5rem; font-size: 2rem;
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--black);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.6rem;
     }
+
+    /* SVG del check interactivo */
+    .check-svg {
+      width: 44px; height: 44px;
+      display: block;
+    }
+    .check-circle {
+      stroke: rgba(255,255,255,0.15);
+      stroke-width: 2;
+      fill: none;
+    }
+    .check-mark {
+      stroke: #ffffff;
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      stroke-dasharray: 36;
+      stroke-dashoffset: 36;
+      transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    /* Cuando el éxito es visible, animar el check */
+    .tnl-success.tnl-show .check-mark {
+      stroke-dashoffset: 0;
+      transition-delay: 0.25s;
+    }
+    /* Pulso del círculo */
+    .tnl-success.tnl-show .tnl-success-ring {
+      animation: successPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+    }
+    @keyframes successPop {
+      0%   { transform: scale(0.7); opacity: 0; }
+      60%  { transform: scale(1.1); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+
     .tnl-success h2 { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.04em; color: var(--black); margin-bottom: 0.55rem; }
     .tnl-success p  { font-size: 0.9rem; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 2rem; }
-    .tnl-success-ref { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.9rem 1.2rem; display: inline-block; margin-bottom: 2rem; }
-    .tnl-success-ref small { display: block; font-size: 0.6rem; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.1em; }
-    .tnl-success-ref strong { font-size: 1rem; font-weight: 900; color: var(--black); letter-spacing: -0.02em; }
 
     /* ══ RESPONSIVE ══ */
     @media(max-width:900px){
@@ -622,6 +740,11 @@
       .tnl-urgency-row { grid-template-columns: 1fr 1fr; }
       .tnl-step3-layout { grid-template-columns: 1fr; }
       .tnl-receipt  { position: static; }
+      .tnl-datetime-grid { grid-template-columns: 1fr; }
+      .tnl-datetime-col { border-right: none; border-bottom: 1px solid var(--border); }
+      .tnl-datetime-col:last-child { border-bottom: none; }
+      .tnl-success { padding: 3.5rem 1.2rem 3rem; }
+      .tnl-success h2 { font-size: 1.45rem; }
     }
 
     @media(max-width:380px){
@@ -674,18 +797,15 @@
 ═══════════════════════════════════════════════════════ -->
 <div class="tnl-overlay" id="tnlOverlay" role="dialog" aria-modal="true" aria-label="Solicitar servicio">
 
-  <!-- Header limpio sin distracciones -->
   <header class="tnl-header">
     <span class="tnl-logo">thruver</span>
     <button class="tnl-close" id="tnlClose" aria-label="Cerrar">✕ Cancelar</button>
   </header>
 
-  <!-- Barra de progreso -->
   <div class="tnl-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33">
     <div class="tnl-progress-fill" id="tnlFill" style="width:33%"></div>
   </div>
 
-  <!-- Dots de progreso -->
   <div class="tnl-step-indicator" id="tnlDots">
     <div class="tnl-dot active"></div>
     <div class="tnl-dot"></div>
@@ -744,6 +864,27 @@
         </div>
       </div>
 
+      <!-- CALENDARIO + HORA (aparece al elegir "Agendar fecha") -->
+      <div class="tnl-datetime-wrap" id="tnl-datetime-wrap">
+        <div class="tnl-datetime-header">
+          <span>📅</span>
+          <span>Selecciona tu fecha y hora preferida</span>
+        </div>
+        <div class="tnl-datetime-grid">
+          <div class="tnl-datetime-col">
+            <label>Fecha</label>
+            <input type="date" id="tnl-fecha" />
+          </div>
+          <div class="tnl-datetime-col">
+            <label>Hora</label>
+            <input type="time" id="tnl-hora" value="10:00" />
+          </div>
+        </div>
+        <div class="tnl-fecha-note">
+          ⚠️ La fecha es preferencial — Thruver la confirmará por WhatsApp.
+        </div>
+      </div>
+
       <div class="tnl-trust">
         <span class="tnl-trust-icon">🛡️</span>
         <p>Thruver te asignará a un técnico <b>verificado con antecedentes revisados</b> y respaldará el trabajo con nuestra <b>Garantía Total</b>. Si no queda bien, regresa sin costo.</p>
@@ -759,7 +900,7 @@
 
       <div class="tnl-step3-layout">
 
-        <!-- Recibo / Resumen -->
+        <!-- Recibo / Resumen negro -->
         <div class="tnl-receipt">
           <p class="tnl-receipt-title">Tu solicitud</p>
 
@@ -784,6 +925,14 @@
               <span id="r-urg">—</span>
             </div>
           </div>
+          <!-- FILA DE FECHA Y HORA (visible solo cuando se agenda fecha) -->
+          <div class="tnl-rrow tnl-rrow-fecha" id="r-fecha-row">
+            <div class="tnl-rrow-ico">📅</div>
+            <div class="tnl-rrow-info">
+              <small>Fecha programada</small>
+              <span id="r-fecha">—</span>
+            </div>
+          </div>
           <div class="tnl-rrow">
             <div class="tnl-rrow-ico">📝</div>
             <div class="tnl-rrow-info">
@@ -801,27 +950,38 @@
         <!-- Formulario -->
         <div class="tnl-form-card">
           <h3 class="tnl-form-title">¿A dónde enviamos a tu experto?</h3>
-          <p class="tnl-form-sub">Ingresa tus datos para confirmar y gestionar tu servicio por WhatsApp.</p>
+          <p class="tnl-form-sub">Ingresa tus datos para confirmar y recibir tu ticket de seguimiento.</p>
 
           <div id="tnl-form-fields">
             <div class="tnl-field">
               <label>Nombre completo</label>
-              <input type="text"  id="tnl-nombre"    placeholder="Tu nombre" autocomplete="given-name" />
+              <input type="text" id="tnl-nombre" placeholder="Tu nombre" autocomplete="given-name" />
             </div>
+
+            <div class="tnl-field">
+              <label>Correo electrónico</label>
+              <input type="email" id="tnl-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" />
+            </div>
+            <!-- Nota explicativa del correo -->
+            <div class="tnl-email-note">
+              <span>✉️</span>
+              <p>Recibirás tu <b>ticket de soporte</b> desde <b>soporte@thruver.com</b> con todos los detalles de tu servicio.</p>
+            </div>
+
             <div class="tnl-field">
               <label>WhatsApp</label>
-              <input type="tel"   id="tnl-tel"        placeholder="667 000 0000" autocomplete="tel" inputmode="tel" />
+              <input type="tel" id="tnl-tel" placeholder="667 000 0000" autocomplete="tel" inputmode="tel" />
             </div>
             <div class="tnl-field">
               <label>Dirección exacta</label>
-              <input type="text"  id="tnl-dir"        placeholder="Calle, número, colonia..." autocomplete="street-address" />
+              <input type="text" id="tnl-dir" placeholder="Calle, número, colonia..." autocomplete="street-address" />
             </div>
 
             <button class="tnl-cta" id="tnl-submit">
               <span class="spinner" id="tnl-spinner"></span>
               <span id="tnl-submit-txt">Confirmar solicitud ✓</span>
             </button>
-            <p class="tnl-cta-note">Al confirmar, Thruver te contactará por WhatsApp para coordinar tu servicio.</p>
+            <p class="tnl-cta-note">Al confirmar, Thruver te contactará por WhatsApp y correo para coordinar tu servicio.</p>
           </div>
         </div>
 
@@ -830,13 +990,17 @@
 
     <!-- ─────────────── ÉXITO ─────────────── -->
     <div class="tnl-success" id="tnl-success">
-      <div class="tnl-success-ring">✓</div>
-      <h2>¡Solicitud enviada!</h2>
-      <p>Tu solicitud está en camino. Un técnico <strong>verificado por Thruver</strong> se pondrá en contacto por WhatsApp en los próximos minutos.</p>
-      <div class="tnl-success-ref">
-        <small>Número de seguimiento</small>
-        <strong id="tnl-ref-num">THR-000000</strong>
+      <!-- Círculo negro con palomita SVG animada -->
+      <div class="tnl-success-ring">
+        <svg class="check-svg" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+          <circle class="check-circle" cx="26" cy="26" r="22"/>
+          <path class="check-mark" d="M14 26 l8 9 l16 -18"/>
+        </svg>
       </div>
+
+      <h2>¡Solicitud enviada!</h2>
+      <p>Tu solicitud está en camino. Un técnico <strong>verificado por Thruver</strong> se pondrá en contacto por WhatsApp en los próximos minutos.<br/>Revisa también tu correo para el ticket de seguimiento.</p>
+
       <button class="tnl-cta" id="tnl-ok" style="max-width:260px;margin:0 auto;">Volver al inicio</button>
     </div>
 
@@ -1228,9 +1392,6 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-  /* ═══════════════════════════════════════════
-     CONFIGURACIÓN
-  ═══════════════════════════════════════════ */
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
 
   /* ═══════════════════════════════════════════
@@ -1264,11 +1425,11 @@ document.addEventListener('DOMContentLoaded', function () {
   var fill     = document.getElementById('tnlFill');
   var dots     = document.querySelectorAll('.tnl-dot');
   var success  = document.getElementById('tnl-success');
+  var dtWrap   = document.getElementById('tnl-datetime-wrap');
 
   /* Estado acumulado */
-  var T = { servicio:'', ico:'🔧', espacio:'', desc:'', urgencia:'Lo antes posible', nombre:'', tel:'', dir:'' };
+  var T = { servicio:'', ico:'🔧', espacio:'', desc:'', urgencia:'Lo antes posible', fecha:'', hora:'', nombre:'', email:'', tel:'', dir:'' };
 
-  /* Progreso por paso */
   var PROG = { 1:'14%', 2:'58%', 3:'90%' };
 
   /* ── Abrir túnel ── */
@@ -1288,17 +1449,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ── Reset completo ── */
   function resetTunnel() {
-    T = { servicio:'', ico:'🔧', espacio:'', desc:'', urgencia:'Lo antes posible', nombre:'', tel:'', dir:'' };
+    T = { servicio:'', ico:'🔧', espacio:'', desc:'', urgencia:'Lo antes posible', fecha:'', hora:'', nombre:'', email:'', tel:'', dir:'' };
     showView(1, true);
     success.classList.remove('tnl-show');
     document.getElementById('tnl-form-fields').style.display = '';
     document.getElementById('tnl-espacio').value = '';
     document.getElementById('tnl-desc').value = '';
     document.getElementById('tnl-nombre').value = '';
+    document.getElementById('tnl-email').value = '';
     document.getElementById('tnl-tel').value = '';
     document.getElementById('tnl-dir').value = '';
+    document.getElementById('tnl-fecha').value = '';
+    document.getElementById('tnl-hora').value = '10:00';
     document.getElementById('tnl-u1').classList.add('tnl-urg-sel');
     document.getElementById('tnl-u2').classList.remove('tnl-urg-sel');
+    dtWrap.classList.remove('visible');
+    document.getElementById('r-fecha-row').classList.remove('visible');
     document.querySelectorAll('.tnl-svc-card').forEach(function(c){ c.classList.remove('tnl-svc-selected'); });
     var submitBtn = document.getElementById('tnl-submit');
     submitBtn.disabled = false;
@@ -1316,9 +1482,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (v) {
       v.classList.add(forward === false ? 'tnl-back' : 'tnl-active');
     }
-    /* Progreso */
     fill.style.width = PROG[n] || '90%';
-    /* Dots */
     dots.forEach(function(d, i){
       d.classList.remove('active','done');
       if (i + 1 < n)  d.classList.add('done');
@@ -1327,14 +1491,24 @@ document.addEventListener('DOMContentLoaded', function () {
     overlay.scrollTop = 0;
   }
 
-  /* ── Pre-seleccionar servicio (desde pills de servicios) ── */
+  /* ── Formatear fecha legible ── */
+  function formatFecha(fecha, hora) {
+    if (!fecha) return '';
+    var meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+    var dias  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+    var d = new Date(fecha + 'T12:00:00');
+    var str = dias[d.getDay()] + ' ' + d.getDate() + ' ' + meses[d.getMonth()] + ' ' + d.getFullYear();
+    if (hora) str += ' · ' + hora;
+    return str;
+  }
+
+  /* ── Pre-seleccionar servicio ── */
   function preselectService(svc) {
     var card = document.querySelector('.tnl-svc-card[data-svc="' + svc + '"]');
     if (card) {
       card.classList.add('tnl-svc-selected');
       T.servicio = svc;
       T.ico = card.getAttribute('data-ico') || '🔧';
-      /* Auto-avance al paso 2 */
       setTimeout(function(){ showView(2, true); }, 200);
     }
   }
@@ -1347,6 +1521,15 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('r-urg').textContent  = T.urgencia  || '—';
     var d = T.desc || '—';
     document.getElementById('r-desc').textContent = d.length > 70 ? d.slice(0,70) + '…' : d;
+
+    /* Fecha programada: visible solo si se agendó */
+    var fechaRow = document.getElementById('r-fecha-row');
+    if (T.urgencia === 'Agendar fecha' && T.fecha) {
+      document.getElementById('r-fecha').textContent = formatFecha(T.fecha, T.hora);
+      fechaRow.classList.add('visible');
+    } else {
+      fechaRow.classList.remove('visible');
+    }
   }
 
   /* ── Helpers de validación ── */
@@ -1356,6 +1539,11 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   function clearErrors() {
     document.querySelectorAll('.tnl-error').forEach(function(el){ el.classList.remove('tnl-error'); });
+  }
+
+  /* ── Validar email ── */
+  function isValidEmail(e) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
   }
 
   /* ─────── Triggers de apertura ─────── */
@@ -1379,21 +1567,32 @@ document.addEventListener('DOMContentLoaded', function () {
       card.classList.add('tnl-svc-selected');
       T.servicio = card.getAttribute('data-svc');
       T.ico      = card.getAttribute('data-ico') || '🔧';
-      /* Auto-avance suave */
       setTimeout(function(){ showView(2, true); }, 240);
     });
   });
 
-  /* ─────── PASO 2: urgencia toggle ─────── */
+  /* ─────── PASO 2: urgencia toggle con calendario ─────── */
   document.getElementById('tnl-u1').addEventListener('click', function () {
     T.urgencia = 'Lo antes posible';
     this.classList.add('tnl-urg-sel');
     document.getElementById('tnl-u2').classList.remove('tnl-urg-sel');
+    dtWrap.classList.remove('visible');
   });
   document.getElementById('tnl-u2').addEventListener('click', function () {
     T.urgencia = 'Agendar fecha';
     this.classList.add('tnl-urg-sel');
     document.getElementById('tnl-u1').classList.remove('tnl-urg-sel');
+    /* Mostrar calendario y establecer mínimo de hoy */
+    var today = new Date();
+    var yyyy  = today.getFullYear();
+    var mm    = String(today.getMonth() + 1).padStart(2, '0');
+    var dd    = String(today.getDate()).padStart(2, '0');
+    document.getElementById('tnl-fecha').min = yyyy + '-' + mm + '-' + dd;
+    dtWrap.classList.add('visible');
+    /* Scroll suave al calendario en móvil */
+    setTimeout(function(){
+      dtWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
   });
 
   /* ─────── PASO 2: continuar ─────── */
@@ -1401,6 +1600,22 @@ document.addEventListener('DOMContentLoaded', function () {
     clearErrors();
     var esp = document.getElementById('tnl-espacio').value;
     if (!esp) { markError('tnl-espacio'); document.getElementById('tnl-espacio').focus(); return; }
+
+    /* Validar fecha si eligió agendar */
+    if (T.urgencia === 'Agendar fecha') {
+      var fechaVal = document.getElementById('tnl-fecha').value;
+      if (!fechaVal) {
+        document.getElementById('tnl-fecha').classList.add('tnl-error');
+        dtWrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        return;
+      }
+      T.fecha = fechaVal;
+      T.hora  = document.getElementById('tnl-hora').value || '10:00';
+    } else {
+      T.fecha = '';
+      T.hora  = '';
+    }
+
     T.espacio = esp;
     T.desc    = document.getElementById('tnl-desc').value.trim();
     updateReceipt();
@@ -1414,53 +1629,59 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ─────── PASO 3: envío final ─────── */
   document.getElementById('tnl-submit').addEventListener('click', function () {
     clearErrors();
-    var nombre   = document.getElementById('tnl-nombre').value.trim();
-    var tel      = document.getElementById('tnl-tel').value.trim();
-    var dir      = document.getElementById('tnl-dir').value.trim();
-    var valid = true;
-    if (!nombre) { markError('tnl-nombre');  valid = false; }
-    if (!tel)    { markError('tnl-tel');     valid = false; }
-    if (!dir)    { markError('tnl-dir');     valid = false; }
-    if (!valid)  { document.querySelector('.tnl-error').focus(); return; }
+    var nombre = document.getElementById('tnl-nombre').value.trim();
+    var email  = document.getElementById('tnl-email').value.trim();
+    var tel    = document.getElementById('tnl-tel').value.trim();
+    var dir    = document.getElementById('tnl-dir').value.trim();
+    var valid  = true;
 
-    T.nombre = nombre; T.tel = tel; T.dir = dir;
+    if (!nombre)              { markError('tnl-nombre'); valid = false; }
+    if (!isValidEmail(email)) { markError('tnl-email');  valid = false; }
+    if (!tel)                 { markError('tnl-tel');    valid = false; }
+    if (!dir)                 { markError('tnl-dir');    valid = false; }
+    if (!valid) {
+      /* Scroll al primer error */
+      var firstErr = document.querySelector('.tnl-error');
+      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
 
-    /* ── Payload JSON completo ── */
-    var ref = 'THR-' + Math.random().toString(36).slice(2,8).toUpperCase();
+    T.nombre = nombre; T.email = email; T.tel = tel; T.dir = dir;
+
     var payload = {
-      tipo:        'SOLICITUD_TUNEL',
-      referencia:  ref,
-      servicio:    T.servicio,
-      espacio:     T.espacio,
-      descripcion: T.desc,
-      urgencia:    T.urgencia,
-      nombre:      T.nombre,
-      telefono:    T.tel,
-      direccion:   T.dir,
-      timestamp:   new Date().toISOString()
+      tipo:              'SOLICITUD_TUNEL',
+      servicio:          T.servicio,
+      espacio:           T.espacio,
+      descripcion:       T.desc,
+      urgencia:          T.urgencia,
+      fecha_programada:  T.urgencia === 'Agendar fecha' ? formatFecha(T.fecha, T.hora) : '',
+      nombre:            T.nombre,
+      email:             T.email,
+      telefono:          T.tel,
+      direccion:         T.dir,
+      timestamp:         new Date().toISOString()
     };
-    console.log('[Thruver] Payload listo para enviar:', JSON.stringify(payload, null, 2));
+    console.log('[Thruver] Payload:', JSON.stringify(payload, null, 2));
 
-    /* ── Spinner ── */
+    /* Spinner */
     var btn = document.getElementById('tnl-submit');
     btn.disabled = true;
     document.getElementById('tnl-spinner').style.display = 'block';
     document.getElementById('tnl-submit-txt').textContent = 'Enviando...';
 
-    /* ── Envío a Google Apps Script ── */
+    /* Envío a Google Apps Script */
     fetch(SCRIPT_URL, {
       method:  'POST',
       mode:    'no-cors',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify(payload)
     })
-    .catch(function(){/* no-cors siempre lanza network error aparente, ignoramos */})
+    .catch(function(){})
     .finally(function(){
-      /* ── Pantalla de éxito ── */
+      /* Pantalla de éxito — sin ticker visible */
       document.querySelectorAll('.tnl-view').forEach(function(v){ v.classList.remove('tnl-active','tnl-back'); });
       fill.style.width = '100%';
       dots.forEach(function(d){ d.classList.add('done'); d.classList.remove('active'); });
-      document.getElementById('tnl-ref-num').textContent = ref;
       success.classList.add('tnl-show');
       overlay.scrollTop = 0;
     });
@@ -1550,7 +1771,7 @@ document.addEventListener('DOMContentLoaded', function () {
   timer = setInterval(function(){ goTo(cur + 1); }, 4200);
 
   /* ═══════════════════════════════════════════
-     TABS (How it works / Register)
+     TABS
   ═══════════════════════════════════════════ */
   document.querySelectorAll('.block-tab[data-tab]').forEach(function(btn){
     btn.addEventListener('click', function(){
@@ -1565,7 +1786,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   /* ═══════════════════════════════════════════
-     FORM SIMPLE (sección de registro existente)
+     FORM SIMPLE
   ═══════════════════════════════════════════ */
   document.getElementById('btn-cliente').addEventListener('click', function(){ submitSimpleForm('cliente'); });
   document.getElementById('btn-tecnico').addEventListener('click', function(){ submitSimpleForm('tecnico'); });
@@ -1576,7 +1797,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var nombre=document.getElementById('c-nombre').value.trim(), tel=document.getElementById('c-telefono').value.trim(),
           email=document.getElementById('c-email').value.trim(), esp=document.getElementById('c-espacio').value, svc=document.getElementById('c-servicio').value;
       if (!nombre||!tel||!esp||!svc){ alert('Por favor completa todos los campos.'); return; }
-      data = { tipo:'CLIENTE', nombre, telefono:tel, email, espacio:esp, servicio:svc };
+      data = { tipo:'CLIENTE', nombre:nombre, telefono:tel, email:email, espacio:esp, servicio:svc };
     } else {
       var tn=document.getElementById('t-nombre').value.trim(), tt=document.getElementById('t-telefono').value.trim(),
           te=document.getElementById('t-email').value.trim(), tesp=document.getElementById('t-especialidad').value,
