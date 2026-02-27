@@ -690,11 +690,28 @@
     .tnl-pass-wrap { position: relative; }
     .tnl-pass-wrap input { padding-right: 3rem; }
     .tnl-pass-toggle {
-      position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%);
+      position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%);
       background: none; border: none; cursor: pointer; color: var(--muted);
-      font-size: 1rem; padding: 0.3rem; line-height: 1;
+      font-size: 1.1rem; padding: 0.3rem; line-height: 1; display: flex;
+      align-items: center; justify-content: center; width: 28px; height: 28px;
     }
     .tnl-pass-toggle:hover { color: var(--black); }
+
+    /* Reset contraseña */
+    .tnl-forgot-wrap {
+      text-align: right; margin-top: -0.3rem; margin-bottom: 0.2rem;
+    }
+    .tnl-forgot-btn {
+      background: none; border: none; cursor: pointer; font-family: var(--font);
+      font-size: 0.72rem; color: var(--muted); text-decoration: underline; padding: 0;
+    }
+    .tnl-forgot-btn:hover { color: var(--black); }
+    .tnl-reset-msg {
+      display: none; font-size: 0.74rem; border-radius: var(--rsm);
+      padding: 0.6rem 0.85rem; margin-bottom: 0.6rem; line-height: 1.5;
+    }
+    .tnl-reset-msg.ok  { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; display: block; }
+    .tnl-reset-msg.err { background: #fff0f0; color: #cc3333; border: 1px solid #fcc;    display: block; }
 
     /* Indicador de sesion activa en paso 3 */
     .tnl-session-banner {
@@ -1071,23 +1088,26 @@
                 <label>Correo electrónico</label>
                 <input type="email" id="tnl-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" />
               </div>
-              <div class="tnl-email-note">
-                <span>✉️</span>
-                <p>Recibirás tu <b>ticket de soporte</b> desde <b>soporte@thruver.com</b> con todos los detalles.</p>
-              </div>
 
               <!-- Contraseña con toggle ver/ocultar -->
               <div class="tnl-field">
                 <label id="tnl-pass-label">Contraseña <span id="tnl-pass-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted2);"> — mínimo 6 caracteres</span></label>
                 <div class="tnl-pass-wrap">
                   <input type="password" id="tnl-pass" placeholder="••••••••" autocomplete="new-password" />
-                  <button class="tnl-pass-toggle" id="tnl-pass-toggle" type="button" aria-label="Ver contraseña">👁</button>
+                  <button class="tnl-pass-toggle" id="tnl-pass-toggle" type="button" aria-label="Ver contraseña">👁️</button>
                 </div>
               </div>
+
+              <!-- Mensaje reset contraseña -->
+              <div class="tnl-reset-msg" id="tnl-reset-msg"></div>
 
               <div class="tnl-mode-toggle">
                 <span id="tnl-mode-text">¿Ya tienes cuenta?</span>
                 <button id="tnl-mode-switch" type="button">Iniciar sesión</button>
+              </div>
+              <!-- Olvidaste contraseña (solo visible en modo login) -->
+              <div class="tnl-forgot-wrap" id="tnl-forgot-wrap" style="display:none;">
+                <button class="tnl-forgot-btn" id="tnl-forgot-btn" type="button">¿Olvidaste tu contraseña?</button>
               </div>
             </div>
 
@@ -1104,6 +1124,11 @@
               <span class="spinner" id="tnl-spinner"></span>
               <span id="tnl-submit-txt">Crear cuenta y confirmar ✓</span>
             </button>
+            <!-- Nota de correo — movida debajo del botón -->
+            <div class="tnl-email-note" style="margin-top:0.9rem;">
+              <span>✉️</span>
+              <p>Recibirás tu <b>ticket de soporte</b> desde <b>soporte@thruver.com</b> con todos los detalles de tu servicio.</p>
+            </div>
             <p class="tnl-cta-note">Al confirmar podrás ver tu historial de servicios desde tu cuenta.</p>
           </div>
         </div>
@@ -1512,7 +1537,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 document.addEventListener('DOMContentLoaded', function () {
 
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
@@ -1808,23 +1833,64 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.getElementById('tnl-pass-toggle').addEventListener('click', function() {
     var inp = document.getElementById('tnl-pass');
-    if (inp.type === 'password') { inp.type = 'text'; this.textContent = '\U0001F648'; }
-    else { inp.type = 'password'; this.textContent = '\U0001F441'; }
+    if (inp.type === 'password') { inp.type = 'text'; this.innerHTML = '🕶️'; }
+    else { inp.type = 'password'; this.innerHTML = '👁️'; }
   });
 
   document.getElementById('tnl-mode-switch').addEventListener('click', function() {
+    var forgotWrap = document.getElementById('tnl-forgot-wrap');
+    var resetMsg   = document.getElementById('tnl-reset-msg');
     if (tnlAuthMode === 'register') {
       tnlAuthMode = 'login';
-      document.getElementById('tnl-mode-text').textContent  = '\u00BFNo tienes cuenta?';
+      document.getElementById('tnl-mode-text').textContent  = '¿No tienes cuenta?';
       this.textContent = 'Crear cuenta';
       document.getElementById('tnl-pass-hint').textContent  = '';
-      document.getElementById('tnl-submit-txt').textContent = 'Iniciar sesi\u00F3n y confirmar \u2713';
+      document.getElementById('tnl-submit-txt').textContent = 'Iniciar sesión y confirmar ✓';
+      document.getElementById('tnl-pass').setAttribute('autocomplete','current-password');
+      if (forgotWrap) forgotWrap.style.display = 'block';
     } else {
       tnlAuthMode = 'register';
-      document.getElementById('tnl-mode-text').textContent  = '\u00BFYa tienes cuenta?';
-      this.textContent = 'Iniciar sesi\u00F3n';
-      document.getElementById('tnl-pass-hint').textContent  = ' \u2014 m\u00EDnimo 6 caracteres';
-      document.getElementById('tnl-submit-txt').textContent = 'Crear cuenta y confirmar \u2713';
+      document.getElementById('tnl-mode-text').textContent  = '¿Ya tienes cuenta?';
+      this.textContent = 'Iniciar sesión';
+      document.getElementById('tnl-pass-hint').textContent  = ' — mínimo 6 caracteres';
+      document.getElementById('tnl-submit-txt').textContent = 'Crear cuenta y confirmar ✓';
+      document.getElementById('tnl-pass').setAttribute('autocomplete','new-password');
+      if (forgotWrap) forgotWrap.style.display = 'none';
+      if (resetMsg) { resetMsg.className = 'tnl-reset-msg'; resetMsg.textContent = ''; }
+    }
+  });
+
+  /* ------- Olvidaste contrasena ------- */
+  document.getElementById('tnl-forgot-btn').addEventListener('click', function() {
+    var emailEl  = document.getElementById('tnl-email');
+    var resetMsg = document.getElementById('tnl-reset-msg');
+    var email    = emailEl ? emailEl.value.trim() : '';
+    resetMsg.className = 'tnl-reset-msg'; resetMsg.textContent = '';
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      resetMsg.textContent = 'Ingresa tu correo arriba primero.';
+      resetMsg.className = 'tnl-reset-msg err';
+      if (emailEl) emailEl.focus();
+      return;
+    }
+    var btn = this; btn.disabled = true; btn.textContent = 'Enviando...';
+    if (window.auth && window.fbSendPasswordReset) {
+      window.fbSendPasswordReset(window.auth, email)
+        .then(function() {
+          resetMsg.textContent = '✅ Correo enviado a ' + email + '. Revisa tu bandeja (y spam).';
+          resetMsg.className = 'tnl-reset-msg ok';
+        })
+        .catch(function(err) {
+          var msg = err.code === 'auth/user-not-found'
+            ? 'No encontramos una cuenta con ese correo.'
+            : 'Error al enviar: ' + err.message;
+          resetMsg.textContent = msg;
+          resetMsg.className = 'tnl-reset-msg err';
+        })
+        .finally(function() { btn.disabled = false; btn.textContent = '¿Olvidaste tu contraseña?'; });
+    } else {
+      resetMsg.textContent = 'Firebase no está listo. Recarga la página.';
+      resetMsg.className = 'tnl-reset-msg err';
+      btn.disabled = false; btn.textContent = '¿Olvidaste tu contraseña?';
     }
   });
 
@@ -2152,7 +2218,8 @@ document.addEventListener('DOMContentLoaded', function () {
     signInWithPopup,
     GoogleAuthProvider,
     onAuthStateChanged,
-    signOut
+    signOut,
+    sendPasswordResetEmail
   } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
   const firebaseConfig = {
@@ -2184,7 +2251,8 @@ document.addEventListener('DOMContentLoaded', function () {
   window.fbSignInWithPopup    = signInWithPopup;
   window.fbGoogleProvider     = googleProvider;
   window.fbSignOut            = signOut;
-  window.fbOnAuthStateChanged = onAuthStateChanged;
+  window.fbOnAuthStateChanged    = onAuthStateChanged;
+  window.fbSendPasswordReset     = sendPasswordResetEmail;
 
   onAuthStateChanged(auth, function(user) {
     if (user) {
