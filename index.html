@@ -238,6 +238,21 @@
     .modal-close { position: absolute; top: 1rem; right: 1rem; background: var(--bg); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: background 0.15s; }
     .modal-close:hover { background: var(--bg3); }
     .modal-error { display: none; background: #fff0f0; border: 1px solid #fcc; border-radius: 7px; padding: 0.6rem 0.9rem; font-size: 0.78rem; color: #cc3333; margin-bottom: 0.8rem; }
+    .modal-success { display: none; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 7px; padding: 0.6rem 0.9rem; font-size: 0.78rem; color: #16a34a; margin-bottom: 0.8rem; }
+    .modal-success.visible, .modal-error.visible { display: block; }
+    .modal-footer-link { font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 1.1rem; }
+    .modal-footer-link button { background: none; border: none; cursor: pointer; font-family: var(--font); font-size: 0.78rem; color: var(--black); font-weight: 700; text-decoration: underline; padding: 0; }
+    .modal-forgot { font-size: 0.72rem; color: var(--muted); text-align: right; margin-top: -0.3rem; margin-bottom: 0.9rem; }
+    .modal-forgot button { background: none; border: none; cursor: pointer; font-family: var(--font); font-size: 0.72rem; color: var(--muted); text-decoration: underline; padding: 0; }
+    .modal-forgot button:hover { color: var(--black); }
+    .modal-pass-wrap { position: relative; }
+    .modal-pass-wrap input { padding-right: 2.8rem; }
+    .modal-pass-eye { position: absolute; right: 0.7rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); padding: 0.25rem; display: flex; align-items: center; }
+    .modal-pass-eye:hover { color: var(--black); }
+    .modal-panel { display: none; }
+    .modal-panel.active { display: block; }
+    .modal-addr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 0.8rem; }
+    .modal-box { overflow-y: auto; max-height: 90vh; }
 
     /* ══ DASHBOARD ══ */
     #dashboard { display: none; min-height: 100vh; background: var(--bg); padding-top: 60px; }
@@ -1451,21 +1466,95 @@
 <div class="modal-overlay" id="loginModal">
   <div class="modal-box">
     <button class="modal-close" id="btn-close-login">✕</button>
-    <h2>Iniciar sesión</h2>
-    <p class="modal-sub">Accede a tu cuenta Thruver</p>
-    <div class="modal-error" id="login-error">Por favor ingresa tu correo y contraseña.</div>
-    <div class="form-group">
-      <label>Correo electrónico</label>
-      <input type="email" id="login-email" placeholder="tu@correo.com" inputmode="email" autocomplete="email" />
+
+    <!-- ── PANEL LOGIN ── -->
+    <div class="modal-panel active" id="modal-panel-login">
+      <h2>Iniciar sesión</h2>
+      <p class="modal-sub">Accede a tu cuenta Thruver</p>
+      <div class="modal-error" id="login-error"></div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" id="login-email" placeholder="tu@correo.com" inputmode="email" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <div class="modal-pass-wrap">
+          <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" />
+          <button class="modal-pass-eye" id="login-pass-eye" type="button" aria-label="Ver contraseña"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+      </div>
+      <div class="modal-forgot">
+        <button id="btn-to-forgot" type="button">¿Olvidaste tu contraseña?</button>
+      </div>
+      <button class="btn-submit" id="btn-do-login">
+        <span class="spinner" id="spinner-login"></span>
+        <span id="btn-login-text">Entrar →</span>
+      </button>
+      <p class="modal-footer-link">¿No tienes cuenta? <button id="btn-to-register">Regístrate</button></p>
     </div>
-    <div class="form-group">
-      <label>Contraseña</label>
-      <input type="password" id="login-pass" placeholder="••••••••" autocomplete="current-password" />
+
+    <!-- ── PANEL OLVIDÉ CONTRASEÑA ── -->
+    <div class="modal-panel" id="modal-panel-forgot">
+      <h2>Restablecer</h2>
+      <p class="modal-sub">Te enviaremos un enlace a tu correo para crear una nueva contraseña.</p>
+      <div class="modal-error"  id="forgot-error"></div>
+      <div class="modal-success" id="forgot-success"></div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" id="forgot-email" placeholder="tu@correo.com" inputmode="email" autocomplete="email" />
+      </div>
+      <button class="btn-submit" id="btn-do-forgot">
+        <span class="spinner" id="spinner-forgot"></span>
+        <span id="btn-forgot-text">Enviar enlace</span>
+      </button>
+      <p class="modal-footer-link"><button id="btn-back-to-login">← Volver al inicio de sesión</button></p>
     </div>
-    <button class="btn-submit" id="btn-do-login" style="margin-top:0.8rem;">
-      <span class="spinner" id="spinner-login"></span>
-      <span id="btn-login-text">Entrar →</span>
-    </button>
+
+    <!-- ── PANEL REGISTRO ── -->
+    <div class="modal-panel" id="modal-panel-register">
+      <h2>Crear cuenta</h2>
+      <p class="modal-sub">Regístrate para solicitar y dar seguimiento a tus servicios.</p>
+      <div class="modal-error" id="register-error"></div>
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" id="reg-nombre" placeholder="Tu nombre" autocomplete="given-name" />
+      </div>
+      <div class="form-group">
+        <label>Correo electrónico</label>
+        <input type="email" id="reg-email" placeholder="tu@correo.com" inputmode="email" autocomplete="email" />
+      </div>
+      <div class="form-group">
+        <label>Contraseña <span style="font-weight:400;text-transform:none;letter-spacing:0;color:#aaa;font-size:0.7rem;"> — mínimo 6 caracteres</span></label>
+        <div class="modal-pass-wrap">
+          <input type="password" id="reg-pass" placeholder="••••••••" autocomplete="new-password" />
+          <button class="modal-pass-eye" id="reg-pass-eye" type="button" aria-label="Ver contraseña"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>WhatsApp</label>
+        <input type="tel" id="reg-tel" placeholder="667 000 0000" autocomplete="tel" inputmode="tel" />
+      </div>
+      <div class="form-group">
+        <label>Calle</label>
+        <input type="text" id="reg-calle" placeholder="Nombre de la calle" autocomplete="address-line1" />
+      </div>
+      <div class="modal-addr-grid">
+        <div class="form-group">
+          <label>Número</label>
+          <input type="text" id="reg-numero" placeholder="Ej. 142" />
+        </div>
+        <div class="form-group">
+          <label>Colonia</label>
+          <input type="text" id="reg-colonia" placeholder="Tu colonia" autocomplete="address-level2" />
+        </div>
+      </div>
+      <button class="btn-submit" id="btn-do-register">
+        <span class="spinner" id="spinner-register"></span>
+        <span id="btn-register-text">Crear cuenta</span>
+      </button>
+      <p class="modal-footer-link">¿Ya tienes cuenta? <button id="btn-back-to-login-2">Iniciar sesión</button></p>
+    </div>
+
   </div>
 </div>
 
@@ -2064,51 +2153,158 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ═══════════════════════════════════════════
      LOGIN MODAL — con Firebase Auth
   ═══════════════════════════════════════════ */
-  var loginModal   = document.getElementById('loginModal');
-  var loginEmail   = document.getElementById('login-email');
-  var loginPass    = document.getElementById('login-pass');
-  var loginError   = document.getElementById('login-error');
-  var loginBtn     = document.getElementById('btn-do-login');
-  var loginText    = document.getElementById('btn-login-text');
-  var loginSpinner = document.getElementById('spinner-login');
+  /* ═══════════════════════════════════════════
+     MODAL: LOGIN / FORGOT / REGISTER
+  ═══════════════════════════════════════════ */
+  var loginModal = document.getElementById('loginModal');
 
-  function openLogin() { loginModal.classList.add('open'); setTimeout(function(){ loginEmail.focus(); }, 100); }
+  /* SVG icons for eye toggle */
+  var svgEyeOpen  = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  var svgEyeSlash = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+
+  /* Helper: switch between panels */
+  function showModalPanel(panelId) {
+    document.querySelectorAll('.modal-panel').forEach(function(p){ p.classList.remove('active'); });
+    document.getElementById(panelId).classList.add('active');
+    loginModal.querySelector('.modal-box').scrollTop = 0;
+  }
+
+  /* Helper: show/hide error or success message in modal */
+  function modalMsg(elId, text, type) {
+    var el = document.getElementById(elId);
+    if (!el) return;
+    el.textContent = text;
+    el.className = type === 'ok' ? 'modal-success visible' : 'modal-error visible';
+  }
+  function clearModalMsg(elId) {
+    var el = document.getElementById(elId); if(el) { el.textContent=''; el.className = el.className.replace(' visible',''); }
+  }
+
+  /* Open / Close */
+  function openLogin() {
+    showModalPanel('modal-panel-login');
+    loginModal.classList.add('open');
+    setTimeout(function(){ var e=document.getElementById('login-email'); if(e) e.focus(); }, 120);
+  }
   function closeLogin() {
     loginModal.classList.remove('open');
-    loginError.style.display = 'none';
-    loginEmail.value = ''; loginPass.value = '';
-    loginBtn.disabled = false;
-    loginSpinner.style.display = 'none';
-    loginText.textContent = 'Entrar →';
+    /* reset all fields */
+    ['login-email','login-pass','forgot-email','reg-nombre','reg-email','reg-pass','reg-tel','reg-calle','reg-numero','reg-colonia'].forEach(function(id){
+      var el = document.getElementById(id); if(el) el.value = '';
+    });
+    ['login-error','forgot-error','forgot-success','register-error'].forEach(clearModalMsg);
+    /* reset buttons */
+    [['btn-do-login','btn-login-text','Entrar →'],['btn-do-forgot','btn-forgot-text','Enviar enlace'],['btn-do-register','btn-register-text','Crear cuenta']].forEach(function(t){
+      var btn=document.getElementById(t[0]); if(btn) btn.disabled=false;
+      var txt=document.getElementById(t[1]); if(txt) txt.textContent=t[2];
+      var sp=document.getElementById('spinner-'+t[0].replace('btn-do-','')); if(sp) sp.style.display='none';
+    });
   }
+
+  /* ── LOGIN ── */
   function doLogin() {
-    if (!loginEmail.value.trim() || !loginPass.value.trim()) { loginError.style.display = 'block'; loginError.textContent = 'Por favor ingresa tu correo y contraseña.'; return; }
-    loginError.style.display = 'none';
-    loginBtn.disabled = true; loginSpinner.style.display = 'block'; loginText.textContent = 'Verificando...';
+    clearModalMsg('login-error');
+    var email = document.getElementById('login-email').value.trim();
+    var pass  = document.getElementById('login-pass').value;
+    if (!email || !pass) { modalMsg('login-error','Por favor ingresa tu correo y contraseña.'); return; }
+    var btn=document.getElementById('btn-do-login'), txt=document.getElementById('btn-login-text'), sp=document.getElementById('spinner-login');
+    btn.disabled=true; sp.style.display='block'; txt.textContent='Verificando...';
     if (window.fbSignIn && window.auth) {
-      window.fbSignIn(window.auth, loginEmail.value.trim(), loginPass.value.trim())
-        .then(function(result) {
-          window.currentUser = result.user;
-          closeLogin();
-          cargarHistorialYMostrarDashboard(result.user);
-        })
-        .catch(function(err) {
-          loginError.textContent = (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password')
-            ? 'Correo o contraseña incorrectos.'
-            : err.code === 'auth/user-not-found' ? 'No encontramos esta cuenta.'
-            : 'Error: ' + err.message;
-          loginError.style.display = 'block';
-          loginBtn.disabled = false; loginSpinner.style.display = 'none'; loginText.textContent = 'Entrar →';
+      window.fbSignIn(window.auth, email, pass)
+        .then(function(r){ window.currentUser=r.user; closeLogin(); cargarHistorialYMostrarDashboard(r.user); })
+        .catch(function(err){
+          var msg = {'auth/invalid-credential':'Correo o contraseña incorrectos.','auth/wrong-password':'Correo o contraseña incorrectos.','auth/user-not-found':'No encontramos esta cuenta.'}[err.code] || ('Error: '+err.message);
+          modalMsg('login-error', msg);
+          btn.disabled=false; sp.style.display='none'; txt.textContent='Entrar →';
         });
-    } else {
-      setTimeout(function(){ closeLogin(); showDashboard(); }, 900);
-    }
+    } else { setTimeout(function(){ closeLogin(); showDashboard(); }, 900); }
   }
+
+  /* ── FORGOT PASSWORD ── */
+  function doForgot() {
+    clearModalMsg('forgot-error'); clearModalMsg('forgot-success');
+    var email = document.getElementById('forgot-email').value.trim();
+    if (!email) { modalMsg('forgot-error','Ingresa tu correo electrónico.'); return; }
+    var btn=document.getElementById('btn-do-forgot'), txt=document.getElementById('btn-forgot-text'), sp=document.getElementById('spinner-forgot');
+    btn.disabled=true; sp.style.display='block'; txt.textContent='Enviando...';
+    if (window.fbSendPasswordReset && window.auth) {
+      window.fbSendPasswordReset(window.auth, email)
+        .then(function(){ modalMsg('forgot-success','✅ Correo enviado a '+email+'. Revisa tu bandeja (y spam).','ok'); })
+        .catch(function(err){
+          var msg = err.code==='auth/user-not-found' ? 'No encontramos una cuenta con ese correo.' : 'Error: '+err.message;
+          modalMsg('forgot-error', msg);
+        })
+        .finally(function(){ btn.disabled=false; sp.style.display='none'; txt.textContent='Enviar enlace'; });
+    } else { modalMsg('forgot-error','Firebase no está listo. Recarga la página.'); btn.disabled=false; sp.style.display='none'; txt.textContent='Enviar enlace'; }
+  }
+
+  /* ── REGISTER ── */
+  function doRegister() {
+    clearModalMsg('register-error');
+    var nombre  = document.getElementById('reg-nombre').value.trim();
+    var email   = document.getElementById('reg-email').value.trim();
+    var pass    = document.getElementById('reg-pass').value;
+    var tel     = document.getElementById('reg-tel').value.trim();
+    var calle   = document.getElementById('reg-calle').value.trim();
+    var numero  = document.getElementById('reg-numero').value.trim();
+    var colonia = document.getElementById('reg-colonia').value.trim();
+    if (!nombre||!email||!pass||!tel||!calle||!colonia) { modalMsg('register-error','Por favor completa todos los campos obligatorios.'); return; }
+    if (pass.length < 6) { modalMsg('register-error','La contraseña debe tener al menos 6 caracteres.'); return; }
+    var btn=document.getElementById('btn-do-register'), txt=document.getElementById('btn-register-text'), sp=document.getElementById('spinner-register');
+    btn.disabled=true; sp.style.display='block'; txt.textContent='Creando cuenta...';
+    if (window.fbCreateUser && window.auth) {
+      window.fbCreateUser(window.auth, email, pass)
+        .then(function(result) {
+          var user = result.user;
+          window.currentUser = user;
+          /* Save profile to Firestore */
+          var direccion = [calle, numero ? 'No.'+numero : '', colonia].filter(Boolean).join(', ');
+          var perfil = { uid:user.uid, nombre:nombre, email:email, telefono:tel, calle:calle, numero:numero, colonia:colonia, direccion:direccion, creadoEn:new Date().toISOString() };
+          saveToFirebase('usuarios', perfil);
+          closeLogin();
+          cargarHistorialYMostrarDashboard(user);
+        })
+        .catch(function(err){
+          var msg = {'auth/email-already-in-use':'Este correo ya tiene cuenta. Usa "Iniciar sesión".','auth/weak-password':'La contraseña debe tener al menos 6 caracteres.','auth/invalid-email':'Correo electrónico inválido.'}[err.code] || ('Error: '+err.message);
+          modalMsg('register-error', msg);
+          btn.disabled=false; sp.style.display='none'; txt.textContent='Crear cuenta';
+        });
+    } else { modalMsg('register-error','Firebase no está listo. Recarga la página.'); btn.disabled=false; sp.style.display='none'; txt.textContent='Crear cuenta'; }
+  }
+
+  /* ── EYE TOGGLES ── */
+  function setupEyeToggle(btnId, inputId) {
+    var btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      var inp = document.getElementById(inputId);
+      if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = svgEyeSlash; }
+      else { inp.type = 'password'; btn.innerHTML = svgEyeOpen; }
+    });
+  }
+  setupEyeToggle('login-pass-eye', 'login-pass');
+  setupEyeToggle('reg-pass-eye',   'reg-pass');
+
+  /* ── EVENT LISTENERS ── */
   document.getElementById('btn-open-login').addEventListener('click', openLogin);
   document.getElementById('btn-close-login').addEventListener('click', closeLogin);
   loginModal.addEventListener('click', function(e){ if (e.target === loginModal) closeLogin(); });
-  loginBtn.addEventListener('click', doLogin);
-  loginPass.addEventListener('keydown', function(e){ if (e.key === 'Enter') doLogin(); });
+
+  document.getElementById('btn-do-login').addEventListener('click', doLogin);
+  document.getElementById('login-pass').addEventListener('keydown', function(e){ if (e.key==='Enter') doLogin(); });
+
+  document.getElementById('btn-to-forgot').addEventListener('click', function(){ showModalPanel('modal-panel-forgot'); });
+  document.getElementById('btn-back-to-login').addEventListener('click', function(){ showModalPanel('modal-panel-login'); });
+
+  document.getElementById('btn-to-register').addEventListener('click', function(){ showModalPanel('modal-panel-register'); });
+  document.getElementById('btn-back-to-login-2').addEventListener('click', function(){ showModalPanel('modal-panel-login'); });
+
+  document.getElementById('btn-do-forgot').addEventListener('click', doForgot);
+  document.getElementById('forgot-email').addEventListener('keydown', function(e){ if (e.key==='Enter') doForgot(); });
+
+  document.getElementById('btn-do-register').addEventListener('click', doRegister);
+
+  /* Mobile menu "Iniciar sesion" also opens the modal */
 
   /* ═══════════════════════════════════════════
      DASHBOARD
