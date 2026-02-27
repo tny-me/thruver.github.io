@@ -646,6 +646,83 @@
     .tnl-success h2 { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.04em; color: var(--black); margin-bottom: 0.55rem; }
     .tnl-success p  { font-size: 0.9rem; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 2rem; }
 
+
+    /* ══ FIREBASE AUTH — Paso 3 ══ */
+    .tnl-google-btn {
+      width: 100%; background: var(--white); color: #3c3c3c;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      padding: 0.9rem 1rem; font-size: 0.9rem; font-weight: 700;
+      font-family: var(--font); cursor: pointer; min-height: 52px;
+      display: flex; align-items: center; justify-content: center; gap: 0.65rem;
+      transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+      margin-bottom: 1.2rem;
+    }
+    .tnl-google-btn:hover { border-color: rgba(0,0,0,0.22); box-shadow: 0 2px 10px rgba(0,0,0,0.07); background: #fafafa; }
+    .tnl-google-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .tnl-google-btn svg { flex-shrink: 0; }
+
+    .tnl-auth-divider {
+      display: flex; align-items: center; gap: 0.8rem;
+      margin-bottom: 1.2rem; color: var(--muted2); font-size: 0.72rem;
+    }
+    .tnl-auth-divider::before,
+    .tnl-auth-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    .tnl-auth-error {
+      display: none; background: #fff0f0; border: 1px solid #fcc;
+      border-radius: var(--rsm); padding: 0.65rem 0.9rem;
+      font-size: 0.78rem; color: #cc3333; margin-bottom: 0.9rem;
+      line-height: 1.5;
+    }
+    .tnl-auth-error.visible { display: block; animation: fadeUp 0.2s ease both; }
+
+    .tnl-mode-toggle {
+      font-size: 0.74rem; color: var(--muted); text-align: center;
+      margin-top: 0.6rem; line-height: 1.6;
+    }
+    .tnl-mode-toggle button {
+      background: none; border: none; color: var(--black); font-weight: 700;
+      cursor: pointer; font-family: var(--font); font-size: 0.74rem;
+      text-decoration: underline; padding: 0; min-height: 0;
+    }
+
+    /* Campo contraseña con ojo toggle */
+    .tnl-pass-wrap { position: relative; }
+    .tnl-pass-wrap input { padding-right: 3rem; }
+    .tnl-pass-toggle {
+      position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--muted);
+      font-size: 1rem; padding: 0.3rem; line-height: 1;
+    }
+    .tnl-pass-toggle:hover { color: var(--black); }
+
+    /* Indicador de sesion activa en paso 3 */
+    .tnl-session-banner {
+      display: none; align-items: center; gap: 0.7rem;
+      background: #f0fdf4; border: 1px solid #bbf7d0;
+      border-radius: var(--radius); padding: 0.85rem 1rem; margin-bottom: 1.2rem;
+    }
+    .tnl-session-banner.visible { display: flex; }
+    .tnl-session-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--black); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+    }
+    .tnl-session-info { flex: 1; }
+    .tnl-session-info strong { display: block; font-size: 0.82rem; font-weight: 700; color: #16a34a; }
+    .tnl-session-info span   { font-size: 0.72rem; color: var(--muted); }
+    .tnl-session-out {
+      background: none; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px;
+      font-size: 0.7rem; color: var(--muted); cursor: pointer; padding: 0.3rem 0.6rem;
+      font-family: var(--font); white-space: nowrap; flex-shrink: 0;
+    }
+    .tnl-session-out:hover { color: var(--black); border-color: rgba(0,0,0,0.2); }
+
+    /* Auth fields se ocultan si ya hay sesion */
+    .tnl-auth-fields { }
+    .tnl-auth-fields.hidden { display: none; }
+
     /* ══ RESPONSIVE ══ */
     @media(max-width:900px){
       .why-strip-inner  { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 2rem; }
@@ -950,22 +1027,68 @@
         <!-- Formulario -->
         <div class="tnl-form-card">
           <h3 class="tnl-form-title">¿A dónde enviamos a tu experto?</h3>
-          <p class="tnl-form-sub">Ingresa tus datos para confirmar y recibir tu ticket de seguimiento.</p>
+          <p class="tnl-form-sub">Crea tu cuenta o inicia sesión para confirmar y dar seguimiento a tu servicio.</p>
 
           <div id="tnl-form-fields">
+
+            <!-- Banner sesión activa (visible cuando ya hay sesión) -->
+            <div class="tnl-session-banner" id="tnl-session-banner">
+              <div class="tnl-session-avatar" id="tnl-session-avatar">?</div>
+              <div class="tnl-session-info">
+                <strong id="tnl-session-name">—</strong>
+                <span id="tnl-session-email">—</span>
+              </div>
+              <button class="tnl-session-out" id="tnl-session-out">Salir</button>
+            </div>
+
+            <!-- Error de autenticación -->
+            <div class="tnl-auth-error" id="tnl-auth-error"></div>
+
+            <!-- Bloque de autenticación (se oculta si ya hay sesión) -->
+            <div class="tnl-auth-fields" id="tnl-auth-fields">
+              <!-- Botón Google -->
+              <button class="tnl-google-btn" id="tnl-google-btn" type="button">
+                <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+                  <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+                  <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+                  <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+                  <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/>
+                </svg>
+                Continuar con Google
+              </button>
+
+              <div class="tnl-auth-divider">o con tu correo</div>
+            </div>
+
+            <!-- Datos de contacto -->
             <div class="tnl-field">
               <label>Nombre completo</label>
               <input type="text" id="tnl-nombre" placeholder="Tu nombre" autocomplete="given-name" />
             </div>
 
-            <div class="tnl-field">
-              <label>Correo electrónico</label>
-              <input type="email" id="tnl-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" />
-            </div>
-            <!-- Nota explicativa del correo -->
-            <div class="tnl-email-note">
-              <span>✉️</span>
-              <p>Recibirás tu <b>ticket de soporte</b> desde <b><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c0f130c130e08193c08140e090a190e521f1311">[email&#160;protected]</a></b> con todos los detalles de tu servicio.</p>
+            <div class="tnl-auth-fields" id="tnl-auth-fields-email">
+              <div class="tnl-field">
+                <label>Correo electrónico</label>
+                <input type="email" id="tnl-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" />
+              </div>
+              <div class="tnl-email-note">
+                <span>✉️</span>
+                <p>Recibirás tu <b>ticket de soporte</b> desde <b>soporte@thruver.com</b> con todos los detalles.</p>
+              </div>
+
+              <!-- Contraseña con toggle ver/ocultar -->
+              <div class="tnl-field">
+                <label id="tnl-pass-label">Contraseña <span id="tnl-pass-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted2);"> — mínimo 6 caracteres</span></label>
+                <div class="tnl-pass-wrap">
+                  <input type="password" id="tnl-pass" placeholder="••••••••" autocomplete="new-password" />
+                  <button class="tnl-pass-toggle" id="tnl-pass-toggle" type="button" aria-label="Ver contraseña">👁</button>
+                </div>
+              </div>
+
+              <div class="tnl-mode-toggle">
+                <span id="tnl-mode-text">¿Ya tienes cuenta?</span>
+                <button id="tnl-mode-switch" type="button">Iniciar sesión</button>
+              </div>
             </div>
 
             <div class="tnl-field">
@@ -979,9 +1102,9 @@
 
             <button class="tnl-cta" id="tnl-submit">
               <span class="spinner" id="tnl-spinner"></span>
-              <span id="tnl-submit-txt">Confirmar solicitud ✓</span>
+              <span id="tnl-submit-txt">Crear cuenta y confirmar ✓</span>
             </button>
-            <p class="tnl-cta-note">Al confirmar, Thruver te contactará por WhatsApp y correo para coordinar tu servicio.</p>
+            <p class="tnl-cta-note">Al confirmar podrás ver tu historial de servicios desde tu cuenta.</p>
           </div>
         </div>
 
@@ -1486,6 +1609,10 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('tnl-dir').value = '';
     document.getElementById('tnl-fecha').value = '';
     document.getElementById('tnl-hora').value = '10:00';
+    var passEl2 = document.getElementById('tnl-pass'); if(passEl2) passEl2.value = '';
+    var errEl2  = document.getElementById('tnl-auth-error'); if(errEl2) errEl2.classList.remove('visible');
+    tnlAuthMode = 'register';
+    var submitTxt = document.getElementById('tnl-submit-txt'); if(submitTxt) submitTxt.textContent = 'Crear cuenta y confirmar ✓';
     document.getElementById('tnl-u1').classList.add('tnl-urg-sel');
     document.getElementById('tnl-u2').classList.remove('tnl-urg-sel');
     dtWrap.classList.remove('visible');
@@ -1651,77 +1778,206 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('tnl-back2').addEventListener('click', function(){ showView(1, false); });
   document.getElementById('tnl-back3').addEventListener('click', function(){ showView(2, false); });
 
-  /* ─────── PASO 3: envío final ─────── */
+  /* ------- AUTH STATE ------- */
+  var tnlAuthMode = 'register';
+
+  window.onUserLoggedIn = function(user) {
+    var banner = document.getElementById('tnl-session-banner');
+    if (!banner) return;
+    var initials = (user.displayName || user.email || '?').charAt(0).toUpperCase();
+    document.getElementById('tnl-session-avatar').textContent = initials;
+    document.getElementById('tnl-session-name').textContent   = user.displayName || 'Usuario';
+    document.getElementById('tnl-session-email').textContent  = user.email || '';
+    banner.classList.add('visible');
+    document.querySelectorAll('.tnl-auth-fields').forEach(function(el){ el.classList.add('hidden'); });
+    var nEl = document.getElementById('tnl-nombre'); if (nEl && user.displayName) nEl.value = user.displayName;
+    var eEl = document.getElementById('tnl-email');  if (eEl && user.email) eEl.value = user.email;
+    document.getElementById('tnl-submit-txt').textContent = 'Confirmar solicitud ✓';
+    actualizarNavConUsuario(user);
+  };
+
+  window.onUserLoggedOut = function() {
+    var banner = document.getElementById('tnl-session-banner');
+    if (banner) banner.classList.remove('visible');
+    document.querySelectorAll('.tnl-auth-fields').forEach(function(el){ el.classList.remove('hidden'); });
+  };
+
+  document.getElementById('tnl-session-out').addEventListener('click', function() {
+    if (window.fbSignOut && window.auth) window.fbSignOut(window.auth).catch(function(){});
+  });
+
+  document.getElementById('tnl-pass-toggle').addEventListener('click', function() {
+    var inp = document.getElementById('tnl-pass');
+    if (inp.type === 'password') { inp.type = 'text'; this.textContent = '\U0001F648'; }
+    else { inp.type = 'password'; this.textContent = '\U0001F441'; }
+  });
+
+  document.getElementById('tnl-mode-switch').addEventListener('click', function() {
+    if (tnlAuthMode === 'register') {
+      tnlAuthMode = 'login';
+      document.getElementById('tnl-mode-text').textContent  = '\u00BFNo tienes cuenta?';
+      this.textContent = 'Crear cuenta';
+      document.getElementById('tnl-pass-hint').textContent  = '';
+      document.getElementById('tnl-submit-txt').textContent = 'Iniciar sesi\u00F3n y confirmar \u2713';
+    } else {
+      tnlAuthMode = 'register';
+      document.getElementById('tnl-mode-text').textContent  = '\u00BFYa tienes cuenta?';
+      this.textContent = 'Iniciar sesi\u00F3n';
+      document.getElementById('tnl-pass-hint').textContent  = ' \u2014 m\u00EDnimo 6 caracteres';
+      document.getElementById('tnl-submit-txt').textContent = 'Crear cuenta y confirmar \u2713';
+    }
+  });
+
+  document.getElementById('tnl-google-btn').addEventListener('click', function() {
+    var errEl = document.getElementById('tnl-auth-error');
+    errEl.classList.remove('visible');
+    if (!window.fbSignInWithPopup || !window.auth || !window.fbGoogleProvider) {
+      errEl.textContent = 'Firebase no est\u00E1 listo. Recarga la p\u00E1gina.';
+      errEl.classList.add('visible'); return;
+    }
+    var btn = this; btn.disabled = true; btn.textContent = 'Conectando con Google...';
+    window.fbSignInWithPopup(window.auth, window.fbGoogleProvider)
+      .then(function(r){ console.log('[Thruver] Google OK:', r.user.uid); })
+      .catch(function(err){ errEl.textContent = 'Error con Google: ' + err.message; errEl.classList.add('visible'); })
+      .finally(function(){
+        btn.disabled = false;
+        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg> Continuar con Google';
+      });
+  });
+
+  /* ------- PASO 3: envio final con Firebase Auth ------- */
   document.getElementById('tnl-submit').addEventListener('click', function () {
     clearErrors();
+    var errEl = document.getElementById('tnl-auth-error');
+    errEl.classList.remove('visible');
     var nombre = document.getElementById('tnl-nombre').value.trim();
-    var email  = document.getElementById('tnl-email').value.trim();
-    var tel    = document.getElementById('tnl-tel').value.trim();
-    var dir    = document.getElementById('tnl-dir').value.trim();
-    var valid  = true;
-
-    if (!nombre)              { markError('tnl-nombre'); valid = false; }
-    if (!isValidEmail(email)) { markError('tnl-email');  valid = false; }
-    if (!tel)                 { markError('tnl-tel');    valid = false; }
-    if (!dir)                 { markError('tnl-dir');    valid = false; }
-    if (!valid) {
-      /* Scroll al primer error */
-      var firstErr = document.querySelector('.tnl-error');
-      if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      return;
+    var emailEl = document.getElementById('tnl-email');
+    var email   = emailEl ? emailEl.value.trim() : '';
+    var tel     = document.getElementById('tnl-tel').value.trim();
+    var dir     = document.getElementById('tnl-dir').value.trim();
+    var passEl  = document.getElementById('tnl-pass');
+    var pass    = passEl ? passEl.value : '';
+    var valid   = true;
+    var haySession = window.currentUser != null;
+    if (!nombre) { markError('tnl-nombre'); valid = false; }
+    if (!tel)    { markError('tnl-tel');    valid = false; }
+    if (!dir)    { markError('tnl-dir');    valid = false; }
+    if (!haySession) {
+      if (!isValidEmail(email)) { markError('tnl-email'); valid = false; }
+      if (!pass || pass.length < 6) { if(passEl) passEl.classList.add('tnl-error'); valid = false; }
     }
-
-    T.nombre = nombre; T.email = email; T.tel = tel; T.dir = dir;
-
-    var payload = {
-      tipo:              'CLIENTE',
-      servicio:          T.servicio,
-      espacio:           T.espacio,
-      descripcion:       T.desc,
-      urgencia:          T.urgencia,
-      fecha_programada:  T.urgencia === 'Agendar fecha' ? formatFecha(T.fecha, T.hora) : '',
-      nombre:            T.nombre,
-      email:             T.email,
-      telefono:          T.tel,
-      direccion:         T.dir,
-      timestamp:         new Date().toISOString()
-    };
-    console.log('[Thruver] Payload:', JSON.stringify(payload, null, 2));
-
-    /* Spinner */
+    if (!valid) { var fe = document.querySelector('.tnl-error'); if(fe) fe.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+    T.nombre = nombre;
+    T.email  = email || (window.currentUser ? window.currentUser.email : '');
+    T.tel = tel; T.dir = dir;
     var btn = document.getElementById('tnl-submit');
     btn.disabled = true;
     document.getElementById('tnl-spinner').style.display = 'block';
-    document.getElementById('tnl-submit-txt').textContent = 'Enviando...';
+    document.getElementById('tnl-submit-txt').textContent = 'Procesando...';
 
-    /* Función que muestra pantalla de éxito */
-    function mostrarExito() {
-      document.querySelectorAll('.tnl-view').forEach(function(v){ v.classList.remove('tnl-active','tnl-back'); });
-      fill.style.width = '100%';
-      dots.forEach(function(d){ d.classList.add('done'); d.classList.remove('active'); });
-      success.classList.add('tnl-show');
-      overlay.scrollTop = 0;
+    function enviarSolicitud(uid, userEmail, userName) {
+      var payload = {
+        tipo:'CLIENTE', uid:uid, servicio:T.servicio, espacio:T.espacio,
+        descripcion:T.desc, urgencia:T.urgencia,
+        fecha_programada: T.urgencia==='Agendar fecha' ? formatFecha(T.fecha,T.hora) : '',
+        nombre:userName||T.nombre, email:userEmail||T.email,
+        telefono:T.tel, direccion:T.dir, estado:'nueva',
+        timestamp:new Date().toISOString()
+      };
+      fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){});
+      saveToFirebase('solicitudes', payload).finally(function(){
+        var h2 = document.querySelector('#tnl-success h2');
+        if (h2) h2.textContent = '\u00A1Listo, ' + (userName||T.nombre).split(' ')[0] + '!';
+        document.querySelectorAll('.tnl-view').forEach(function(v){ v.classList.remove('tnl-active','tnl-back'); });
+        fill.style.width = '100%';
+        dots.forEach(function(d){ d.classList.add('done'); d.classList.remove('active'); });
+        success.classList.add('tnl-show');
+        overlay.scrollTop = 0;
+      });
     }
 
-    /* 1. Envío a Google Apps Script (correo + ticket) — fire & forget */
-    fetch(SCRIPT_URL, {
-      method:  'POST',
-      mode:    'no-cors',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify(payload)
-    }).catch(function(){});
-
-    /* 2. Guardar en Firebase Firestore (colección: solicitudes) */
-    saveToFirebase('solicitudes', payload).finally(function(){
-      mostrarExito();
-    });
+    if (haySession) { var u = window.currentUser; enviarSolicitud(u.uid, u.email, u.displayName||T.nombre); return; }
+    if (!window.fbCreateUser || !window.auth) {
+      errEl.textContent = 'Firebase no est\u00E1 listo. Recarga la p\u00E1gina.';
+      errEl.classList.add('visible');
+      btn.disabled=false; document.getElementById('tnl-spinner').style.display='none';
+      document.getElementById('tnl-submit-txt').textContent='Confirmar solicitud \u2713'; return;
+    }
+    var authPromise = tnlAuthMode==='register'
+      ? window.fbCreateUser(window.auth, email, pass)
+      : window.fbSignIn(window.auth, email, pass);
+    authPromise
+      .then(function(result) {
+        window.currentUser = result.user;
+        actualizarNavConUsuario(result.user);
+        enviarSolicitud(result.user.uid, result.user.email, T.nombre);
+      })
+      .catch(function(err) {
+        var msgs = {
+          'auth/email-already-in-use':'Este correo ya tiene cuenta. Usa \"Iniciar sesi\u00F3n\".',
+          'auth/wrong-password':'Contrase\u00F1a incorrecta.',
+          'auth/invalid-credential':'Correo o contrase\u00F1a incorrectos.',
+          'auth/user-not-found':'No encontramos esta cuenta.',
+          'auth/weak-password':'La contrase\u00F1a debe tener al menos 6 caracteres.'
+        };
+        errEl.textContent = msgs[err.code] || ('Error: ' + err.message);
+        errEl.classList.add('visible');
+        errEl.scrollIntoView({behavior:'smooth',block:'center'});
+        btn.disabled=false; document.getElementById('tnl-spinner').style.display='none';
+        document.getElementById('tnl-submit-txt').textContent = tnlAuthMode==='register' ? 'Crear cuenta y confirmar \u2713' : 'Iniciar sesi\u00F3n y confirmar \u2713';
+      });
   });
 
-  /* ─────── Éxito: volver al inicio ─────── */
-  document.getElementById('tnl-ok').addEventListener('click', closeTunnel);
+  /* ------- Exito: ir al dashboard ------- */
+  document.getElementById('tnl-ok').addEventListener('click', function() {
+    closeTunnel();
+    if (window.currentUser) cargarHistorialYMostrarDashboard(window.currentUser);
+  });
+
+  /* ------- Actualizar nav con usuario ------- */
+  function actualizarNavConUsuario(user) {
+    var dn = user.displayName || user.email || 'Usuario';
+    var av = document.querySelector('.dash-avatar'); if(av) av.textContent = dn.charAt(0).toUpperCase();
+    var nm = document.querySelector('.dash-name');   if(nm) nm.textContent = dn.split(' ')[0];
+    var gr = document.querySelector('.dash-greeting h1'); if(gr) gr.textContent = 'Buen d\u00EDa, ' + dn.split(' ')[0] + ' \uD83D\uDC4B';
+    var pn = document.querySelector('.profile-name');  if(pn) pn.textContent = dn;
+    var pe = document.querySelector('.profile-email'); if(pe) pe.textContent = user.email || '';
+  }
+
+  /* ------- Cargar historial y mostrar dashboard ------- */
+  function cargarHistorialYMostrarDashboard(user) {
+    actualizarNavConUsuario(user);
+    showDashboard();
+    if (!window.fbGetDocs||!window.fbQuery||!window.fbWhere||!window.db) return;
+    window.fbGetDocs(window.fbQuery(window.fbCollection(window.db,'solicitudes'),window.fbWhere('uid','==',user.uid)))
+      .then(function(snap) {
+        var svcs=[];
+        snap.forEach(function(d){ svcs.push(d.data()); });
+        svcs.sort(function(a,b){ return b.timestamp>a.timestamp?1:-1; });
+        var tot = document.querySelector('.dash-stat-value'); if(tot) tot.textContent=svcs.length;
+        renderizarHistorial(svcs);
+      }).catch(function(e){ console.warn('[Thruver] Historial error:',e); });
+  }
+
+  /* ------- Renderizar historial ------- */
+  function renderizarHistorial(svcs) {
+    var histEl=null;
+    document.querySelectorAll('.dash-card-header h3').forEach(function(h){ if(h.textContent.trim()==='Historial de servicios') histEl=h.closest('.dash-card'); });
+    if(!histEl||svcs.length===0) return;
+    histEl.querySelectorAll('.service-row').forEach(function(r){ r.remove(); });
+    var ic={'Plomer\u00EDa':'\uD83D\uDD27','Electricidad':'\u26A1','Limpieza':'\uD83E\uDDF9','Pintura':'\uD83D\uDD8C\uFE0F','Carpinter\u00EDa':'\uD83E\uDEA8','Jardiner\u00EDa':'\uD83C\uDF3F','Aire / Clima':'\u2744\uFE0F','Remodelaci\u00F3n':'\uD83C\uDFD7\uFE0F','Otro':'\uD83D\uDCAC'};
+    svcs.slice(0,8).forEach(function(s){
+      var ico=ic[s.servicio]||'\uD83D\uDD27';
+      var fecha=s.timestamp?new Date(s.timestamp).toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}):'\u2014';
+      var row=document.createElement('div'); row.className='service-row';
+      row.innerHTML='<div class="service-row-icon">'+ico+'</div><div class="service-row-info"><strong>'+(s.servicio||'\u2014')+'</strong><span>'+fecha+' \u00B7 '+(s.espacio||'\u2014')+'</span></div><div class="service-row-right"><span class="service-row-status status-done">Enviada</span></div>';
+      histEl.appendChild(row);
+    });
+  }
+
 
   /* ═══════════════════════════════════════════
-     LOGIN MODAL
+     LOGIN MODAL — con Firebase Auth
   ═══════════════════════════════════════════ */
   var loginModal   = document.getElementById('loginModal');
   var loginEmail   = document.getElementById('login-email');
@@ -1741,10 +1997,27 @@ document.addEventListener('DOMContentLoaded', function () {
     loginText.textContent = 'Entrar →';
   }
   function doLogin() {
-    if (!loginEmail.value.trim() || !loginPass.value.trim()) { loginError.style.display = 'block'; return; }
+    if (!loginEmail.value.trim() || !loginPass.value.trim()) { loginError.style.display = 'block'; loginError.textContent = 'Por favor ingresa tu correo y contraseña.'; return; }
     loginError.style.display = 'none';
     loginBtn.disabled = true; loginSpinner.style.display = 'block'; loginText.textContent = 'Verificando...';
-    setTimeout(function(){ closeLogin(); showDashboard(); }, 900);
+    if (window.fbSignIn && window.auth) {
+      window.fbSignIn(window.auth, loginEmail.value.trim(), loginPass.value.trim())
+        .then(function(result) {
+          window.currentUser = result.user;
+          closeLogin();
+          cargarHistorialYMostrarDashboard(result.user);
+        })
+        .catch(function(err) {
+          loginError.textContent = (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password')
+            ? 'Correo o contraseña incorrectos.'
+            : err.code === 'auth/user-not-found' ? 'No encontramos esta cuenta.'
+            : 'Error: ' + err.message;
+          loginError.style.display = 'block';
+          loginBtn.disabled = false; loginSpinner.style.display = 'none'; loginText.textContent = 'Entrar →';
+        });
+    } else {
+      setTimeout(function(){ closeLogin(); showDashboard(); }, 900);
+    }
   }
   document.getElementById('btn-open-login').addEventListener('click', openLogin);
   document.getElementById('btn-close-login').addEventListener('click', closeLogin);
@@ -1767,7 +2040,11 @@ document.addEventListener('DOMContentLoaded', function () {
   function closeDashboard() { dashboard.style.display='none'; mainNav.style.display='flex'; document.body.style.overflow=''; }
 
   document.getElementById('btn-dash-logo').addEventListener('click', closeDashboard);
-  document.getElementById('btn-logout').addEventListener('click', closeDashboard);
+  document.getElementById('btn-logout').addEventListener('click', function() {
+    if (window.fbSignOut && window.auth) {
+      window.fbSignOut(window.auth).then(function(){ window.currentUser = null; closeDashboard(); }).catch(closeDashboard);
+    } else { closeDashboard(); }
+  });
 
   /* ═══════════════════════════════════════════
      CAROUSEL
@@ -1816,7 +2093,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   /* ═══════════════════════════════════════════
-     FORM SIMPLE
+     FORM SIMPLE (registro de la pagina)
   ═══════════════════════════════════════════ */
   document.getElementById('btn-cliente').addEventListener('click', function(){ submitSimpleForm('cliente'); });
   document.getElementById('btn-tecnico').addEventListener('click', function(){ submitSimpleForm('tecnico'); });
@@ -1837,15 +2114,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     var btn=document.getElementById('btn-'+tipo), sp=document.getElementById('spinner-'+tipo), bt=document.getElementById('btn-'+tipo+'-text');
     btn.disabled=true; sp.style.display='block'; bt.textContent='Enviando...';
-
-    /* Determinar colección de Firebase según tipo */
     var coleccion = (tipo === 'tecnico') ? 'tecnicos' : 'clientes';
-
-    /* 1. Envío a Google Apps Script (correo) — fire & forget */
-    fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)})
-      .catch(function(){});
-
-    /* 2. Guardar en Firebase Firestore */
+    fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(function(){});
     saveToFirebase(coleccion, data).finally(function(){
       document.getElementById('rform-'+tipo).style.display='none';
       document.getElementById('success-'+tipo).style.display='block';
@@ -1869,13 +2139,21 @@ document.addEventListener('DOMContentLoaded', function () {
 </script>
 
 <!-- ═══════════════════════════════════════════
-     FIREBASE — Conexión a base de datos
+     FIREBASE — Auth + Firestore + Analytics
 ═══════════════════════════════════════════ -->
 <script type="module">
-  import { initializeApp }                        from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-  import { getAnalytics }                         from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
-  import { getFirestore, collection, addDoc }     from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-  import { getAuth }                              from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+  import { initializeApp }                                          from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAnalytics }                                           from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+  import {
+    getAuth,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
+    onAuthStateChanged,
+    signOut
+  } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey:            "AIzaSyCJlo2i_MsotnrCJ9VnnXsZidGKospvw2k",
@@ -1887,18 +2165,38 @@ document.addEventListener('DOMContentLoaded', function () {
     measurementId:     "G-NPFGT5G82D"
   };
 
-  const app       = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-  const db        = getFirestore(app);
-  const auth      = getAuth(app);
+  const app            = initializeApp(firebaseConfig);
+  const analytics      = getAnalytics(app);
+  const db             = getFirestore(app);
+  const auth           = getAuth(app);
+  const googleProvider = new GoogleAuthProvider();
 
-  /* Exponer al scope global para que el script principal los use */
-  window.db         = db;
-  window.auth       = auth;
-  window.fbCollection = collection;
-  window.fbAddDoc     = addDoc;
+  window.db                   = db;
+  window.auth                 = auth;
+  window.fbCollection         = collection;
+  window.fbAddDoc             = addDoc;
+  window.fbQuery              = query;
+  window.fbWhere              = where;
+  window.fbGetDocs            = getDocs;
+  window.fbOrderBy            = orderBy;
+  window.fbCreateUser         = createUserWithEmailAndPassword;
+  window.fbSignIn             = signInWithEmailAndPassword;
+  window.fbSignInWithPopup    = signInWithPopup;
+  window.fbGoogleProvider     = googleProvider;
+  window.fbSignOut            = signOut;
+  window.fbOnAuthStateChanged = onAuthStateChanged;
 
-  console.log("🔥 Firebase conectado con éxito a Thruver Platforms!");
+  onAuthStateChanged(auth, function(user) {
+    if (user) {
+      window.currentUser = user;
+      if (typeof window.onUserLoggedIn === 'function') window.onUserLoggedIn(user);
+    } else {
+      window.currentUser = null;
+      if (typeof window.onUserLoggedOut === 'function') window.onUserLoggedOut();
+    }
+  });
+
+  console.log("🔥 Firebase Auth + Firestore conectado a Thruver!");
 </script>
 </body>
 </html>
