@@ -852,8 +852,12 @@
     .dash-profile-card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; max-width:480px; margin-bottom:1.2rem; }
     .dash-profile-head { background:#111; padding:2rem 1.5rem; display:flex; align-items:center; gap:1.2rem; }
     .dash-profile-avatar-xl { width:60px; height:60px; border-radius:50%; background:rgba(255,255,255,0.12); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:700; flex-shrink:0; }
+    /* Mobile dash header */
+    .dash-mobile-hd { display:none; height:52px; background:#fff; border-bottom:1px solid #e5e7eb; flex-shrink:0; align-items:center; justify-content:space-between; padding:0 1.1rem; }
+    .dash-mobile-back { display:flex; align-items:center; gap:0.35rem; background:none; border:none; cursor:pointer; font-family:var(--font); font-size:0.83rem; font-weight:700; color:#111; padding:0.4rem 0.3rem; -webkit-tap-highlight-color:transparent; }
+    .dash-mobile-logo-txt { font-weight:900; font-size:1.15rem; letter-spacing:-0.04em; color:#111; }
     /* Mobile bottom nav */
-    .dash-bottom-nav { display:none; background:#fff; border-top:1px solid #e5e7eb; flex-shrink:0; }
+    .dash-bottom-nav { display:none; background:#fff; border-top:1px solid #e5e7eb; flex-shrink:0; padding-bottom: env(safe-area-inset-bottom); }
     .dash-bottom-inner { display:flex; height:64px; align-items:stretch; }
     .dash-bot-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.18rem; cursor:pointer; color:#9ca3af; font-size:0.6rem; font-weight:600; transition:color 0.15s; user-select:none; min-height:44px; -webkit-tap-highlight-color:transparent; }
     .dash-bot-item.active { color:#111; }
@@ -876,6 +880,7 @@
 
     @media(max-width:768px){
       .dash-sidebar { display: none; }
+      .dash-mobile-hd { display: flex; }
       .dash-bottom-nav { display: flex; }
       .dash-main-scroll { padding: 1.5rem 1.25rem 1rem; }
     }
@@ -925,6 +930,7 @@
       .footer-links a { min-height: 48px; }
       /* Platform dashboard — mobile */
       .dash-sidebar { display: none; }
+      .dash-mobile-hd { display: flex; }
       .dash-bottom-nav { display: flex; }
       .dash-stats-row { gap: 0.6rem; }
       .dash-stat-card { padding: 1rem; }
@@ -1667,6 +1673,14 @@
 <!-- DASHBOARD -->
 <div id="dashboard">
 
+  <!-- Mobile header (visible sólo en móvil) -->
+  <div class="dash-mobile-hd">
+    <button class="dash-mobile-back" id="btn-dash-back">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      <span class="dash-mobile-logo-txt">thruver</span>
+    </button>
+  </div>
+
   <!-- Layout -->
   <div class="dash-layout">
 
@@ -1679,7 +1693,7 @@
           <div class="dash-sidebar-uname" id="dash-topnav-name">—</div>
         </div>
       </div>
-      <nav class="dash-sidebar-nav">
+      <div class="dash-sidebar-nav">
         <div class="dash-nav-link active" data-view="dv-home">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           Inicio
@@ -1692,7 +1706,7 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
           Mis servicios
         </div>
-      </nav>
+      </div>
       <div class="dash-sidebar-bottom">
         <div class="dash-nav-logout" id="btn-logout">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -2724,6 +2738,10 @@ document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('#dashboard .dash-bot-item[data-view]').forEach(function(item){
     item.addEventListener('click', function(){ showDashView(item.dataset.view); });
   });
+
+  /* Mobile back button → cierra el dashboard y vuelve al landing */
+  var btnDashBack = document.getElementById('btn-dash-back');
+  if (btnDashBack) btnDashBack.addEventListener('click', closeDashboard);
 
   /* Logout buttons (sidebar + profile view) */
   document.getElementById('btn-logout').addEventListener('click', doLogout);
