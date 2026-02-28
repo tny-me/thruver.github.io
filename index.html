@@ -254,9 +254,6 @@
     .modal-addr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 0.8rem; }
     .modal-box { overflow-y: auto; max-height: 90vh; }
 
-    /* ══ DASHBOARD ══ */
-    #dashboard { display: none; min-height: 100vh; background: var(--bg); padding-top: 60px; }
-    .dash-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 200; height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; background: var(--white); border-bottom: 1px solid var(--border); }
     .dash-nav-logo { font-weight: 900; font-size: 1.3rem; letter-spacing: -0.04em; color: var(--black); text-decoration: none; }
     .dash-nav-right { display: flex; align-items: center; gap: 1rem; }
     .dash-user { display: flex; align-items: center; gap: 0.6rem; font-size: 0.83rem; color: var(--text); }
@@ -759,6 +756,8 @@
     /* ══ DASHBOARD PLATFORM ══ */
     #dashboard { display:none; position:fixed; inset:0; z-index:500; flex-direction:column; background:#f8f9fc; }
     #dashboard.dash-open { display:flex; }
+    /* Ocultar todo el landing cuando el dashboard está abierto (fix iOS compositing layer) */
+    body.dash-is-open > *:not(#dashboard) { visibility:hidden !important; }
     /* Layout */
     .dash-layout { display:flex; flex:1; overflow:hidden; }
     /* Sidebar */
@@ -2691,13 +2690,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function showDashboard() {
     dashboard.classList.add('dash-open');
-    mainNav.style.display = 'none';
+    document.body.classList.add('dash-is-open');
     document.body.style.overflow = 'hidden';
     showDashView('dv-home');
   }
   function closeDashboard() {
     dashboard.classList.remove('dash-open');
-    mainNav.style.display = 'flex';
+    document.body.classList.remove('dash-is-open');
     document.body.style.overflow = '';
   }
   function doLogout() {
