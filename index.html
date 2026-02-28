@@ -756,8 +756,6 @@
     /* ══ DASHBOARD PLATFORM ══ */
     #dashboard { display:none; position:fixed; inset:0; z-index:500; flex-direction:column; background:#f8f9fc; }
     #dashboard.dash-open { display:flex; }
-    /* Ocultar todo el landing cuando el dashboard está abierto (fix iOS compositing layer) */
-    body.dash-is-open > *:not(#dashboard) { visibility:hidden !important; pointer-events:none !important; }
     /* Layout */
     .dash-layout { display:flex; flex:1; overflow:hidden; }
     /* Sidebar */
@@ -856,8 +854,8 @@
     .dash-mobile-back { display:flex; align-items:center; gap:0.35rem; background:none; border:none; cursor:pointer; font-family:var(--font); font-size:0.83rem; font-weight:700; color:#111; padding:0.4rem 0.3rem; -webkit-tap-highlight-color:transparent; }
     .dash-mobile-logo-txt { font-weight:900; font-size:1.15rem; letter-spacing:-0.04em; color:#111; }
     /* Mobile bottom nav */
-    .dash-bottom-nav { display:none; background:#fff; border-top:1px solid #e5e7eb; flex-shrink:0; padding-bottom: env(safe-area-inset-bottom); }
-    .dash-bottom-inner { display:flex; height:64px; align-items:stretch; }
+    .dash-bottom-nav { display:none; background:#fff; border-top:1px solid #e5e7eb; flex-shrink:0; width:100%; padding-bottom: env(safe-area-inset-bottom); }
+    .dash-bottom-inner { display:flex; height:64px; align-items:stretch; width:100%; }
     .dash-bot-item { flex:1; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#9ca3af; transition:color 0.15s; user-select:none; min-height:44px; -webkit-tap-highlight-color:transparent; }
     .dash-bot-item svg { width:24px; height:24px; }
     .dash-bot-item.active { color:#111; }
@@ -2686,15 +2684,21 @@ document.addEventListener('DOMContentLoaded', function () {
   var dashboard = document.getElementById('dashboard');
   var mainNav   = document.getElementById('main-nav');
 
+  var _landingHidden = [];
   function showDashboard() {
     dashboard.classList.add('dash-open');
-    document.body.classList.add('dash-is-open');
+    _landingHidden = [];
+    document.querySelectorAll('body > *:not(#dashboard)').forEach(function(el) {
+      _landingHidden.push({ el: el, prev: el.style.display });
+      el.style.display = 'none';
+    });
     document.body.style.overflow = 'hidden';
     showDashView('dv-home');
   }
   function closeDashboard() {
     dashboard.classList.remove('dash-open');
-    document.body.classList.remove('dash-is-open');
+    _landingHidden.forEach(function(item) { item.el.style.display = item.prev; });
+    _landingHidden = [];
     document.body.style.overflow = '';
   }
   function doLogout() {
