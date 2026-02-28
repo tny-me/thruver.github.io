@@ -126,8 +126,8 @@
 
     .hero-right { position: relative; z-index: 1; height: calc(100vh - 60px); display: flex; align-items: center; justify-content: center; padding: 3rem 3.5rem 3rem 1.5rem; }
     .carousel-wrap { width: 100%; max-width: 500px; }
-    .carousel-frame { width: 100%; aspect-ratio: 4/3; border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.09); box-shadow: 0 24px 64px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.06); background: var(--bg3); animation: fadeUp 0.6s ease 0.1s both; }
-    .carousel-slides { display: flex; width: 100%; height: 100%; transition: transform 0.9s cubic-bezier(0.4,0,0.2,1); }
+    .carousel-frame { width: 100%; aspect-ratio: 4/3; border-radius: 20px; overflow: hidden; border: 1px solid rgba(0,0,0,0.09); box-shadow: 0 24px 64px rgba(0,0,0,0.13), 0 4px 16px rgba(0,0,0,0.06); background: var(--bg3); animation: fadeUp 0.6s ease 0.1s both; -webkit-transform: translateZ(0); transform: translateZ(0); -webkit-mask-image: -webkit-radial-gradient(white, black); }
+    .carousel-slides { display: flex; width: 100%; height: 100%; transition: transform 0.9s cubic-bezier(0.4,0,0.2,1); will-change: transform; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
     .carousel-slide { flex-shrink: 0; width: 100%; height: 100%; overflow: hidden; }
     .carousel-slide img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 6s ease; transform: scale(1.06); }
     .carousel-slide.active img { transform: scale(1); }
@@ -759,9 +759,6 @@
     /* ══ DASHBOARD PLATFORM ══ */
     #dashboard { display:none; position:fixed; inset:0; z-index:500; flex-direction:column; background:#f8f9fc; }
     #dashboard.dash-open { display:flex; }
-    /* Top nav */
-    .dash-topnav { height:60px; background:#fff; border-bottom:1px solid #e5e7eb; display:flex; align-items:center; justify-content:space-between; padding:0 1.75rem; flex-shrink:0; z-index:10; }
-    .dash-topnav-logo { font-weight:900; font-size:1.2rem; letter-spacing:-0.04em; color:#111; cursor:pointer; }
     /* Layout */
     .dash-layout { display:flex; flex:1; overflow:hidden; }
     /* Sidebar */
@@ -929,7 +926,6 @@
       /* Platform dashboard — mobile */
       .dash-sidebar { display: none; }
       .dash-bottom-nav { display: flex; }
-      .dash-topnav { padding: 0 1rem; }
       .dash-stats-row { gap: 0.6rem; }
       .dash-stat-card { padding: 1rem; }
       .dash-stat-value { font-size: 1.5rem; }
@@ -1671,15 +1667,6 @@
 <!-- DASHBOARD -->
 <div id="dashboard">
 
-  <!-- Top nav -->
-  <div class="dash-topnav">
-    <span class="dash-topnav-logo" id="btn-dash-logo">thruver</span>
-    <button class="dash-cta-btn tnl-trigger">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      Solicitar servicio
-    </button>
-  </div>
-
   <!-- Layout -->
   <div class="dash-layout">
 
@@ -1697,13 +1684,13 @@
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           Inicio
         </div>
-        <div class="dash-nav-link" data-view="dv-services">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-          Mis servicios
-        </div>
         <div class="dash-nav-link" data-view="dv-profile">
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           Mi perfil
+        </div>
+        <div class="dash-nav-link" data-view="dv-services">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          Mis servicios
         </div>
       </nav>
       <div class="dash-sidebar-bottom">
@@ -2723,9 +2710,6 @@ document.addEventListener('DOMContentLoaded', function () {
     var ms = document.querySelector('.dash-main-scroll');
     if (ms) ms.scrollTop = 0;
   }
-
-  /* Logo → go home (not logout) */
-  document.getElementById('btn-dash-logo').addEventListener('click', function(){ showDashView('dv-home'); });
 
   /* "Ver todo" link in home view */
   var btnSeeAll = document.getElementById('btn-see-all-svcs');
