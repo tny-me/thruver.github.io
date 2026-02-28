@@ -2688,7 +2688,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function showDashboard() {
     dashboard.classList.add('dash-open');
     _landingHidden = [];
-    document.querySelectorAll('body > *:not(#dashboard)').forEach(function(el) {
+    document.querySelectorAll('body > *:not(#dashboard):not(#tnlOverlay):not(#loginModal)').forEach(function(el) {
       _landingHidden.push({ el: el, prev: el.style.display });
       el.style.display = 'none';
     });
