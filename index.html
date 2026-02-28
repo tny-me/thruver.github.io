@@ -1399,6 +1399,7 @@
               </select>
             </div>
           </div>
+          <div id="error-cliente" style="display:none;background:#fff0f0;border:1px solid #fcc;border-radius:7px;padding:0.6rem 0.9rem;font-size:0.78rem;color:#cc3333;margin-bottom:0.5rem;"></div>
           <button class="btn-submit" id="btn-cliente">
             <span class="spinner" id="spinner-cliente"></span>
             <span id="btn-cliente-text">Registrarme como cliente →</span>
@@ -1436,6 +1437,7 @@
             </div>
           </div>
           <div class="form-group"><label>Colonia donde trabajas</label><input type="text" id="t-zona" placeholder="Ej. Las Quintas, Tres Ríos..." /></div>
+          <div id="error-tecnico" style="display:none;background:#fff0f0;border:1px solid #fcc;border-radius:7px;padding:0.6rem 0.9rem;font-size:0.78rem;color:#cc3333;margin-bottom:0.5rem;"></div>
           <button class="btn-submit" id="btn-tecnico">
             <span class="spinner" id="spinner-tecnico"></span>
             <span id="btn-tecnico-text">Solicitar mi cupo →</span>
@@ -1459,9 +1461,9 @@
     <a href="#como-funciona">Cómo funciona</a>
     <a href="#" class="tnl-trigger">Solicitar servicio</a>
     <a href="#registro">Ser técnico</a>
-    <a href="https://wa.me/526670000000" target="_blank">WhatsApp</a>
+    <a href="https://wa.me/52" target="_blank" rel="noopener noreferrer">WhatsApp</a>
   </div>
-  <p class="footer-copy">© 2025 Thruver · Culiacán, Sinaloa, México</p>
+  <p class="footer-copy">© 2026 Thruver · Culiacán, Sinaloa, México</p>
 </footer>
 
 <!-- LOGIN MODAL -->
@@ -1566,72 +1568,52 @@
     <a href="javascript:void(0)" class="dash-nav-logo" id="btn-dash-logo">thruver</a>
     <div class="dash-nav-right">
       <div class="dash-user">
-        <div class="dash-avatar">AM</div>
-        <span class="dash-name">Antonio Moreno</span>
+        <div class="dash-avatar">?</div>
+        <span class="dash-name">Mi cuenta</span>
       </div>
       <button class="btn-ghost" id="btn-logout" style="font-size:0.78rem;padding:0.35rem 0.85rem;">Cerrar sesión</button>
     </div>
   </nav>
   <div class="dash-body">
     <div class="dash-greeting">
-      <h1>Buen día, Antonio 👋</h1>
+      <h1>Buen día 👋</h1>
       <p>Aquí tienes un resumen de tus servicios con Thruver.</p>
     </div>
     <div class="dash-stats">
-      <div class="dash-stat-card"><div class="dash-stat-label">Servicios totales</div><div class="dash-stat-value">7</div><div class="dash-stat-sub">Desde enero 2025</div></div>
-      <div class="dash-stat-card"><div class="dash-stat-label">En curso</div><div class="dash-stat-value">1</div><div class="dash-stat-sub">Hoy · 10:00 AM</div></div>
-      <div class="dash-stat-card"><div class="dash-stat-label">Próximos</div><div class="dash-stat-value">2</div><div class="dash-stat-sub">Esta semana</div></div>
-      <div class="dash-stat-card"><div class="dash-stat-label">Calificación</div><div class="dash-stat-value">4.9</div><div class="dash-stat-sub">⭐ Últimos servicios</div></div>
+      <div class="dash-stat-card"><div class="dash-stat-label">Servicios totales</div><div class="dash-stat-value" id="stat-total">—</div><div class="dash-stat-sub" id="stat-total-sub">Cargando...</div></div>
+      <div class="dash-stat-card"><div class="dash-stat-label">En curso</div><div class="dash-stat-value" id="stat-curso">—</div><div class="dash-stat-sub">Servicios activos</div></div>
+      <div class="dash-stat-card"><div class="dash-stat-label">Última solicitud</div><div class="dash-stat-value" id="stat-ultimo" style="font-size:1rem;">—</div><div class="dash-stat-sub" id="stat-ultimo-sub">Sin servicios aún</div></div>
+      <div class="dash-stat-card"><div class="dash-stat-label">Estado</div><div class="dash-stat-value" id="stat-estado" style="font-size:1rem;">—</div><div class="dash-stat-sub">Tu cuenta</div></div>
     </div>
     <div class="dash-grid">
       <div style="display:flex;flex-direction:column;gap:1.2rem;">
-        <div class="dash-card">
-          <div class="dash-card-header"><h3>Servicio en curso</h3><span style="font-size:0.72rem;color:var(--muted);">Hoy · 10:00 AM</span></div>
-          <div class="active-service">
-            <div class="active-badge"><span class="active-dot"></span> En progreso</div>
-            <h4>Reparación de plomería</h4>
-            <p class="active-service-meta">Hogar · Las Quintas, Culiacán</p>
-            <div class="active-tech">
-              <div class="tech-avatar">MG</div>
-              <div class="tech-info"><strong>Miguel González</strong><span>Plomero · 6 años de experiencia</span></div>
-              <div class="tech-verified">✓ Verificado</div>
-            </div>
-            <div class="progress-steps">
-              <div class="pstep done"><div class="pstep-dot">✓</div><div class="pstep-label">Asignado</div></div>
-              <div class="pstep-line done"></div>
-              <div class="pstep done"><div class="pstep-dot">✓</div><div class="pstep-label">En camino</div></div>
-              <div class="pstep-line done"></div>
-              <div class="pstep active"><div class="pstep-dot">●</div><div class="pstep-label">En trabajo</div></div>
-              <div class="pstep-line"></div>
-              <div class="pstep"><div class="pstep-dot"></div><div class="pstep-label">Completado</div></div>
-            </div>
+        <div class="dash-card" id="dash-card-historial">
+          <div class="dash-card-header"><h3>Mis solicitudes</h3></div>
+          <div id="dash-historial-empty" style="padding:2rem 1.5rem;text-align:center;color:var(--muted);font-size:0.82rem;">
+            <div style="font-size:1.8rem;margin-bottom:0.5rem;">📋</div>
+            Aún no tienes solicitudes.<br/>
+            <button class="tnl-trigger" style="margin-top:0.8rem;background:var(--black);color:#fff;border:none;padding:0.6rem 1.2rem;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:var(--font);">Solicitar mi primer servicio →</button>
           </div>
-        </div>
-        <div class="dash-card">
-          <div class="dash-card-header"><h3>Historial de servicios</h3><a href="#">Ver todos →</a></div>
-          <div class="service-row"><div class="service-row-icon">⚡</div><div class="service-row-info"><strong>Instalación eléctrica</strong><span>15 Nov 2025 · Oficina Centro</span></div><div class="service-row-right"><div class="service-row-price">$850</div><span class="service-row-status status-done">Completado</span></div></div>
-          <div class="service-row"><div class="service-row-icon">🧹</div><div class="service-row-info"><strong>Limpieza profunda</strong><span>02 Nov 2025 · Las Quintas</span></div><div class="service-row-right"><div class="service-row-price">$600</div><span class="service-row-status status-done">Completado</span></div></div>
-          <div class="service-row"><div class="service-row-icon">🖌️</div><div class="service-row-info"><strong>Pintura de interiores</strong><span>18 Oct 2025 · Las Quintas</span></div><div class="service-row-right"><div class="service-row-price">$1,200</div><span class="service-row-status status-done">Completado</span></div></div>
-          <div class="service-row"><div class="service-row-icon">❄️</div><div class="service-row-info"><strong>Mantenimiento A/C</strong><span>05 Sep 2025 · Oficina Centro</span></div><div class="service-row-right"><div class="service-row-price">$750</div><span class="service-row-status status-pending">Pend. pago</span></div></div>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:1.2rem;">
         <div class="dash-card">
-          <div class="dash-card-header"><h3>Próximos servicios</h3><a href="#" class="tnl-trigger">+ Agendar</a></div>
-          <div class="upcoming-item"><div class="upcoming-date"><strong>28</strong><span>Feb</span></div><div class="upcoming-info"><strong>Jardinería y poda</strong><span>09:00 AM · Hogar Las Quintas</span></div></div>
-          <div class="upcoming-item"><div class="upcoming-date"><strong>03</strong><span>Mar</span></div><div class="upcoming-info"><strong>Revisión eléctrica</strong><span>11:00 AM · Oficina Centro</span></div></div>
+          <div class="dash-card-header"><h3>Solicitar servicio</h3><a href="#" class="tnl-trigger">+ Nuevo</a></div>
+          <div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:0.82rem;">
+            <div style="font-size:1.8rem;margin-bottom:0.5rem;">🛠️</div>
+            ¿Necesitas algo?<br/>Solicita un técnico verificado ahora.
+            <br/><button class="tnl-trigger btn-solid" style="margin-top:1rem;width:100%;justify-content:center;font-size:0.85rem;">Solicitar servicio →</button>
+          </div>
         </div>
         <div class="dash-card">
-          <div class="dash-card-header"><h3>Mi perfil</h3><a href="#">Editar</a></div>
+          <div class="dash-card-header"><h3>Mi perfil</h3></div>
           <div class="profile-section">
             <div class="profile-row">
-              <div class="profile-avatar-lg">AM</div>
-              <div><div class="profile-name">Antonio Moreno</div><div class="profile-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="53323d273c3d3a3c13303c2121363c7d303c3e">[email&#160;protected]</a></div></div>
+              <div class="profile-avatar-lg" id="dash-profile-avatar">?</div>
+              <div><div class="profile-name" id="dash-profile-name">—</div><div class="profile-email" id="dash-profile-email">—</div></div>
             </div>
-            <div class="profile-field"><span>Teléfono</span><span>667 123 4567</span></div>
-            <div class="profile-field"><span>Tipo de cliente</span><span>Hogar + Empresa</span></div>
-            <div class="profile-field"><span>Zona</span><span>Culiacán Norte</span></div>
-            <div class="profile-field"><span>Miembro desde</span><span>Enero 2025</span></div>
+            <div class="profile-field"><span>Miembro desde</span><span id="dash-profile-since">—</span></div>
+            <div class="profile-field"><span>Estado</span><span style="color:#16a34a;font-weight:700;">✓ Activo</span></div>
           </div>
         </div>
       </div>
@@ -1639,7 +1621,7 @@
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 document.addEventListener('DOMContentLoaded', function () {
 
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEyoOsNCpYEixE1rksRScf28qSiuYAfDHReo3v8XeFZ725vD3MqxRBs3JmEGZAsMY8/exec';
@@ -2113,11 +2095,27 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ------- Actualizar nav con usuario ------- */
   function actualizarNavConUsuario(user) {
     var dn = user.displayName || user.email || 'Usuario';
-    var av = document.querySelector('.dash-avatar'); if(av) av.textContent = dn.charAt(0).toUpperCase();
-    var nm = document.querySelector('.dash-name');   if(nm) nm.textContent = dn.split(' ')[0];
-    var gr = document.querySelector('.dash-greeting h1'); if(gr) gr.textContent = 'Buen d\u00EDa, ' + dn.split(' ')[0] + ' \uD83D\uDC4B';
-    var pn = document.querySelector('.profile-name');  if(pn) pn.textContent = dn;
-    var pe = document.querySelector('.profile-email'); if(pe) pe.textContent = user.email || '';
+    var inicial = dn.charAt(0).toUpperCase();
+    var nombre  = dn.split(' ')[0];
+    var av = document.querySelector('.dash-avatar');      if(av) av.textContent = inicial;
+    var nm = document.querySelector('.dash-name');        if(nm) nm.textContent = nombre;
+    var gr = document.querySelector('.dash-greeting h1'); if(gr) gr.textContent = 'Buen d\u00EDa, ' + nombre + ' \uD83D\uDC4B';
+    /* Perfil */
+    var pa = document.getElementById('dash-profile-avatar'); if(pa) pa.textContent = inicial;
+    var pn = document.getElementById('dash-profile-name');   if(pn) pn.textContent = dn;
+    var pe = document.getElementById('dash-profile-email');  if(pe) pe.textContent = user.email || '';
+    /* Fecha de registro */
+    var ps = document.getElementById('dash-profile-since');
+    if(ps) {
+      var creado = user.metadata && user.metadata.creationTime ? new Date(user.metadata.creationTime) : new Date();
+      ps.textContent = creado.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+    }
+    /* Stats iniciales */
+    var st = document.getElementById('stat-total');   if(st) st.textContent = '0';
+    var sc = document.getElementById('stat-curso');   if(sc) sc.textContent = '0';
+    var su = document.getElementById('stat-ultimo');  if(su) su.textContent = '—';
+    var se = document.getElementById('stat-estado');  if(se) se.textContent = '\u2713 Activo';
+    var stSub = document.getElementById('stat-total-sub'); if(stSub) stSub.textContent = 'Sin servicios a\u00FAn';
   }
 
   /* ------- Cargar historial y mostrar dashboard ------- */
@@ -2130,17 +2128,31 @@ document.addEventListener('DOMContentLoaded', function () {
         var svcs=[];
         snap.forEach(function(d){ svcs.push(d.data()); });
         svcs.sort(function(a,b){ return b.timestamp>a.timestamp?1:-1; });
-        var tot = document.querySelector('.dash-stat-value'); if(tot) tot.textContent=svcs.length;
+        /* Stats */
+        var tot = document.getElementById('stat-total');
+        if(tot) tot.textContent = svcs.length;
+        var totSub = document.getElementById('stat-total-sub');
+        if(totSub) totSub.textContent = svcs.length === 1 ? '1 servicio registrado' : svcs.length + ' servicios registrados';
+        if(svcs.length > 0) {
+          var ultimo = svcs[0];
+          var su = document.getElementById('stat-ultimo');
+          if(su) su.textContent = ultimo.servicio || '—';
+          var suSub = document.getElementById('stat-ultimo-sub');
+          if(suSub) suSub.textContent = ultimo.timestamp ? new Date(ultimo.timestamp).toLocaleDateString('es-MX',{day:'2-digit',month:'short'}) : '—';
+        }
         renderizarHistorial(svcs);
       }).catch(function(e){ console.warn('[Thruver] Historial error:',e); });
   }
 
   /* ------- Renderizar historial ------- */
   function renderizarHistorial(svcs) {
-    var histEl=null;
-    document.querySelectorAll('.dash-card-header h3').forEach(function(h){ if(h.textContent.trim()==='Historial de servicios') histEl=h.closest('.dash-card'); });
-    if(!histEl||svcs.length===0) return;
+    var histEl = document.getElementById('dash-card-historial');
+    var emptyEl = document.getElementById('dash-historial-empty');
+    if(!histEl) return;
+    /* Limpiar filas anteriores */
     histEl.querySelectorAll('.service-row').forEach(function(r){ r.remove(); });
+    if(svcs.length===0) { if(emptyEl) emptyEl.style.display='block'; return; }
+    if(emptyEl) emptyEl.style.display='none';
     var ic={'Plomer\u00EDa':'\uD83D\uDD27','Electricidad':'\u26A1','Limpieza':'\uD83E\uDDF9','Pintura':'\uD83D\uDD8C\uFE0F','Carpinter\u00EDa':'\uD83E\uDEA8','Jardiner\u00EDa':'\uD83C\uDF3F','Aire / Clima':'\u2744\uFE0F','Remodelaci\u00F3n':'\uD83C\uDFD7\uFE0F','Otro':'\uD83D\uDCAC'};
     svcs.slice(0,8).forEach(function(s){
       var ico=ic[s.servicio]||'\uD83D\uDD27';
@@ -2381,18 +2393,31 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById('btn-cliente').addEventListener('click', function(){ submitSimpleForm('cliente'); });
   document.getElementById('btn-tecnico').addEventListener('click', function(){ submitSimpleForm('tecnico'); });
 
+  function showSimpleError(tipo, msg) {
+    var el = document.getElementById('error-'+tipo);
+    if (!el) return;
+    el.textContent = msg;
+    el.style.display = 'block';
+    el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+  function hideSimpleError(tipo) {
+    var el = document.getElementById('error-'+tipo);
+    if (el) el.style.display = 'none';
+  }
+
   function submitSimpleForm(tipo) {
+    hideSimpleError(tipo);
     var data = {};
     if (tipo === 'cliente') {
       var nombre=document.getElementById('c-nombre').value.trim(), tel=document.getElementById('c-telefono').value.trim(),
           email=document.getElementById('c-email').value.trim(), esp=document.getElementById('c-espacio').value, svc=document.getElementById('c-servicio').value;
-      if (!nombre||!tel||!esp||!svc){ alert('Por favor completa todos los campos.'); return; }
+      if (!nombre||!tel||!esp||!svc){ showSimpleError('cliente','Por favor completa todos los campos obligatorios.'); return; }
       data = { tipo:'CLIENTE', nombre:nombre, telefono:tel, email:email, espacio:esp, servicio:svc };
     } else {
       var tn=document.getElementById('t-nombre').value.trim(), tt=document.getElementById('t-telefono').value.trim(),
           te=document.getElementById('t-email').value.trim(), tesp=document.getElementById('t-especialidad').value,
           tz=document.getElementById('t-zona').value.trim(), tx=document.getElementById('t-experiencia').value;
-      if (!tn||!tt||!tesp||!tz){ alert('Por favor completa todos los campos.'); return; }
+      if (!tn||!tt||!tesp||!tz){ showSimpleError('tecnico','Por favor completa todos los campos obligatorios.'); return; }
       data = { tipo:'TECNICO', nombre:tn, telefono:tt, email:te, especialidad:tesp, zona:tz, experiencia:tx };
     }
     var btn=document.getElementById('btn-'+tipo), sp=document.getElementById('spinner-'+tipo), bt=document.getElementById('btn-'+tipo+'-text');
