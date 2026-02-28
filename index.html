@@ -856,11 +856,15 @@
     /* Mobile bottom nav */
     .dash-bottom-nav { display:none; background:#fff; border-top:1px solid #e5e7eb; flex-shrink:0; width:100%; padding-bottom: env(safe-area-inset-bottom); }
     .dash-bottom-inner { display:flex; height:64px; align-items:stretch; width:100%; }
-    .dash-bot-item { flex:1; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#9ca3af; transition:color 0.15s; user-select:none; min-height:44px; -webkit-tap-highlight-color:transparent; }
-    .dash-bot-item svg { width:24px; height:24px; }
+    .dash-bot-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.22rem; cursor:pointer; color:#9ca3af; transition:color 0.15s; user-select:none; min-height:44px; -webkit-tap-highlight-color:transparent; }
+    .dash-bot-item svg { width:20px; height:20px; flex-shrink:0; }
+    .dash-bot-label { font-size:0.58rem; font-weight:500; letter-spacing:0.01em; line-height:1; }
     .dash-bot-item.active { color:#111; }
     .dash-bot-item.active svg { stroke:#111; }
-    .dash-bot-circle { width:46px; height:46px; border-radius:50%; background:#111; color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(0,0,0,0.2); }
+    .dash-bot-cta { flex:none; display:flex; align-items:center; justify-content:center; padding:0 1rem; }
+    .dash-bot-cta-pill { display:flex; align-items:center; gap:0.3rem; background:#111; color:#fff; border-radius:999px; height:36px; padding:0 14px; cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; }
+    .dash-bot-cta-pill svg { width:14px; height:14px; flex-shrink:0; }
+    .dash-bot-cta-pill span { font-size:0.72rem; font-weight:700; letter-spacing:-0.01em; white-space:nowrap; }
 
     /* ══ RESPONSIVE ══ */
     @media(max-width:900px){
@@ -1908,17 +1912,21 @@
     <div class="dash-bottom-inner">
       <div class="dash-bot-item active" data-view="dv-home" aria-label="Inicio">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="dash-bot-label">Inicio</span>
       </div>
       <div class="dash-bot-item" data-view="dv-services" aria-label="Servicios">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
-      </div>
-      <div class="dash-bot-item tnl-trigger" style="flex:none;width:72px;" aria-label="Contratar">
-        <div class="dash-bot-circle">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        </div>
+        <span class="dash-bot-label">Servicios</span>
       </div>
       <div class="dash-bot-item" data-view="dv-profile" aria-label="Perfil">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="dash-bot-label">Perfil</span>
+      </div>
+      <div class="dash-bot-cta tnl-trigger" aria-label="Solicitar servicio">
+        <div class="dash-bot-cta-pill">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Solicitar</span>
+        </div>
       </div>
     </div>
   </div>
