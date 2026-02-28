@@ -757,83 +757,111 @@
     .tnl-auth-fields.hidden { display: none; }
 
     /* ══ DASHBOARD PLATFORM ══ */
-    /* ── DASHBOARD ── */
-    #dashboard { display:none; position:fixed; inset:0; z-index:500; flex-direction:column; background:#f5f6fa; }
+    #dashboard { display:none; position:fixed; inset:0; z-index:500; flex-direction:column; background:#f8f9fc; }
     #dashboard.dash-open { display:flex; }
-    .dash-topnav { height:64px; background:#fff; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:0 2rem; flex-shrink:0; z-index:10; }
-    .dash-topnav-logo { font-weight:900; font-size:1.3rem; letter-spacing:-0.04em; color:#111; cursor:pointer; text-decoration:none; }
-    .dash-topnav-right { display:flex; align-items:center; gap:1rem; }
-    .dash-user-pill { display:flex; align-items:center; gap:0.6rem; background:#f3f4f6; border-radius:100px; padding:0.3rem 0.9rem 0.3rem 0.3rem; }
+    /* Top nav */
+    .dash-topnav { height:60px; background:#fff; border-bottom:1px solid #e5e7eb; display:flex; align-items:center; justify-content:space-between; padding:0 1.75rem; flex-shrink:0; z-index:10; }
+    .dash-topnav-logo { font-weight:900; font-size:1.2rem; letter-spacing:-0.04em; color:#111; cursor:pointer; }
+    /* Layout */
     .dash-layout { display:flex; flex:1; overflow:hidden; }
     /* Sidebar */
-    .dash-sidebar { width:220px; background:#111; display:flex; flex-direction:column; flex-shrink:0; overflow-y:auto; }
-    .dash-sidebar-logo { padding:1.4rem 1.25rem 1rem; border-bottom:1px solid rgba(255,255,255,0.07); }
-    .dash-sidebar-brand { font-weight:900; font-size:1.1rem; letter-spacing:-0.04em; color:#fff; }
-    .dash-sidebar-nav { flex:1; padding:0.75rem 0; }
-    .dash-nav-link { display:flex; align-items:center; gap:0.75rem; padding:0.7rem 1rem; margin:0.1rem 0.75rem; font-size:0.84rem; font-weight:600; color:rgba(255,255,255,0.48); cursor:pointer; transition:all 0.15s; border-radius:9px; border-left:none; user-select:none; }
-    .dash-nav-link:hover { color:#fff; background:rgba(255,255,255,0.07); }
-    .dash-nav-link.active { color:#fff; background:rgba(255,255,255,0.13); }
-    .dash-nav-link .nav-icon { font-size:1rem; flex-shrink:0; }
-    .dash-sidebar-bottom { padding:1rem 0.75rem; border-top:1px solid rgba(255,255,255,0.07); }
-    .dash-new-btn { width:100%; background:#fff; color:#111; border:none; border-radius:9px; padding:0.82rem; font-size:0.82rem; font-weight:700; cursor:pointer; font-family:var(--font); display:flex; align-items:center; justify-content:center; gap:0.4rem; transition:opacity 0.15s; }
-    .dash-new-btn:hover { opacity:0.85; }
+    .dash-sidebar { width:240px; background:#fff; border-right:1px solid #e5e7eb; display:flex; flex-direction:column; flex-shrink:0; overflow-y:auto; }
+    .dash-sidebar-user { padding:1.75rem 1.25rem 1.25rem; border-bottom:1px solid #e5e7eb; display:flex; flex-direction:column; align-items:center; gap:0.45rem; text-align:center; }
+    .dash-sidebar-avatar { width:50px; height:50px; border-radius:50%; background:#111; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:700; flex-shrink:0; }
+    .dash-sidebar-uwelcome { font-size:0.69rem; color:#9ca3af; font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+    .dash-sidebar-uname { font-size:0.9rem; font-weight:800; color:#111; }
+    .dash-sidebar-nav { flex:1; padding:0.75rem; display:flex; flex-direction:column; gap:0.1rem; }
+    .dash-nav-link { display:flex; align-items:center; gap:0.7rem; padding:0.68rem 0.85rem; font-size:0.83rem; font-weight:600; color:#6b7280; cursor:pointer; border-radius:9px; transition:all 0.15s; user-select:none; }
+    .dash-nav-link svg { flex-shrink:0; opacity:0.65; transition:opacity 0.15s; }
+    .dash-nav-link:hover { color:#111; background:#f3f4f6; }
+    .dash-nav-link:hover svg { opacity:1; }
+    .dash-nav-link.active { color:#111; background:#f3f4f6; font-weight:700; }
+    .dash-nav-link.active svg { opacity:1; }
+    .dash-sidebar-bottom { padding:0.75rem; border-top:1px solid #e5e7eb; }
+    .dash-nav-logout { display:flex; align-items:center; gap:0.7rem; padding:0.68rem 0.85rem; font-size:0.83rem; font-weight:600; color:#ef4444; cursor:pointer; border-radius:9px; transition:background 0.15s; }
+    .dash-nav-logout:hover { background:#fef2f2; }
     /* Main */
-    .dash-main-scroll { flex:1; overflow-y:auto; padding:2.5rem 2.5rem; background:#f5f6fa; }
+    .dash-main-scroll { flex:1; overflow-y:auto; background:#f8f9fc; padding:2rem 2.25rem; }
     .dash-view { display:none; }
-    .dash-view.active { display:block; animation:fadeUp 0.25s ease both; }
-    /* Greeting row */
-    .dash-greeting-row { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:2rem; gap:1rem; }
-    .dash-greeting-row h1 { font-size:1.65rem; font-weight:900; letter-spacing:-0.04em; color:#111; margin-bottom:0.25rem; }
-    .dash-greeting-row p { font-size:0.87rem; color:var(--muted); }
-    .dash-cta-btn { background:#111; color:#fff; border:none; border-radius:10px; padding:0.75rem 1.3rem; font-size:0.83rem; font-weight:700; cursor:pointer; font-family:var(--font); display:inline-flex; align-items:center; gap:0.4rem; white-space:nowrap; transition:opacity 0.15s; flex-shrink:0; }
+    .dash-view.active { display:block; animation:fadeUp 0.22s ease both; }
+    /* CTA button */
+    .dash-cta-btn { background:#111; color:#fff; border:none; border-radius:9px; padding:0.65rem 1.2rem; font-size:0.8rem; font-weight:700; cursor:pointer; font-family:var(--font); display:inline-flex; align-items:center; gap:0.4rem; white-space:nowrap; transition:opacity 0.15s; flex-shrink:0; }
     .dash-cta-btn:hover { opacity:0.78; }
+    /* Hero banner */
+    .dash-hero { background:#111; border-radius:18px; padding:2.25rem 2.5rem; display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem; overflow:hidden; position:relative; min-height:168px; }
+    .dash-hero-content { flex:1; z-index:1; max-width:360px; }
+    .dash-hero-tag { display:inline-block; background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.65); font-size:0.66rem; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; padding:0.28rem 0.75rem; border-radius:100px; margin-bottom:0.85rem; }
+    .dash-hero-title { font-size:1.4rem; font-weight:900; color:#fff; letter-spacing:-0.04em; line-height:1.22; margin-bottom:0.35rem; }
+    .dash-hero-sub { font-size:0.82rem; color:rgba(255,255,255,0.5); margin-bottom:1.4rem; }
+    .dash-hero-btn { display:inline-flex; align-items:center; gap:0.45rem; background:#fff; color:#111; border:none; border-radius:9px; padding:0.65rem 1.25rem; font-size:0.8rem; font-weight:700; cursor:pointer; font-family:var(--font); transition:opacity 0.15s; }
+    .dash-hero-btn:hover { opacity:0.88; }
+    .dash-hero-illo { width:190px; display:flex; align-items:center; justify-content:flex-end; flex-shrink:0; z-index:1; }
     /* Stat cards */
-    .dash-stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1rem; margin-bottom:2rem; }
-    .dash-stat-card { background:#fff; border-radius:14px; padding:1.3rem 1.4rem; display:flex; align-items:center; justify-content:space-between; border:1px solid var(--border); box-shadow:0 1px 4px rgba(0,0,0,0.04); }
-    .dash-stat-info { display:flex; flex-direction:column; gap:0.25rem; }
-    .dash-stat-label { font-size:0.7rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.07em; }
-    .dash-stat-value { font-size:1.9rem; font-weight:900; letter-spacing:-0.05em; color:#111; line-height:1.1; }
-    .dash-stat-sub { font-size:0.7rem; color:var(--muted2); }
-    .dash-stat-illo { font-size:2.2rem; line-height:1; opacity:0.65; }
+    .dash-stats-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1.5rem; }
+    .dash-stat-card { border-radius:14px; padding:1.35rem 1.4rem; display:flex; align-items:center; justify-content:space-between; }
+    .dash-stat-mint  { background:#ecfdf5; }
+    .dash-stat-cream { background:#fffbeb; }
+    .dash-stat-info  { display:flex; flex-direction:column; gap:0.2rem; }
+    .dash-stat-label { font-size:0.69rem; font-weight:700; color:#6b7280; text-transform:uppercase; letter-spacing:0.07em; }
+    .dash-stat-value { font-size:2rem; font-weight:900; letter-spacing:-0.05em; line-height:1.1; }
+    .dash-stat-mint  .dash-stat-value { color:#065f46; }
+    .dash-stat-cream .dash-stat-value { color:#92400e; }
+    .dash-stat-sub { font-size:0.7rem; }
+    .dash-stat-mint  .dash-stat-sub { color:#34d399; }
+    .dash-stat-cream .dash-stat-sub { color:#fbbf24; }
+    .dash-stat-ico-wrap { width:48px; height:48px; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .dash-stat-mint  .dash-stat-ico-wrap { background:rgba(16,185,129,0.14); color:#059669; }
+    .dash-stat-cream .dash-stat-ico-wrap { background:rgba(245,158,11,0.14); color:#d97706; }
     /* Section header */
     .dash-section-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.85rem; }
-    .dash-section-hd h3 { font-size:0.9rem; font-weight:800; color:#111; letter-spacing:-0.02em; }
-    .dash-see-all { font-size:0.78rem; color:var(--muted); cursor:pointer; background:none; border:none; font-family:var(--font); padding:0; }
+    .dash-section-hd h3 { font-size:0.9rem; font-weight:800; color:#111; }
+    .dash-see-all { font-size:0.77rem; color:#9ca3af; cursor:pointer; background:none; border:none; font-family:var(--font); padding:0; }
     .dash-see-all:hover { color:#111; }
     /* Catalog */
-    .dash-catalog-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0.75rem; margin-bottom:2rem; }
-    .dash-catalog-card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:1.25rem 0.75rem; text-align:center; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:0.45rem; transition:all 0.18s; user-select:none; -webkit-tap-highlight-color:transparent; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
-    .dash-catalog-card:hover { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.09); border-color:rgba(0,0,0,0.15); }
-    .dash-catalog-icon { font-size:1.9rem; line-height:1; }
-    .dash-catalog-name { font-size:0.74rem; font-weight:700; color:var(--text); }
-    /* Service rows */
-    .dash-list-card { background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden; margin-bottom:1.5rem; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
-    .dash-svc-row { display:flex; align-items:center; gap:1rem; padding:1rem 1.5rem; border-bottom:1px solid var(--border); transition:background 0.15s; min-height:64px; }
-    .dash-svc-row:last-child { border-bottom:none; }
-    .dash-svc-row:hover { background:#fafafa; }
-    .dash-svc-ico { width:42px; height:42px; border-radius:11px; background:#f3f4f6; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:1.15rem; flex-shrink:0; }
-    .dash-svc-info { flex:1; min-width:0; }
-    .dash-svc-info strong { display:block; font-size:0.85rem; font-weight:700; color:#111; }
-    .dash-svc-info span { font-size:0.73rem; color:var(--muted); }
-    .dash-svc-badge { font-size:0.65rem; font-weight:700; padding:0.28rem 0.7rem; border-radius:100px; white-space:nowrap; flex-shrink:0; }
-    .badge-enviada { background:#f0fdf4; color:#16a34a; border:1px solid #bbf7d0; }
-    .badge-nueva   { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
-    .badge-pendiente { background:#fffbeb; color:#d97706; border:1px solid #fde68a; }
+    .dash-catalog-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0.75rem; margin-bottom:1.75rem; }
+    .dash-catalog-card { background:#fff; border:1px solid #e5e7eb; border-radius:13px; padding:1.2rem 0.6rem 1rem; text-align:center; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:0.5rem; transition:all 0.18s; user-select:none; -webkit-tap-highlight-color:transparent; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+    .dash-catalog-card:hover { transform:translateY(-3px); box-shadow:0 8px 20px rgba(0,0,0,0.09); border-color:#d1d5db; }
+    .dash-catalog-ico-wrap { width:42px; height:42px; border-radius:11px; display:flex; align-items:center; justify-content:center; }
+    .dash-catalog-name { font-size:0.72rem; font-weight:700; color:#374151; }
+    .ic-blue   { background:#eff6ff; color:#3b82f6; }
+    .ic-yellow { background:#fef9c3; color:#ca8a04; }
+    .ic-green  { background:#f0fdf4; color:#16a34a; }
+    .ic-purple { background:#fdf4ff; color:#a855f7; }
+    .ic-orange { background:#fff7ed; color:#f97316; }
+    .ic-teal   { background:#f0fdfa; color:#0d9488; }
+    .ic-sky    { background:#f0f9ff; color:#0ea5e9; }
+    .ic-gray   { background:#f3f4f6; color:#6b7280; }
+    /* Table */
+    .dash-tbl-card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; box-shadow:0 1px 3px rgba(0,0,0,0.04); margin-bottom:1.5rem; }
+    .dash-tbl-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .dash-table { width:100%; border-collapse:collapse; font-size:0.81rem; min-width:520px; }
+    .dash-table th { padding:0.7rem 1rem; text-align:left; font-size:0.66rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.07em; background:#f9fafb; border-bottom:1px solid #e5e7eb; white-space:nowrap; }
+    .dash-table td { padding:0.85rem 1rem; border-bottom:1px solid #f3f4f6; color:#374151; vertical-align:middle; }
+    .dash-table tr:last-child td { border-bottom:none; }
+    .dash-table tbody tr:hover td { background:#fafafa; }
+    .dash-tbl-svc-ico { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .dash-tbl-badge { display:inline-flex; align-items:center; padding:0.2rem 0.6rem; border-radius:100px; font-size:0.67rem; font-weight:700; white-space:nowrap; }
+    .badge-enviada    { background:#d1fae5; color:#065f46; }
+    .badge-nueva      { background:#dbeafe; color:#1e40af; }
+    .badge-pendiente  { background:#fef3c7; color:#92400e; }
+    .badge-completado { background:#dbeafe; color:#1e40af; }
+    .dash-tbl-report { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; border-radius:7px; background:#f3f4f6; border:none; cursor:pointer; color:#6b7280; transition:all 0.15s; }
+    .dash-tbl-report:hover { background:#e5e7eb; color:#111; }
+    /* Empty state */
     .dash-empty { text-align:center; padding:3rem 2rem; }
-    .dash-empty h4 { font-size:0.95rem; font-weight:700; color:#111; margin-bottom:0.4rem; }
-    .dash-empty p { font-size:0.82rem; color:var(--muted); line-height:1.65; margin-bottom:1.2rem; }
+    .dash-empty h4 { font-size:0.93rem; font-weight:700; color:#111; margin-bottom:0.4rem; }
+    .dash-empty p { font-size:0.81rem; color:#6b7280; line-height:1.65; margin-bottom:1.2rem; }
     /* Profile */
-    .dash-profile-card { background:#fff; border:1px solid var(--border); border-radius:14px; overflow:hidden; max-width:480px; margin-bottom:1.2rem; box-shadow:0 1px 4px rgba(0,0,0,0.04); }
+    .dash-profile-card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; max-width:480px; margin-bottom:1.2rem; }
     .dash-profile-head { background:#111; padding:2rem 1.5rem; display:flex; align-items:center; gap:1.2rem; }
     .dash-profile-avatar-xl { width:60px; height:60px; border-radius:50%; background:rgba(255,255,255,0.12); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.4rem; font-weight:700; flex-shrink:0; }
-    .dash-profile-head-name { font-size:1.05rem; font-weight:900; color:#fff; letter-spacing:-0.02em; }
-    .dash-profile-head-email { font-size:0.76rem; color:rgba(255,255,255,0.5); margin-top:0.2rem; }
     /* Mobile bottom nav */
-    .dash-bottom-nav { display:none; background:#fff; border-top:1px solid var(--border); flex-shrink:0; }
+    .dash-bottom-nav { display:none; background:#fff; border-top:1px solid #e5e7eb; flex-shrink:0; }
     .dash-bottom-inner { display:flex; height:64px; align-items:stretch; }
-    .dash-bot-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.2rem; cursor:pointer; color:var(--muted); font-size:0.62rem; font-weight:600; transition:color 0.15s; user-select:none; min-height:44px; -webkit-tap-highlight-color:transparent; }
+    .dash-bot-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.18rem; cursor:pointer; color:#9ca3af; font-size:0.6rem; font-weight:600; transition:color 0.15s; user-select:none; min-height:44px; -webkit-tap-highlight-color:transparent; }
     .dash-bot-item.active { color:#111; }
-    .dash-bot-circle { width:46px; height:46px; border-radius:50%; background:#111; color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.5rem; box-shadow:0 4px 14px rgba(0,0,0,0.22); }
+    .dash-bot-item.active svg { stroke:#111; }
+    .dash-bot-circle { width:46px; height:46px; border-radius:50%; background:#111; color:#fff; display:flex; align-items:center; justify-content:center; box-shadow:0 4px 14px rgba(0,0,0,0.2); }
 
     /* ══ RESPONSIVE ══ */
     @media(max-width:900px){
@@ -844,7 +872,6 @@
       .hero             { grid-template-columns: 1fr; min-height: auto; }
       .hero-right       { height: auto; padding: 0 2rem 3rem; justify-content: center; }
       .carousel-wrap    { max-width: 480px; }
-      .dash-stats-grid  { grid-template-columns: repeat(2,1fr); }
       .dash-main-scroll { padding: 2rem 1.5rem; }
       .tnl-step3-layout { grid-template-columns: 1fr; }
       .tnl-receipt      { position: static; }
@@ -903,15 +930,18 @@
       .dash-sidebar { display: none; }
       .dash-bottom-nav { display: flex; }
       .dash-topnav { padding: 0 1rem; }
-      .dash-stats-grid { grid-template-columns: repeat(2,1fr); gap: 0.6rem; }
-      .dash-stat-card { padding: 1rem 1rem; }
+      .dash-stats-row { gap: 0.6rem; }
+      .dash-stat-card { padding: 1rem; }
       .dash-stat-value { font-size: 1.5rem; }
-      .dash-stat-illo { font-size: 1.6rem; }
+      .dash-stat-ico-wrap { width: 40px; height: 40px; }
       .dash-catalog-grid { grid-template-columns: repeat(4,1fr); gap: 0.5rem; }
       .dash-catalog-card { padding: 0.85rem 0.3rem; }
-      .dash-main-scroll { padding: 1.5rem 1rem 1rem; }
-      .dash-greeting-row { flex-direction: column; gap: 0.75rem; }
-      .dash-greeting-row h1 { font-size: 1.35rem; }
+      .dash-catalog-ico-wrap { width: 36px; height: 36px; }
+      .dash-main-scroll { padding: 1.25rem 0.9rem 1rem; }
+      .dash-hero { padding: 1.5rem 1.4rem; min-height: auto; }
+      .dash-hero-illo { display: none; }
+      .dash-hero-title { font-size: 1.2rem; }
+      .dash-hero-sub { margin-bottom: 1rem; }
       .dash-cta-btn { width: 100%; justify-content: center; }
       .modal-box { padding: 2rem 1.4rem; margin: 0.8rem; }
       .modal-box h2 { font-size: 1.15rem; }
@@ -1644,81 +1674,118 @@
   <!-- Top nav -->
   <div class="dash-topnav">
     <span class="dash-topnav-logo" id="btn-dash-logo">thruver</span>
-    <div class="dash-topnav-right">
-      <div class="dash-user-pill">
-        <div class="dash-profile-avatar-xl" id="dash-topnav-avatar" style="width:30px;height:30px;font-size:0.85rem;flex-shrink:0;">?</div>
-        <span id="dash-topnav-name" style="font-size:0.82rem;font-weight:600;color:#111;">Mi cuenta</span>
-      </div>
-    </div>
+    <button class="dash-cta-btn tnl-trigger">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Solicitar servicio
+    </button>
   </div>
 
-  <!-- Body -->
+  <!-- Layout -->
   <div class="dash-layout">
 
-    <!-- Sidebar (desktop) -->
+    <!-- Sidebar -->
     <aside class="dash-sidebar">
-      <div class="dash-sidebar-logo">
-        <div class="dash-sidebar-brand">thruver</div>
+      <div class="dash-sidebar-user">
+        <div class="dash-sidebar-avatar" id="dash-topnav-avatar">?</div>
+        <div>
+          <div class="dash-sidebar-uwelcome">Bienvenido de vuelta</div>
+          <div class="dash-sidebar-uname" id="dash-topnav-name">—</div>
+        </div>
       </div>
       <nav class="dash-sidebar-nav">
-        <div class="dash-nav-link active" data-view="dv-home"><span class="nav-icon">🏠</span> Inicio</div>
-        <div class="dash-nav-link" data-view="dv-services"><span class="nav-icon">📋</span> Mis servicios</div>
-        <div class="dash-nav-link" data-view="dv-profile"><span class="nav-icon">👤</span> Mi perfil</div>
+        <div class="dash-nav-link active" data-view="dv-home">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Inicio
+        </div>
+        <div class="dash-nav-link" data-view="dv-services">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          Mis servicios
+        </div>
+        <div class="dash-nav-link" data-view="dv-profile">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Mi perfil
+        </div>
       </nav>
       <div class="dash-sidebar-bottom">
-        <button class="dash-new-btn tnl-trigger">＋ Solicitar servicio</button>
-        <button id="btn-logout" style="width:100%;background:none;border:none;color:rgba(255,255,255,0.32);font-size:0.78rem;font-weight:600;cursor:pointer;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.7rem 0;margin-top:0.5rem;">⎋ Cerrar sesión</button>
+        <div class="dash-nav-logout" id="btn-logout">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Cerrar sesión
+        </div>
       </div>
     </aside>
 
-    <!-- Main scroll area -->
+    <!-- Main -->
     <div class="dash-main-scroll">
 
-      <!-- ══ VIEW: Inicio ══ -->
+      <!-- VIEW: Inicio -->
       <div class="dash-view active" id="dv-home">
 
-        <!-- Greeting + CTA -->
-        <div class="dash-greeting-row">
-          <div>
-            <h1 id="dash-greeting-name">Buen día 👋</h1>
-            <p>Esto es lo que tenemos para ti hoy.</p>
+        <!-- Hero -->
+        <div class="dash-hero">
+          <div class="dash-hero-content">
+            <div class="dash-hero-tag">Plataforma de servicios del hogar</div>
+            <div class="dash-hero-title" id="dash-greeting-name">Bienvenido a Thruver.</div>
+            <div class="dash-hero-sub">¿Qué necesitas hoy?</div>
+            <button class="dash-hero-btn tnl-trigger">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Solicitar servicio
+            </button>
           </div>
-          <button class="dash-cta-btn tnl-trigger">＋ Solicitar servicio</button>
+          <div class="dash-hero-illo">
+            <svg width="190" height="170" viewBox="0 0 190 170" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="120" cy="85" r="78" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+              <circle cx="120" cy="85" r="54" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+              <rect x="85" y="97" width="70" height="58" rx="4" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.16)" stroke-width="1.5"/>
+              <path d="M78 99 L120 57 L162 99" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.26)" stroke-width="1.5" stroke-linejoin="round"/>
+              <rect x="148" y="71" width="8" height="15" rx="1" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+              <rect x="108" y="117" width="24" height="38" rx="2" fill="rgba(255,255,255,0.14)"/>
+              <circle cx="128" cy="137" r="2" fill="rgba(255,255,255,0.3)"/>
+              <rect x="90" y="106" width="14" height="11" rx="1.5" fill="rgba(255,255,255,0.16)"/>
+              <rect x="136" y="106" width="14" height="11" rx="1.5" fill="rgba(255,255,255,0.16)"/>
+              <line x1="97" y1="106" x2="97" y2="117" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <line x1="90" y1="111.5" x2="104" y2="111.5" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <line x1="143" y1="106" x2="143" y2="117" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <line x1="136" y1="111.5" x2="150" y2="111.5" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+              <g transform="translate(14,22) rotate(-38,22,18)">
+                <rect x="18" y="2" width="8" height="28" rx="4" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.28)" stroke-width="1.5"/>
+                <circle cx="22" cy="6" r="7" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.25)" stroke-width="1.5"/>
+                <circle cx="22" cy="28" r="5" fill="rgba(255,255,255,0.07)" stroke="rgba(255,255,255,0.22)" stroke-width="1.5"/>
+              </g>
+              <circle cx="167" cy="121" r="16" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.11)" stroke-width="1.5"/>
+              <circle cx="167" cy="121" r="7" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+              <rect x="164" y="103" width="6" height="4" rx="1" fill="rgba(255,255,255,0.11)"/>
+              <rect x="164" y="134" width="6" height="4" rx="1" fill="rgba(255,255,255,0.11)"/>
+              <rect x="149" y="118" width="4" height="6" rx="1" fill="rgba(255,255,255,0.11)"/>
+              <rect x="182" y="118" width="4" height="6" rx="1" fill="rgba(255,255,255,0.11)"/>
+              <circle cx="34" cy="115" r="3" fill="rgba(255,255,255,0.18)"/>
+              <circle cx="170" cy="44" r="2" fill="rgba(255,255,255,0.13)"/>
+              <circle cx="178" cy="156" r="3" fill="rgba(255,255,255,0.09)"/>
+              <circle cx="58" cy="52" r="1.5" fill="rgba(255,255,255,0.13)"/>
+            </svg>
+          </div>
         </div>
 
         <!-- Stat cards -->
-        <div class="dash-stats-grid">
-          <div class="dash-stat-card">
+        <div class="dash-stats-row">
+          <div class="dash-stat-card dash-stat-mint">
             <div class="dash-stat-info">
-              <div class="dash-stat-label">Solicitudes</div>
+              <div class="dash-stat-label">Servicios solicitados</div>
               <div class="dash-stat-value" id="stat-total">0</div>
-              <div class="dash-stat-sub">realizadas en total</div>
+              <div class="dash-stat-sub">total acumulado</div>
             </div>
-            <div class="dash-stat-illo">📋</div>
-          </div>
-          <div class="dash-stat-card">
-            <div class="dash-stat-info">
-              <div class="dash-stat-label">En progreso</div>
-              <div class="dash-stat-value" id="stat-active">0</div>
-              <div class="dash-stat-sub">servicios activos</div>
+            <div class="dash-stat-ico-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><line x1="12" y1="11" x2="16" y2="11"/><line x1="12" y1="16" x2="16" y2="16"/><line x1="8" y1="11" x2="8.01" y2="11"/><line x1="8" y1="16" x2="8.01" y2="16"/></svg>
             </div>
-            <div class="dash-stat-illo">🔄</div>
           </div>
-          <div class="dash-stat-card">
+          <div class="dash-stat-card dash-stat-cream">
             <div class="dash-stat-info">
-              <div class="dash-stat-label">Completados</div>
+              <div class="dash-stat-label">Servicios completados</div>
               <div class="dash-stat-value" id="stat-done">0</div>
-              <div class="dash-stat-sub">servicios terminados</div>
+              <div class="dash-stat-sub">finalizados con éxito</div>
             </div>
-            <div class="dash-stat-illo">✅</div>
-          </div>
-          <div class="dash-stat-card">
-            <div class="dash-stat-info">
-              <div class="dash-stat-label">Disponibles</div>
-              <div class="dash-stat-value">8</div>
-              <div class="dash-stat-sub">tipos de servicio</div>
+            <div class="dash-stat-ico-wrap">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
             </div>
-            <div class="dash-stat-illo">🛠️</div>
           </div>
         </div>
 
@@ -1727,14 +1794,38 @@
           <h3>Servicios disponibles</h3>
         </div>
         <div class="dash-catalog-grid">
-          <div class="dash-catalog-card tnl-trigger" data-svc="Plomería"><div class="dash-catalog-icon">🔧</div><div class="dash-catalog-name">Plomería</div></div>
-          <div class="dash-catalog-card tnl-trigger" data-svc="Electricidad"><div class="dash-catalog-icon">⚡</div><div class="dash-catalog-name">Electricidad</div></div>
-          <div class="dash-catalog-card tnl-trigger" data-svc="Limpieza"><div class="dash-catalog-icon">🧹</div><div class="dash-catalog-name">Limpieza</div></div>
-          <div class="dash-catalog-card tnl-trigger" data-svc="Pintura"><div class="dash-catalog-icon">🖌️</div><div class="dash-catalog-name">Pintura</div></div>
-          <div class="dash-catalog-card tnl-trigger" data-svc="Carpintería"><div class="dash-catalog-icon">🪚</div><div class="dash-catalog-name">Carpintería</div></div>
-          <div class="dash-catalog-card tnl-trigger" data-svc="Jardinería"><div class="dash-catalog-icon">🌿</div><div class="dash-catalog-name">Jardinería</div></div>
-          <div class="dash-catalog-card tnl-trigger" data-svc="Aire / Clima"><div class="dash-catalog-icon">❄️</div><div class="dash-catalog-name">Aire / Clima</div></div>
-          <div class="dash-catalog-card tnl-trigger" data-svc="Remodelación"><div class="dash-catalog-icon">🏗️</div><div class="dash-catalog-name">Remodelación</div></div>
+          <div class="dash-catalog-card tnl-trigger" data-svc="Plomería">
+            <div class="dash-catalog-ico-wrap ic-blue"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+            <div class="dash-catalog-name">Plomería</div>
+          </div>
+          <div class="dash-catalog-card tnl-trigger" data-svc="Electricidad">
+            <div class="dash-catalog-ico-wrap ic-yellow"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <div class="dash-catalog-name">Electricidad</div>
+          </div>
+          <div class="dash-catalog-card tnl-trigger" data-svc="Limpieza">
+            <div class="dash-catalog-ico-wrap ic-green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg></div>
+            <div class="dash-catalog-name">Limpieza</div>
+          </div>
+          <div class="dash-catalog-card tnl-trigger" data-svc="Pintura">
+            <div class="dash-catalog-ico-wrap ic-purple"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.37 2.63 14 7l-1.59-1.59-2.83 2.83 1.59 1.59L7 14l-1-4-4 4 4 4h16V8z"/></svg></div>
+            <div class="dash-catalog-name">Pintura</div>
+          </div>
+          <div class="dash-catalog-card tnl-trigger" data-svc="Carpintería">
+            <div class="dash-catalog-ico-wrap ic-orange"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47l2.26 1.91"/></svg></div>
+            <div class="dash-catalog-name">Carpintería</div>
+          </div>
+          <div class="dash-catalog-card tnl-trigger" data-svc="Jardinería">
+            <div class="dash-catalog-ico-wrap ic-teal"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></div>
+            <div class="dash-catalog-name">Jardinería</div>
+          </div>
+          <div class="dash-catalog-card tnl-trigger" data-svc="Aire / Clima">
+            <div class="dash-catalog-ico-wrap ic-sky"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg></div>
+            <div class="dash-catalog-name">Aire / Clima</div>
+          </div>
+          <div class="dash-catalog-card tnl-trigger" data-svc="Remodelación">
+            <div class="dash-catalog-ico-wrap ic-gray"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+            <div class="dash-catalog-name">Remodelación</div>
+          </div>
         </div>
 
         <!-- Recent activity -->
@@ -1742,58 +1833,72 @@
           <h3>Actividad reciente</h3>
           <button class="dash-see-all" id="btn-see-all-svcs">Ver todo →</button>
         </div>
-        <div class="dash-list-card" id="dash-card-historial">
-          <div id="dash-historial-empty" style="text-align:center;padding:3rem 2rem;color:var(--muted);">
-            <div style="font-size:2rem;margin-bottom:0.75rem;">📋</div>
-            <div style="font-size:0.88rem;font-weight:600;color:#111;margin-bottom:0.4rem;">Aún no tienes solicitudes</div>
-            <div style="font-size:0.8rem;margin-bottom:1.25rem;">Solicita tu primer servicio y te conectamos con un técnico verificado.</div>
-            <button class="tnl-trigger" style="background:#111;color:#fff;border:none;border-radius:8px;padding:0.7rem 1.5rem;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:var(--font);">Solicitar ahora →</button>
+        <div class="dash-tbl-card" id="dash-card-historial">
+          <div id="dash-historial-empty" class="dash-empty">
+            <h4>Sin actividad reciente</h4>
+            <p>Solicita tu primer servicio y te conectamos<br>con un técnico verificado en tu zona.</p>
+            <button class="tnl-trigger dash-cta-btn" style="margin:0 auto;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Solicitar ahora
+            </button>
           </div>
         </div>
 
       </div><!-- /dv-home -->
 
-      <!-- ══ VIEW: Mis servicios ══ -->
+      <!-- VIEW: Mis servicios -->
       <div class="dash-view" id="dv-services">
-        <div class="dash-greeting-row">
+        <div class="dash-section-hd" style="margin-bottom:1.5rem;align-items:flex-end;">
           <div>
-            <h1 style="font-size:1.5rem;">Mis servicios</h1>
-            <p>Historial completo de tus solicitudes.</p>
+            <h3 style="font-size:1.35rem;font-weight:900;letter-spacing:-0.04em;color:#111;margin-bottom:0.15rem;">Mis servicios</h3>
+            <p style="font-size:0.82rem;color:#9ca3af;">Historial completo de tus solicitudes.</p>
           </div>
-          <button class="dash-cta-btn tnl-trigger">＋ Nuevo servicio</button>
+          <button class="dash-cta-btn tnl-trigger">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Nuevo servicio
+          </button>
         </div>
-        <div class="dash-list-card" id="dash-services-list">
-          <div id="dash-services-empty" style="text-align:center;padding:3rem 2rem;color:var(--muted);">
-            <div style="font-size:2rem;margin-bottom:0.75rem;">🛠️</div>
-            <div style="font-size:0.88rem;font-weight:600;color:#111;margin-bottom:0.4rem;">Sin servicios aún</div>
-            <button class="tnl-trigger" style="background:#111;color:#fff;border:none;border-radius:8px;padding:0.7rem 1.5rem;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:var(--font);">Solicitar servicio →</button>
+        <div class="dash-tbl-card" id="dash-services-list">
+          <div id="dash-services-empty" class="dash-empty">
+            <h4>Sin servicios aún</h4>
+            <p>Aquí aparecerán todos tus servicios solicitados.</p>
+            <button class="tnl-trigger dash-cta-btn" style="margin:0 auto;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Solicitar servicio
+            </button>
           </div>
         </div>
       </div><!-- /dv-services -->
 
-      <!-- ══ VIEW: Mi perfil ══ -->
+      <!-- VIEW: Mi perfil -->
       <div class="dash-view" id="dv-profile">
-        <div class="dash-greeting-row" style="margin-bottom:1.5rem;">
-          <div>
-            <h1 style="font-size:1.5rem;">Mi perfil</h1>
-            <p>Información de tu cuenta.</p>
-          </div>
+        <div class="dash-section-hd" style="margin-bottom:1.5rem;">
+          <h3 style="font-size:1.35rem;font-weight:900;letter-spacing:-0.04em;color:#111;">Mi perfil</h3>
         </div>
         <div class="dash-profile-card">
           <div class="dash-profile-head">
             <div class="dash-profile-avatar-xl" id="dash-profile-avatar">?</div>
             <div>
-              <div id="dash-profile-name" class="dash-profile-head-name">—</div>
-              <div id="dash-profile-email" class="dash-profile-head-email">—</div>
+              <div id="dash-profile-name" style="font-size:1.05rem;font-weight:900;color:#fff;letter-spacing:-0.02em;">—</div>
+              <div id="dash-profile-email" style="font-size:0.76rem;color:rgba(255,255,255,0.5);margin-top:0.2rem;">—</div>
             </div>
           </div>
           <div>
-            <div class="dash-svc-row" style="border-bottom:1px solid var(--border);"><span style="font-size:0.8rem;color:var(--muted);font-weight:600;flex:1;">Miembro desde</span><span id="dash-profile-since" style="font-size:0.85rem;font-weight:700;color:#111;">—</span></div>
-            <div class="dash-svc-row" style="border-bottom:1px solid var(--border);"><span style="font-size:0.8rem;color:var(--muted);font-weight:600;flex:1;">Estado</span><span style="font-size:0.85rem;font-weight:700;color:#16a34a;">✓ Activo</span></div>
-            <div class="dash-svc-row"><span style="font-size:0.8rem;color:var(--muted);font-weight:600;flex:1;">Servicios totales</span><span id="dash-profile-total" style="font-size:0.85rem;font-weight:700;color:#111;">—</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;border-bottom:1px solid #e5e7eb;min-height:52px;">
+              <span style="font-size:0.8rem;color:#6b7280;font-weight:600;">Miembro desde</span>
+              <span id="dash-profile-since" style="font-size:0.85rem;font-weight:700;color:#111;">—</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;border-bottom:1px solid #e5e7eb;min-height:52px;">
+              <span style="font-size:0.8rem;color:#6b7280;font-weight:600;">Estado</span>
+              <span style="font-size:0.85rem;font-weight:700;color:#059669;">Activo</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;min-height:52px;">
+              <span style="font-size:0.8rem;color:#6b7280;font-weight:600;">Servicios totales</span>
+              <span id="dash-profile-total" style="font-size:0.85rem;font-weight:700;color:#111;">—</span>
+            </div>
           </div>
         </div>
-        <button id="btn-logout-profile" style="margin-top:0.5rem;background:none;border:1.5px solid #fcc;border-radius:var(--radius);color:#cc3333;padding:0.85rem 1.5rem;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:var(--font);width:100%;max-width:480px;">Cerrar sesión</button>
+        <button id="btn-logout-profile" style="margin-top:0.5rem;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;padding:0.85rem 1.5rem;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:var(--font);width:100%;max-width:480px;">Cerrar sesión</button>
       </div><!-- /dv-profile -->
 
     </div><!-- /dash-main-scroll -->
@@ -1802,10 +1907,23 @@
   <!-- Mobile bottom nav -->
   <div class="dash-bottom-nav">
     <div class="dash-bottom-inner">
-      <div class="dash-bot-item active" data-view="dv-home"><span style="font-size:1.15rem;line-height:1;">🏠</span>Inicio</div>
-      <div class="dash-bot-item" data-view="dv-services"><span style="font-size:1.15rem;line-height:1;">📋</span>Servicios</div>
-      <div class="dash-bot-item tnl-trigger" style="flex:none;width:70px;"><div class="dash-bot-circle">＋</div></div>
-      <div class="dash-bot-item" data-view="dv-profile"><span style="font-size:1.15rem;line-height:1;">👤</span>Perfil</div>
+      <div class="dash-bot-item active" data-view="dv-home">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Inicio
+      </div>
+      <div class="dash-bot-item" data-view="dv-services">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        Servicios
+      </div>
+      <div class="dash-bot-item tnl-trigger" style="flex:none;width:72px;">
+        <div class="dash-bot-circle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </div>
+      </div>
+      <div class="dash-bot-item" data-view="dv-profile">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Perfil
+      </div>
     </div>
   </div>
 
@@ -2293,7 +2411,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var tav = document.getElementById('dash-topnav-avatar'); if(tav) tav.textContent = inicial;
     var tnm = document.getElementById('dash-topnav-name');   if(tnm) tnm.textContent = nombre;
     /* Greeting */
-    var gr = document.getElementById('dash-greeting-name');  if(gr) gr.textContent = 'Buen d\u00EDa, ' + nombre + ' \uD83D\uDC4B';
+    var gr = document.getElementById('dash-greeting-name');  if(gr) gr.textContent = 'Bienvenido a Thruver, ' + nombre + '.';
     /* Profile view */
     var pa = document.getElementById('dash-profile-avatar'); if(pa) pa.textContent = inicial;
     var pn = document.getElementById('dash-profile-name');   if(pn) pn.textContent = dn;
@@ -2336,43 +2454,70 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ------- Renderizar historial ------- */
   function renderizarHistorial(svcs) {
-    var ic = {'Plomer\u00EDa':'\uD83D\uDD27','Electricidad':'\u26A1','Limpieza':'\uD83E\uDDF9','Pintura':'\uD83D\uDD8C\uFE0F','Carpinter\u00EDa':'\uD83E\uDEA8','Jardiner\u00EDa':'\uD83C\uDF3F','Aire / Clima':'\u2744\uFE0F','Remodelaci\u00F3n':'\uD83C\uDFD7\uFE0F','Otro':'\uD83D\uDCAC'};
+    var SVC_INFO = {
+      'Plomer\u00EDa':    { cls:'ic-blue',   svg:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>' },
+      'Electricidad':     { cls:'ic-yellow', svg:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>' },
+      'Limpieza':         { cls:'ic-green',  svg:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>' },
+      'Pintura':          { cls:'ic-purple', svg:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18.37 2.63 14 7l-1.59-1.59-2.83 2.83 1.59 1.59L7 14l-1-4-4 4 4 4h16V8z"/></svg>' },
+      'Carpinter\u00EDa': { cls:'ic-orange', svg:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 12-8.5 8.5c-.83.83-2.17.83-3 0a2.12 2.12 0 0 1 0-3L12 9"/><path d="M17.64 15 22 10.64"/><path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47l2.26 1.91"/></svg>' },
+      'Jardiner\u00EDa':  { cls:'ic-teal',   svg:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>' },
+      'Aire / Clima':     { cls:'ic-sky',    svg:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.7 7.7a2.5 2.5 0 1 1 1.8 4.3H2"/><path d="M9.6 4.6A2 2 0 1 1 11 8H2"/><path d="M12.6 19.4A2 2 0 1 0 14 16H2"/></svg>' },
+      'Remodelaci\u00F3n':{ cls:'ic-gray',   svg:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>' }
+    };
+    var defaultInfo = { cls:'ic-gray', svg:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>' };
+    var reportSvg = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
 
-    function buildRow(s) {
-      var ico   = ic[s.servicio] || '\uD83D\uDD27';
+    function buildTable(rows) {
+      var wrap = document.createElement('div');
+      wrap.className = 'dash-tbl-scroll';
+      var tbl = document.createElement('table');
+      tbl.className = 'dash-table';
+      tbl.innerHTML = '<thead><tr><th></th><th>Servicio</th><th>Categor\u00EDa</th><th>Fecha</th><th>Costo</th><th>Estado</th><th>Reporte</th></tr></thead>';
+      var tbody = document.createElement('tbody');
+      rows.forEach(function(s){ tbody.appendChild(buildTr(s)); });
+      tbl.appendChild(tbody);
+      wrap.appendChild(tbl);
+      return wrap;
+    }
+
+    function buildTr(s) {
+      var info  = SVC_INFO[s.servicio] || defaultInfo;
       var fecha = s.timestamp ? new Date(s.timestamp).toLocaleDateString('es-MX', {day:'2-digit',month:'short',year:'numeric'}) : '\u2014';
-      var row = document.createElement('div');
-      row.className = 'dash-svc-row';
-      row.innerHTML = '<div class="dash-svc-ico">' + ico + '</div>'
-        + '<div style="flex:1;min-width:0;"><div style="font-size:0.85rem;font-weight:700;color:var(--black);">' + (s.servicio || '\u2014') + '</div>'
-        + '<div style="font-size:0.75rem;color:var(--muted);margin-top:0.15rem;">' + fecha + (s.espacio ? ' \u00B7 ' + s.espacio : '') + '</div></div>'
-        + '<span class="dash-svc-badge badge-enviada">Enviada</span>';
-      return row;
+      var tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><div class="dash-tbl-svc-ico ' + info.cls + '">' + info.svg + '</div></td>' +
+        '<td><span style="font-weight:700;font-size:0.82rem;color:#111;">' + (s.servicio || '\u2014') + '</span>' + (s.espacio ? '<div style="font-size:0.71rem;color:#9ca3af;margin-top:1px;">' + s.espacio + '</div>' : '') + '</td>' +
+        '<td><span class="dash-tbl-badge" style="background:#f3f4f6;color:#374151;">' + (s.servicio || '\u2014') + '</span></td>' +
+        '<td style="color:#6b7280;font-size:0.8rem;">' + fecha + '</td>' +
+        '<td style="color:#9ca3af;font-size:0.8rem;">\u2014</td>' +
+        '<td><span class="dash-tbl-badge badge-enviada">Enviada</span></td>' +
+        '<td><button class="dash-tbl-report" title="Ver reporte t\u00E9cnico">' + reportSvg + '</button></td>';
+      return tr;
     }
 
     /* ── Home card: recent (max 5) ── */
     var histEl  = document.getElementById('dash-card-historial');
     var emptyEl = document.getElementById('dash-historial-empty');
     if (histEl) {
-      histEl.querySelectorAll('.dash-svc-row').forEach(function(r){ r.remove(); });
+      histEl.querySelectorAll('.dash-tbl-scroll').forEach(function(t){ t.remove(); });
       if (svcs.length === 0) {
         if (emptyEl) emptyEl.style.display = '';
       } else {
         if (emptyEl) emptyEl.style.display = 'none';
-        svcs.slice(0, 5).forEach(function(s){ histEl.appendChild(buildRow(s)); });
+        histEl.appendChild(buildTable(svcs.slice(0, 5)));
       }
     }
 
     /* ── Services view: full list ── */
-    var listEl   = document.getElementById('dash-services-list');
+    var listEl    = document.getElementById('dash-services-list');
     var listEmpty = document.getElementById('dash-services-empty');
     if (listEl) {
-      listEl.querySelectorAll('.dash-svc-row').forEach(function(r){ r.remove(); });
+      listEl.querySelectorAll('.dash-tbl-scroll').forEach(function(t){ t.remove(); });
       if (svcs.length === 0) {
         if (listEmpty) listEmpty.style.display = '';
       } else {
         if (listEmpty) listEmpty.style.display = 'none';
-        svcs.forEach(function(s){ listEl.appendChild(buildRow(s)); });
+        listEl.appendChild(buildTable(svcs));
       }
     }
   }
