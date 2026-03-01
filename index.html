@@ -1259,7 +1259,8 @@
               <div class="tnl-auth-divider">o con tu correo</div>
             </div>
 
-            <!-- Datos de contacto -->
+            <!-- Datos de contacto (se ocultan cuando ya hay sesión con datos guardados) -->
+            <div id="tnl-contact-wrap">
             <div class="tnl-field">
               <label>Nombre completo</label>
               <input type="text" id="tnl-nombre" placeholder="Tu nombre" autocomplete="given-name" />
@@ -1310,6 +1311,20 @@
               <label>Colonia</label>
               <input type="text" id="tnl-colonia" placeholder="Tu colonia" autocomplete="address-level2" />
             </div>
+            </div>
+            </div><!-- /tnl-contact-wrap -->
+
+            <!-- Resumen de datos guardados (visible solo cuando hay sesión + datos) -->
+            <div id="tnl-saved-card" style="display:none;background:#f9fafb;border:1.5px solid #e5e7eb;border-radius:12px;padding:0.9rem 1rem;margin-bottom:0.5rem;">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                <div>
+                  <div style="font-size:0.66rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.09em;margin-bottom:0.5rem;">Contacto guardado</div>
+                  <div id="tnl-saved-name" style="font-size:0.88rem;font-weight:700;color:#111;margin-bottom:0.2rem;">—</div>
+                  <div id="tnl-saved-tel" style="font-size:0.8rem;color:#6b7280;margin-bottom:0.15rem;">—</div>
+                  <div id="tnl-saved-dir" style="font-size:0.8rem;color:#6b7280;">—</div>
+                </div>
+                <button id="tnl-saved-edit" type="button" style="background:none;border:1.5px solid #e5e7eb;border-radius:8px;padding:0.3rem 0.65rem;font-size:0.72rem;font-weight:700;color:#6b7280;cursor:pointer;font-family:var(--font);white-space:nowrap;flex-shrink:0;">Cambiar</button>
+              </div>
             </div>
 
             <button class="tnl-cta" id="tnl-submit">
@@ -2337,6 +2352,38 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ------- AUTH STATE ------- */
   var tnlAuthMode = 'register';
 
+  /* Muestra u oculta los campos de contacto del tunnel según si hay datos guardados */
+  function actualizarContactWrap(user) {
+    var tel    = localStorage.getItem('thruver_tel')    || '';
+    var calle  = localStorage.getItem('thruver_calle')  || '';
+    var wrap   = document.getElementById('tnl-contact-wrap');
+    var card   = document.getElementById('tnl-saved-card');
+    if (!wrap || !card) return;
+    var tieneData = user && tel && calle;
+    wrap.style.display = tieneData ? 'none' : '';
+    card.style.display = tieneData ? '' : 'none';
+    if (tieneData) {
+      var colonia = localStorage.getItem('thruver_colonia') || '';
+      var nombre  = user.displayName || localStorage.getItem('thruver_nombre') || '';
+      var dir     = [calle, colonia].filter(Boolean).join(', ');
+      document.getElementById('tnl-saved-name').textContent = nombre || '—';
+      document.getElementById('tnl-saved-tel').textContent  = tel;
+      document.getElementById('tnl-saved-dir').textContent  = dir || '—';
+      /* Pre-llenar campos ocultos para el submit */
+      var nEl = document.getElementById('tnl-nombre'); if (nEl) nEl.value = nombre;
+      var tEl = document.getElementById('tnl-tel');    if (tEl) tEl.value = tel;
+      var cEl = document.getElementById('tnl-calle');  if (cEl) cEl.value = calle;
+      var oEl = document.getElementById('tnl-colonia');if (oEl) oEl.value = colonia;
+    }
+  }
+
+  document.getElementById('tnl-saved-edit').addEventListener('click', function() {
+    var wrap = document.getElementById('tnl-contact-wrap');
+    var card = document.getElementById('tnl-saved-card');
+    if (wrap) wrap.style.display = '';
+    if (card) card.style.display = 'none';
+  });
+
   window.onUserLoggedIn = function(user) {
     var banner = document.getElementById('tnl-session-banner');
     if (!banner) return;
@@ -2346,16 +2393,20 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('tnl-session-email').textContent  = user.email || '';
     banner.classList.add('visible');
     document.querySelectorAll('.tnl-auth-fields').forEach(function(el){ el.classList.add('hidden'); });
-    var nEl = document.getElementById('tnl-nombre'); if (nEl && user.displayName) nEl.value = user.displayName;
-    var eEl = document.getElementById('tnl-email');  if (eEl && user.email) eEl.value = user.email;
+    var eEl = document.getElementById('tnl-email'); if (eEl && user.email) eEl.value = user.email;
     document.getElementById('tnl-submit-txt').textContent = 'Confirmar solicitud ✓';
     actualizarNavConUsuario(user);
+    actualizarContactWrap(user);
   };
 
   window.onUserLoggedOut = function() {
     var banner = document.getElementById('tnl-session-banner');
     if (banner) banner.classList.remove('visible');
     document.querySelectorAll('.tnl-auth-fields').forEach(function(el){ el.classList.remove('hidden'); });
+    var wrap = document.getElementById('tnl-contact-wrap');
+    var card = document.getElementById('tnl-saved-card');
+    if (wrap) wrap.style.display = '';
+    if (card) card.style.display = 'none';
   };
 
   document.getElementById('tnl-session-out').addEventListener('click', function() {
@@ -2452,25 +2503,31 @@ document.addEventListener('DOMContentLoaded', function () {
     var nombre = document.getElementById('tnl-nombre').value.trim();
     var emailEl = document.getElementById('tnl-email');
     var email   = emailEl ? emailEl.value.trim() : '';
+    var passEl  = document.getElementById('tnl-pass');
+    var pass    = passEl ? passEl.value : '';
+    var valid   = true;
+    var haySession   = window.currentUser != null;
+    var contactWrap  = document.getElementById('tnl-contact-wrap');
+    var datosGuardados = contactWrap && contactWrap.style.display === 'none';
+    /* Leer valores de campos (pre-llenados aunque estén ocultos) */
     var tel     = document.getElementById('tnl-tel').value.trim();
     var calle   = document.getElementById('tnl-calle') ? document.getElementById('tnl-calle').value.trim() : '';
     var numero  = document.getElementById('tnl-numero') ? document.getElementById('tnl-numero').value.trim() : '';
     var colonia = document.getElementById('tnl-colonia') ? document.getElementById('tnl-colonia').value.trim() : '';
     var dir     = [calle, numero ? 'No.' + numero : '', colonia].filter(Boolean).join(', ');
-    var passEl  = document.getElementById('tnl-pass');
-    var pass    = passEl ? passEl.value : '';
-    var valid   = true;
-    var haySession = window.currentUser != null;
-    if (!nombre) { markError('tnl-nombre'); valid = false; }
-    if (!tel)    { markError('tnl-tel');    valid = false; }
-    if (!calle)   { markError('tnl-calle');   valid = false; }
-    if (!colonia) { markError('tnl-colonia');  valid = false; }
+    /* Solo validar campos visibles */
+    if (!datosGuardados) {
+      if (!nombre) { markError('tnl-nombre'); valid = false; }
+      if (!tel)    { markError('tnl-tel');    valid = false; }
+      if (!calle)   { markError('tnl-calle');   valid = false; }
+      if (!colonia) { markError('tnl-colonia');  valid = false; }
+    }
     if (!haySession) {
       if (!isValidEmail(email)) { markError('tnl-email'); valid = false; }
       if (!pass || pass.length < 6) { if(passEl) passEl.classList.add('tnl-error'); valid = false; }
     }
     if (!valid) { var fe = document.querySelector('.tnl-error'); if(fe) fe.scrollIntoView({behavior:'smooth',block:'center'}); return; }
-    T.nombre = nombre;
+    T.nombre = nombre || (window.currentUser ? window.currentUser.displayName : '') || localStorage.getItem('thruver_nombre') || '';
     T.email  = email || (window.currentUser ? window.currentUser.email : '');
     T.tel = tel; T.dir = dir; T.calle = calle; T.numero = numero; T.colonia = colonia;
     var btn = document.getElementById('tnl-submit');
@@ -3100,15 +3157,8 @@ document.addEventListener('DOMContentLoaded', function () {
   var _origOpenTunnel = openTunnel;
   openTunnel = function(presetSvc) {
     _origOpenTunnel(presetSvc);
-    var tel     = localStorage.getItem('thruver_tel')    || '';
-    var calle   = localStorage.getItem('thruver_calle')  || '';
-    var colonia = localStorage.getItem('thruver_colonia')|| '';
-    var telEl   = document.getElementById('tnl-tel');
-    var calleEl = document.getElementById('tnl-calle');
-    var colonEl = document.getElementById('tnl-colonia');
-    if (telEl   && tel    && !telEl.value)   telEl.value   = tel;
-    if (calleEl && calle  && !calleEl.value) calleEl.value = calle;
-    if (colonEl && colonia&& !colonEl.value) colonEl.value = colonia;
+    /* Mostrar/ocultar campos según datos guardados + sesión activa */
+    actualizarContactWrap(window.currentUser || null);
   };
 
   /* ═══════════════════════════════════════════
