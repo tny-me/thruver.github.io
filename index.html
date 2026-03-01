@@ -1066,10 +1066,23 @@
     /* Mobile tech header */
     .tech-mobile-hd { display:none; height:52px; background:#fff; border-bottom:1px solid #e5e7eb; flex-shrink:0; align-items:center; justify-content:space-between; padding:0 1.1rem; }
     .tech-mobile-logo { font-weight:900; font-size:1.1rem; letter-spacing:-0.04em; color:#111; }
+    .tech-mobile-right { display:flex; align-items:center; gap:0.6rem; }
     .tech-mobile-status { display:flex; align-items:center; gap:0.4rem; font-size:0.72rem; font-weight:700; color:#9ca3af; cursor:pointer; padding:0.4rem 0.7rem; border-radius:100px; border:1px solid #e5e7eb; }
     .tech-mobile-status.ts-on { color:#10b981; border-color:rgba(16,185,129,0.28); background:rgba(16,185,129,0.07); }
     .tech-mob-dot { width:6px; height:6px; border-radius:50%; background:#d1d5db; flex-shrink:0; }
     .tech-mobile-status.ts-on .tech-mob-dot { background:#10b981; animation:techPulse 2s ease-in-out infinite; }
+    /* Hamburger button */
+    .tech-mob-hamburger { display:flex; flex-direction:column; justify-content:center; align-items:center; gap:4px; width:40px; height:40px; background:transparent; border:1px solid #e5e7eb; border-radius:8px; cursor:pointer; flex-shrink:0; }
+    .tech-mob-hamburger span { display:block; width:18px; height:2px; background:#111; border-radius:2px; transition:all 0.22s ease; }
+    .tech-mob-hamburger.open span:nth-child(1) { transform:translateY(6px) rotate(45deg); }
+    .tech-mob-hamburger.open span:nth-child(2) { opacity:0; transform:scaleX(0); }
+    .tech-mob-hamburger.open span:nth-child(3) { transform:translateY(-6px) rotate(-45deg); }
+    /* Mobile sidebar drawer */
+    .tech-sidebar-overlay { display:none; position:fixed; inset:0; z-index:600; background:rgba(0,0,0,0.35); }
+    .tech-sidebar-overlay.open { display:block; animation:fadeIn 0.2s ease; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+    .tech-sidebar-drawer { position:fixed; top:0; left:0; bottom:0; width:260px; z-index:601; background:#fff; border-right:1px solid #e5e7eb; display:flex; flex-direction:column; transform:translateX(-100%); transition:transform 0.28s cubic-bezier(0.4,0,0.2,1); overflow-y:auto; }
+    .tech-sidebar-overlay.open .tech-sidebar-drawer { transform:translateX(0); }
     /* Mobile bottom nav (tech) */
     .tech-bottom-nav { display:none; background:#fff; border-top:1px solid #e5e7eb; flex-shrink:0; width:100%; padding-bottom:env(safe-area-inset-bottom); }
     .tech-bottom-inner { display:flex; height:64px; align-items:stretch; width:100%; }
@@ -1086,7 +1099,7 @@
       .tech-sidebar { display:none; }
       .tech-mobile-hd { display:flex; }
       .tech-bottom-nav { display:flex; }
-      .tech-main { padding:1.5rem 1.25rem 1rem; }
+      .tech-main { padding:1.5rem 1.25rem 5rem; }
     }
 
     /* ══ RESPONSIVE ══ */
@@ -2233,10 +2246,66 @@
 <div id="techDashboard">
   <!-- Mobile header -->
   <div class="tech-mobile-hd">
+    <button class="tech-mob-hamburger" id="tech-mob-hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
     <span class="tech-mobile-logo">thruver</span>
-    <div class="tech-mobile-status" id="tech-mob-status">
-      <span class="tech-mob-dot"></span>
-      <span id="tech-mob-status-lbl">No disponible</span>
+    <div class="tech-mobile-right">
+      <div class="tech-mobile-status" id="tech-mob-status">
+        <span class="tech-mob-dot"></span>
+        <span id="tech-mob-status-lbl">No disponible</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile sidebar drawer overlay -->
+  <div class="tech-sidebar-overlay" id="tech-sidebar-overlay">
+    <div class="tech-sidebar-drawer">
+      <div class="tech-sidebar-brand" style="padding:1.2rem 1.25rem 1rem;">
+        <span class="tech-brand-logo">thruver</span>
+        <span class="tech-brand-chip">Técnico</span>
+      </div>
+      <div class="tech-sidebar-user" style="padding:1rem 1.25rem;">
+        <div class="tech-sidebar-avatar" id="tech-drawer-av">T</div>
+        <div class="tech-sidebar-info">
+          <div class="tech-sidebar-uname" id="tech-drawer-name">—</div>
+          <div class="tech-sidebar-uemail" id="tech-drawer-email">—</div>
+        </div>
+      </div>
+      <div class="tech-status-wrap">
+        <div class="tech-status-toggle" id="tech-drawer-status">
+          <div class="tech-status-left">
+            <span class="tech-status-dot" id="tech-drawer-dot"></span>
+            <span class="tech-status-lbl" id="tech-drawer-status-lbl">No disponible</span>
+          </div>
+          <div class="tech-sw"></div>
+        </div>
+      </div>
+      <nav class="tech-sidebar-nav" id="tech-drawer-nav">
+        <div class="tech-nav-link active" data-tview="tdv-home" data-drawer="1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Inicio
+        </div>
+        <div class="tech-nav-link" data-tview="tdv-requests" data-drawer="1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Solicitudes
+          <span class="tech-nav-badge visible" id="tnav-drawer-badge">3</span>
+        </div>
+        <div class="tech-nav-link" data-tview="tdv-history" data-drawer="1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Historial
+        </div>
+        <div class="tech-nav-link" data-tview="tdv-profile" data-drawer="1">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Mi perfil
+        </div>
+      </nav>
+      <div class="tech-sidebar-bottom">
+        <div class="tech-nav-logout" id="tech-drawer-logout">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Cerrar sesión
+        </div>
+      </div>
     </div>
   </div>
 
@@ -2283,10 +2352,6 @@
         </div>
       </nav>
       <div class="tech-sidebar-bottom">
-        <div class="tech-nav-switch" id="tech-switch-role">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-          Cambiar a cliente
-        </div>
         <div class="tech-nav-logout" id="tech-logout">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
           Cerrar sesión
@@ -3774,26 +3839,71 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     var tm = document.querySelector('.tech-main');
     if (tm) tm.scrollTop = 0;
+    closeTechDrawer();
   }
 
   /* Status toggle */
   var _techAvailable = false;
   function toggleTechStatus() {
     _techAvailable = !_techAvailable;
-    var toggle  = document.getElementById('tech-status-toggle');
-    var lbl     = document.getElementById('tech-status-lbl');
-    var mobSt   = document.getElementById('tech-mob-status');
-    var mobLbl  = document.getElementById('tech-mob-status-lbl');
     var txt = _techAvailable ? 'Disponible' : 'No disponible';
-    if (toggle) toggle.classList.toggle('ts-on', _techAvailable);
-    if (lbl)    lbl.textContent = txt;
+    ['tech-status-toggle','tech-drawer-status'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.classList.toggle('ts-on', _techAvailable);
+    });
+    ['tech-status-lbl','tech-drawer-status-lbl'].forEach(function(id){
+      var el = document.getElementById(id);
+      if (el) el.textContent = txt;
+    });
+    var mobSt  = document.getElementById('tech-mob-status');
+    var mobLbl = document.getElementById('tech-mob-status-lbl');
     if (mobSt)  mobSt.classList.toggle('ts-on', _techAvailable);
     if (mobLbl) mobLbl.textContent = txt;
   }
   document.getElementById('tech-status-toggle').addEventListener('click', toggleTechStatus);
   document.getElementById('tech-mob-status').addEventListener('click', toggleTechStatus);
+  var drawerStatusEl = document.getElementById('tech-drawer-status');
+  if (drawerStatusEl) drawerStatusEl.addEventListener('click', toggleTechStatus);
 
-  /* Nav links */
+  /* Hamburger / drawer */
+  function openTechDrawer() {
+    var overlay = document.getElementById('tech-sidebar-overlay');
+    var btn     = document.getElementById('tech-mob-hamburger');
+    if (overlay) overlay.classList.add('open');
+    if (btn) btn.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    syncDrawerUser();
+  }
+  function closeTechDrawer() {
+    var overlay = document.getElementById('tech-sidebar-overlay');
+    var btn     = document.getElementById('tech-mob-hamburger');
+    if (overlay) overlay.classList.remove('open');
+    if (btn) btn.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function syncDrawerUser() {
+    var av = document.getElementById('tech-sidebar-av');
+    var nm = document.getElementById('tech-sidebar-name');
+    var em = document.getElementById('tech-sidebar-email');
+    var dav = document.getElementById('tech-drawer-av');
+    var dnm = document.getElementById('tech-drawer-name');
+    var dem = document.getElementById('tech-drawer-email');
+    if (dav && av) dav.textContent = av.textContent;
+    if (dnm && nm) dnm.textContent = nm.textContent;
+    if (dem && em) dem.textContent = em.textContent;
+  }
+  var hamBtn = document.getElementById('tech-mob-hamburger');
+  if (hamBtn) hamBtn.addEventListener('click', function(){
+    var overlay = document.getElementById('tech-sidebar-overlay');
+    if (overlay && overlay.classList.contains('open')) closeTechDrawer();
+    else openTechDrawer();
+  });
+  var overlay = document.getElementById('tech-sidebar-overlay');
+  if (overlay) overlay.addEventListener('click', function(e){
+    if (e.target === overlay) closeTechDrawer();
+  });
+
+  /* Nav links (sidebar + drawer) */
   document.querySelectorAll('#techDashboard .tech-nav-link[data-tview]').forEach(function(link){
     link.addEventListener('click', function(){ showTechView(link.dataset.tview); });
   });
@@ -3805,13 +3915,6 @@ document.addEventListener('DOMContentLoaded', function () {
   var techSeeReq = document.getElementById('tech-see-requests');
   if (techSeeReq) techSeeReq.addEventListener('click', function(){ showTechView('tdv-requests'); });
 
-  /* Switch to client */
-  document.getElementById('tech-switch-role').addEventListener('click', function(){
-    localStorage.setItem('thruver_role', 'client');
-    closeTechDashboard();
-    if (window.currentUser) cargarHistorialYMostrarDashboard(window.currentUser);
-  });
-
   /* Logout tech */
   function doTechLogout() {
     localStorage.removeItem('thruver_role');
@@ -3821,6 +3924,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   document.getElementById('tech-logout').addEventListener('click', doTechLogout);
   document.getElementById('tech-logout-prof').addEventListener('click', doTechLogout);
+  var drawerLogout = document.getElementById('tech-drawer-logout');
+  if (drawerLogout) drawerLogout.addEventListener('click', doTechLogout);
 
   /* Countdown timers */
   function initCountdowns() {
