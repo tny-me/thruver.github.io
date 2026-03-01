@@ -919,6 +919,176 @@
     .dash-bot-cta-pill svg { width:14px; height:14px; flex-shrink:0; }
     .dash-bot-cta-pill span { font-size:0.72rem; font-weight:700; letter-spacing:-0.01em; white-space:nowrap; }
 
+    /* ══ ROLE PICKER ══ */
+    #rolePicker { display:none; position:fixed; inset:0; z-index:550; background:rgba(8,9,15,0.88); backdrop-filter:blur(14px); align-items:center; justify-content:center; padding:1.5rem; }
+    #rolePicker.rp-open { display:flex; animation:fadeIn 0.22s ease; }
+    .rp-card { background:#fff; border-radius:22px; width:100%; max-width:440px; padding:2.25rem 2rem 2rem; text-align:center; box-shadow:0 32px 80px rgba(0,0,0,0.4); }
+    .rp-logo { font-weight:900; font-size:1.15rem; letter-spacing:-0.04em; color:#111; margin-bottom:1.5rem; }
+    .rp-title { font-size:1.45rem; font-weight:900; letter-spacing:-0.04em; color:#111; margin-bottom:0.3rem; line-height:1.2; }
+    .rp-sub { font-size:0.82rem; color:#9ca3af; margin-bottom:1.85rem; }
+    .rp-options { display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; }
+    .rp-option { background:#f9fafb; border:2px solid #e5e7eb; border-radius:16px; padding:1.75rem 1rem 1.4rem; cursor:pointer; font-family:var(--font); transition:all 0.18s; text-align:center; display:flex; flex-direction:column; align-items:center; gap:0.5rem; }
+    .rp-option:hover { transform:translateY(-2px); box-shadow:0 8px 24px rgba(0,0,0,0.1); }
+    .rp-opt-client:hover { border-color:#111; background:#fff; }
+    .rp-opt-tech:hover { border-color:#3b82f6; background:#eff6ff; }
+    .rp-option-icon { font-size:2.2rem; line-height:1; }
+    .rp-option-label { font-size:0.95rem; font-weight:800; color:#111; letter-spacing:-0.02em; }
+    .rp-option-desc { font-size:0.72rem; color:#9ca3af; line-height:1.4; }
+
+    /* ══ TECH DASHBOARD ══ */
+    #techDashboard { display:none; position:fixed; inset:0; z-index:500; flex-direction:column; background:#0c0e14; }
+    #techDashboard.tech-open { display:flex; }
+    .tech-layout { display:flex; flex:1; overflow:hidden; }
+    /* Sidebar */
+    .tech-sidebar { width:240px; background:#080a10; border-right:1px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; flex-shrink:0; overflow-y:auto; }
+    .tech-sidebar-brand { padding:1.4rem 1.25rem 1.1rem; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:space-between; }
+    .tech-brand-logo { font-weight:900; font-size:1.15rem; letter-spacing:-0.04em; color:#f1f5f9; }
+    .tech-brand-chip { font-size:0.58rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; background:rgba(59,130,246,0.14); color:#3b82f6; padding:0.22rem 0.6rem; border-radius:100px; border:1px solid rgba(59,130,246,0.22); }
+    .tech-sidebar-user { padding:1.1rem 1.25rem; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; gap:0.85rem; }
+    .tech-sidebar-avatar { width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#3b82f6 0%,#6366f1 100%); color:#fff; display:flex; align-items:center; justify-content:center; font-size:0.95rem; font-weight:700; flex-shrink:0; }
+    .tech-sidebar-info { flex:1; min-width:0; }
+    .tech-sidebar-uname { font-size:0.84rem; font-weight:700; color:#f1f5f9; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tech-sidebar-uemail { font-size:0.67rem; color:#475569; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    /* Status toggle */
+    .tech-status-wrap { padding:0.85rem 1rem; border-bottom:1px solid rgba(255,255,255,0.06); }
+    .tech-status-toggle { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:0.75rem 0.9rem; display:flex; align-items:center; justify-content:space-between; cursor:pointer; transition:all 0.2s; user-select:none; }
+    .tech-status-toggle:hover { border-color:rgba(255,255,255,0.13); }
+    .tech-status-toggle.ts-on { border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.07); }
+    .tech-status-left { display:flex; align-items:center; gap:0.6rem; }
+    .tech-status-dot { width:8px; height:8px; border-radius:50%; background:#475569; flex-shrink:0; transition:background 0.25s; }
+    .tech-status-toggle.ts-on .tech-status-dot { background:#10b981; animation:techPulse 2s ease-in-out infinite; }
+    @keyframes techPulse { 0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,0.5)} 50%{box-shadow:0 0 0 5px rgba(16,185,129,0)} }
+    .tech-status-lbl { font-size:0.75rem; font-weight:700; color:#64748b; }
+    .tech-status-toggle.ts-on .tech-status-lbl { color:#10b981; }
+    .tech-sw { width:30px; height:17px; border-radius:9px; background:#1e293b; border:1.5px solid rgba(255,255,255,0.08); position:relative; transition:background 0.25s; flex-shrink:0; }
+    .tech-sw::after { content:''; position:absolute; top:2px; left:2px; width:9px; height:9px; border-radius:50%; background:#475569; transition:all 0.25s; }
+    .tech-status-toggle.ts-on .tech-sw { background:#10b981; border-color:transparent; }
+    .tech-status-toggle.ts-on .tech-sw::after { left:calc(100% - 11px); background:#fff; }
+    /* Nav links */
+    .tech-sidebar-nav { flex:1; padding:0.65rem; display:flex; flex-direction:column; gap:0.06rem; }
+    .tech-nav-link { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.85rem; font-size:0.81rem; font-weight:600; color:#4b5563; cursor:pointer; border-radius:10px; transition:all 0.15s; user-select:none; position:relative; }
+    .tech-nav-link svg { flex-shrink:0; opacity:0.55; transition:opacity 0.15s; }
+    .tech-nav-link:hover { color:#94a3b8; background:rgba(255,255,255,0.04); }
+    .tech-nav-link:hover svg { opacity:0.85; }
+    .tech-nav-link.active { color:#fff; background:rgba(59,130,246,0.12); }
+    .tech-nav-link.active svg { opacity:1; stroke:#3b82f6; }
+    .tech-nav-badge { margin-left:auto; background:#ef4444; color:#fff; font-size:0.58rem; font-weight:700; padding:0.13rem 0.42rem; border-radius:100px; min-width:16px; text-align:center; display:none; }
+    .tech-nav-badge.visible { display:block; }
+    .tech-sidebar-bottom { padding:0.65rem; border-top:1px solid rgba(255,255,255,0.06); display:flex; flex-direction:column; gap:0.06rem; }
+    .tech-nav-switch { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.85rem; font-size:0.81rem; font-weight:600; color:#64748b; cursor:pointer; border-radius:10px; transition:background 0.15s; }
+    .tech-nav-switch:hover { background:rgba(255,255,255,0.04); color:#94a3b8; }
+    .tech-nav-logout { display:flex; align-items:center; gap:0.7rem; padding:0.65rem 0.85rem; font-size:0.81rem; font-weight:600; color:#ef4444; cursor:pointer; border-radius:10px; transition:background 0.15s; opacity:0.7; }
+    .tech-nav-logout:hover { background:rgba(239,68,68,0.08); opacity:1; }
+    /* Main */
+    .tech-main { flex:1; overflow-y:auto; background:#0c0e14; padding:2rem 2.25rem; }
+    .tech-view { display:none; }
+    .tech-view.active { display:block; animation:fadeUp 0.22s ease both; }
+    /* View header */
+    .tech-view-hd { margin-bottom:1.75rem; }
+    .tech-view-hd h2 { font-size:1.45rem; font-weight:900; color:#f1f5f9; letter-spacing:-0.04em; line-height:1; }
+    .tech-view-hd p { font-size:0.78rem; color:#475569; margin-top:0.2rem; }
+    .tech-view-hd-row { display:flex; align-items:flex-end; justify-content:space-between; }
+    /* 4 Metric chips */
+    .tech-metrics { display:grid; grid-template-columns:repeat(4,1fr); gap:0.8rem; margin-bottom:1.75rem; }
+    .tech-metric { background:#13151e; border:1px solid rgba(255,255,255,0.07); border-radius:14px; padding:1.2rem 1.1rem; }
+    .tech-metric-label { font-size:0.65rem; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.09em; margin-bottom:0.6rem; }
+    .tech-metric-value { font-size:1.75rem; font-weight:900; letter-spacing:-0.05em; line-height:1; margin-bottom:0.25rem; }
+    .tech-metric-sub { font-size:0.67rem; color:#475569; }
+    .tm-blue { border-color:rgba(59,130,246,0.17); } .tm-blue .tech-metric-value { color:#60a5fa; }
+    .tm-green { border-color:rgba(16,185,129,0.17); } .tm-green .tech-metric-value { color:#34d399; }
+    .tm-amber { border-color:rgba(245,158,11,0.17); } .tm-amber .tech-metric-value { color:#fbbf24; }
+    .tm-purple { border-color:rgba(139,92,246,0.17); } .tm-purple .tech-metric-value { color:#a78bfa; }
+    /* Section header */
+    .tech-sec-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.85rem; }
+    .tech-sec-hd h3 { font-size:0.72rem; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.09em; }
+    .tech-sec-link { font-size:0.75rem; color:#3b82f6; background:none; border:none; cursor:pointer; font-family:var(--font); padding:0; }
+    /* Job card */
+    .tech-job-card { background:#13151e; border:1px solid rgba(255,255,255,0.07); border-radius:14px; overflow:hidden; margin-bottom:0.85rem; transition:border-color 0.18s; }
+    .tech-job-card:hover { border-color:rgba(255,255,255,0.13); }
+    .tech-job-head { padding:1rem 1.3rem; display:flex; align-items:center; gap:0.9rem; }
+    .tech-job-ico { width:40px; height:40px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:1.15rem; flex-shrink:0; border:1px solid rgba(255,255,255,0.08); }
+    .tech-job-ico-blue { background:rgba(59,130,246,0.1); border-color:rgba(59,130,246,0.18); }
+    .tech-job-ico-green { background:rgba(16,185,129,0.08); border-color:rgba(16,185,129,0.18); }
+    .tech-job-meta { flex:1; min-width:0; }
+    .tech-job-svc { font-size:0.9rem; font-weight:700; color:#f1f5f9; }
+    .tech-job-loc { font-size:0.73rem; color:#64748b; margin-top:0.12rem; }
+    .tech-job-badge { font-size:0.62rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:100px; white-space:nowrap; flex-shrink:0; }
+    .tb-new { background:rgba(59,130,246,0.14); color:#60a5fa; border:1px solid rgba(59,130,246,0.22); }
+    .tb-active { background:rgba(16,185,129,0.1); color:#34d399; border:1px solid rgba(16,185,129,0.18); }
+    .tb-done { background:rgba(100,116,139,0.1); color:#64748b; border:1px solid rgba(100,116,139,0.15); }
+    .tech-job-body { padding:0 1.3rem 1rem; border-top:1px solid rgba(255,255,255,0.05); padding-top:0.85rem; }
+    .tech-job-desc { font-size:0.77rem; color:#94a3b8; margin-bottom:0.85rem; line-height:1.55; }
+    .tech-job-actions { display:flex; gap:0.55rem; flex-wrap:wrap; }
+    /* Tech buttons */
+    .tbtn-primary { background:#3b82f6; color:#fff; border:none; border-radius:9px; padding:0.55rem 1rem; font-size:0.76rem; font-weight:700; cursor:pointer; font-family:var(--font); transition:opacity 0.15s; white-space:nowrap; }
+    .tbtn-primary:hover { opacity:0.85; }
+    .tbtn-ghost { background:rgba(255,255,255,0.05); color:#94a3b8; border:1px solid rgba(255,255,255,0.09); border-radius:9px; padding:0.55rem 1rem; font-size:0.76rem; font-weight:700; cursor:pointer; font-family:var(--font); transition:all 0.15s; white-space:nowrap; }
+    .tbtn-ghost:hover { background:rgba(255,255,255,0.09); color:#f1f5f9; }
+    .tbtn-danger { background:rgba(239,68,68,0.08); color:#f87171; border:1px solid rgba(239,68,68,0.18); border-radius:9px; padding:0.55rem 1rem; font-size:0.76rem; font-weight:700; cursor:pointer; font-family:var(--font); transition:all 0.15s; white-space:nowrap; }
+    .tbtn-danger:hover { background:rgba(239,68,68,0.15); }
+    /* Timer */
+    .tech-timer-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
+    .tech-timer-lbl { font-size:0.7rem; font-weight:600; color:#fbbf24; }
+    .tech-timer-bar { height:3px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; margin-bottom:0.85rem; }
+    .tech-timer-fill { height:100%; background:#fbbf24; border-radius:3px; transition:width 1s linear; }
+    /* Earnings card */
+    .tech-earn-card { background:linear-gradient(135deg,#0f1f3d 0%,#1e3a5f 100%); border:1px solid rgba(59,130,246,0.2); border-radius:16px; padding:1.5rem 1.75rem; margin-bottom:1.2rem; display:flex; align-items:center; justify-content:space-between; }
+    .tech-earn-label { font-size:0.65rem; font-weight:700; color:rgba(147,197,253,0.65); text-transform:uppercase; letter-spacing:0.09em; margin-bottom:0.3rem; }
+    .tech-earn-value { font-size:2.2rem; font-weight:900; color:#93c5fd; letter-spacing:-0.05em; line-height:1; }
+    .tech-earn-sub { font-size:0.7rem; color:rgba(147,197,253,0.45); margin-top:0.2rem; }
+    .tech-earn-ico { width:52px; height:52px; border-radius:13px; background:rgba(59,130,246,0.14); border:1px solid rgba(59,130,246,0.2); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    /* Rating */
+    .tech-rating-row { display:flex; align-items:center; gap:0.35rem; margin-top:0.35rem; }
+    .tech-stars { color:#fbbf24; font-size:0.82rem; letter-spacing:0.04em; }
+    .tech-rating-num { font-size:0.82rem; font-weight:700; color:#f1f5f9; }
+    .tech-rating-cnt { font-size:0.7rem; color:#475569; }
+    /* Empty state */
+    .tech-empty { text-align:center; padding:2.5rem 2rem; }
+    .tech-empty-ico { font-size:2.2rem; margin-bottom:0.85rem; opacity:0.35; }
+    .tech-empty h4 { font-size:0.88rem; font-weight:700; color:#64748b; margin-bottom:0.35rem; }
+    .tech-empty p { font-size:0.76rem; color:#374151; line-height:1.65; }
+    /* Profile tech */
+    .tech-profile-head { background:#13151e; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:1.75rem 1.5rem; display:flex; align-items:center; gap:1.2rem; margin-bottom:1rem; }
+    .tech-profile-av { width:62px; height:62px; border-radius:50%; background:linear-gradient(135deg,#3b82f6 0%,#6366f1 100%); color:#fff; display:flex; align-items:center; justify-content:center; font-size:1.45rem; font-weight:700; flex-shrink:0; }
+    .tech-profile-name { font-size:1.1rem; font-weight:800; color:#f1f5f9; letter-spacing:-0.02em; }
+    .tech-profile-role-lbl { font-size:0.7rem; font-weight:600; color:#3b82f6; margin-top:0.12rem; }
+    .tech-profile-card { background:#13151e; border:1px solid rgba(255,255,255,0.07); border-radius:14px; overflow:hidden; margin-bottom:1rem; }
+    .tech-prof-row { display:flex; align-items:center; justify-content:space-between; padding:0.88rem 1.35rem; border-bottom:1px solid rgba(255,255,255,0.05); min-height:48px; }
+    .tech-prof-row:last-child { border-bottom:none; }
+    .tech-prof-label { font-size:0.77rem; color:#475569; font-weight:600; }
+    .tech-prof-val { font-size:0.82rem; font-weight:700; color:#f1f5f9; text-align:right; max-width:60%; word-break:break-word; }
+    .tech-prof-card-title { font-size:0.72rem; font-weight:700; color:#475569; text-transform:uppercase; letter-spacing:0.09em; padding:0.88rem 1.35rem 0.4rem; border-bottom:1px solid rgba(255,255,255,0.05); }
+    .tech-svc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem; padding:0.9rem 1.35rem 1.1rem; }
+    .tech-svc-check { display:flex; align-items:center; gap:0.4rem; cursor:pointer; }
+    .tech-svc-check input { width:14px; height:14px; accent-color:#3b82f6; cursor:pointer; flex-shrink:0; }
+    .tech-svc-check span { font-size:0.73rem; color:#64748b; font-weight:600; }
+    .tech-svc-check input:checked + span { color:#f1f5f9; }
+    /* Mobile tech header */
+    .tech-mobile-hd { display:none; height:52px; background:#08090f; border-bottom:1px solid rgba(255,255,255,0.06); flex-shrink:0; align-items:center; justify-content:space-between; padding:0 1.1rem; }
+    .tech-mobile-logo { font-weight:900; font-size:1.1rem; letter-spacing:-0.04em; color:#f1f5f9; }
+    .tech-mobile-status { display:flex; align-items:center; gap:0.4rem; font-size:0.72rem; font-weight:700; color:#475569; cursor:pointer; padding:0.4rem 0.7rem; border-radius:100px; border:1px solid rgba(255,255,255,0.08); }
+    .tech-mobile-status.ts-on { color:#10b981; border-color:rgba(16,185,129,0.28); background:rgba(16,185,129,0.07); }
+    .tech-mob-dot { width:6px; height:6px; border-radius:50%; background:#475569; flex-shrink:0; }
+    .tech-mobile-status.ts-on .tech-mob-dot { background:#10b981; animation:techPulse 2s ease-in-out infinite; }
+    /* Mobile bottom nav (tech) */
+    .tech-bottom-nav { display:none; background:#08090f; border-top:1px solid rgba(255,255,255,0.06); flex-shrink:0; width:100%; padding-bottom:env(safe-area-inset-bottom); }
+    .tech-bottom-inner { display:flex; height:64px; align-items:stretch; width:100%; }
+    .tech-bot-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.22rem; cursor:pointer; color:#374151; transition:color 0.15s; user-select:none; position:relative; min-height:44px; -webkit-tap-highlight-color:transparent; }
+    .tech-bot-item svg { width:20px; height:20px; flex-shrink:0; }
+    .tech-bot-label { font-size:0.58rem; font-weight:500; letter-spacing:0.01em; line-height:1; }
+    .tech-bot-item.active { color:#3b82f6; }
+    .tech-bot-item.active::after { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:24px; height:2.5px; background:#3b82f6; border-radius:0 0 3px 3px; }
+    .tech-bot-badge { position:absolute; top:8px; right:calc(50% - 14px); width:8px; height:8px; background:#ef4444; border-radius:50%; border:2px solid #08090f; display:none; }
+    .tech-bot-badge.visible { display:block; }
+    /* Responsive tech */
+    @media(max-width:900px) { .tech-metrics { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:768px) {
+      .tech-sidebar { display:none; }
+      .tech-mobile-hd { display:flex; }
+      .tech-bottom-nav { display:flex; }
+      .tech-main { padding:1.5rem 1.25rem 1rem; }
+    }
+
     /* ══ RESPONSIVE ══ */
     @media(max-width:900px){
       .why-strip-inner  { grid-template-columns: 1fr; gap: 3rem; padding: 3rem 2rem; }
@@ -2038,6 +2208,340 @@
 
 </div>
 
+<!-- ROLE PICKER -->
+<div id="rolePicker">
+  <div class="rp-card">
+    <div class="rp-logo">thruver</div>
+    <div class="rp-title">¿Cómo deseas<br>continuar?</div>
+    <div class="rp-sub">Selecciona tu tipo de cuenta</div>
+    <div class="rp-options">
+      <button class="rp-option rp-opt-client" id="rp-client">
+        <div class="rp-option-icon">🏠</div>
+        <div class="rp-option-label">Soy cliente</div>
+        <div class="rp-option-desc">Solicita servicios del hogar</div>
+      </button>
+      <button class="rp-option rp-opt-tech" id="rp-tech">
+        <div class="rp-option-icon">🔧</div>
+        <div class="rp-option-label">Soy técnico</div>
+        <div class="rp-option-desc">Recibe y gestiona trabajos</div>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TECH DASHBOARD -->
+<div id="techDashboard">
+  <!-- Mobile header -->
+  <div class="tech-mobile-hd">
+    <span class="tech-mobile-logo">thruver</span>
+    <div class="tech-mobile-status" id="tech-mob-status">
+      <span class="tech-mob-dot"></span>
+      <span id="tech-mob-status-lbl">No disponible</span>
+    </div>
+  </div>
+
+  <div class="tech-layout">
+    <!-- Sidebar -->
+    <aside class="tech-sidebar">
+      <div class="tech-sidebar-brand">
+        <span class="tech-brand-logo">thruver</span>
+        <span class="tech-brand-chip">Técnico</span>
+      </div>
+      <div class="tech-sidebar-user">
+        <div class="tech-sidebar-avatar" id="tech-sidebar-av">T</div>
+        <div class="tech-sidebar-info">
+          <div class="tech-sidebar-uname" id="tech-sidebar-name">—</div>
+          <div class="tech-sidebar-uemail" id="tech-sidebar-email">—</div>
+        </div>
+      </div>
+      <div class="tech-status-wrap">
+        <div class="tech-status-toggle" id="tech-status-toggle">
+          <div class="tech-status-left">
+            <span class="tech-status-dot"></span>
+            <span class="tech-status-lbl" id="tech-status-lbl">No disponible</span>
+          </div>
+          <div class="tech-sw"></div>
+        </div>
+      </div>
+      <nav class="tech-sidebar-nav">
+        <div class="tech-nav-link active" data-tview="tdv-home">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Inicio
+        </div>
+        <div class="tech-nav-link" data-tview="tdv-requests">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          Solicitudes
+          <span class="tech-nav-badge visible" id="tnav-badge">3</span>
+        </div>
+        <div class="tech-nav-link" data-tview="tdv-history">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Historial
+        </div>
+        <div class="tech-nav-link" data-tview="tdv-profile">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Mi perfil
+        </div>
+      </nav>
+      <div class="tech-sidebar-bottom">
+        <div class="tech-nav-switch" id="tech-switch-role">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+          Cambiar a cliente
+        </div>
+        <div class="tech-nav-logout" id="tech-logout">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          Cerrar sesión
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="tech-main">
+
+      <!-- VIEW: Inicio -->
+      <div class="tech-view active" id="tdv-home">
+        <div class="tech-view-hd tech-view-hd-row">
+          <div>
+            <h2 id="tech-greeting">Hola, Técnico.</h2>
+            <p id="tech-greeting-sub">Tu panel de control</p>
+          </div>
+        </div>
+        <!-- 4 metrics -->
+        <div class="tech-metrics">
+          <div class="tech-metric tm-blue">
+            <div class="tech-metric-label">Jobs hoy</div>
+            <div class="tech-metric-value" id="tm-today">0</div>
+            <div class="tech-metric-sub">solicitados</div>
+          </div>
+          <div class="tech-metric tm-green">
+            <div class="tech-metric-label">Completados</div>
+            <div class="tech-metric-value" id="tm-done">0</div>
+            <div class="tech-metric-sub">este mes</div>
+          </div>
+          <div class="tech-metric tm-amber">
+            <div class="tech-metric-label">Ganancias</div>
+            <div class="tech-metric-value" id="tm-earn">$0</div>
+            <div class="tech-metric-sub">esta semana</div>
+          </div>
+          <div class="tech-metric tm-purple">
+            <div class="tech-metric-label">Calificación</div>
+            <div class="tech-metric-value" id="tm-rating">—</div>
+            <div class="tech-metric-sub">promedio ★</div>
+          </div>
+        </div>
+        <!-- Trabajo activo -->
+        <div class="tech-sec-hd">
+          <h3>Trabajo activo</h3>
+        </div>
+        <div id="tdv-active-wrap">
+          <div class="tech-empty">
+            <div class="tech-empty-ico">⚙️</div>
+            <h4>Sin trabajo activo</h4>
+            <p>Activa tu disponibilidad para<br>recibir nuevas solicitudes.</p>
+          </div>
+        </div>
+        <!-- Resumen solicitudes -->
+        <div class="tech-sec-hd" style="margin-top:1rem;">
+          <h3>Solicitudes nuevas</h3>
+          <button class="tech-sec-link" id="tech-see-requests">Ver todas →</button>
+        </div>
+        <div id="tdv-home-requests">
+          <div class="tech-empty">
+            <div class="tech-empty-ico">📋</div>
+            <h4>Sin solicitudes pendientes</h4>
+            <p>Las nuevas solicitudes aparecerán aquí<br>cuando estés disponible.</p>
+          </div>
+        </div>
+      </div><!-- /tdv-home -->
+
+      <!-- VIEW: Solicitudes -->
+      <div class="tech-view" id="tdv-requests">
+        <div class="tech-view-hd tech-view-hd-row">
+          <div>
+            <h2>Solicitudes</h2>
+            <p>Acepta o rechaza antes de que expiren</p>
+          </div>
+          <span class="tech-job-badge tb-new" style="font-size:0.72rem;padding:0.3rem 0.85rem;">3 nuevas</span>
+        </div>
+        <div id="tdv-requests-list">
+          <div class="tech-job-card">
+            <div class="tech-job-head">
+              <div class="tech-job-ico tech-job-ico-blue">🔧</div>
+              <div class="tech-job-meta">
+                <div class="tech-job-svc">Plomería — fuga de agua</div>
+                <div class="tech-job-loc">📍 Col. San Pedro, Monterrey · 2.3 km</div>
+              </div>
+              <span class="tech-job-badge tb-new">Nueva</span>
+            </div>
+            <div class="tech-job-body">
+              <div class="tech-timer-row">
+                <span class="tech-timer-lbl">⏱ Expira en <span class="tech-countdown" data-secs="540">9:00</span></span>
+              </div>
+              <div class="tech-timer-bar"><div class="tech-timer-fill" style="width:100%"></div></div>
+              <div class="tech-job-desc">Fuga bajo el lavabo de la cocina, lleva un día. Urgencia normal.</div>
+              <div class="tech-job-actions">
+                <button class="tbtn-primary">Aceptar</button>
+                <button class="tbtn-ghost">Ver detalles</button>
+                <button class="tbtn-danger">Rechazar</button>
+              </div>
+            </div>
+          </div>
+          <div class="tech-job-card">
+            <div class="tech-job-head">
+              <div class="tech-job-ico tech-job-ico-blue">⚡</div>
+              <div class="tech-job-meta">
+                <div class="tech-job-svc">Electricidad — corto circuito</div>
+                <div class="tech-job-loc">📍 Col. Mitras, Monterrey · 4.1 km</div>
+              </div>
+              <span class="tech-job-badge tb-new">Nueva</span>
+            </div>
+            <div class="tech-job-body">
+              <div class="tech-timer-row">
+                <span class="tech-timer-lbl">⏱ Expira en <span class="tech-countdown" data-secs="312">5:12</span></span>
+              </div>
+              <div class="tech-timer-bar"><div class="tech-timer-fill" style="width:57%"></div></div>
+              <div class="tech-job-desc">Se fue la luz en dos cuartos, el breaker dispara. Revisión urgente.</div>
+              <div class="tech-job-actions">
+                <button class="tbtn-primary">Aceptar</button>
+                <button class="tbtn-ghost">Ver detalles</button>
+                <button class="tbtn-danger">Rechazar</button>
+              </div>
+            </div>
+          </div>
+          <div class="tech-job-card">
+            <div class="tech-job-head">
+              <div class="tech-job-ico tech-job-ico-blue">❄️</div>
+              <div class="tech-job-meta">
+                <div class="tech-job-svc">Aire / Clima — no enfría</div>
+                <div class="tech-job-loc">📍 Col. Cumbres, Monterrey · 6.8 km</div>
+              </div>
+              <span class="tech-job-badge tb-new">Nueva</span>
+            </div>
+            <div class="tech-job-body">
+              <div class="tech-timer-row">
+                <span class="tech-timer-lbl">⏱ Expira en <span class="tech-countdown" data-secs="720">12:00</span></span>
+              </div>
+              <div class="tech-timer-bar"><div class="tech-timer-fill" style="width:80%"></div></div>
+              <div class="tech-job-desc">El minisplit enciende pero no baja temperatura. Quiere revisión hoy.</div>
+              <div class="tech-job-actions">
+                <button class="tbtn-primary">Aceptar</button>
+                <button class="tbtn-ghost">Ver detalles</button>
+                <button class="tbtn-danger">Rechazar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /tdv-requests -->
+
+      <!-- VIEW: Historial -->
+      <div class="tech-view" id="tdv-history">
+        <div class="tech-view-hd">
+          <h2>Historial</h2>
+          <p>Registro de trabajos completados</p>
+        </div>
+        <div class="tech-earn-card">
+          <div>
+            <div class="tech-earn-label">Ganancias esta semana</div>
+            <div class="tech-earn-value" id="tech-earn-total">$0</div>
+            <div class="tech-earn-sub">0 trabajos completados</div>
+          </div>
+          <div class="tech-earn-ico">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#93c5fd" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+        </div>
+        <div class="tech-sec-hd">
+          <h3>Trabajos recientes</h3>
+        </div>
+        <div id="tdv-history-list">
+          <div class="tech-empty">
+            <div class="tech-empty-ico">📂</div>
+            <h4>Sin historial aún</h4>
+            <p>Aquí verás todos tus trabajos completados<br>junto con las calificaciones recibidas.</p>
+          </div>
+        </div>
+      </div><!-- /tdv-history -->
+
+      <!-- VIEW: Mi perfil -->
+      <div class="tech-view" id="tdv-profile">
+        <div class="tech-view-hd">
+          <h2>Mi perfil</h2>
+          <p>Tu información como técnico verificado</p>
+        </div>
+        <div class="tech-profile-head">
+          <div class="tech-profile-av" id="tech-prof-av">T</div>
+          <div>
+            <div class="tech-profile-name" id="tech-prof-name">—</div>
+            <div class="tech-profile-role-lbl">Técnico verificado · Thruver</div>
+            <div class="tech-rating-row">
+              <span class="tech-stars">★★★★★</span>
+              <span class="tech-rating-num">5.0</span>
+              <span class="tech-rating-cnt">(0 reseñas)</span>
+            </div>
+          </div>
+        </div>
+        <div class="tech-profile-card">
+          <div class="tech-prof-row">
+            <span class="tech-prof-label">Correo</span>
+            <span class="tech-prof-val" id="tech-prof-email">—</span>
+          </div>
+          <div class="tech-prof-row">
+            <span class="tech-prof-label">Teléfono</span>
+            <span class="tech-prof-val" id="tech-prof-tel" style="color:#475569;">—</span>
+          </div>
+          <div class="tech-prof-row">
+            <span class="tech-prof-label">Zona de cobertura</span>
+            <span class="tech-prof-val" id="tech-prof-zone" style="color:#475569;">—</span>
+          </div>
+          <div class="tech-prof-row" style="border-bottom:none;">
+            <span class="tech-prof-label">Miembro desde</span>
+            <span class="tech-prof-val" id="tech-prof-since">—</span>
+          </div>
+        </div>
+        <div class="tech-profile-card">
+          <div class="tech-prof-card-title">Servicios que ofrezco</div>
+          <div class="tech-svc-grid">
+            <label class="tech-svc-check"><input type="checkbox" checked /><span>Plomería</span></label>
+            <label class="tech-svc-check"><input type="checkbox" /><span>Electricidad</span></label>
+            <label class="tech-svc-check"><input type="checkbox" /><span>Limpieza</span></label>
+            <label class="tech-svc-check"><input type="checkbox" /><span>Pintura</span></label>
+            <label class="tech-svc-check"><input type="checkbox" /><span>Carpintería</span></label>
+            <label class="tech-svc-check"><input type="checkbox" /><span>Jardinería</span></label>
+            <label class="tech-svc-check"><input type="checkbox" /><span>Aire / Clima</span></label>
+            <label class="tech-svc-check"><input type="checkbox" /><span>Remodelación</span></label>
+            <label class="tech-svc-check"><input type="checkbox" /><span>Otro</span></label>
+          </div>
+        </div>
+        <button id="tech-logout-prof" style="margin-top:0.5rem;background:none;border:1.5px solid rgba(239,68,68,0.3);border-radius:10px;color:#f87171;padding:0.85rem 1.5rem;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:var(--font);width:100%;max-width:520px;">Cerrar sesión</button>
+      </div><!-- /tdv-profile -->
+
+    </div><!-- /tech-main -->
+  </div><!-- /tech-layout -->
+
+  <!-- Mobile bottom nav -->
+  <div class="tech-bottom-nav">
+    <div class="tech-bottom-inner">
+      <div class="tech-bot-item active" data-tview="tdv-home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        <span class="tech-bot-label">Inicio</span>
+      </div>
+      <div class="tech-bot-item" data-tview="tdv-requests">
+        <span style="position:relative;display:inline-flex;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="tech-bot-badge visible" id="tech-bot-badge"></span>
+        </span>
+        <span class="tech-bot-label">Solicitudes</span>
+      </div>
+      <div class="tech-bot-item" data-tview="tdv-history">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span class="tech-bot-label">Historial</span>
+      </div>
+      <div class="tech-bot-item" data-tview="tdv-profile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span class="tech-bot-label">Perfil</span>
+      </div>
+    </div>
+  </div>
+</div><!-- /techDashboard -->
+
 <!-- ONBOARDING -->
 <div id="onboarding" class="onb-overlay">
   <div class="onb-card">
@@ -2623,6 +3127,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   /* ------- Cargar historial y mostrar dashboard ------- */
   function cargarHistorialYMostrarDashboard(user) {
+    var savedRole = localStorage.getItem('thruver_role');
+    if (!savedRole) { showRolePicker(user); return; }
+    if (savedRole === 'tech') { showTechDashboard(user); return; }
     actualizarNavConUsuario(user);
     showDashboard();
     if (!window.fbGetDocs || !window.fbQuery || !window.fbWhere || !window.db) return;
@@ -2921,6 +3428,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.style.overflow = '';
   }
   function doLogout() {
+    localStorage.removeItem('thruver_role');
     if (window.fbSignOut && window.auth) {
       window.fbSignOut(window.auth).then(function(){ window.currentUser = null; closeDashboard(); }).catch(closeDashboard);
     } else { closeDashboard(); }
@@ -3182,11 +3690,155 @@ document.addEventListener('DOMContentLoaded', function () {
   var _origOnUserLoggedIn = window.onUserLoggedIn;
   window.onUserLoggedIn = function(user) {
     if (_origOnUserLoggedIn) _origOnUserLoggedIn(user);
-    if (!localStorage.getItem('thruver_onboarded')) {
+    if (!localStorage.getItem('thruver_onboarded') && localStorage.getItem('thruver_role') !== 'tech') {
       setTimeout(function(){ showOnboarding(user); }, 600);
     }
     actualizarPerfilExtra();
   };
+
+  /* ═══════════════════════════════════════════
+     ROLE PICKER
+  ═══════════════════════════════════════════ */
+  function showRolePicker(user) {
+    var picker = document.getElementById('rolePicker');
+    picker.classList.add('rp-open');
+    document.getElementById('rp-client').onclick = function() {
+      localStorage.setItem('thruver_role', 'client');
+      picker.classList.remove('rp-open');
+      cargarHistorialYMostrarDashboard(user);
+    };
+    document.getElementById('rp-tech').onclick = function() {
+      localStorage.setItem('thruver_role', 'tech');
+      picker.classList.remove('rp-open');
+      cargarHistorialYMostrarDashboard(user);
+    };
+  }
+
+  /* ═══════════════════════════════════════════
+     TECH DASHBOARD
+  ═══════════════════════════════════════════ */
+  var techDash = document.getElementById('techDashboard');
+
+  function actualizarTechNav(user) {
+    var dn      = user.displayName || user.email || 'Técnico';
+    var inicial = dn.charAt(0).toUpperCase();
+    var nombre  = dn.split(' ')[0];
+    var els = {
+      'tech-sidebar-av': inicial, 'tech-sidebar-name': dn,
+      'tech-sidebar-email': user.email || '',
+      'tech-prof-av': inicial, 'tech-prof-name': dn,
+      'tech-prof-email': user.email || '',
+      'tech-greeting': 'Hola, ' + nombre + '.'
+    };
+    Object.keys(els).forEach(function(id){ var el=document.getElementById(id); if(el) el.textContent=els[id]; });
+    var gs = document.getElementById('tech-greeting-sub');
+    if (gs) {
+      var hoy = new Date();
+      gs.textContent = hoy.toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'}) + ' · Tu panel de control';
+    }
+    var ps = document.getElementById('tech-prof-since');
+    if (ps) {
+      var creado = user.metadata && user.metadata.creationTime ? new Date(user.metadata.creationTime) : new Date();
+      ps.textContent = creado.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
+    }
+  }
+
+  function showTechDashboard(user) {
+    actualizarTechNav(user);
+    techDash.classList.add('tech-open');
+    _landingHidden = [];
+    document.querySelectorAll('body > *:not(#techDashboard):not(#tnlOverlay):not(#loginModal):not(#rolePicker)').forEach(function(el){
+      _landingHidden.push({ el: el, prev: el.style.display });
+      el.style.display = 'none';
+    });
+    document.body.style.overflow = 'hidden';
+    showTechView('tdv-home');
+  }
+
+  function closeTechDashboard() {
+    techDash.classList.remove('tech-open');
+    _landingHidden.forEach(function(item){ item.el.style.display = item.prev; });
+    _landingHidden = [];
+    document.body.style.overflow = '';
+  }
+
+  function showTechView(viewId) {
+    document.querySelectorAll('#techDashboard .tech-view').forEach(function(v){ v.classList.remove('active'); });
+    var target = document.getElementById(viewId);
+    if (target) target.classList.add('active');
+    document.querySelectorAll('#techDashboard .tech-nav-link[data-tview]').forEach(function(l){
+      l.classList.toggle('active', l.dataset.tview === viewId);
+    });
+    document.querySelectorAll('#techDashboard .tech-bot-item[data-tview]').forEach(function(b){
+      b.classList.toggle('active', b.dataset.tview === viewId);
+    });
+    var tm = document.querySelector('.tech-main');
+    if (tm) tm.scrollTop = 0;
+  }
+
+  /* Status toggle */
+  var _techAvailable = false;
+  function toggleTechStatus() {
+    _techAvailable = !_techAvailable;
+    var toggle  = document.getElementById('tech-status-toggle');
+    var lbl     = document.getElementById('tech-status-lbl');
+    var mobSt   = document.getElementById('tech-mob-status');
+    var mobLbl  = document.getElementById('tech-mob-status-lbl');
+    var txt = _techAvailable ? 'Disponible' : 'No disponible';
+    if (toggle) toggle.classList.toggle('ts-on', _techAvailable);
+    if (lbl)    lbl.textContent = txt;
+    if (mobSt)  mobSt.classList.toggle('ts-on', _techAvailable);
+    if (mobLbl) mobLbl.textContent = txt;
+  }
+  document.getElementById('tech-status-toggle').addEventListener('click', toggleTechStatus);
+  document.getElementById('tech-mob-status').addEventListener('click', toggleTechStatus);
+
+  /* Nav links */
+  document.querySelectorAll('#techDashboard .tech-nav-link[data-tview]').forEach(function(link){
+    link.addEventListener('click', function(){ showTechView(link.dataset.tview); });
+  });
+  document.querySelectorAll('#techDashboard .tech-bot-item[data-tview]').forEach(function(item){
+    item.addEventListener('click', function(){ showTechView(item.dataset.tview); });
+  });
+
+  /* Shortcut */
+  var techSeeReq = document.getElementById('tech-see-requests');
+  if (techSeeReq) techSeeReq.addEventListener('click', function(){ showTechView('tdv-requests'); });
+
+  /* Switch to client */
+  document.getElementById('tech-switch-role').addEventListener('click', function(){
+    localStorage.setItem('thruver_role', 'client');
+    closeTechDashboard();
+    if (window.currentUser) cargarHistorialYMostrarDashboard(window.currentUser);
+  });
+
+  /* Logout tech */
+  function doTechLogout() {
+    localStorage.removeItem('thruver_role');
+    if (window.fbSignOut && window.auth) {
+      window.fbSignOut(window.auth).then(function(){ window.currentUser=null; closeTechDashboard(); }).catch(closeTechDashboard);
+    } else { closeTechDashboard(); }
+  }
+  document.getElementById('tech-logout').addEventListener('click', doTechLogout);
+  document.getElementById('tech-logout-prof').addEventListener('click', doTechLogout);
+
+  /* Countdown timers */
+  function initCountdowns() {
+    document.querySelectorAll('.tech-countdown').forEach(function(el){
+      var secs  = parseInt(el.getAttribute('data-secs')) || 0;
+      var total = secs;
+      var body  = el.closest('.tech-job-body');
+      var bar   = body ? body.querySelector('.tech-timer-fill') : null;
+      var iv = setInterval(function(){
+        secs--;
+        if (secs <= 0) { clearInterval(iv); el.textContent = '0:00'; if(bar) bar.style.width='0%'; return; }
+        var m = Math.floor(secs/60), s = secs%60;
+        el.textContent = m + ':' + (s<10?'0':'') + s;
+        if (bar && total > 0) bar.style.width = Math.round(secs/total*100) + '%';
+      }, 1000);
+    });
+  }
+  initCountdowns();
 
   /* ═══════════════════════════════════════════
      SERVICE WORKER (PWA)
