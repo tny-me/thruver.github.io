@@ -6,6 +6,11 @@
   <title>Thruver — Infraestructura confiable de mantenimiento y mejoras</title>
   <meta name="description" content="Thruver conecta tu espacio con técnicos verificados, asignados por zona." />
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Favicon.png" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#111111" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="Thruver" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -859,8 +864,56 @@
     .dash-bot-item { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.22rem; cursor:pointer; color:#9ca3af; transition:color 0.15s; user-select:none; min-height:44px; -webkit-tap-highlight-color:transparent; }
     .dash-bot-item svg { width:20px; height:20px; flex-shrink:0; }
     .dash-bot-label { font-size:0.58rem; font-weight:500; letter-spacing:0.01em; line-height:1; }
+    .dash-bot-item { position:relative; }
     .dash-bot-item.active { color:#111; }
     .dash-bot-item.active svg { stroke:#111; }
+    .dash-bot-item.active::after { content:''; position:absolute; top:0; left:50%; transform:translateX(-50%); width:24px; height:2.5px; background:#111; border-radius:0 0 3px 3px; }
+    /* Badge notificación */
+    .dash-bot-badge { position:absolute; top:-3px; right:-5px; width:8px; height:8px; background:#ef4444; border-radius:50%; border:2px solid #fff; display:none; }
+    .dash-bot-badge.visible { display:block; }
+    /* Skeleton loaders */
+    @keyframes shimmer { 0%{background-position:-400px 0} 100%{background-position:400px 0} }
+    .dash-skel-line { border-radius:6px; background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%); background-size:400px 100%; animation:shimmer 1.3s ease-in-out infinite; }
+    .dash-skel-row { display:flex; align-items:center; gap:0.75rem; padding:0.9rem 1rem; border-bottom:1px solid #f3f4f6; }
+    .dash-skel-ico { width:32px; height:32px; border-radius:8px; flex-shrink:0; }
+    .dash-skel-lines { flex:1; display:flex; flex-direction:column; gap:0.35rem; }
+    /* Status chips */
+    .badge-pending  { background:#fef3c7; color:#92400e; }
+    .badge-progress { background:#dbeafe; color:#1d4ed8; }
+    .badge-done     { background:#d1fae5; color:#065f46; }
+    /* Onboarding */
+    .onb-overlay { display:none; position:fixed; inset:0; z-index:600; background:rgba(17,17,17,0.6); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:1.5rem; }
+    .onb-overlay.onb-open { display:flex; animation:fadeIn 0.25s ease; }
+    .onb-card { background:#fff; border-radius:20px; width:100%; max-width:420px; padding:2rem 1.75rem; }
+    .onb-step { display:none; }
+    .onb-step.onb-active { display:block; animation:tnlStepIn 0.28s ease both; }
+    .onb-logo { font-weight:900; font-size:1.1rem; letter-spacing:-0.04em; color:#111; margin-bottom:1.25rem; }
+    .onb-prog { display:flex; gap:0.3rem; margin-bottom:1.25rem; }
+    .onb-prog-dot { height:3px; flex:1; background:#e5e7eb; border-radius:3px; transition:background 0.2s; }
+    .onb-prog-dot.done { background:#111; }
+    .onb-title { font-size:1.4rem; font-weight:900; letter-spacing:-0.04em; color:#111; margin-bottom:0.3rem; line-height:1.2; }
+    .onb-sub { font-size:0.83rem; color:#6b7280; margin-bottom:1.4rem; line-height:1.6; }
+    .onb-field { margin-bottom:0.8rem; }
+    .onb-field label { display:block; font-size:0.66rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.09em; margin-bottom:0.3rem; }
+    .onb-field input { width:100%; border:1.5px solid #e5e7eb; border-radius:10px; padding:0.7rem 0.85rem; font-size:0.88rem; font-family:var(--font); color:#111; outline:none; background:#fff; }
+    .onb-field input:focus { border-color:#111; }
+    .onb-btn { width:100%; background:#111; color:#fff; border:none; border-radius:10px; padding:0.82rem; font-size:0.88rem; font-weight:700; cursor:pointer; font-family:var(--font); margin-top:0.4rem; transition:opacity 0.15s; }
+    .onb-btn:hover { opacity:0.8; }
+    .onb-skip { display:block; text-align:center; font-size:0.75rem; color:#9ca3af; margin-top:0.85rem; cursor:pointer; border:none; background:none; font-family:var(--font); width:100%; }
+    .onb-skip:hover { color:#111; }
+    /* Profile extra fields */
+    .dash-prof-row { display:flex; justify-content:space-between; align-items:center; padding:1rem 1.5rem; border-bottom:1px solid #e5e7eb; min-height:52px; }
+    .dash-prof-row:last-child { border-bottom:none; }
+    .dash-prof-label { font-size:0.8rem; color:#6b7280; font-weight:600; }
+    .dash-prof-val { font-size:0.85rem; font-weight:700; color:#111; text-align:right; max-width:60%; word-break:break-word; }
+    .dash-prof-edit-btn { background:none; border:1.5px solid #e5e7eb; border-radius:8px; padding:0.35rem 0.75rem; font-size:0.72rem; font-weight:700; color:#6b7280; cursor:pointer; font-family:var(--font); white-space:nowrap; transition:border-color 0.15s,color 0.15s; }
+    .dash-prof-edit-btn:hover { border-color:#111; color:#111; }
+    .dash-prof-edit-form { display:none; padding:1.25rem 1.5rem; border-top:1px solid #e5e7eb; gap:0.7rem; flex-direction:column; }
+    .dash-prof-edit-form.open { display:flex; }
+    .dash-prof-field label { display:block; font-size:0.66rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.09em; margin-bottom:0.3rem; }
+    .dash-prof-field input { width:100%; border:1.5px solid #e5e7eb; border-radius:9px; padding:0.6rem 0.8rem; font-size:0.85rem; font-family:var(--font); color:#111; outline:none; }
+    .dash-prof-field input:focus { border-color:#111; }
+    .dash-prof-save { background:#111; color:#fff; border:none; border-radius:9px; padding:0.6rem 1.2rem; font-size:0.82rem; font-weight:700; cursor:pointer; font-family:var(--font); align-self:flex-start; }
     .dash-bot-cta { flex:none; display:flex; align-items:center; justify-content:center; padding:0 1rem; }
     .dash-bot-cta-pill { display:flex; align-items:center; gap:0.3rem; background:#111; color:#fff; border-radius:999px; height:36px; padding:0 14px; cursor:pointer; -webkit-tap-highlight-color:transparent; user-select:none; }
     .dash-bot-cta-pill svg { width:14px; height:14px; flex-shrink:0; }
@@ -1838,7 +1891,12 @@
           <button class="dash-see-all" id="btn-see-all-svcs">Ver todo →</button>
         </div>
         <div class="dash-tbl-card" id="dash-card-historial">
-          <div id="dash-historial-empty" class="dash-empty">
+          <div id="dash-historial-skel">
+            <div class="dash-skel-row"><div class="dash-skel-ico dash-skel-line"></div><div class="dash-skel-lines"><div class="dash-skel-line" style="height:12px;width:55%;"></div><div class="dash-skel-line" style="height:10px;width:35%;"></div></div><div class="dash-skel-line" style="height:10px;width:60px;border-radius:100px;"></div></div>
+            <div class="dash-skel-row"><div class="dash-skel-ico dash-skel-line"></div><div class="dash-skel-lines"><div class="dash-skel-line" style="height:12px;width:45%;"></div><div class="dash-skel-line" style="height:10px;width:30%;"></div></div><div class="dash-skel-line" style="height:10px;width:60px;border-radius:100px;"></div></div>
+            <div class="dash-skel-row"><div class="dash-skel-ico dash-skel-line"></div><div class="dash-skel-lines"><div class="dash-skel-line" style="height:12px;width:60%;"></div><div class="dash-skel-line" style="height:10px;width:40%;"></div></div><div class="dash-skel-line" style="height:10px;width:60px;border-radius:100px;"></div></div>
+          </div>
+          <div id="dash-historial-empty" class="dash-empty" style="display:none;">
             <h4>Sin actividad reciente</h4>
             <p>Solicita tu primer servicio y te conectamos<br>con un técnico verificado en tu zona.</p>
             <button class="tnl-trigger dash-cta-btn" style="margin:0 auto;">
@@ -1863,7 +1921,12 @@
           </button>
         </div>
         <div class="dash-tbl-card" id="dash-services-list">
-          <div id="dash-services-empty" class="dash-empty">
+          <div id="dash-services-skel">
+            <div class="dash-skel-row"><div class="dash-skel-ico dash-skel-line"></div><div class="dash-skel-lines"><div class="dash-skel-line" style="height:12px;width:55%;"></div><div class="dash-skel-line" style="height:10px;width:35%;"></div></div><div class="dash-skel-line" style="height:10px;width:60px;border-radius:100px;"></div></div>
+            <div class="dash-skel-row"><div class="dash-skel-ico dash-skel-line"></div><div class="dash-skel-lines"><div class="dash-skel-line" style="height:12px;width:45%;"></div><div class="dash-skel-line" style="height:10px;width:30%;"></div></div><div class="dash-skel-line" style="height:10px;width:60px;border-radius:100px;"></div></div>
+            <div class="dash-skel-row"><div class="dash-skel-ico dash-skel-line"></div><div class="dash-skel-lines"><div class="dash-skel-line" style="height:12px;width:60%;"></div><div class="dash-skel-line" style="height:10px;width:40%;"></div></div><div class="dash-skel-line" style="height:10px;width:60px;border-radius:100px;"></div></div>
+          </div>
+          <div id="dash-services-empty" class="dash-empty" style="display:none;">
             <h4>Sin servicios aún</h4>
             <p>Aquí aparecerán todos tus servicios solicitados.</p>
             <button class="tnl-trigger dash-cta-btn" style="margin:0 auto;">
@@ -1892,14 +1955,37 @@
               <span style="font-size:0.8rem;color:#6b7280;font-weight:600;">Miembro desde</span>
               <span id="dash-profile-since" style="font-size:0.85rem;font-weight:700;color:#111;">—</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;border-bottom:1px solid #e5e7eb;min-height:52px;">
-              <span style="font-size:0.8rem;color:#6b7280;font-weight:600;">Estado</span>
+            <div class="dash-prof-row">
+              <span class="dash-prof-label">Estado</span>
               <span style="font-size:0.85rem;font-weight:700;color:#059669;">Activo</span>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:1rem 1.5rem;min-height:52px;">
-              <span style="font-size:0.8rem;color:#6b7280;font-weight:600;">Servicios totales</span>
-              <span id="dash-profile-total" style="font-size:0.85rem;font-weight:700;color:#111;">—</span>
+            <div class="dash-prof-row">
+              <span class="dash-prof-label">Servicios totales</span>
+              <span id="dash-profile-total" class="dash-prof-val">—</span>
             </div>
+            <div class="dash-prof-row">
+              <span class="dash-prof-label">Teléfono</span>
+              <span id="dash-profile-tel" class="dash-prof-val" style="color:#9ca3af;">—</span>
+            </div>
+            <div class="dash-prof-row" style="border-bottom:none;">
+              <span class="dash-prof-label">Dirección</span>
+              <span id="dash-profile-dir" class="dash-prof-val" style="color:#9ca3af;">—</span>
+            </div>
+            <!-- Formulario edición inline -->
+            <div class="dash-prof-edit-form" id="prof-edit-form">
+              <div class="dash-prof-field">
+                <label>Teléfono</label>
+                <input type="tel" id="prof-input-tel" placeholder="Ej: 81 1234 5678" />
+              </div>
+              <div class="dash-prof-field">
+                <label>Dirección (calle y colonia)</label>
+                <input type="text" id="prof-input-dir" placeholder="Ej: Av. Morelos 45, Col. Centro" />
+              </div>
+              <button class="dash-prof-save" id="prof-save-btn">Guardar cambios</button>
+            </div>
+          </div>
+          <div style="padding:1rem 1.5rem;border-top:1px solid #e5e7eb;">
+            <button class="dash-prof-edit-btn" id="prof-edit-toggle">Editar información</button>
           </div>
         </div>
         <button id="btn-logout-profile" style="margin-top:0.5rem;background:none;border:1.5px solid #fecaca;border-radius:10px;color:#ef4444;padding:0.85rem 1.5rem;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:var(--font);width:100%;max-width:480px;">Cerrar sesión</button>
@@ -1916,7 +2002,10 @@
         <span class="dash-bot-label">Inicio</span>
       </div>
       <div class="dash-bot-item" data-view="dv-services" aria-label="Servicios">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        <span style="position:relative;display:inline-flex;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>
+          <span class="dash-bot-badge" id="svc-badge"></span>
+        </span>
         <span class="dash-bot-label">Servicios</span>
       </div>
       <div class="dash-bot-item" data-view="dv-profile" aria-label="Perfil">
@@ -1932,6 +2021,47 @@
     </div>
   </div>
 
+</div>
+
+<!-- ONBOARDING -->
+<div id="onboarding" class="onb-overlay">
+  <div class="onb-card">
+    <div class="onb-logo">thruver</div>
+    <div class="onb-prog">
+      <div class="onb-prog-dot done" id="onb-dot-1"></div>
+      <div class="onb-prog-dot" id="onb-dot-2"></div>
+    </div>
+    <!-- Paso 1 -->
+    <div class="onb-step onb-active" id="onb-step-1">
+      <div class="onb-title">¡Bienvenido! 👋</div>
+      <div class="onb-sub">Configura tu perfil en segundos para que podamos conectarte con el técnico correcto.</div>
+      <div class="onb-field">
+        <label>Tu nombre completo</label>
+        <input type="text" id="onb-nombre" placeholder="Ej: María González" autocomplete="name" />
+      </div>
+      <div class="onb-field">
+        <label>Teléfono de contacto</label>
+        <input type="tel" id="onb-tel" placeholder="Ej: 81 1234 5678" autocomplete="tel" />
+      </div>
+      <button class="onb-btn" id="onb-next-1">Continuar →</button>
+      <button class="onb-skip" id="onb-skip-1">Omitir por ahora</button>
+    </div>
+    <!-- Paso 2 -->
+    <div class="onb-step" id="onb-step-2">
+      <div class="onb-title">¿Dónde estás? 📍</div>
+      <div class="onb-sub">Guardamos tu dirección para agilizar futuras solicitudes. La puedes cambiar después.</div>
+      <div class="onb-field">
+        <label>Calle y número</label>
+        <input type="text" id="onb-calle" placeholder="Ej: Av. Morelos 45" autocomplete="street-address" />
+      </div>
+      <div class="onb-field">
+        <label>Colonia</label>
+        <input type="text" id="onb-colonia" placeholder="Ej: Col. Centro" />
+      </div>
+      <button class="onb-btn" id="onb-finish">Empezar a usar Thruver ✓</button>
+      <button class="onb-skip" id="onb-skip-2">Omitir por ahora</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -2357,6 +2487,7 @@ document.addEventListener('DOMContentLoaded', function () {
         telefono:T.tel, direccion:T.dir, calle:T.calle, numero:T.numero, colonia:T.colonia, estado:'nueva',
         timestamp:new Date().toISOString()
       };
+      window._lastPayload = payload;
       fetch(SCRIPT_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}).catch(function(){});
       saveToFirebase('solicitudes', payload).finally(function(){
         var h2 = document.querySelector('#tnl-success h2');
@@ -2451,10 +2582,29 @@ document.addEventListener('DOMContentLoaded', function () {
         var stActive = document.getElementById('stat-active');
         var stDone   = document.getElementById('stat-done');
         if (stTotal)  stTotal.textContent  = svcs.length;
-        if (stActive) stActive.textContent = svcs.filter(function(s){ return s.estado === 'activo' || !s.estado; }).length;
+        if (stActive) stActive.textContent = svcs.filter(function(s){ return s.estado === 'activo'; }).length;
         if (stDone)   stDone.textContent   = svcs.filter(function(s){ return s.estado === 'completado'; }).length;
+        /* Badge notificación: servicios pendientes */
+        var pendientes = svcs.filter(function(s){ return !s.estado || s.estado === 'nueva' || s.estado === 'enviada'; }).length;
+        var badge = document.getElementById('svc-badge');
+        if (badge) badge.classList.toggle('visible', pendientes > 0);
+        /* Ocultar skeletons */
+        var skelH = document.getElementById('dash-historial-skel');
+        var skelS = document.getElementById('dash-services-skel');
+        if (skelH) skelH.style.display = 'none';
+        if (skelS) skelS.style.display = 'none';
+        /* Mostrar empty si vacío */
+        var emptyH = document.getElementById('dash-historial-empty');
+        var emptyS = document.getElementById('dash-services-empty');
+        if (emptyH) emptyH.style.display = svcs.length === 0 ? '' : 'none';
+        if (emptyS) emptyS.style.display = svcs.length === 0 ? '' : 'none';
         renderizarHistorial(svcs);
-      }).catch(function(e){ console.warn('[Thruver] Historial error:', e); });
+      }).catch(function(e){
+        console.warn('[Thruver] Historial error:', e);
+        /* Si falla, ocultar skeleton y mostrar estado vacío */
+        ['dash-historial-skel','dash-services-skel'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+        ['dash-historial-empty','dash-services-empty'].forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display=''; });
+      });
   }
 
   /* ------- Renderizar historial ------- */
@@ -2477,7 +2627,7 @@ document.addEventListener('DOMContentLoaded', function () {
       wrap.className = 'dash-tbl-scroll';
       var tbl = document.createElement('table');
       tbl.className = 'dash-table';
-      tbl.innerHTML = '<thead><tr><th></th><th>Servicio</th><th>Categor\u00EDa</th><th>Fecha</th><th>Costo</th><th>Estado</th><th>Reporte</th></tr></thead>';
+      tbl.innerHTML = '<thead><tr><th></th><th>Servicio</th><th>Fecha</th><th>Costo</th><th>Estado</th><th>Reporte</th></tr></thead>';
       var tbody = document.createElement('tbody');
       rows.forEach(function(s){ tbody.appendChild(buildTr(s)); });
       tbl.appendChild(tbody);
@@ -2488,14 +2638,17 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildTr(s) {
       var info  = SVC_INFO[s.servicio] || defaultInfo;
       var fecha = s.timestamp ? new Date(s.timestamp).toLocaleDateString('es-MX', {day:'2-digit',month:'short',year:'numeric'}) : '\u2014';
+      var estadoMap = { 'nueva':'Pendiente', 'enviada':'Pendiente', 'activo':'En progreso', 'en progreso':'En progreso', 'completado':'Completado', 'cancelado':'Cancelado' };
+      var estadoCls = { 'Pendiente':'badge-pending', 'En progreso':'badge-progress', 'Completado':'badge-done', 'Cancelado':'dash-tbl-badge' };
+      var estadoLabel = estadoMap[(s.estado||'').toLowerCase()] || 'Pendiente';
+      var estadoCl    = estadoCls[estadoLabel] || 'badge-pending';
       var tr = document.createElement('tr');
       tr.innerHTML =
         '<td><div class="dash-tbl-svc-ico ' + info.cls + '">' + info.svg + '</div></td>' +
         '<td><span style="font-weight:700;font-size:0.82rem;color:#111;">' + (s.servicio || '\u2014') + '</span>' + (s.espacio ? '<div style="font-size:0.71rem;color:#9ca3af;margin-top:1px;">' + s.espacio + '</div>' : '') + '</td>' +
-        '<td><span class="dash-tbl-badge" style="background:#f3f4f6;color:#374151;">' + (s.servicio || '\u2014') + '</span></td>' +
         '<td style="color:#6b7280;font-size:0.8rem;">' + fecha + '</td>' +
         '<td style="color:#9ca3af;font-size:0.8rem;">\u2014</td>' +
-        '<td><span class="dash-tbl-badge badge-enviada">Enviada</span></td>' +
+        '<td><span class="dash-tbl-badge ' + estadoCl + '">' + estadoLabel + '</span></td>' +
         '<td><button class="dash-tbl-report" title="Ver reporte t\u00E9cnico">' + reportSvg + '</button></td>';
       return tr;
     }
@@ -2859,6 +3012,138 @@ document.addEventListener('DOMContentLoaded', function () {
     el.style.transition='opacity 0.4s ease, transform 0.4s ease';
     obs.observe(el);
   });
+
+  /* ═══════════════════════════════════════════
+     ONBOARDING
+  ═══════════════════════════════════════════ */
+  var onbOverlay = document.getElementById('onboarding');
+
+  function showOnboarding(user) {
+    /* Pre-llenar nombre si Firebase lo tiene */
+    var nombreEl = document.getElementById('onb-nombre');
+    if (nombreEl && user && user.displayName) nombreEl.value = user.displayName;
+    onbOverlay.classList.add('onb-open');
+  }
+
+  function closeOnboarding() {
+    onbOverlay.classList.remove('onb-open');
+  }
+
+  function onbGoStep(n) {
+    document.querySelectorAll('.onb-step').forEach(function(s){ s.classList.remove('onb-active'); });
+    document.getElementById('onb-step-' + n).classList.add('onb-active');
+    document.getElementById('onb-dot-1').classList.toggle('done', n >= 1);
+    document.getElementById('onb-dot-2').classList.toggle('done', n >= 2);
+  }
+
+  document.getElementById('onb-next-1').addEventListener('click', function() {
+    var nombre = document.getElementById('onb-nombre').value.trim();
+    var tel    = document.getElementById('onb-tel').value.trim();
+    if (nombre) { localStorage.setItem('thruver_nombre', nombre); }
+    if (tel)    { localStorage.setItem('thruver_tel', tel); }
+    onbGoStep(2);
+  });
+
+  function finishOnboarding() {
+    var calle   = (document.getElementById('onb-calle')   || {}).value || '';
+    var colonia = (document.getElementById('onb-colonia') || {}).value || '';
+    if (calle.trim())   localStorage.setItem('thruver_calle',   calle.trim());
+    if (colonia.trim()) localStorage.setItem('thruver_colonia', colonia.trim());
+    localStorage.setItem('thruver_onboarded', '1');
+    closeOnboarding();
+    actualizarPerfilExtra();
+  }
+
+  document.getElementById('onb-finish').addEventListener('click', finishOnboarding);
+  document.getElementById('onb-skip-1').addEventListener('click', function(){ localStorage.setItem('thruver_onboarded','1'); closeOnboarding(); });
+  document.getElementById('onb-skip-2').addEventListener('click', function(){ localStorage.setItem('thruver_onboarded','1'); closeOnboarding(); });
+
+  /* ═══════════════════════════════════════════
+     PERFIL AMPLIADO — localStorage
+  ═══════════════════════════════════════════ */
+  function actualizarPerfilExtra() {
+    var tel     = localStorage.getItem('thruver_tel') || '';
+    var calle   = localStorage.getItem('thruver_calle') || '';
+    var colonia = localStorage.getItem('thruver_colonia') || '';
+    var dir     = [calle, colonia].filter(Boolean).join(', ');
+    var telEl   = document.getElementById('dash-profile-tel');
+    var dirEl   = document.getElementById('dash-profile-dir');
+    if (telEl) { telEl.textContent = tel || '—'; telEl.style.color = tel ? '#111' : '#9ca3af'; }
+    if (dirEl) { dirEl.textContent = dir || '—'; dirEl.style.color = dir ? '#111' : '#9ca3af'; }
+    /* Pre-llenar inputs del form edit */
+    var inpTel = document.getElementById('prof-input-tel');
+    var inpDir = document.getElementById('prof-input-dir');
+    if (inpTel) inpTel.value = tel;
+    if (inpDir) inpDir.value = dir;
+  }
+  actualizarPerfilExtra();
+
+  document.getElementById('prof-edit-toggle').addEventListener('click', function() {
+    var form = document.getElementById('prof-edit-form');
+    var open = form.classList.toggle('open');
+    this.textContent = open ? 'Cancelar' : 'Editar información';
+  });
+
+  document.getElementById('prof-save-btn').addEventListener('click', function() {
+    var tel = document.getElementById('prof-input-tel').value.trim();
+    var dir = document.getElementById('prof-input-dir').value.trim();
+    /* Guardar tel directo; dir en calle field por simplicidad */
+    if (tel) localStorage.setItem('thruver_tel',    tel);
+    if (dir) localStorage.setItem('thruver_calle',  dir);
+    localStorage.removeItem('thruver_colonia');
+    actualizarPerfilExtra();
+    document.getElementById('prof-edit-form').classList.remove('open');
+    document.getElementById('prof-edit-toggle').textContent = 'Editar información';
+  });
+
+  /* Pre-llenar tunnel con datos de perfil guardados */
+  var _origOpenTunnel = openTunnel;
+  openTunnel = function(presetSvc) {
+    _origOpenTunnel(presetSvc);
+    var tel     = localStorage.getItem('thruver_tel')    || '';
+    var calle   = localStorage.getItem('thruver_calle')  || '';
+    var colonia = localStorage.getItem('thruver_colonia')|| '';
+    var telEl   = document.getElementById('tnl-tel');
+    var calleEl = document.getElementById('tnl-calle');
+    var colonEl = document.getElementById('tnl-colonia');
+    if (telEl   && tel    && !telEl.value)   telEl.value   = tel;
+    if (calleEl && calle  && !calleEl.value) calleEl.value = calle;
+    if (colonEl && colonia&& !colonEl.value) colonEl.value = colonia;
+  };
+
+  /* ═══════════════════════════════════════════
+     CONFIRMACIÓN POR EMAIL (via Google Apps Script)
+  ═══════════════════════════════════════════ */
+  function enviarEmailConfirmacion(datos) {
+    var payload = Object.assign({}, datos, { tipo: 'EMAIL_CONFIRMACION' });
+    fetch(SCRIPT_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) }).catch(function(){});
+  }
+  /* Inyectar hook en enviarSolicitud al finalizar con éxito */
+  var _origOkBtn = document.getElementById('tnl-ok');
+  if (_origOkBtn) {
+    _origOkBtn.addEventListener('click', function() {
+      if (window._lastPayload) enviarEmailConfirmacion(window._lastPayload);
+    });
+  }
+
+  /* ═══════════════════════════════════════════
+     HOOK ONBOARDING en login
+  ═══════════════════════════════════════════ */
+  var _origOnUserLoggedIn = window.onUserLoggedIn;
+  window.onUserLoggedIn = function(user) {
+    if (_origOnUserLoggedIn) _origOnUserLoggedIn(user);
+    if (!localStorage.getItem('thruver_onboarded')) {
+      setTimeout(function(){ showOnboarding(user); }, 600);
+    }
+    actualizarPerfilExtra();
+  };
+
+  /* ═══════════════════════════════════════════
+     SERVICE WORKER (PWA)
+  ═══════════════════════════════════════════ */
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(function(){});
+  }
 
 });
 </script>

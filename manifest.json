@@ -1,0 +1,24 @@
+{
+  "name": "Thruver",
+  "short_name": "Thruver",
+  "description": "Servicios del hogar con técnicos verificados",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f3f3f3",
+  "theme_color": "#111111",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
