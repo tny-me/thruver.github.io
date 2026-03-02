@@ -2425,74 +2425,12 @@
             <h2>Solicitudes</h2>
             <p>Acepta o rechaza antes de que expiren</p>
           </div>
-          <span class="tech-job-badge tb-new" style="font-size:0.72rem;padding:0.3rem 0.85rem;">3 nuevas</span>
+          <span class="tech-job-badge tb-new" id="tdv-badge-count" style="font-size:0.72rem;padding:0.3rem 0.85rem;">…</span>
         </div>
         <div id="tdv-requests-list">
-          <div class="tech-job-card">
-            <div class="tech-job-head">
-              <div class="tech-job-ico tech-job-ico-blue">🔧</div>
-              <div class="tech-job-meta">
-                <div class="tech-job-svc">Plomería — fuga de agua</div>
-                <div class="tech-job-loc">📍 Col. San Pedro, Monterrey · 2.3 km</div>
-              </div>
-              <span class="tech-job-badge tb-new">Nueva</span>
-            </div>
-            <div class="tech-job-body">
-              <div class="tech-timer-row">
-                <span class="tech-timer-lbl">⏱ Expira en <span class="tech-countdown" data-secs="540">9:00</span></span>
-              </div>
-              <div class="tech-timer-bar"><div class="tech-timer-fill" style="width:100%"></div></div>
-              <div class="tech-job-desc">Fuga bajo el lavabo de la cocina, lleva un día. Urgencia normal.</div>
-              <div class="tech-job-actions">
-                <button class="tbtn-primary">Aceptar</button>
-                <button class="tbtn-ghost">Ver detalles</button>
-                <button class="tbtn-danger">Rechazar</button>
-              </div>
-            </div>
-          </div>
-          <div class="tech-job-card">
-            <div class="tech-job-head">
-              <div class="tech-job-ico tech-job-ico-blue">⚡</div>
-              <div class="tech-job-meta">
-                <div class="tech-job-svc">Electricidad — corto circuito</div>
-                <div class="tech-job-loc">📍 Col. Mitras, Monterrey · 4.1 km</div>
-              </div>
-              <span class="tech-job-badge tb-new">Nueva</span>
-            </div>
-            <div class="tech-job-body">
-              <div class="tech-timer-row">
-                <span class="tech-timer-lbl">⏱ Expira en <span class="tech-countdown" data-secs="312">5:12</span></span>
-              </div>
-              <div class="tech-timer-bar"><div class="tech-timer-fill" style="width:57%"></div></div>
-              <div class="tech-job-desc">Se fue la luz en dos cuartos, el breaker dispara. Revisión urgente.</div>
-              <div class="tech-job-actions">
-                <button class="tbtn-primary">Aceptar</button>
-                <button class="tbtn-ghost">Ver detalles</button>
-                <button class="tbtn-danger">Rechazar</button>
-              </div>
-            </div>
-          </div>
-          <div class="tech-job-card">
-            <div class="tech-job-head">
-              <div class="tech-job-ico tech-job-ico-blue">❄️</div>
-              <div class="tech-job-meta">
-                <div class="tech-job-svc">Aire / Clima — no enfría</div>
-                <div class="tech-job-loc">📍 Col. Cumbres, Monterrey · 6.8 km</div>
-              </div>
-              <span class="tech-job-badge tb-new">Nueva</span>
-            </div>
-            <div class="tech-job-body">
-              <div class="tech-timer-row">
-                <span class="tech-timer-lbl">⏱ Expira en <span class="tech-countdown" data-secs="720">12:00</span></span>
-              </div>
-              <div class="tech-timer-bar"><div class="tech-timer-fill" style="width:80%"></div></div>
-              <div class="tech-job-desc">El minisplit enciende pero no baja temperatura. Quiere revisión hoy.</div>
-              <div class="tech-job-actions">
-                <button class="tbtn-primary">Aceptar</button>
-                <button class="tbtn-ghost">Ver detalles</button>
-                <button class="tbtn-danger">Rechazar</button>
-              </div>
-            </div>
+          <div class="tech-empty">
+            <div class="tech-empty-ico">⏳</div>
+            <p>Cargando solicitudes...</p>
           </div>
         </div>
       </div><!-- /tdv-requests -->
@@ -3821,6 +3759,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
     document.body.style.overflow = 'hidden';
     showTechView('tdv-home');
+    cargarSolicitudesTecnico(user);
   }
 
   function closeTechDashboard() {
@@ -3949,6 +3888,136 @@ document.addEventListener('DOMContentLoaded', function () {
   initCountdowns();
 
   /* ═══════════════════════════════════════════
+     TECH DASHBOARD — Cargar solicitudes reales
+  ═══════════════════════════════════════════ */
+  var SVC_ICONS = {
+    'Plomería':'🔧','Electricidad':'⚡','Limpieza':'🧹','Pintura':'🖌️',
+    'Carpintería':'🪚','Jardinería':'🌿','Aire / Clima':'❄️',
+    'Remodelación':'🏗️','Consulta general':'💬'
+  };
+
+  function buildJobCard(docId, data) {
+    var ico  = SVC_ICONS[data.servicio] || '🔧';
+    var svc  = data.servicio + (data.espacio ? ' — ' + data.espacio : '');
+    var loc  = data.colonia ? '📍 Col. ' + data.colonia : (data.direccion ? '📍 ' + data.direccion : '');
+    var desc = data.descripcion || '—';
+    var cuando = data.urgencia === 'Agendar fecha' && data.fecha_programada
+      ? '📅 ' + data.fecha_programada
+      : '🚨 Lo antes posible';
+    return '<div class="tech-job-card" data-doc-id="' + docId + '">' +
+      '<div class="tech-job-head">' +
+        '<div class="tech-job-ico tech-job-ico-blue">' + ico + '</div>' +
+        '<div class="tech-job-meta">' +
+          '<div class="tech-job-svc">' + svc + '</div>' +
+          '<div class="tech-job-loc">' + loc + '</div>' +
+        '</div>' +
+        '<span class="tech-job-badge tb-new">Nueva</span>' +
+      '</div>' +
+      '<div class="tech-job-body">' +
+        '<div class="tech-job-desc">' + desc + '</div>' +
+        '<div class="tech-job-desc" style="color:#6b7280;font-size:0.8rem;margin-top:0.3rem;">' + cuando + '</div>' +
+        '<div class="tech-job-actions">' +
+          '<button class="tbtn-primary tjob-accept">Aceptar</button>' +
+          '<button class="tbtn-danger tjob-reject">Rechazar</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  function attachJobHandlers(user, tecnico) {
+    document.querySelectorAll('.tjob-accept').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var card  = btn.closest('[data-doc-id]');
+        var docId = card.getAttribute('data-doc-id');
+        btn.disabled = true;
+        btn.textContent = 'Aceptando...';
+        var ref = window.fbDoc(window.db, 'solicitudes', docId);
+        window.fbUpdateDoc(ref, {
+          estado:        'asignada',
+          tecnicoId:     user.uid,
+          tecnicoNombre: tecnico.nombre || user.displayName || '',
+          tecnicoEmail:  tecnico.email  || user.email  || '',
+          tecnicoTel:    tecnico.telefono || '',
+          asignadoEn:    new Date().toISOString()
+        }).then(function() {
+          card.innerHTML = '<div style="padding:1rem 1.25rem;text-align:center;color:#16a34a;font-weight:700;font-size:0.95rem;">✅ Trabajo aceptado</div>';
+          /* también quitarlo del panel home si existe */
+          var homeCard = document.querySelector('#tdv-home-requests [data-doc-id="' + docId + '"]');
+          if (homeCard) homeCard.remove();
+          setTimeout(function() { card.remove(); }, 2200);
+        }).catch(function(err) {
+          btn.disabled = false;
+          btn.textContent = 'Aceptar';
+          alert('Error al aceptar: ' + err.message);
+        });
+      });
+    });
+    document.querySelectorAll('.tjob-reject').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var card = btn.closest('[data-doc-id]');
+        card.style.opacity = '0.35';
+        card.style.transition = 'opacity 0.3s';
+        setTimeout(function() { card.remove(); }, 320);
+      });
+    });
+  }
+
+  function cargarSolicitudesTecnico(user) {
+    var reqList  = document.getElementById('tdv-requests-list');
+    var homeReq  = document.getElementById('tdv-home-requests');
+    var badge    = document.getElementById('tdv-badge-count');
+    var loadHTML = '<div class="tech-empty"><div class="tech-empty-ico">⏳</div><p>Cargando...</p></div>';
+    reqList.innerHTML = loadHTML;
+    homeReq.innerHTML = loadHTML;
+
+    if (!window.db || !window.fbGetDocs || !window.fbDoc || !window.fbUpdateDoc) {
+      reqList.innerHTML = '<div class="tech-empty"><p>Firebase no está listo. Recarga la página.</p></div>';
+      homeReq.innerHTML = reqList.innerHTML;
+      return;
+    }
+
+    /* 1. Buscar perfil del técnico por uid */
+    var qTec = window.fbQuery(window.fbCollection(window.db, 'tecnicos'), window.fbWhere('uid', '==', user.uid));
+    window.fbGetDocs(qTec).then(function(snap) {
+      var tecnico = null;
+      snap.forEach(function(d) { tecnico = d.data(); });
+
+      if (!tecnico) {
+        var msg = '<div class="tech-empty"><div class="tech-empty-ico">⚠️</div><h4>Perfil incompleto</h4><p>Regístrate como técnico para ver solicitudes.</p></div>';
+        reqList.innerHTML = msg; homeReq.innerHTML = msg;
+        return;
+      }
+
+      /* 2. Solicitudes nuevas que coincidan con la especialidad */
+      var qSol = window.fbQuery(
+        window.fbCollection(window.db, 'solicitudes'),
+        window.fbWhere('servicio', '==', tecnico.especialidad),
+        window.fbWhere('estado',   '==', 'nueva'),
+        window.fbOrderBy('timestamp', 'desc')
+      );
+      window.fbGetDocs(qSol).then(function(solSnap) {
+        var lista = [];
+        solSnap.forEach(function(d) { lista.push({ id: d.id, data: d.data() }); });
+
+        if (badge) badge.textContent = lista.length + (lista.length === 1 ? ' nueva' : ' nuevas');
+
+        var emptyHTML = '<div class="tech-empty"><div class="tech-empty-ico">📋</div><h4>Sin solicitudes nuevas</h4><p>Las nuevas solicitudes de ' + tecnico.especialidad + '<br>aparecerán aquí automáticamente.</p></div>';
+        if (lista.length === 0) { reqList.innerHTML = emptyHTML; homeReq.innerHTML = emptyHTML; return; }
+
+        reqList.innerHTML = lista.map(function(s) { return buildJobCard(s.id, s.data); }).join('');
+        homeReq.innerHTML = lista.slice(0, 2).map(function(s) { return buildJobCard(s.id, s.data); }).join('');
+        attachJobHandlers(user, tecnico);
+      }).catch(function(err) {
+        console.error('[Thruver] Error cargando solicitudes:', err);
+        reqList.innerHTML = '<div class="tech-empty"><p>Error al cargar. Intenta de nuevo.</p></div>';
+      });
+    }).catch(function(err) {
+      console.error('[Thruver] Error cargando perfil técnico:', err);
+      reqList.innerHTML = '<div class="tech-empty"><p>Error al cargar perfil. Intenta de nuevo.</p></div>';
+    });
+  }
+
+  /* ═══════════════════════════════════════════
      SERVICE WORKER (PWA)
   ═══════════════════════════════════════════ */
   if ('serviceWorker' in navigator) {
@@ -3964,7 +4033,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <script type="module">
   import { initializeApp }                                          from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
   import { getAnalytics }                                           from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
-  import { getFirestore, collection, addDoc, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, query, where, getDocs, orderBy, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
   import {
     getAuth,
     createUserWithEmailAndPassword,
@@ -4000,6 +4069,8 @@ document.addEventListener('DOMContentLoaded', function () {
   window.fbWhere              = where;
   window.fbGetDocs            = getDocs;
   window.fbOrderBy            = orderBy;
+  window.fbUpdateDoc          = updateDoc;
+  window.fbDoc                = doc;
   window.fbCreateUser         = createUserWithEmailAndPassword;
   window.fbSignIn             = signInWithEmailAndPassword;
   window.fbSignInWithPopup    = signInWithPopup;
