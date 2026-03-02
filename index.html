@@ -141,59 +141,6 @@
     .carousel-dot::after { content: ''; position: absolute; inset: -8px; }
     .carousel-dot.active { background: var(--black); transform: scale(1.4); }
 
-    /* ══ HERO ILLUSTRATION ══ */
-    .hero-illo-wrap { width: 100%; max-width: 500px; animation: fadeUp 0.6s ease 0.1s both; }
-    .hero-illo { width: 100%; height: auto; display: block; }
-
-    /* ══ SERVICES TABLE SECTION ══ */
-    .svc-table-section { background: var(--white); border-bottom: 1px solid var(--border); }
-    .svc-table-inner { max-width: 1140px; margin: 0 auto; padding: 3rem 2.5rem; }
-    .svc-table-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 1.8rem; gap: 1rem; flex-wrap: wrap; }
-    .svc-eyebrow { font-size: 0.67rem; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.3rem; }
-    .svc-table-title { font-size: 1.35rem; font-weight: 900; letter-spacing: -0.035em; color: var(--black); }
-    .svc-table-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); }
-    .svc-table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
-    .svc-table thead tr { border-bottom: 1px solid var(--border); background: var(--bg); }
-    .svc-table th { padding: 0.75rem 1.1rem; text-align: left; font-size: 0.65rem; font-weight: 700; color: var(--muted2); text-transform: uppercase; letter-spacing: 0.09em; white-space: nowrap; }
-    .svc-table td { padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--border); vertical-align: middle; }
-    .svc-table tbody tr:last-child td { border-bottom: none; }
-    .svc-table tbody tr { transition: background 0.15s; }
-    .svc-table tbody tr:hover { background: var(--bg); }
-    /* Ticker */
-    .svc-ticker { font-size: 0.72rem; font-weight: 800; color: var(--muted2); font-family: 'Courier New', monospace; white-space: nowrap; }
-    /* Cliente */
-    .svc-client-cell { display: flex; align-items: center; gap: 0.65rem; }
-    .svc-client-av { width: 30px; height: 30px; border-radius: 50%; background: var(--black); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 700; flex-shrink: 0; }
-    .svc-client-av.av-blue  { background: #0098cf; }
-    .svc-client-av.av-green { background: #16a34a; }
-    .svc-client-av.av-amber { background: #d97706; }
-    .svc-client-name { font-size: 0.83rem; font-weight: 700; color: var(--black); white-space: nowrap; }
-    /* Servicio */
-    .svc-cat-cell { display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
-    .svc-cat-icon { font-size: 1rem; }
-    .svc-cat-name { font-size: 0.81rem; color: var(--text); font-weight: 600; }
-    /* Dirección / Tel */
-    .svc-addr { font-size: 0.78rem; color: var(--muted); max-width: 140px; line-height: 1.4; }
-    .svc-tel  { font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
-    /* Details button */
-    .svc-detail-btn { width: 32px; height: 32px; border-radius: 8px; background: var(--bg); border: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: all 0.15s; position: relative; }
-    .svc-detail-btn:hover { background: var(--bg3); color: var(--black); border-color: rgba(0,0,0,0.15); }
-    /* Status badge */
-    .svc-status { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.68rem; font-weight: 700; padding: 0.28rem 0.7rem; border-radius: 100px; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.05em; }
-    .svc-status-active   { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-    .svc-status-pending  { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
-    .svc-status-transit  { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
-    .svc-status-done     { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
-    .svc-status-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
-    /* Details popover */
-    .svc-popover-wrap { position: relative; display: inline-flex; }
-    .svc-popover { display: none; position: absolute; bottom: calc(100% + 8px); right: 0; width: 260px; background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; box-shadow: 0 8px 32px rgba(0,0,0,0.12); z-index: 200; animation: fadeUp 0.18s ease; }
-    .svc-popover.open { display: block; }
-    .svc-popover-title { font-size: 0.82rem; font-weight: 800; color: var(--black); margin-bottom: 0.75rem; padding-bottom: 0.55rem; border-bottom: 1px solid var(--border); }
-    .svc-popover-row { display: flex; justify-content: space-between; gap: 0.5rem; padding: 0.35rem 0; font-size: 0.77rem; }
-    .svc-popover-row span:first-child { color: var(--muted); }
-    .svc-popover-row span:last-child  { color: var(--black); font-weight: 600; text-align: right; }
-
     /* ══ SERVICES BAR ══ */
     .services-bar { background: #3c3c3c; }
     .services-bar-inner { max-width: 1140px; margin: 0 auto; padding: 2.5rem; }
@@ -1211,9 +1158,8 @@
       .main-content     { grid-template-columns: 1fr; padding: 3rem 2rem; }
       .hero             { grid-template-columns: 1fr; min-height: auto; }
       .hero-right       { height: auto; padding: 0 2rem 3rem; justify-content: center; }
-      .hero-illo-wrap   { max-width: 480px; }
-      .svc-table-inner  { padding: 2.5rem 2rem; }
-      .svc-addr         { max-width: 110px; }
+      .carousel-wrap    { max-width: 480px; }
+      .services-grid    { grid-template-columns: repeat(4,1fr); }
       .dash-main-scroll { padding: 2rem 1.5rem; }
       .tnl-step3-layout { grid-template-columns: 1fr; }
       .tnl-receipt      { position: static; }
@@ -1234,11 +1180,8 @@
       .hero { grid-template-columns: 1fr; min-height: auto; }
       .hero-left { padding: 2rem 1.2rem 1.5rem; }
       .hero-right { height: auto; padding: 0 1.2rem 2.5rem; }
-      .hero-illo-wrap { max-width: 100%; }
-      .svc-table-inner  { padding: 1.8rem 1.2rem; }
-      .svc-table-title  { font-size: 1.15rem; }
-      .svc-tel, .svc-addr { font-size: 0.72rem; }
-      .svc-table th, .svc-table td { padding: 0.75rem 0.75rem; }
+      .carousel-wrap { max-width: 100%; }
+      .carousel-frame { border-radius: 14px; }
       .hero-h1 { font-size: 1.75rem; line-height: 1.1; }
       .hero-sub { font-size: 0.9rem; max-width: 100%; margin-bottom: 1.8rem; }
       .hero-actions { flex-direction: column; gap: 0.5rem; margin-bottom: 2rem; }
@@ -1254,7 +1197,12 @@
       .why-strip-title  { font-size: 1.4rem; margin-bottom: 1.8rem; }
       .why-strip-right  { display: none; }
       .why-strip-list   { gap: 1.2rem; }
-      .svc-table-header { flex-direction: column; align-items: flex-start; gap: 0.8rem; }
+      .services-bar-inner { padding: 1.5rem 1.2rem; }
+      .services-bar-top { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+      .services-grid { grid-template-columns: repeat(4,1fr); gap: 0.45rem; }
+      .service-pill { padding: 0.8rem 0.3rem; border-radius: 10px; min-height: 70px; gap: 0.3rem; }
+      .service-pill-icon  { font-size: 1.35rem; }
+      .service-pill-label { font-size: 0.6rem; }
       .main-content { padding: 2rem 1.2rem; gap: 2rem; }
       .block-title  { font-size: 1.2rem; }
       .problem-card { padding: 1.1rem 1.2rem; }
@@ -1670,124 +1618,24 @@
   </div>
 
   <div class="hero-right">
-    <div class="hero-illo-wrap">
-      <svg class="hero-illo" viewBox="0 0 460 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <defs>
-          <pattern id="hdots" width="22" height="22" patternUnits="userSpaceOnUse">
-            <circle cx="11" cy="11" r="1.4" fill="rgba(0,0,0,0.07)"/>
-          </pattern>
-        </defs>
-        <rect width="460" height="420" rx="24" fill="url(#hdots)"/>
-        <!-- Ground shadow -->
-        <ellipse cx="215" cy="385" rx="105" ry="12" fill="rgba(0,0,0,0.06)"/>
-        <!-- Ground line -->
-        <line x1="80" y1="368" x2="350" y2="368" stroke="#111" stroke-width="1.5" stroke-linecap="round" opacity="0.1"/>
-
-        <!-- ═══ LEGS ═══ -->
-        <rect x="178" y="275" width="24" height="92" rx="12" fill="white" stroke="#111" stroke-width="2"/>
-        <rect x="218" y="275" width="24" height="92" rx="12" fill="white" stroke="#111" stroke-width="2"/>
-        <!-- Boots -->
-        <rect x="164" y="350" width="46" height="24" rx="10" fill="#111"/>
-        <rect x="204" y="350" width="46" height="24" rx="10" fill="#111"/>
-
-        <!-- ═══ TORSO (uniform) ═══ -->
-        <rect x="158" y="178" width="104" height="104" rx="20" fill="#111"/>
-        <!-- Collar stripe -->
-        <rect x="192" y="185" width="36" height="5" rx="2.5" fill="rgba(255,255,255,0.22)"/>
-        <!-- Chest pocket -->
-        <rect x="165" y="207" width="34" height="30" rx="7" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.16)" stroke-width="1.5"/>
-        <line x1="172" y1="215" x2="192" y2="215" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/>
-        <line x1="172" y1="222" x2="188" y2="222" stroke="rgba(255,255,255,0.2)" stroke-width="1.5" stroke-linecap="round"/>
-        <text x="174" y="232" font-size="7" font-weight="900" fill="rgba(255,255,255,0.35)" font-family="Arial, sans-serif">THR</text>
-
-        <!-- ═══ LEFT ARM (down → wrench) ═══ -->
-        <path d="M 163 198 C 142 220 128 252 120 278" stroke-width="21" stroke="#111" stroke-linecap="round" fill="none"/>
-        <path d="M 163 198 C 142 220 128 252 120 278" stroke-width="17" stroke="white" stroke-linecap="round" fill="none"/>
-        <path d="M 163 198 C 142 220 128 252 120 278" stroke-width="2" stroke="#111" stroke-linecap="round" fill="none"/>
-
-        <!-- ═══ RIGHT ARM (out → clipboard) ═══ -->
-        <path d="M 257 198 C 275 215 292 232 304 252" stroke-width="21" stroke="#111" stroke-linecap="round" fill="none"/>
-        <path d="M 257 198 C 275 215 292 232 304 252" stroke-width="17" stroke="white" stroke-linecap="round" fill="none"/>
-        <path d="M 257 198 C 275 215 292 232 304 252" stroke-width="2" stroke="#111" stroke-linecap="round" fill="none"/>
-
-        <!-- ═══ NECK ═══ -->
-        <rect x="196" y="163" width="28" height="22" rx="11" fill="#f5c9a0" stroke="#111" stroke-width="2"/>
-
-        <!-- ═══ HEAD ═══ -->
-        <circle cx="210" cy="132" r="42" fill="#f5c9a0" stroke="#111" stroke-width="2.5"/>
-
-        <!-- Hard hat -->
-        <path d="M 168 130 Q 168 83 210 83 Q 252 83 252 130 Z" fill="#111"/>
-        <rect x="160" y="125" width="100" height="14" rx="7" fill="#111"/>
-        <rect x="165" y="131" width="90" height="4" rx="2" fill="rgba(255,255,255,0.13)"/>
-
-        <!-- Eyes -->
-        <circle cx="197" cy="140" r="4.5" fill="#111"/>
-        <circle cx="223" cy="140" r="4.5" fill="#111"/>
-        <circle cx="199" cy="138" r="1.6" fill="rgba(255,255,255,0.6)"/>
-        <circle cx="225" cy="138" r="1.6" fill="rgba(255,255,255,0.6)"/>
-        <!-- Eyebrows -->
-        <path d="M 191 131 Q 197 128 203 131" stroke="#111" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <path d="M 217 131 Q 223 128 229 131" stroke="#111" stroke-width="2" fill="none" stroke-linecap="round"/>
-        <!-- Smile -->
-        <path d="M 195 153 Q 210 165 225 153" stroke="#111" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-
-        <!-- ═══ WRENCH ═══ -->
-        <g transform="translate(109,280) rotate(-18)">
-          <rect x="-6" y="-42" width="12" height="56" rx="5.5" fill="#e0e0e0" stroke="#111" stroke-width="2"/>
-          <rect x="-15" y="-56" width="30" height="18" rx="6" fill="white" stroke="#111" stroke-width="2"/>
-          <rect x="-5" y="-58" width="10" height="12" rx="3" fill="#f0f0f0" stroke="#111" stroke-width="1.5"/>
-          <rect x="-15" y="-26" width="6" height="9" rx="2.5" fill="white" stroke="#111" stroke-width="1.5"/>
-          <rect x="9" y="-26" width="6" height="9" rx="2.5" fill="white" stroke="#111" stroke-width="1.5"/>
-        </g>
-
-        <!-- ═══ CLIPBOARD ═══ -->
-        <g transform="translate(316,258)">
-          <rect x="-30" y="-54" width="60" height="76" rx="9" fill="white" stroke="#111" stroke-width="2"/>
-          <rect x="-14" y="-60" width="28" height="14" rx="5" fill="#111"/>
-          <line x1="-20" y1="-38" x2="20" y2="-38" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-          <line x1="-20" y1="-26" x2="20" y2="-26" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-          <line x1="-20" y1="-14" x2="12" y2="-14" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-          <line x1="-20" y1="-2" x2="20" y2="-2" stroke="#e0e0e0" stroke-width="2" stroke-linecap="round"/>
-          <circle cx="6" cy="12" r="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
-          <path d="M 2 12 L 5 15 L 11 8" stroke="#22c55e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-        </g>
-
-        <!-- ═══ TOOLBOX ═══ -->
-        <g transform="translate(352,305)">
-          <rect x="-52" y="-34" width="104" height="66" rx="10" fill="white" stroke="#111" stroke-width="2"/>
-          <rect x="-52" y="-10" width="104" height="8" fill="#111" rx="0"/>
-          <rect x="-20" y="-44" width="40" height="18" rx="7" fill="none" stroke="#111" stroke-width="2"/>
-          <rect x="-40" y="8" width="20" height="20" rx="4" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="1.5"/>
-          <rect x="-16" y="8" width="14" height="20" rx="4" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="1.5"/>
-          <rect x="2" y="8" width="14" height="20" rx="4" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="1.5"/>
-          <rect x="20" y="8" width="20" height="20" rx="4" fill="#f5f5f5" stroke="#e0e0e0" stroke-width="1.5"/>
-        </g>
-
-        <!-- ═══ FLOATING VERIFIED BADGE ═══ -->
-        <g transform="translate(363,90)">
-          <rect x="-55" y="-30" width="110" height="60" rx="15" fill="white" stroke="#111" stroke-width="1.5"/>
-          <circle cx="-30" cy="0" r="18" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
-          <path d="M -37 0 L -32 6 L -22 -7" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-          <text x="-5" y="-8" font-size="9.5" font-weight="800" fill="#111" font-family="Arial, sans-serif">Verificado</text>
-          <text x="-5" y="7" font-size="8" fill="#888" font-family="Arial, sans-serif">Técnico activo</text>
-          <circle cx="46" cy="-20" r="7" fill="rgba(34,197,94,0.12)" stroke="#22c55e" stroke-width="1"/>
-          <circle cx="46" cy="-20" r="3.5" fill="#22c55e"/>
-        </g>
-
-        <!-- ═══ RATING CHIP ═══ -->
-        <g transform="translate(80,118)">
-          <rect x="-54" y="-22" width="108" height="44" rx="13" fill="white" stroke="#111" stroke-width="1.5"/>
-          <text x="-40" y="-4" font-size="7.5" font-weight="700" fill="#999" font-family="Arial, sans-serif">200+ reseñas</text>
-          <text x="-42" y="10" font-size="14" fill="#111" font-family="Arial, sans-serif">★★★★★</text>
-        </g>
-
-        <!-- ═══ SPEED PILL ═══ -->
-        <g transform="translate(92,318)">
-          <rect x="-50" y="-16" width="100" height="32" rx="100" fill="#111"/>
-          <text x="0" y="5" font-size="9.5" font-weight="700" fill="white" font-family="Arial, sans-serif" text-anchor="middle">⚡ Hoy mismo</text>
-        </g>
-      </svg>
+    <div class="carousel-wrap">
+      <div class="carousel-frame">
+        <div class="carousel-slides" id="carouselSlides">
+          <div class="carousel-slide active">
+            <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Plomero.jpeg" alt="Plomería" />
+          </div>
+          <div class="carousel-slide">
+            <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Electrico.jpeg" alt="Electricidad" loading="lazy" />
+          </div>
+          <div class="carousel-slide">
+            <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Pintor.jpeg" alt="Pintura" loading="lazy" />
+          </div>
+          <div class="carousel-slide">
+            <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Limpieza.jpeg" alt="Limpieza" loading="lazy" />
+          </div>
+        </div>
+      </div>
+      <div class="carousel-dots" id="carouselDots"></div>
     </div>
   </div>
 </section>
@@ -1845,168 +1693,22 @@
   </div>
 </section>
 
-<!-- ACTIVE SERVICES TABLE -->
-<section class="svc-table-section" id="servicios">
-  <div class="svc-table-inner">
-    <div class="svc-table-header">
-      <div>
-        <p class="svc-eyebrow">Panel de operaciones</p>
-        <h2 class="svc-table-title">Servicios activos</h2>
-      </div>
-      <a href="#" class="btn-solid tnl-trigger">+ Nuevo servicio</a>
+<!-- SERVICES BAR -->
+<section class="services-bar" id="servicios">
+  <div class="services-bar-inner">
+    <div class="services-bar-top">
+      <h2>¿Qué necesitas hoy?</h2>
+      <a href="#" class="link-muted tnl-trigger">Ver todos →</a>
     </div>
-    <div class="svc-table-wrap">
-      <table class="svc-table">
-        <thead>
-          <tr>
-            <th>Ticket</th>
-            <th>Nombre cliente</th>
-            <th>Categoría / Servicio</th>
-            <th>Dirección</th>
-            <th>Teléfono</th>
-            <th>Detalles</th>
-            <th>Estatus</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Row 1 -->
-          <tr>
-            <td><span class="svc-ticker">#T-0041</span></td>
-            <td>
-              <div class="svc-client-cell">
-                <div class="svc-client-av">RM</div>
-                <span class="svc-client-name">Roberto Medina</span>
-              </div>
-            </td>
-            <td>
-              <div class="svc-cat-cell">
-                <span class="svc-cat-icon">🔧</span>
-                <span class="svc-cat-name">Plomería</span>
-              </div>
-            </td>
-            <td><span class="svc-addr">Col. Centro, Calle Ángel Flores 210</span></td>
-            <td><span class="svc-tel">667 123 4567</span></td>
-            <td>
-              <div class="svc-popover-wrap">
-                <button class="svc-detail-btn" onclick="togglePopover(this)" title="Ver detalles">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="7" x2="8" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="5" r="0.75" fill="currentColor"/></svg>
-                </button>
-                <div class="svc-popover">
-                  <p class="svc-popover-title">Ticket #T-0041 · Plomería</p>
-                  <div class="svc-popover-row"><span>Descripción</span><span>Fuga de agua en cocina</span></div>
-                  <div class="svc-popover-row"><span>Técnico</span><span>Carlos Montoya</span></div>
-                  <div class="svc-popover-row"><span>Fecha</span><span>Hoy · 2:30 pm</span></div>
-                  <div class="svc-popover-row"><span>Precio estimado</span><span>$450</span></div>
-                  <div class="svc-popover-row"><span>Nota</span><span>Revisar llave principal</span></div>
-                </div>
-              </div>
-            </td>
-            <td><span class="svc-status svc-status-active"><span class="svc-status-dot"></span>En curso</span></td>
-          </tr>
-          <!-- Row 2 -->
-          <tr>
-            <td><span class="svc-ticker">#T-0040</span></td>
-            <td>
-              <div class="svc-client-cell">
-                <div class="svc-client-av av-blue">LG</div>
-                <span class="svc-client-name">Lucía González</span>
-              </div>
-            </td>
-            <td>
-              <div class="svc-cat-cell">
-                <span class="svc-cat-icon">⚡</span>
-                <span class="svc-cat-name">Electricidad</span>
-              </div>
-            </td>
-            <td><span class="svc-addr">Col. Guadalupe, Blvd. Zapata 88</span></td>
-            <td><span class="svc-tel">667 234 5678</span></td>
-            <td>
-              <div class="svc-popover-wrap">
-                <button class="svc-detail-btn" onclick="togglePopover(this)" title="Ver detalles">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="7" x2="8" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="5" r="0.75" fill="currentColor"/></svg>
-                </button>
-                <div class="svc-popover">
-                  <p class="svc-popover-title">Ticket #T-0040 · Electricidad</p>
-                  <div class="svc-popover-row"><span>Descripción</span><span>Cortocircuito en tablero</span></div>
-                  <div class="svc-popover-row"><span>Técnico</span><span>En asignación</span></div>
-                  <div class="svc-popover-row"><span>Fecha</span><span>Hoy · 5:00 pm</span></div>
-                  <div class="svc-popover-row"><span>Precio estimado</span><span>$600</span></div>
-                  <div class="svc-popover-row"><span>Nota</span><span>Urgente — sin luz sala</span></div>
-                </div>
-              </div>
-            </td>
-            <td><span class="svc-status svc-status-transit"><span class="svc-status-dot"></span>En camino</span></td>
-          </tr>
-          <!-- Row 3 -->
-          <tr>
-            <td><span class="svc-ticker">#T-0039</span></td>
-            <td>
-              <div class="svc-client-cell">
-                <div class="svc-client-av av-green">MR</div>
-                <span class="svc-client-name">Mario Ríos</span>
-              </div>
-            </td>
-            <td>
-              <div class="svc-cat-cell">
-                <span class="svc-cat-icon">🧹</span>
-                <span class="svc-cat-name">Limpieza</span>
-              </div>
-            </td>
-            <td><span class="svc-addr">Fracc. Las Quintas, Av. Las Torres 15</span></td>
-            <td><span class="svc-tel">667 345 6789</span></td>
-            <td>
-              <div class="svc-popover-wrap">
-                <button class="svc-detail-btn" onclick="togglePopover(this)" title="Ver detalles">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="7" x2="8" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="5" r="0.75" fill="currentColor"/></svg>
-                </button>
-                <div class="svc-popover">
-                  <p class="svc-popover-title">Ticket #T-0039 · Limpieza</p>
-                  <div class="svc-popover-row"><span>Descripción</span><span>Limpieza profunda hogar</span></div>
-                  <div class="svc-popover-row"><span>Técnico</span><span>María López</span></div>
-                  <div class="svc-popover-row"><span>Fecha</span><span>Mar 3 · 10:00 am</span></div>
-                  <div class="svc-popover-row"><span>Precio estimado</span><span>$280</span></div>
-                  <div class="svc-popover-row"><span>Nota</span><span>3 habitaciones + sala</span></div>
-                </div>
-              </div>
-            </td>
-            <td><span class="svc-status svc-status-pending"><span class="svc-status-dot"></span>Pendiente</span></td>
-          </tr>
-          <!-- Row 4 -->
-          <tr>
-            <td><span class="svc-ticker">#T-0038</span></td>
-            <td>
-              <div class="svc-client-cell">
-                <div class="svc-client-av av-amber">SP</div>
-                <span class="svc-client-name">Sara Palomino</span>
-              </div>
-            </td>
-            <td>
-              <div class="svc-cat-cell">
-                <span class="svc-cat-icon">🖌️</span>
-                <span class="svc-cat-name">Pintura</span>
-              </div>
-            </td>
-            <td><span class="svc-addr">Col. Tierra Blanca, Prol. Insurgentes 44</span></td>
-            <td><span class="svc-tel">667 456 7890</span></td>
-            <td>
-              <div class="svc-popover-wrap">
-                <button class="svc-detail-btn" onclick="togglePopover(this)" title="Ver detalles">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="7" x2="8" y2="11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="5" r="0.75" fill="currentColor"/></svg>
-                </button>
-                <div class="svc-popover">
-                  <p class="svc-popover-title">Ticket #T-0038 · Pintura</p>
-                  <div class="svc-popover-row"><span>Descripción</span><span>Pintura exterior fachada</span></div>
-                  <div class="svc-popover-row"><span>Técnico</span><span>Pedro Sánchez</span></div>
-                  <div class="svc-popover-row"><span>Fecha</span><span>Mar 4 · 9:00 am</span></div>
-                  <div class="svc-popover-row"><span>Precio estimado</span><span>$1,200</span></div>
-                  <div class="svc-popover-row"><span>Nota</span><span>2 colores — blanco / gris</span></div>
-                </div>
-              </div>
-            </td>
-            <td><span class="svc-status svc-status-done"><span class="svc-status-dot"></span>Completado</span></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="services-grid">
+      <a href="#" class="service-pill tnl-trigger" data-preset="Plomería"><span class="service-pill-icon">🔧</span><span class="service-pill-label">Plomería</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Electricidad"><span class="service-pill-icon">⚡</span><span class="service-pill-label">Electricidad</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Limpieza"><span class="service-pill-icon">🧹</span><span class="service-pill-label">Limpieza</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Pintura"><span class="service-pill-icon">🖌️</span><span class="service-pill-label">Pintura</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Carpintería"><span class="service-pill-icon">🪚</span><span class="service-pill-label">Carpintería</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Jardinería"><span class="service-pill-icon">🌿</span><span class="service-pill-label">Jardinería</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Aire / Clima"><span class="service-pill-icon">❄️</span><span class="service-pill-label">Aire / Clima</span></a>
+      <a href="#" class="service-pill tnl-trigger" data-preset="Remodelación"><span class="service-pill-icon">🏗️</span><span class="service-pill-label">Remodelación</span></a>
     </div>
   </div>
 </section>
@@ -3885,19 +3587,35 @@ document.addEventListener('DOMContentLoaded', function () {
   if (btnLogoutProfile) btnLogoutProfile.addEventListener('click', doLogout);
 
   /* ═══════════════════════════════════════════
-     SERVICE TABLE POPOVER
+     CAROUSEL
   ═══════════════════════════════════════════ */
-  function togglePopover(btn) {
-    var pop = btn.nextElementSibling;
-    var isOpen = pop.classList.contains('open');
-    document.querySelectorAll('.svc-popover.open').forEach(function(p){ p.classList.remove('open'); });
-    if (!isOpen) pop.classList.add('open');
-  }
-  document.addEventListener('click', function(e){
-    if (!e.target.closest('.svc-popover-wrap')) {
-      document.querySelectorAll('.svc-popover.open').forEach(function(p){ p.classList.remove('open'); });
-    }
+  var slides = document.querySelectorAll('.carousel-slide');
+  var dotsEl = document.getElementById('carouselDots');
+  var cur = 0, timer;
+
+  slides.forEach(function(_, i) {
+    var d = document.createElement('div');
+    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', function(){ goTo(i); });
+    dotsEl.appendChild(d);
   });
+
+  function goTo(n) {
+    slides[cur].classList.remove('active');
+    dotsEl.children[cur].classList.remove('active');
+    cur = (n + slides.length) % slides.length;
+    slides[cur].classList.add('active');
+    dotsEl.children[cur].classList.add('active');
+    document.getElementById('carouselSlides').style.transform = 'translateX(-' + (cur * 100) + '%)';
+    clearInterval(timer);
+    timer = setInterval(function(){ goTo(cur + 1); }, 4200);
+  }
+
+  var tsX = 0;
+  var cf  = document.querySelector('.carousel-frame');
+  cf.addEventListener('touchstart', function(e){ tsX = e.touches[0].clientX; }, { passive:true });
+  cf.addEventListener('touchend',   function(e){ var d = tsX - e.changedTouches[0].clientX; if (Math.abs(d) > 40) goTo(d > 0 ? cur+1 : cur-1); }, { passive:true });
+  timer = setInterval(function(){ goTo(cur + 1); }, 4200);
 
   /* ═══════════════════════════════════════════
      TABS
