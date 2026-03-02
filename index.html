@@ -3901,9 +3901,9 @@ document.addEventListener('DOMContentLoaded', function () {
     if (overlay && overlay.classList.contains('open')) closeTechDrawer();
     else openTechDrawer();
   });
-  var overlay = document.getElementById('tech-sidebar-overlay');
-  if (overlay) overlay.addEventListener('click', function(e){
-    if (e.target === overlay) closeTechDrawer();
+  var techSidebarOverlay = document.getElementById('tech-sidebar-overlay');
+  if (techSidebarOverlay) techSidebarOverlay.addEventListener('click', function(e){
+    if (e.target === techSidebarOverlay) closeTechDrawer();
   });
 
   /* Nav links (sidebar + drawer) */
