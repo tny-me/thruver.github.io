@@ -335,7 +335,7 @@
 
     .tnl-overlay {
       display: none;
-      position: fixed; inset: 0; z-index: 800;
+      position: fixed; inset: 0; z-index: 1200;
       background: #f5f5f5;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
@@ -2838,14 +2838,14 @@ document.addEventListener('DOMContentLoaded', function () {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
   }
 
-  /* ─────── Triggers de apertura ─────── */
-  document.querySelectorAll('.tnl-trigger').forEach(function (el) {
-    el.addEventListener('click', function (e) {
-      e.preventDefault();
-      closeMobileMenu();
-      var preset = el.getAttribute('data-preset') || el.getAttribute('data-svc') || null;
-      openTunnel(preset);
-    });
+  /* ─────── Triggers de apertura (event delegation) ─────── */
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('.tnl-trigger');
+    if (!el) return;
+    e.preventDefault();
+    closeMobileMenu();
+    var preset = el.getAttribute('data-preset') || el.getAttribute('data-svc') || null;
+    openTunnel(preset);
   });
 
   /* ─────── Cerrar ─────── */
