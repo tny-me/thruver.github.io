@@ -3976,47 +3976,34 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
-    console.log('[Thruver Tech] Buscando perfil para uid:', user.uid);
-    /* 1. Buscar perfil del técnico por uid */
-    var qTec = window.fbQuery(window.fbCollection(window.db, 'tecnicos'), window.fbWhere('uid', '==', user.uid));
-    window.fbGetDocs(qTec).then(function(snap) {
-      var tecnico = null;
-      snap.forEach(function(d) { tecnico = d.data(); });
+    /* Sin filtro de especialidad — mostrar todas las solicitudes nuevas */
+    var tecnico = {
+      nombre:   user.displayName || user.email || '',
+      email:    user.email || '',
+      telefono: ''
+    };
 
-      console.log('[Thruver Tech] Perfil encontrado:', tecnico);
-      if (!tecnico) {
-        var msg = '<div class="tech-empty"><div class="tech-empty-ico">⚠️</div><h4>Perfil no encontrado</h4><p>UID: ' + user.uid + '<br>Regístrate como técnico para ver solicitudes.</p></div>';
-        reqList.innerHTML = msg; homeReq.innerHTML = msg;
-        return;
-      }
-      console.log('[Thruver Tech] Especialidad:', tecnico.especialidad);
+    var qSol = window.fbQuery(
+      window.fbCollection(window.db, 'solicitudes'),
+      window.fbWhere('estado', '==', 'nueva')
+    );
+    window.fbGetDocs(qSol).then(function(solSnap) {
+      var lista = [];
+      solSnap.forEach(function(d) { lista.push({ id: d.id, data: d.data() }); });
+      console.log('[Thruver Tech] Solicitudes nuevas:', lista.length);
 
-      /* 2. Solicitudes nuevas que coincidan con la especialidad */
-      var qSol = window.fbQuery(
-        window.fbCollection(window.db, 'solicitudes'),
-        window.fbWhere('servicio', '==', tecnico.especialidad),
-        window.fbWhere('estado',   '==', 'nueva')
-      );
-      window.fbGetDocs(qSol).then(function(solSnap) {
-        var lista = [];
-        solSnap.forEach(function(d) { lista.push({ id: d.id, data: d.data() }); });
-        console.log('[Thruver Tech] Solicitudes encontradas:', lista.length, lista);
+      if (badge) badge.textContent = lista.length + (lista.length === 1 ? ' nueva' : ' nuevas');
 
-        if (badge) badge.textContent = lista.length + (lista.length === 1 ? ' nueva' : ' nuevas');
+      var emptyHTML = '<div class="tech-empty"><div class="tech-empty-ico">📋</div><h4>Sin solicitudes nuevas</h4><p>Las nuevas solicitudes aparecerán aquí<br>cuando los clientes las envíen.</p></div>';
+      if (lista.length === 0) { reqList.innerHTML = emptyHTML; homeReq.innerHTML = emptyHTML; return; }
 
-        var emptyHTML = '<div class="tech-empty"><div class="tech-empty-ico">📋</div><h4>Sin solicitudes nuevas</h4><p>Las nuevas solicitudes de ' + tecnico.especialidad + '<br>aparecerán aquí automáticamente.</p></div>';
-        if (lista.length === 0) { reqList.innerHTML = emptyHTML; homeReq.innerHTML = emptyHTML; return; }
-
-        reqList.innerHTML = lista.map(function(s) { return buildJobCard(s.id, s.data); }).join('');
-        homeReq.innerHTML = lista.slice(0, 2).map(function(s) { return buildJobCard(s.id, s.data); }).join('');
-        attachJobHandlers(user, tecnico);
-      }).catch(function(err) {
-        console.error('[Thruver] Error cargando solicitudes:', err);
-        reqList.innerHTML = '<div class="tech-empty"><p>Error: ' + err.message + '</p></div>';
-      });
+      reqList.innerHTML = lista.map(function(s) { return buildJobCard(s.id, s.data); }).join('');
+      homeReq.innerHTML = lista.slice(0, 2).map(function(s) { return buildJobCard(s.id, s.data); }).join('');
+      attachJobHandlers(user, tecnico);
     }).catch(function(err) {
-      console.error('[Thruver] Error cargando perfil técnico:', err);
-      reqList.innerHTML = '<div class="tech-empty"><p>Error al cargar perfil. Intenta de nuevo.</p></div>';
+      console.error('[Thruver] Error cargando solicitudes:', err);
+      reqList.innerHTML = '<div class="tech-empty"><p style="color:#dc2626;font-size:0.8rem;">Error: ' + err.message + '</p></div>';
+      homeReq.innerHTML = reqList.innerHTML;
     });
   }
 
