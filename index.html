@@ -3976,28 +3976,31 @@ document.addEventListener('DOMContentLoaded', function () {
       return;
     }
 
+    console.log('[Thruver Tech] Buscando perfil para uid:', user.uid);
     /* 1. Buscar perfil del técnico por uid */
     var qTec = window.fbQuery(window.fbCollection(window.db, 'tecnicos'), window.fbWhere('uid', '==', user.uid));
     window.fbGetDocs(qTec).then(function(snap) {
       var tecnico = null;
       snap.forEach(function(d) { tecnico = d.data(); });
 
+      console.log('[Thruver Tech] Perfil encontrado:', tecnico);
       if (!tecnico) {
-        var msg = '<div class="tech-empty"><div class="tech-empty-ico">⚠️</div><h4>Perfil incompleto</h4><p>Regístrate como técnico para ver solicitudes.</p></div>';
+        var msg = '<div class="tech-empty"><div class="tech-empty-ico">⚠️</div><h4>Perfil no encontrado</h4><p>UID: ' + user.uid + '<br>Regístrate como técnico para ver solicitudes.</p></div>';
         reqList.innerHTML = msg; homeReq.innerHTML = msg;
         return;
       }
+      console.log('[Thruver Tech] Especialidad:', tecnico.especialidad);
 
       /* 2. Solicitudes nuevas que coincidan con la especialidad */
       var qSol = window.fbQuery(
         window.fbCollection(window.db, 'solicitudes'),
         window.fbWhere('servicio', '==', tecnico.especialidad),
-        window.fbWhere('estado',   '==', 'nueva'),
-        window.fbOrderBy('timestamp', 'desc')
+        window.fbWhere('estado',   '==', 'nueva')
       );
       window.fbGetDocs(qSol).then(function(solSnap) {
         var lista = [];
         solSnap.forEach(function(d) { lista.push({ id: d.id, data: d.data() }); });
+        console.log('[Thruver Tech] Solicitudes encontradas:', lista.length, lista);
 
         if (badge) badge.textContent = lista.length + (lista.length === 1 ? ' nueva' : ' nuevas');
 
@@ -4009,7 +4012,7 @@ document.addEventListener('DOMContentLoaded', function () {
         attachJobHandlers(user, tecnico);
       }).catch(function(err) {
         console.error('[Thruver] Error cargando solicitudes:', err);
-        reqList.innerHTML = '<div class="tech-empty"><p>Error al cargar. Intenta de nuevo.</p></div>';
+        reqList.innerHTML = '<div class="tech-empty"><p>Error: ' + err.message + '</p></div>';
       });
     }).catch(function(err) {
       console.error('[Thruver] Error cargando perfil técnico:', err);
