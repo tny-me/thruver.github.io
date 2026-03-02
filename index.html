@@ -1027,6 +1027,13 @@
     .tbtn-ghost:hover { background:#e5e7eb; color:#111; }
     .tbtn-danger { background:#fef2f2; color:#dc2626; border:1px solid #fecaca; border-radius:9px; padding:0.55rem 1rem; font-size:0.76rem; font-weight:700; cursor:pointer; font-family:var(--font); transition:all 0.15s; white-space:nowrap; }
     .tbtn-danger:hover { background:#fee2e2; }
+    /* Active job ticket */
+    .tj-active { border-top:3px solid #16a34a; }
+    .tj-live-badge { display:inline-flex; align-items:center; gap:0.3rem; font-size:0.65rem; font-weight:700; color:#16a34a; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:100px; padding:0.22rem 0.6rem; white-space:nowrap; flex-shrink:0; }
+    .tj-dot { width:6px; height:6px; border-radius:50%; background:#16a34a; animation:tjpulse 1.5s ease-in-out infinite; flex-shrink:0; }
+    @keyframes tjpulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+    .tj-footer { display:flex; align-items:center; gap:0.35rem; font-size:0.72rem; color:#6b7280; flex-wrap:wrap; margin-top:0.65rem; padding-top:0.65rem; border-top:1px solid #f3f4f6; }
+    .tj-footer-sep { color:#d1d5db; }
     /* Timer */
     .tech-timer-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
     .tech-timer-lbl { font-size:0.7rem; font-weight:600; color:#d97706; }
@@ -3905,23 +3912,23 @@ document.addEventListener('DOMContentLoaded', function () {
     var desc   = data.descripcion || '—';
     var cuando = data.urgencia === 'Agendar fecha' && data.fecha_programada
       ? data.fecha_programada : 'Lo antes posible';
-    return '<div class="tech-job-card" style="border-left:3px solid #16a34a;" data-active-id="' + docId + '">' +
+    var footerParts = [];
+    if (data.nombre) footerParts.push('<span>' + data.nombre + '</span>');
+    if (data.telefono) footerParts.push('<span>' + data.telefono + '</span>');
+    footerParts.push('<span>' + cuando + '</span>');
+    var footerHtml = footerParts.join('<span class="tj-footer-sep"> · </span>');
+    return '<div class="tech-job-card tj-active" data-active-id="' + docId + '">' +
       '<div class="tech-job-head">' +
-        '<div class="tech-job-ico tech-job-ico-blue">' + ico + '</div>' +
+        '<div class="tech-job-ico tech-job-ico-green">' + ico + '</div>' +
         '<div class="tech-job-meta">' +
           '<div class="tech-job-svc">' + svc + '</div>' +
-          '<div class="tech-job-loc">' + (loc ? '📍 ' + loc : '') + '</div>' +
+          (loc ? '<div class="tech-job-loc">' + loc + '</div>' : '') +
         '</div>' +
-        '<span class="tech-job-badge" style="background:#dcfce7;color:#15803d;">Activo</span>' +
+        '<span class="tj-live-badge"><span class="tj-dot"></span>Activo</span>' +
       '</div>' +
       '<div class="tech-job-body">' +
         '<div class="tech-job-desc">' + desc + '</div>' +
-        '<div style="margin-top:0.75rem;padding:0.65rem 0.75rem;background:#f9fafb;border-radius:8px;font-size:0.8rem;">' +
-          '<div style="font-weight:700;color:#374151;margin-bottom:0.3rem;">👤 Cliente</div>' +
-          '<div style="color:#374151;">' + (data.nombre || '—') + '</div>' +
-          (data.telefono ? '<div style="color:#6b7280;margin-top:0.2rem;">📞 ' + data.telefono + '</div>' : '') +
-          '<div style="color:#6b7280;margin-top:0.2rem;">🕐 ' + cuando + '</div>' +
-        '</div>' +
+        '<div class="tj-footer">' + footerHtml + '</div>' +
       '</div>' +
     '</div>';
   }
