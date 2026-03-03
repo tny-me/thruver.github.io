@@ -1044,63 +1044,105 @@
     .dth-illo { width:148px; flex-shrink:0; z-index:1; display:flex; align-items:center; justify-content:flex-end; }
     .dth-illo svg { width:100%; height:auto; display:block; }
 
-    /* ── JOB TABLE ROWS (active jobs) ── */
-    .tjt-wrap { background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; margin-bottom:0.85rem; }
-    .tjt-head { display:grid; grid-template-columns:90px 220px 1fr 165px 110px 34px; padding:0.6rem 1.1rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; gap:0.5rem; align-items:center; }
-    .tjt-head span { font-size:0.59rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.09em; white-space:nowrap; }
-    .tjt-row { display:grid; grid-template-columns:90px 220px 1fr 165px 110px 34px; padding:0.85rem 1.1rem; border-bottom:1px solid #e5e7eb; transition:background 0.15s; align-items:center; gap:0.5rem; position:relative; }
-    .tjt-row:last-child { border-bottom:none; }
-    .tjt-row:hover { background:#f0f4ff; }
-    .tjt-active-row { border-left:3px solid #16a34a; padding-left:calc(1.1rem - 3px); }
-    .tjt-live { display:inline-flex; align-items:center; gap:0.3rem; font-size:0.63rem; font-weight:700; color:#16a34a; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:100px; padding:0.22rem 0.6rem; white-space:nowrap; }
+    /* ── ACTIVE JOBS — card grid 2 columnas ── */
+    .tjt-cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; margin-bottom:0.85rem; }
+    .tjt-card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:1.1rem 1.15rem 0.9rem; cursor:pointer; transition:border-color 0.18s, box-shadow 0.18s; display:flex; flex-direction:column; gap:0.6rem; position:relative; overflow:hidden; }
+    .tjt-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:#16a34a; }
+    .tjt-card:hover { border-color:#c7d2fe; box-shadow:0 4px 18px rgba(99,102,241,0.1); }
+    .tjt-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:0.6rem; }
+    .tjt-card-svc { display:flex; align-items:center; gap:0.55rem; min-width:0; flex:1; }
+    .tjt-ico { font-size:1rem; width:36px; height:36px; background:#f3f4f6; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .tjt-card-svc strong { display:block; font-size:0.83rem; font-weight:800; color:#111; line-height:1.25; }
+    .tjt-card-svc .tjt-card-desc { font-size:0.68rem; color:#9ca3af; display:block; margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:150px; }
+    .tjt-live { display:inline-flex; align-items:center; gap:0.3rem; font-size:0.6rem; font-weight:700; color:#16a34a; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:100px; padding:0.2rem 0.55rem; white-space:nowrap; flex-shrink:0; }
     .tjt-dot { width:5px; height:5px; border-radius:50%; background:#16a34a; animation:tjpulse 1.5s ease-in-out infinite; flex-shrink:0; }
-    .tjt-svc-col { display:flex; align-items:center; gap:0.6rem; min-width:0; }
-    .tjt-ico { font-size:0.95rem; width:30px; height:30px; background:#f3f4f6; border-radius:7px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .tjt-svc-info strong { display:block; font-size:0.8rem; font-weight:700; color:#111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .tjt-svc-info span { font-size:0.69rem; color:#6b7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .tjt-loc { font-size:0.72rem; color:#6b7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .tjt-client-col { display:flex; flex-direction:column; gap:0.06rem; min-width:0; }
-    .tjt-client-col strong { font-size:0.77rem; font-weight:700; color:#111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .tjt-client-col span { font-size:0.69rem; color:#9ca3af; white-space:nowrap; }
-    .tjt-when { font-size:0.69rem; color:#6b7280; white-space:nowrap; }
-    /* Detail button + popover */
-    .tjt-pop-wrap { position:relative; }
-    .tjt-detail-btn { width:30px; height:30px; border-radius:8px; background:#f3f4f6; border:1px solid #e5e7eb; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#9ca3af; transition:all 0.15s; flex-shrink:0; }
-    .tjt-detail-btn:hover { background:#e5e7eb; color:#111; border-color:#d1d5db; }
-    .tjt-popover { display:none; position:absolute; bottom:calc(100% + 8px); right:0; width:268px; background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:1rem 1.1rem; box-shadow:0 8px 28px rgba(0,0,0,0.1); z-index:300; animation:fadeUp 0.16s ease; }
-    .tjt-popover.open { display:block; }
-    .tjt-pop-title { font-size:0.82rem; font-weight:800; color:#111; margin-bottom:0.7rem; padding-bottom:0.55rem; border-bottom:1px solid #f3f4f6; }
-    .tjt-pop-row { display:flex; justify-content:space-between; gap:0.5rem; padding:0.3rem 0; font-size:0.76rem; border-bottom:1px solid #f9fafb; }
-    .tjt-pop-row:last-child { border-bottom:none; }
-    .tjt-pop-row span:first-child { color:#9ca3af; flex-shrink:0; }
-    .tjt-pop-row span:last-child  { color:#111; font-weight:600; text-align:right; word-break:break-word; }
+    .tjt-card-loc { font-size:0.7rem; color:#9ca3af; padding-left:1px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+    .tjt-card-foot { display:flex; align-items:center; gap:0.3rem; padding-top:0.6rem; border-top:1px solid #f3f4f6; flex-wrap:wrap; }
+    .tjt-card-foot > span { font-size:0.67rem; color:#6b7280; }
+    .tjt-foot-sep { color:#d1d5db !important; }
+    /* ── DETAIL DRAWER (right panel) ── */
+    .tjt-drawer-overlay { display:none; position:fixed; inset:0; z-index:500; background:rgba(0,0,0,0.32); }
+    .tjt-drawer-overlay.open { display:block; animation:fadeIn 0.22s ease; }
+    .tjt-drawer { position:fixed; top:0; right:0; bottom:0; width:390px; max-width:96vw; background:#fff; border-left:1px solid #e5e7eb; box-shadow:-10px 0 50px rgba(0,0,0,0.1); display:flex; flex-direction:column; transform:translateX(110%); transition:transform 0.3s cubic-bezier(0.4,0,0.2,1); z-index:501; overflow:hidden; }
+    .tjt-drawer-overlay.open .tjt-drawer { transform:translateX(0); }
+    .tjt-drawer-hd { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; border-bottom:1px solid #e5e7eb; flex-shrink:0; background:#fff; }
+    .tjt-drawer-hd-title { font-size:0.88rem; font-weight:800; color:#111; }
+    .tjt-drawer-close { width:30px; height:30px; border-radius:8px; background:#f3f4f6; border:1px solid #e5e7eb; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.8rem; color:#6b7280; }
+    .tjt-drawer-close:hover { background:#fee2e2; color:#dc2626; border-color:#fca5a5; }
+    .tjt-drawer-body { flex:1; overflow-y:auto; padding:1.25rem 1.25rem 1.5rem; display:flex; flex-direction:column; }
+    /* Drawer — detail view */
+    .tjt-dv-hero { display:flex; align-items:center; gap:0.85rem; margin-bottom:1.25rem; padding-bottom:1.1rem; border-bottom:1px solid #f3f4f6; }
+    .tjt-dv-hero-ico { font-size:1.35rem; width:48px; height:48px; background:#f3f4f6; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .tjt-dv-hero strong { display:block; font-size:0.98rem; font-weight:800; color:#111; line-height:1.25; }
+    .tjt-dv-hero span { font-size:0.72rem; color:#9ca3af; display:block; margin-top:3px; }
+    .tjt-dv-sections { border:1px solid #e5e7eb; border-radius:11px; overflow:hidden; margin-bottom:1.25rem; }
+    .tjt-dv-row { display:flex; align-items:flex-start; padding:0.7rem 0.95rem; border-bottom:1px solid #f3f4f6; gap:0.75rem; }
+    .tjt-dv-row:last-child { border-bottom:none; }
+    .tjt-dv-lbl { font-size:0.64rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.07em; min-width:84px; flex-shrink:0; padding-top:1px; }
+    .tjt-dv-val { font-size:0.78rem; color:#111; font-weight:500; line-height:1.45; word-break:break-word; }
+    .tjt-report-btn { width:100%; padding:0.88rem 1rem; background:#111; color:#fff; border:none; border-radius:11px; font-size:0.83rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.55rem; transition:background 0.15s, transform 0.1s; }
+    .tjt-report-btn:hover { background:#1e293b; }
+    .tjt-report-btn:active { transform:scale(0.98); }
+    /* Drawer — report form */
+    .tjt-rf-back { display:inline-flex; align-items:center; gap:0.35rem; font-size:0.74rem; font-weight:700; color:#6b7280; cursor:pointer; margin-bottom:1.1rem; padding:0.35rem 0.6rem; border-radius:7px; border:1px solid #e5e7eb; background:#f9fafb; }
+    .tjt-rf-back:hover { color:#111; background:#f3f4f6; }
+    .tjt-rf-title { font-size:1.05rem; font-weight:900; color:#111; margin-bottom:0.2rem; }
+    .tjt-rf-sub { font-size:0.71rem; color:#9ca3af; margin-bottom:1.2rem; line-height:1.5; }
+    .tjt-rf-field { display:flex; flex-direction:column; gap:0.28rem; margin-bottom:0.9rem; }
+    .tjt-rf-field label { font-size:0.72rem; font-weight:700; color:#374151; }
+    .tjt-rf-field label .req { color:#dc2626; }
+    .tjt-rf-field textarea { border:1px solid #e5e7eb; border-radius:9px; padding:0.65rem 0.8rem; font-size:0.78rem; font-family:inherit; resize:vertical; min-height:68px; color:#111; background:#fff; transition:border-color 0.15s; }
+    .tjt-rf-field textarea:focus { outline:none; border-color:#6366f1; box-shadow:0 0 0 3px rgba(99,102,241,0.1); }
+    .tjt-rf-submit { width:100%; padding:0.92rem; background:#16a34a; color:#fff; border:none; border-radius:11px; font-size:0.85rem; font-weight:700; cursor:pointer; margin-top:0.6rem; display:flex; align-items:center; justify-content:center; gap:0.5rem; transition:background 0.15s; }
+    .tjt-rf-submit:hover { background:#15803d; }
+    .tjt-rf-submit:disabled { background:#9ca3af; cursor:not-allowed; }
 
     /* ── JOB TABLE ROWS (new requests) ── */
+    .tjt-wrap { background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; margin-bottom:0.85rem; }
     .tjt-req-head { display:grid; grid-template-columns:220px 130px 1fr 115px 155px; padding:0.6rem 1.1rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; gap:0.5rem; align-items:center; }
     .tjt-req-head span { font-size:0.59rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.09em; white-space:nowrap; }
     .tjt-req-row { display:grid; grid-template-columns:220px 130px 1fr 115px 155px; padding:0.85rem 1.1rem; border-bottom:1px solid #e5e7eb; transition:background 0.15s; align-items:center; gap:0.5rem; }
     .tjt-req-row:last-child { border-bottom:none; }
     .tjt-req-row:hover { background:#f0f4ff; }
+    .tjt-svc-col { display:flex; align-items:center; gap:0.6rem; min-width:0; }
+    .tjt-svc-info strong { display:block; font-size:0.8rem; font-weight:700; color:#111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tjt-svc-info span { font-size:0.69rem; color:#6b7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .tjt-loc { font-size:0.72rem; color:#6b7280; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .tjt-desc { font-size:0.75rem; color:#374151; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .tjt-when-pill { display:inline-flex; align-items:center; gap:0.3rem; font-size:0.63rem; font-weight:700; border-radius:100px; padding:0.22rem 0.6rem; white-space:nowrap; }
     .tjt-wp-urgent { background:#fef2f2; color:#dc2626; border:1px solid #fecaca; }
     .tjt-wp-sched  { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
     .tjt-req-actions { display:flex; gap:0.4rem; }
 
-    /* ── MOBILE: tablas colapsan a tarjetas ── */
+    /* ── CLIENT: modal reporte técnico ── */
+    .rpt-overlay { display:none; position:fixed; inset:0; z-index:700; background:rgba(0,0,0,0.45); align-items:center; justify-content:center; padding:1rem; }
+    .rpt-overlay.open { display:flex; animation:fadeIn 0.2s ease; }
+    .rpt-modal { background:#fff; border-radius:18px; width:100%; max-width:580px; max-height:90vh; overflow-y:auto; box-shadow:0 24px 60px rgba(0,0,0,0.18); }
+    .rpt-modal-hd { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.3rem; border-bottom:1px solid #e5e7eb; position:sticky; top:0; background:#fff; z-index:1; }
+    .rpt-modal-hd h3 { font-size:0.88rem; font-weight:800; color:#111; }
+    .rpt-modal-close { width:30px; height:30px; border-radius:8px; background:#f3f4f6; border:1px solid #e5e7eb; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.78rem; color:#6b7280; }
+    .rpt-modal-close:hover { background:#fee2e2; color:#dc2626; border-color:#fca5a5; }
+    .rpt-doc { padding:1.5rem 1.75rem 2.2rem; }
+    .rpt-doc-banner { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:1.3rem; }
+    .rpt-doc-brand { font-size:1.1rem; font-weight:900; letter-spacing:-0.05em; color:#111; }
+    .rpt-doc-brand span { color:#6366f1; }
+    .rpt-doc-meta p { font-size:0.67rem; color:#9ca3af; line-height:1.6; text-align:right; }
+    .rpt-doc-divider { height:2px; background:linear-gradient(90deg,#6366f1,#a78bfa); border-radius:2px; margin-bottom:1.3rem; }
+    .rpt-info-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.4rem 1.2rem; margin-bottom:1.4rem; padding:0.9rem 1rem; background:#f9fafb; border-radius:10px; border:1px solid #f3f4f6; }
+    .rpt-info-lbl { font-size:0.58rem; font-weight:800; text-transform:uppercase; letter-spacing:0.09em; color:#9ca3af; margin-bottom:1px; }
+    .rpt-info-val { font-size:0.78rem; font-weight:700; color:#111; }
+    .rpt-section { margin-bottom:1rem; }
+    .rpt-section-title { font-size:0.62rem; font-weight:800; text-transform:uppercase; letter-spacing:0.1em; color:#6366f1; margin-bottom:0.38rem; }
+    .rpt-section-body { font-size:0.81rem; color:#374151; line-height:1.6; background:#f9fafb; border-radius:9px; padding:0.7rem 0.95rem; border-left:3px solid #e0e7ff; }
+    .rpt-doc-foot { display:flex; align-items:center; justify-content:space-between; margin-top:1.5rem; padding-top:1rem; border-top:1px solid #f3f4f6; }
+    .rpt-doc-foot p { font-size:0.67rem; color:#9ca3af; }
+    .rpt-doc-foot strong { color:#374151; }
+
+    /* ── MOBILE responsive ── */
     @media(max-width:700px) {
       .dash-tech-banner { min-height:auto; padding:1.4rem 1.3rem; }
       .dth-illo { display:none; }
-      /* Active jobs */
-      .tjt-head { display:none; }
-      .tjt-row { grid-template-columns:1fr auto; grid-template-rows:auto auto auto; row-gap:0.45rem; column-gap:0.6rem; padding:0.9rem 1rem; }
-      .tjt-row > :nth-child(1) { grid-column:2; grid-row:1; align-self:start; }
-      .tjt-row > :nth-child(2) { grid-column:1; grid-row:1; min-width:0; }
-      .tjt-row > :nth-child(3) { grid-column:1/3; grid-row:2; white-space:normal; }
-      .tjt-row > :nth-child(4) { grid-column:1; grid-row:3; }
-      .tjt-row > :nth-child(5) { grid-column:2; grid-row:3; text-align:right; }
-      .tjt-row > :nth-child(6) { display:none; }
-      /* New requests */
+      .tjt-cards-grid { grid-template-columns:1fr; }
       .tjt-req-head { display:none; }
       .tjt-req-row { grid-template-columns:1fr auto; grid-template-rows:auto auto auto; row-gap:0.45rem; padding:0.9rem 1rem; }
       .tjt-req-row > :nth-child(1) { grid-column:1; grid-row:1; min-width:0; }
@@ -1110,6 +1152,8 @@
       .tjt-req-row > :nth-child(5) { grid-column:1/3; grid-row:3; }
       .tjt-req-actions { flex-wrap:wrap; }
       .tbtn-primary, .tbtn-danger { flex:1; text-align:center; justify-content:center; }
+      .rpt-info-grid { grid-template-columns:1fr; }
+      .rpt-doc { padding:1.2rem 1.2rem 1.8rem; }
     }
     /* Timer */
     .tech-timer-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
@@ -3348,10 +3392,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function buildTr(s) {
       var info  = SVC_INFO[s.servicio] || defaultInfo;
       var fecha = s.timestamp ? new Date(s.timestamp).toLocaleDateString('es-MX', {day:'2-digit',month:'short',year:'numeric'}) : '\u2014';
-      var estadoMap = { 'nueva':'Pendiente', 'enviada':'Pendiente', 'asignada':'Técnico asignado', 'activo':'En progreso', 'en progreso':'En progreso', 'completado':'Completado', 'cancelado':'Cancelado' };
+      var estadoMap = { 'nueva':'Pendiente', 'enviada':'Pendiente', 'asignada':'Técnico asignado', 'activo':'En progreso', 'en progreso':'En progreso', 'completada':'Completado', 'completado':'Completado', 'cancelado':'Cancelado' };
       var estadoCls = { 'Pendiente':'badge-pending', 'Técnico asignado':'badge-assigned', 'En progreso':'badge-progress', 'Completado':'badge-done', 'Cancelado':'dash-tbl-badge' };
       var estadoLabel = estadoMap[(s.estado||'').toLowerCase()] || 'Pendiente';
       var estadoCl    = estadoCls[estadoLabel] || 'badge-pending';
+      var hasReport   = s.reporte && s.reporte.diagnostico;
       var tr = document.createElement('tr');
       tr.innerHTML =
         '<td><div class="dash-tbl-svc-ico ' + info.cls + '">' + info.svg + '</div></td>' +
@@ -3359,8 +3404,54 @@ document.addEventListener('DOMContentLoaded', function () {
         '<td style="color:#6b7280;font-size:0.8rem;">' + fecha + '</td>' +
         '<td style="color:#9ca3af;font-size:0.8rem;">\u2014</td>' +
         '<td><span class="dash-tbl-badge ' + estadoCl + '">' + estadoLabel + '</span></td>' +
-        '<td><button class="dash-tbl-report" title="Ver reporte t\u00E9cnico">' + reportSvg + '</button></td>';
+        '<td>' + (hasReport
+          ? '<button class="dash-tbl-report dash-tbl-report-active" title="Ver reporte técnico" style="color:#6366f1;background:#eff6ff;border-color:#c7d2fe;">' + reportSvg + '</button>'
+          : '<button class="dash-tbl-report" title="Sin reporte aún" disabled style="opacity:0.3;cursor:default;">' + reportSvg + '</button>'
+        ) + '</td>';
+      if (hasReport) {
+        tr.querySelector('.dash-tbl-report-active').addEventListener('click', function() {
+          openClientReportModal(s);
+        });
+      }
       return tr;
+    }
+
+    function openClientReportModal(s) {
+      var overlay = document.getElementById('rpt-overlay');
+      var body    = document.getElementById('rpt-modal-body');
+      if (!overlay || !body) return;
+      var r    = s.reporte;
+      var svc  = s.servicio + (s.espacio ? ' — ' + s.espacio : '');
+      var fecha = s.reporte.fecha ? new Date(s.reporte.fecha).toLocaleDateString('es-MX', {day:'2-digit',month:'long',year:'numeric'}) : '—';
+      function sec(title, val) {
+        if (!val || !val.trim()) return '';
+        return '<div class="rpt-section">' +
+          '<div class="rpt-section-title">' + title + '</div>' +
+          '<div class="rpt-section-body">' + val.replace(/\n/g,'<br>') + '</div>' +
+        '</div>';
+      }
+      body.innerHTML =
+        '<div class="rpt-doc-banner">' +
+          '<div class="rpt-doc-brand">thru<span>ver</span></div>' +
+          '<div class="rpt-doc-meta"><p>Reporte Técnico</p><p>' + fecha + '</p></div>' +
+        '</div>' +
+        '<div class="rpt-doc-divider"></div>' +
+        '<div class="rpt-info-grid">' +
+          '<div><div class="rpt-info-lbl">Servicio</div><div class="rpt-info-val">' + svc + '</div></div>' +
+          '<div><div class="rpt-info-lbl">Técnico</div><div class="rpt-info-val">' + (r.tecnicoNombre || '—') + '</div></div>' +
+          '<div><div class="rpt-info-lbl">Cliente</div><div class="rpt-info-val">' + (s.nombre || '—') + '</div></div>' +
+          '<div><div class="rpt-info-lbl">Fecha</div><div class="rpt-info-val">' + fecha + '</div></div>' +
+        '</div>' +
+        sec('Diagnóstico', r.diagnostico) +
+        sec('Trabajo Realizado', r.trabajo) +
+        sec('Materiales Usados', r.materiales) +
+        sec('Observaciones', r.observaciones) +
+        sec('Recomendaciones', r.recomendaciones) +
+        '<div class="rpt-doc-foot">' +
+          '<p>Técnico certificado: <strong>' + (r.tecnicoNombre || '—') + '</strong></p>' +
+          '<p>thruver · servicios del hogar</p>' +
+        '</div>';
+      overlay.classList.add('open');
     }
 
     /* ── Home card: recent (max 5) ── */
@@ -4037,47 +4128,33 @@ document.addEventListener('DOMContentLoaded', function () {
     'Remodelación':'🏗️','Consulta general':'💬'
   };
 
+  /* ── Active job card (2-col grid) ── */
   function buildActiveCard(docId, data) {
     var ico    = SVC_ICONS[data.servicio] || '🔧';
     var svc    = data.servicio + (data.espacio ? ' — ' + data.espacio : '');
-    var loc    = data.colonia ? 'Col. ' + data.colonia : (data.direccion || '');
-    var desc   = data.descripcion || '—';
+    var loc    = data.colonia ? '📍 Col. ' + data.colonia : (data.direccion ? '📍 ' + data.direccion : '');
+    var desc   = data.descripcion || '';
     var cuando = data.urgencia === 'Agendar fecha' && data.fecha_programada
       ? data.fecha_programada : 'Lo antes posible';
-    var footerParts = [];
-    if (data.nombre) footerParts.push('<span>' + data.nombre + '</span>');
-    if (data.telefono) footerParts.push('<span>' + data.telefono + '</span>');
-    footerParts.push('<span>' + cuando + '</span>');
-    var footerHtml = footerParts.join('<span class="tj-footer-sep"> · </span>');
-    var nombre = data.nombre   || '—';
     var tel    = data.telefono || '—';
-    var popId  = 'pop-' + docId;
-    return '<div class="tjt-row tjt-active-row" data-active-id="' + docId + '">' +
-      '<div><span class="tjt-live"><span class="tjt-dot"></span>Activo</span></div>' +
-      '<div class="tjt-svc-col"><div class="tjt-ico">' + ico + '</div>' +
-        '<div class="tjt-svc-info"><strong>' + svc + '</strong><span>' + desc + '</span></div></div>' +
-      '<div class="tjt-loc">' + (loc || '—') + '</div>' +
-      '<div class="tjt-client-col">' +
-        '<strong>' + nombre + '</strong>' +
-        (data.telefono ? '<span>' + tel + '</span>' : '') +
-      '</div>' +
-      '<div class="tjt-when">' + cuando + '</div>' +
-      '<div class="tjt-pop-wrap">' +
-        '<button class="tjt-detail-btn" data-pop="' + popId + '" title="Ver detalles">' +
-          '<svg width="15" height="15" viewBox="0 0 16 16" fill="none">' +
-            '<circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>' +
-            '<line x1="8" y1="7.2" x2="8" y2="11.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
-            '<circle cx="8" cy="5" r="0.8" fill="currentColor"/>' +
-          '</svg>' +
-        '</button>' +
-        '<div class="tjt-popover" id="' + popId + '">' +
-          '<p class="tjt-pop-title">' + ico + ' ' + svc + '</p>' +
-          '<div class="tjt-pop-row"><span>Descripción</span><span>' + desc + '</span></div>' +
-          '<div class="tjt-pop-row"><span>Ubicación</span><span>' + (loc || '—') + '</span></div>' +
-          '<div class="tjt-pop-row"><span>Cliente</span><span>' + nombre + '</span></div>' +
-          '<div class="tjt-pop-row"><span>Teléfono</span><span>' + tel + '</span></div>' +
-          '<div class="tjt-pop-row"><span>Cuándo</span><span>' + cuando + '</span></div>' +
+    return '<div class="tjt-card" data-active-id="' + docId + '">' +
+      '<div class="tjt-card-head">' +
+        '<div class="tjt-card-svc">' +
+          '<div class="tjt-ico">' + ico + '</div>' +
+          '<div>' +
+            '<strong>' + svc + '</strong>' +
+            (desc ? '<span class="tjt-card-desc">' + desc + '</span>' : '') +
+          '</div>' +
         '</div>' +
+        '<span class="tjt-live"><span class="tjt-dot"></span>Activo</span>' +
+      '</div>' +
+      (loc ? '<div class="tjt-card-loc">' + loc + '</div>' : '') +
+      '<div class="tjt-card-foot">' +
+        '<span>' + (data.servicio || '—') + '</span>' +
+        '<span class="tjt-foot-sep"> · </span>' +
+        '<span>' + tel + '</span>' +
+        '<span class="tjt-foot-sep"> · </span>' +
+        '<span>' + cuando + '</span>' +
       '</div>' +
     '</div>';
   }
@@ -4085,6 +4162,8 @@ document.addEventListener('DOMContentLoaded', function () {
   function cargarTrabajoActivo(user) {
     var wrap = document.getElementById('tdv-active-wrap');
     if (!wrap || !window.db || !window.fbGetDocs) return;
+    /* Guardar user para usarlo en el drawer */
+    window._tjtUser = user;
     var q = window.fbQuery(
       window.fbCollection(window.db, 'solicitudes'),
       window.fbWhere('tecnicoId', '==', user.uid),
@@ -4096,35 +4175,145 @@ document.addEventListener('DOMContentLoaded', function () {
       if (lista.length === 0) {
         wrap.innerHTML = '<div class="tech-empty"><div class="tech-empty-ico">⚙️</div><h4>Sin trabajo activo</h4><p>Acepta una solicitud para<br>ver tu trabajo aquí.</p></div>';
       } else {
-        wrap.innerHTML =
-          '<div class="tjt-wrap">' +
-            '<div class="tjt-head">' +
-              '<span>Estado</span><span>Servicio</span><span>Ubicación</span>' +
-              '<span>Cliente</span><span>Cuándo</span><span></span>' +
-            '</div>' +
-            lista.map(function(s) { return buildActiveCard(s.id, s.data); }).join('') +
+        wrap.innerHTML = '<div class="tjt-cards-grid">' +
+          lista.map(function(s) { return buildActiveCard(s.id, s.data); }).join('') +
           '</div>';
-        /* Popover toggle — event delegation (register once) */
-        if (!window._tjtPopReady) {
-          window._tjtPopReady = true;
+        /* Card click → drawer (event delegation, una sola vez) */
+        if (!window._tjtCardReady) {
+          window._tjtCardReady = true;
           document.addEventListener('click', function(e) {
-            var btn = e.target.closest('.tjt-detail-btn');
-            if (btn) {
-              e.stopPropagation();
-              var popId  = btn.getAttribute('data-pop');
-              var pop    = document.getElementById(popId);
-              var isOpen = pop && pop.classList.contains('open');
-              document.querySelectorAll('.tjt-popover.open').forEach(function(p) { p.classList.remove('open'); });
-              if (!isOpen && pop) pop.classList.add('open');
-              return;
-            }
-            if (!e.target.closest('.tjt-popover')) {
-              document.querySelectorAll('.tjt-popover.open').forEach(function(p) { p.classList.remove('open'); });
-            }
+            var card = e.target.closest('.tjt-card[data-active-id]');
+            if (card) openJobDrawer(card.getAttribute('data-active-id'));
           });
         }
+        /* Guardar datos para el drawer */
+        lista.forEach(function(s) {
+          window._tjtDataCache = window._tjtDataCache || {};
+          window._tjtDataCache[s.id] = s.data;
+        });
       }
     }).catch(function(err) { console.error('[Thruver] Error trabajo activo:', err); });
+  }
+
+  /* ── Drawer: abrir y mostrar detalles ── */
+  function openJobDrawer(docId) {
+    var overlay = document.getElementById('tjt-drawer-overlay');
+    var body    = document.getElementById('tjt-drawer-body');
+    var titleEl = document.getElementById('tjt-drawer-hd-title');
+    if (!overlay || !body) return;
+    var data = (window._tjtDataCache || {})[docId];
+    if (!data) return;
+    if (titleEl) titleEl.textContent = 'Detalles del trabajo';
+    body.innerHTML = buildDrawerDetail(docId, data);
+    overlay.classList.add('open');
+    /* Botón crear reporte */
+    var rptBtn = document.getElementById('tjt-open-report');
+    if (rptBtn) rptBtn.addEventListener('click', function() { showReportForm(docId, data); });
+  }
+
+  function buildDrawerDetail(docId, data) {
+    var ico    = SVC_ICONS[data.servicio] || '🔧';
+    var svc    = data.servicio + (data.espacio ? ' — ' + data.espacio : '');
+    var loc    = data.colonia ? 'Col. ' + data.colonia : (data.direccion || '—');
+    var dir    = data.direccion || '';
+    var desc   = data.descripcion || '—';
+    var cuando = data.urgencia === 'Agendar fecha' && data.fecha_programada
+      ? data.fecha_programada : 'Lo antes posible';
+    var nombre = data.nombre   || '—';
+    var tel    = data.telefono || '—';
+    var locFull = [loc, dir].filter(Boolean).join(', ') || '—';
+    return '<div class="tjt-dv-hero">' +
+        '<div class="tjt-dv-hero-ico">' + ico + '</div>' +
+        '<div>' +
+          '<strong>' + svc + '</strong>' +
+          '<span>' + (data.espacio || data.servicio) + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="tjt-dv-sections">' +
+        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Descripción</span><span class="tjt-dv-val">' + desc + '</span></div>' +
+        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Ubicación</span><span class="tjt-dv-val">' + locFull + '</span></div>' +
+        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Cliente</span><span class="tjt-dv-val">' + nombre + '</span></div>' +
+        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Teléfono</span><span class="tjt-dv-val">' + tel + '</span></div>' +
+        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Cuándo</span><span class="tjt-dv-val">' + cuando + '</span></div>' +
+        (data.urgencia ? '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Urgencia</span><span class="tjt-dv-val">' + data.urgencia + '</span></div>' : '') +
+      '</div>' +
+      '<div class="tjt-dv-cta">' +
+        '<button class="tjt-report-btn" id="tjt-open-report">' +
+          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>' +
+          'Crear Reporte Técnico' +
+        '</button>' +
+      '</div>';
+  }
+
+  /* ── Drawer: formulario de reporte ── */
+  function showReportForm(docId, data) {
+    var body    = document.getElementById('tjt-drawer-body');
+    var titleEl = document.getElementById('tjt-drawer-hd-title');
+    if (!body) return;
+    if (titleEl) titleEl.textContent = 'Reporte Técnico';
+    body.innerHTML =
+      '<div class="tjt-rf-back" id="tjt-rf-back-btn">' +
+        '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
+        'Ver detalles' +
+      '</div>' +
+      '<p class="tjt-rf-title">Reporte Técnico</p>' +
+      '<p class="tjt-rf-sub">Este reporte será visible para el cliente en su perfil.</p>' +
+      '<div class="tjt-rf-field"><label>Diagnóstico <span class="req">*</span></label>' +
+        '<textarea id="rf-diagnostico" placeholder="¿Cuál fue el problema encontrado?"></textarea></div>' +
+      '<div class="tjt-rf-field"><label>Trabajo realizado <span class="req">*</span></label>' +
+        '<textarea id="rf-trabajo" placeholder="Describe el trabajo que se realizó..."></textarea></div>' +
+      '<div class="tjt-rf-field"><label>Materiales usados</label>' +
+        '<textarea id="rf-materiales" placeholder="Lista de materiales y refacciones utilizados..."></textarea></div>' +
+      '<div class="tjt-rf-field"><label>Observaciones</label>' +
+        '<textarea id="rf-observaciones" placeholder="Observaciones adicionales..."></textarea></div>' +
+      '<div class="tjt-rf-field"><label>Recomendaciones</label>' +
+        '<textarea id="rf-recomendaciones" placeholder="Recomendaciones para el cliente..."></textarea></div>' +
+      '<button class="tjt-rf-submit" id="tjt-rf-submit">' +
+        '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>' +
+        'Guardar y marcar como completado' +
+      '</button>';
+    document.getElementById('tjt-rf-back-btn').addEventListener('click', function() {
+      openJobDrawer(docId);
+    });
+    document.getElementById('tjt-rf-submit').addEventListener('click', function() {
+      submitTechReport(docId, data);
+    });
+  }
+
+  /* ── Drawer: guardar reporte y completar trabajo ── */
+  function submitTechReport(docId, data) {
+    var diagnostico    = (document.getElementById('rf-diagnostico')    || {}).value || '';
+    var trabajo        = (document.getElementById('rf-trabajo')        || {}).value || '';
+    var materiales     = (document.getElementById('rf-materiales')     || {}).value || '';
+    var observaciones  = (document.getElementById('rf-observaciones')  || {}).value || '';
+    var recomendaciones= (document.getElementById('rf-recomendaciones')|| {}).value || '';
+    if (!diagnostico.trim() || !trabajo.trim()) {
+      alert('Por favor llena los campos obligatorios: Diagnóstico y Trabajo realizado.');
+      return;
+    }
+    var btn = document.getElementById('tjt-rf-submit');
+    if (btn) { btn.disabled = true; btn.textContent = 'Guardando...'; }
+    var tecnico = window._tjtUser || {};
+    var reporte = {
+      diagnostico:     diagnostico.trim(),
+      trabajo:         trabajo.trim(),
+      materiales:      materiales.trim(),
+      observaciones:   observaciones.trim(),
+      recomendaciones: recomendaciones.trim(),
+      tecnicoNombre:   tecnico.displayName || tecnico.email || '',
+      fecha:           new Date().toISOString()
+    };
+    var ref = window.fbDoc(window.db, 'solicitudes', docId);
+    window.fbUpdateDoc(ref, { estado: 'completada', reporte: reporte })
+      .then(function() {
+        document.getElementById('tjt-drawer-overlay').classList.remove('open');
+        cargarTrabajoActivo(window._tjtUser);
+      })
+      .catch(function(err) {
+        console.error('[Thruver] Error guardando reporte:', err);
+        if (btn) { btn.disabled = false; btn.textContent = 'Guardar y marcar como completado'; }
+        alert('Error al guardar el reporte. Intenta de nuevo.');
+      });
   }
 
   function buildJobCard(docId, data) {
@@ -4318,6 +4507,50 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   console.log("🔥 Firebase Auth + Firestore conectado a Thruver!");
+
+  /* ── Drawer close button ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    var closeBtn = document.getElementById('tjt-drawer-close');
+    var overlay  = document.getElementById('tjt-drawer-overlay');
+    if (closeBtn && overlay) {
+      closeBtn.addEventListener('click', function() { overlay.classList.remove('open'); });
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) overlay.classList.remove('open');
+      });
+    }
+    /* Client report modal close */
+    var rptClose   = document.getElementById('rpt-modal-close');
+    var rptOverlay = document.getElementById('rpt-overlay');
+    if (rptClose && rptOverlay) {
+      rptClose.addEventListener('click', function() { rptOverlay.classList.remove('open'); });
+      rptOverlay.addEventListener('click', function(e) {
+        if (e.target === rptOverlay) rptOverlay.classList.remove('open');
+      });
+    }
+  });
 </script>
+
+<!-- ── Tecnico: detail + report drawer ── -->
+<div class="tjt-drawer-overlay" id="tjt-drawer-overlay">
+  <div class="tjt-drawer">
+    <div class="tjt-drawer-hd">
+      <span class="tjt-drawer-hd-title" id="tjt-drawer-hd-title">Detalles del trabajo</span>
+      <button class="tjt-drawer-close" id="tjt-drawer-close">✕</button>
+    </div>
+    <div class="tjt-drawer-body" id="tjt-drawer-body"></div>
+  </div>
+</div>
+
+<!-- ── Cliente: modal reporte técnico ── -->
+<div class="rpt-overlay" id="rpt-overlay">
+  <div class="rpt-modal" id="rpt-modal">
+    <div class="rpt-modal-hd">
+      <h3>Reporte Técnico</h3>
+      <button class="rpt-modal-close" id="rpt-modal-close">✕</button>
+    </div>
+    <div class="rpt-doc" id="rpt-modal-body"></div>
+  </div>
+</div>
+
 </body>
 </html>
