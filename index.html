@@ -4224,7 +4224,7 @@ document.addEventListener('DOMContentLoaded', function () {
   function _avc(n) { var s=0; for(var i=0;i<(n||'').length;i++) s+=n.charCodeAt(i); return _AVC[s%_AVC.length]; }
   function _init(n) { return (n||'').split(' ').filter(Boolean).slice(0,2).map(function(p){return p[0].toUpperCase();}).join('')||'?'; }
 
-  window.openJobDrawer = function openJobDrawer(docId) {
+  var openJobDrawer = window.openJobDrawer = function(docId) {
     var overlay = document.getElementById('tjt-drawer-overlay');
     var body    = document.getElementById('tjt-drawer-body');
     var foot    = document.getElementById('tjt-drawer-foot');
