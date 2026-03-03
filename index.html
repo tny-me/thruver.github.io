@@ -1046,9 +1046,9 @@
 
     /* ── ACTIVE JOBS — card grid 2 columnas ── */
     .tjt-cards-grid { display:grid; grid-template-columns:1fr 1fr; gap:0.85rem; margin-bottom:0.85rem; }
-    .tjt-card { background:#fff; border:1px solid #e5e7eb; border-radius:14px; padding:1.1rem 1.15rem 0.9rem; cursor:pointer; transition:border-color 0.18s, box-shadow 0.18s; display:flex; flex-direction:column; gap:0.6rem; position:relative; overflow:hidden; }
-    .tjt-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:#16a34a; }
-    .tjt-card:hover { border-color:#c7d2fe; box-shadow:0 4px 18px rgba(99,102,241,0.1); }
+    .tjt-card { background:#fff; border:1px solid #d1d5db; border-radius:14px; padding:1.1rem 1.15rem 0.9rem; cursor:pointer; transition:border-color 0.18s, box-shadow 0.18s; display:flex; flex-direction:column; gap:0.6rem; position:relative; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.07); }
+    .tjt-card::before { content:''; position:absolute; left:0; top:0; bottom:0; width:4px; background:#16a34a; }
+    .tjt-card:hover { border-color:#a5b4fc; box-shadow:0 4px 18px rgba(99,102,241,0.12); }
     .tjt-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:0.6rem; }
     .tjt-card-svc { display:flex; align-items:center; gap:0.55rem; min-width:0; flex:1; }
     .tjt-ico { font-size:1rem; width:36px; height:36px; background:#f3f4f6; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -1061,8 +1061,8 @@
     .tjt-card-foot > span { font-size:0.67rem; color:#6b7280; }
     .tjt-foot-sep { color:#d1d5db !important; }
     /* ── DETAIL DRAWER (right panel) ── */
-    .tjt-drawer-overlay { display:none; position:fixed; inset:0; z-index:500; background:rgba(0,0,0,0.32); }
-    .tjt-drawer-overlay.open { display:block; animation:fadeIn 0.22s ease; }
+    .tjt-drawer-overlay { visibility:hidden; opacity:0; pointer-events:none; position:fixed; inset:0; z-index:500; background:rgba(0,0,0,0.32); transition:opacity 0.25s ease, visibility 0.25s ease; }
+    .tjt-drawer-overlay.open { visibility:visible; opacity:1; pointer-events:auto; }
     .tjt-drawer { position:fixed; top:0; right:0; bottom:0; width:390px; max-width:96vw; background:#fff; border-left:1px solid #e5e7eb; box-shadow:-10px 0 50px rgba(0,0,0,0.1); display:flex; flex-direction:column; transform:translateX(110%); transition:transform 0.3s cubic-bezier(0.4,0,0.2,1); z-index:501; overflow:hidden; }
     .tjt-drawer-overlay.open .tjt-drawer { transform:translateX(0); }
     .tjt-drawer-hd { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.25rem; border-bottom:1px solid #e5e7eb; flex-shrink:0; background:#fff; }
@@ -4137,7 +4137,7 @@ document.addEventListener('DOMContentLoaded', function () {
     var cuando = data.urgencia === 'Agendar fecha' && data.fecha_programada
       ? data.fecha_programada : 'Lo antes posible';
     var tel    = data.telefono || '—';
-    return '<div class="tjt-card" data-active-id="' + docId + '">' +
+    return '<div class="tjt-card" data-active-id="' + docId + '" onclick="openJobDrawer(\'' + docId + '\')" style="cursor:pointer;">' +
       '<div class="tjt-card-head">' +
         '<div class="tjt-card-svc">' +
           '<div class="tjt-ico">' + ico + '</div>' +
