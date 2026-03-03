@@ -1069,24 +1069,47 @@
     .tjt-drawer-hd-title { font-size:0.88rem; font-weight:800; color:#111; }
     .tjt-drawer-close { width:30px; height:30px; border-radius:8px; background:#f3f4f6; border:1px solid #e5e7eb; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:0.8rem; color:#6b7280; }
     .tjt-drawer-close:hover { background:#fee2e2; color:#dc2626; border-color:#fca5a5; }
-    .tjt-drawer-body { flex:1; overflow-y:auto; padding:1.25rem 1.25rem 1.5rem; display:flex; flex-direction:column; }
-    /* Drawer — detail view */
-    .tjt-dv-hero { display:flex; align-items:center; gap:0.85rem; margin-bottom:1.25rem; padding-bottom:1.1rem; border-bottom:1px solid #f3f4f6; }
-    .tjt-dv-hero-ico { font-size:1.35rem; width:48px; height:48px; background:#f3f4f6; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .tjt-dv-hero strong { display:block; font-size:0.98rem; font-weight:800; color:#111; line-height:1.25; }
-    .tjt-dv-hero span { font-size:0.72rem; color:#9ca3af; display:block; margin-top:3px; }
-    .tjt-dv-sections { border:1px solid #e5e7eb; border-radius:11px; overflow:hidden; margin-bottom:1.25rem; }
-    .tjt-dv-row { display:flex; align-items:flex-start; padding:0.7rem 0.95rem; border-bottom:1px solid #f3f4f6; gap:0.75rem; }
-    .tjt-dv-row:last-child { border-bottom:none; }
-    .tjt-dv-lbl { font-size:0.64rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.07em; min-width:84px; flex-shrink:0; padding-top:1px; }
-    .tjt-dv-val { font-size:0.78rem; color:#111; font-weight:500; line-height:1.45; word-break:break-word; }
+    .tjt-drawer-body { flex:1; overflow-y:auto; padding:0; display:flex; flex-direction:column; }
+    /* ── Drawer: banner superior oscuro ── */
+    .tjt-dv-banner { background:linear-gradient(150deg,#0f172a 0%,#1e293b 100%); padding:1.3rem 1.25rem 1.15rem; flex-shrink:0; }
+    .tjt-dv-banner-top { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.7rem; }
+    .tjt-dv-banner-ico { font-size:0.85rem; width:26px; height:26px; background:rgba(255,255,255,0.1); border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .tjt-dv-banner-cat { font-size:0.62rem; color:rgba(255,255,255,0.45); font-weight:700; text-transform:uppercase; letter-spacing:0.08em; flex:1; }
+    .tjt-dv-banner-title { font-size:1.15rem; font-weight:900; color:#fff; letter-spacing:-0.03em; line-height:1.25; margin-bottom:1.05rem; }
+    /* Barra de progreso */
+    .tjt-dv-progress { display:flex; align-items:flex-start; }
+    .tjt-dv-ps { display:flex; flex-direction:column; align-items:center; gap:0.22rem; flex:1; position:relative; }
+    .tjt-dv-ps:not(:last-child)::after { content:''; position:absolute; top:5px; left:calc(50% + 7px); right:calc(-50% + 7px); height:2px; background:rgba(255,255,255,0.12); z-index:0; }
+    .tjt-dv-ps.done::after { background:rgba(16,185,129,0.5); }
+    .tjt-dv-ps-dot { width:10px; height:10px; border-radius:50%; background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.2); position:relative; z-index:1; flex-shrink:0; transition:all 0.2s; }
+    .tjt-dv-ps.done .tjt-dv-ps-dot { background:#10b981; border-color:#10b981; }
+    .tjt-dv-ps.active .tjt-dv-ps-dot { background:#818cf8; border-color:#818cf8; box-shadow:0 0 0 3px rgba(99,102,241,0.4); }
+    .tjt-dv-ps-lbl { font-size:0.5rem; font-weight:700; color:rgba(255,255,255,0.28); text-transform:uppercase; letter-spacing:0.04em; white-space:nowrap; }
+    .tjt-dv-ps.done .tjt-dv-ps-lbl, .tjt-dv-ps.active .tjt-dv-ps-lbl { color:rgba(255,255,255,0.65); }
+    /* Fila del cliente */
+    .tjt-dv-client { display:flex; align-items:center; gap:0.8rem; padding:1rem 1.25rem; border-bottom:1px solid #f0f0f0; background:#fff; }
+    .tjt-dv-avatar { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.85rem; font-weight:800; color:#fff; flex-shrink:0; letter-spacing:-0.01em; }
+    .tjt-dv-client-name { font-size:0.95rem; font-weight:800; color:#111; line-height:1.2; margin-bottom:0.22rem; }
+    .tjt-dv-chips { display:flex; align-items:center; gap:0.6rem; flex-wrap:wrap; }
+    .tjt-dv-chip { display:inline-flex; align-items:center; gap:0.22rem; font-size:0.68rem; color:#6b7280; }
+    .tjt-dv-chip svg { flex-shrink:0; }
+    /* Grid de datos */
+    .tjt-dv-grid { display:grid; grid-template-columns:1fr 1fr; padding:1rem 1.25rem; gap:0.85rem 1.1rem; border-bottom:1px solid #f0f0f0; background:#fff; }
+    .tjt-dv-gi-lbl { font-size:0.56rem; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:#9ca3af; margin-bottom:0.2rem; }
+    .tjt-dv-gi-val { font-size:0.8rem; font-weight:600; color:#111; line-height:1.35; }
+    /* Descripción */
+    .tjt-dv-desc { padding:1rem 1.25rem; border-bottom:1px solid #f0f0f0; background:#fff; }
+    .tjt-dv-sec-lbl { font-size:0.56rem; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:#9ca3af; margin-bottom:0.5rem; }
+    .tjt-dv-desc-body { font-size:0.8rem; color:#374151; line-height:1.6; background:#f8fafc; border-radius:9px; padding:0.7rem 0.9rem; border-left:3px solid #c7d2fe; }
+    /* Footer fijo del drawer */
+    .tjt-drawer-foot { padding:0.9rem 1.25rem; border-top:1px solid #e5e7eb; background:#fff; flex-shrink:0; }
     .tjt-report-btn { width:100%; padding:0.88rem 1rem; background:#111; color:#fff; border:none; border-radius:11px; font-size:0.83rem; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:0.55rem; transition:background 0.15s, transform 0.1s; }
     .tjt-report-btn:hover { background:#1e293b; }
     .tjt-report-btn:active { transform:scale(0.98); }
-    /* Drawer — report form */
+    /* ── Drawer: formulario de reporte ── */
     .tjt-rf-back { display:inline-flex; align-items:center; gap:0.35rem; font-size:0.74rem; font-weight:700; color:#6b7280; cursor:pointer; margin-bottom:1.1rem; padding:0.35rem 0.6rem; border-radius:7px; border:1px solid #e5e7eb; background:#f9fafb; }
     .tjt-rf-back:hover { color:#111; background:#f3f4f6; }
-    .tjt-rf-title { font-size:1.05rem; font-weight:900; color:#111; margin-bottom:0.2rem; }
+    .tjt-rf-title { font-size:1rem; font-weight:900; color:#111; margin-bottom:0.2rem; }
     .tjt-rf-sub { font-size:0.71rem; color:#9ca3af; margin-bottom:1.2rem; line-height:1.5; }
     .tjt-rf-field { display:flex; flex-direction:column; gap:0.28rem; margin-bottom:0.9rem; }
     .tjt-rf-field label { font-size:0.72rem; font-weight:700; color:#374151; }
@@ -4196,61 +4219,97 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ── Drawer: abrir y mostrar detalles ── */
+  /* ── Drawer: helper de color avatar ── */
+  var _AVC = ['#6366f1','#0ea5e9','#10b981','#f59e0b','#ec4899','#8b5cf6','#ef4444','#14b8a6'];
+  function _avc(n) { var s=0; for(var i=0;i<(n||'').length;i++) s+=n.charCodeAt(i); return _AVC[s%_AVC.length]; }
+  function _init(n) { return (n||'').split(' ').filter(Boolean).slice(0,2).map(function(p){return p[0].toUpperCase();}).join('')||'?'; }
+
   function openJobDrawer(docId) {
     var overlay = document.getElementById('tjt-drawer-overlay');
     var body    = document.getElementById('tjt-drawer-body');
+    var foot    = document.getElementById('tjt-drawer-foot');
     var titleEl = document.getElementById('tjt-drawer-hd-title');
     if (!overlay || !body) return;
     var data = (window._tjtDataCache || {})[docId];
     if (!data) return;
-    if (titleEl) titleEl.textContent = 'Detalles del trabajo';
-    body.innerHTML = buildDrawerDetail(docId, data);
+    if (titleEl) titleEl.textContent = 'Vista del trabajo';
+    body.style.padding = '0';
+    body.innerHTML = buildDrawerDetail(data);
+    if (foot) {
+      foot.style.display = '';
+      foot.innerHTML =
+        '<button class="tjt-report-btn" id="tjt-open-report">' +
+          '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>' +
+          'Crear Reporte Técnico' +
+        '</button>';
+      document.getElementById('tjt-open-report').addEventListener('click', function() {
+        showReportForm(docId, data);
+      });
+    }
     overlay.classList.add('open');
-    /* Botón crear reporte */
-    var rptBtn = document.getElementById('tjt-open-report');
-    if (rptBtn) rptBtn.addEventListener('click', function() { showReportForm(docId, data); });
   }
 
-  function buildDrawerDetail(docId, data) {
+  function buildDrawerDetail(data) {
     var ico    = SVC_ICONS[data.servicio] || '🔧';
     var svc    = data.servicio + (data.espacio ? ' — ' + data.espacio : '');
     var loc    = data.colonia ? 'Col. ' + data.colonia : (data.direccion || '—');
-    var dir    = data.direccion || '';
-    var desc   = data.descripcion || '—';
+    var desc   = data.descripcion || 'Sin descripción.';
     var cuando = data.urgencia === 'Agendar fecha' && data.fecha_programada
       ? data.fecha_programada : 'Lo antes posible';
     var nombre = data.nombre   || '—';
     var tel    = data.telefono || '—';
-    var locFull = [loc, dir].filter(Boolean).join(', ') || '—';
-    return '<div class="tjt-dv-hero">' +
-        '<div class="tjt-dv-hero-ico">' + ico + '</div>' +
-        '<div>' +
-          '<strong>' + svc + '</strong>' +
-          '<span>' + (data.espacio || data.servicio) + '</span>' +
+    var color  = _avc(nombre);
+    var inits  = _init(nombre);
+    /* Banner + progress bar */
+    var html =
+      '<div class="tjt-dv-banner">' +
+        '<div class="tjt-dv-banner-top">' +
+          '<div class="tjt-dv-banner-ico">' + ico + '</div>' +
+          '<span class="tjt-dv-banner-cat">' + data.servicio + '</span>' +
+          '<span class="tjt-live" style="border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:#fff;"><span class="tjt-dot"></span>Activo</span>' +
+        '</div>' +
+        '<div class="tjt-dv-banner-title">' + svc + '</div>' +
+        '<div class="tjt-dv-progress">' +
+          '<div class="tjt-dv-ps done"><div class="tjt-dv-ps-dot"></div><span class="tjt-dv-ps-lbl">Nueva</span></div>' +
+          '<div class="tjt-dv-ps done"><div class="tjt-dv-ps-dot"></div><span class="tjt-dv-ps-lbl">Enviada</span></div>' +
+          '<div class="tjt-dv-ps active"><div class="tjt-dv-ps-dot"></div><span class="tjt-dv-ps-lbl">Asignada</span></div>' +
+          '<div class="tjt-dv-ps"><div class="tjt-dv-ps-dot"></div><span class="tjt-dv-ps-lbl">Completada</span></div>' +
         '</div>' +
       '</div>' +
-      '<div class="tjt-dv-sections">' +
-        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Descripción</span><span class="tjt-dv-val">' + desc + '</span></div>' +
-        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Ubicación</span><span class="tjt-dv-val">' + locFull + '</span></div>' +
-        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Cliente</span><span class="tjt-dv-val">' + nombre + '</span></div>' +
-        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Teléfono</span><span class="tjt-dv-val">' + tel + '</span></div>' +
-        '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Cuándo</span><span class="tjt-dv-val">' + cuando + '</span></div>' +
-        (data.urgencia ? '<div class="tjt-dv-row"><span class="tjt-dv-lbl">Urgencia</span><span class="tjt-dv-val">' + data.urgencia + '</span></div>' : '') +
+      /* Cliente */
+      '<div class="tjt-dv-client">' +
+        '<div class="tjt-dv-avatar" style="background:' + color + ';">' + inits + '</div>' +
+        '<div>' +
+          '<div class="tjt-dv-client-name">' + nombre + '</div>' +
+          '<div class="tjt-dv-chips">' +
+            '<span class="tjt-dv-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.72 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.63 0h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.36-1.36a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>' + tel + '</span>' +
+          '</div>' +
+        '</div>' +
       '</div>' +
-      '<div class="tjt-dv-cta">' +
-        '<button class="tjt-report-btn" id="tjt-open-report">' +
-          '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>' +
-          'Crear Reporte Técnico' +
-        '</button>' +
+      /* Grid de datos */
+      '<div class="tjt-dv-grid">' +
+        '<div><div class="tjt-dv-gi-lbl">Servicio</div><div class="tjt-dv-gi-val">' + data.servicio + '</div></div>' +
+        '<div><div class="tjt-dv-gi-lbl">Espacio</div><div class="tjt-dv-gi-val">' + (data.espacio || '—') + '</div></div>' +
+        '<div><div class="tjt-dv-gi-lbl">Ubicación</div><div class="tjt-dv-gi-val">' + loc + '</div></div>' +
+        '<div><div class="tjt-dv-gi-lbl">Cuándo</div><div class="tjt-dv-gi-val">' + cuando + '</div></div>' +
+      '</div>' +
+      /* Descripción */
+      '<div class="tjt-dv-desc">' +
+        '<div class="tjt-dv-sec-lbl">Descripción del problema</div>' +
+        '<div class="tjt-dv-desc-body">' + desc + '</div>' +
       '</div>';
+    return html;
   }
 
   /* ── Drawer: formulario de reporte ── */
   function showReportForm(docId, data) {
     var body    = document.getElementById('tjt-drawer-body');
+    var foot    = document.getElementById('tjt-drawer-foot');
     var titleEl = document.getElementById('tjt-drawer-hd-title');
     if (!body) return;
+    if (foot) foot.style.display = 'none';
     if (titleEl) titleEl.textContent = 'Reporte Técnico';
+    body.style.padding = '1.25rem';
     body.innerHTML =
       '<div class="tjt-rf-back" id="tjt-rf-back-btn">' +
         '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>' +
@@ -4534,10 +4593,11 @@ document.addEventListener('DOMContentLoaded', function () {
 <div class="tjt-drawer-overlay" id="tjt-drawer-overlay">
   <div class="tjt-drawer">
     <div class="tjt-drawer-hd">
-      <span class="tjt-drawer-hd-title" id="tjt-drawer-hd-title">Detalles del trabajo</span>
+      <span class="tjt-drawer-hd-title" id="tjt-drawer-hd-title">Vista del trabajo</span>
       <button class="tjt-drawer-close" id="tjt-drawer-close">✕</button>
     </div>
     <div class="tjt-drawer-body" id="tjt-drawer-body"></div>
+    <div class="tjt-drawer-foot" id="tjt-drawer-foot"></div>
   </div>
 </div>
 
