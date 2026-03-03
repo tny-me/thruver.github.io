@@ -1046,9 +1046,9 @@
 
     /* ── JOB TABLE ROWS (active jobs) ── */
     .tjt-wrap { background:#fff; border:1px solid #e5e7eb; border-radius:14px; overflow:hidden; margin-bottom:0.85rem; }
-    .tjt-head { display:grid; grid-template-columns:90px 220px 1fr 165px 110px; padding:0.6rem 1.1rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; gap:0.5rem; align-items:center; }
+    .tjt-head { display:grid; grid-template-columns:90px 220px 1fr 165px 110px 34px; padding:0.6rem 1.1rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; gap:0.5rem; align-items:center; }
     .tjt-head span { font-size:0.59rem; font-weight:700; color:#9ca3af; text-transform:uppercase; letter-spacing:0.09em; white-space:nowrap; }
-    .tjt-row { display:grid; grid-template-columns:90px 220px 1fr 165px 110px; padding:0.85rem 1.1rem; border-bottom:1px solid #e5e7eb; transition:background 0.15s; align-items:center; gap:0.5rem; }
+    .tjt-row { display:grid; grid-template-columns:90px 220px 1fr 165px 110px 34px; padding:0.85rem 1.1rem; border-bottom:1px solid #e5e7eb; transition:background 0.15s; align-items:center; gap:0.5rem; position:relative; }
     .tjt-row:last-child { border-bottom:none; }
     .tjt-row:hover { background:#f0f4ff; }
     .tjt-active-row { border-left:3px solid #16a34a; padding-left:calc(1.1rem - 3px); }
@@ -1063,6 +1063,17 @@
     .tjt-client-col strong { font-size:0.77rem; font-weight:700; color:#111; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .tjt-client-col span { font-size:0.69rem; color:#9ca3af; white-space:nowrap; }
     .tjt-when { font-size:0.69rem; color:#6b7280; white-space:nowrap; }
+    /* Detail button + popover */
+    .tjt-pop-wrap { position:relative; }
+    .tjt-detail-btn { width:30px; height:30px; border-radius:8px; background:#f3f4f6; border:1px solid #e5e7eb; cursor:pointer; display:flex; align-items:center; justify-content:center; color:#9ca3af; transition:all 0.15s; flex-shrink:0; }
+    .tjt-detail-btn:hover { background:#e5e7eb; color:#111; border-color:#d1d5db; }
+    .tjt-popover { display:none; position:absolute; bottom:calc(100% + 8px); right:0; width:268px; background:#fff; border:1px solid #e5e7eb; border-radius:12px; padding:1rem 1.1rem; box-shadow:0 8px 28px rgba(0,0,0,0.1); z-index:300; animation:fadeUp 0.16s ease; }
+    .tjt-popover.open { display:block; }
+    .tjt-pop-title { font-size:0.82rem; font-weight:800; color:#111; margin-bottom:0.7rem; padding-bottom:0.55rem; border-bottom:1px solid #f3f4f6; }
+    .tjt-pop-row { display:flex; justify-content:space-between; gap:0.5rem; padding:0.3rem 0; font-size:0.76rem; border-bottom:1px solid #f9fafb; }
+    .tjt-pop-row:last-child { border-bottom:none; }
+    .tjt-pop-row span:first-child { color:#9ca3af; flex-shrink:0; }
+    .tjt-pop-row span:last-child  { color:#111; font-weight:600; text-align:right; word-break:break-word; }
 
     /* ── JOB TABLE ROWS (new requests) ── */
     .tjt-req-head { display:grid; grid-template-columns:220px 130px 1fr 115px 155px; padding:0.6rem 1.1rem; background:#f9fafb; border-bottom:1px solid #e5e7eb; gap:0.5rem; align-items:center; }
@@ -1075,6 +1086,31 @@
     .tjt-wp-urgent { background:#fef2f2; color:#dc2626; border:1px solid #fecaca; }
     .tjt-wp-sched  { background:#eff6ff; color:#2563eb; border:1px solid #bfdbfe; }
     .tjt-req-actions { display:flex; gap:0.4rem; }
+
+    /* ── MOBILE: tablas colapsan a tarjetas ── */
+    @media(max-width:700px) {
+      .dash-tech-banner { min-height:auto; padding:1.4rem 1.3rem; }
+      .dth-illo { display:none; }
+      /* Active jobs */
+      .tjt-head { display:none; }
+      .tjt-row { grid-template-columns:1fr auto; grid-template-rows:auto auto auto; row-gap:0.45rem; column-gap:0.6rem; padding:0.9rem 1rem; }
+      .tjt-row > :nth-child(1) { grid-column:2; grid-row:1; align-self:start; }
+      .tjt-row > :nth-child(2) { grid-column:1; grid-row:1; min-width:0; }
+      .tjt-row > :nth-child(3) { grid-column:1/3; grid-row:2; white-space:normal; }
+      .tjt-row > :nth-child(4) { grid-column:1; grid-row:3; }
+      .tjt-row > :nth-child(5) { grid-column:2; grid-row:3; text-align:right; }
+      .tjt-row > :nth-child(6) { display:none; }
+      /* New requests */
+      .tjt-req-head { display:none; }
+      .tjt-req-row { grid-template-columns:1fr auto; grid-template-rows:auto auto auto; row-gap:0.45rem; padding:0.9rem 1rem; }
+      .tjt-req-row > :nth-child(1) { grid-column:1; grid-row:1; min-width:0; }
+      .tjt-req-row > :nth-child(2) { display:none; }
+      .tjt-req-row > :nth-child(3) { grid-column:1/3; grid-row:2; white-space:normal; }
+      .tjt-req-row > :nth-child(4) { grid-column:2; grid-row:1; }
+      .tjt-req-row > :nth-child(5) { grid-column:1/3; grid-row:3; }
+      .tjt-req-actions { flex-wrap:wrap; }
+      .tbtn-primary, .tbtn-danger { flex:1; text-align:center; justify-content:center; }
+    }
     /* Timer */
     .tech-timer-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.5rem; }
     .tech-timer-lbl { font-size:0.7rem; font-weight:600; color:#d97706; }
@@ -4013,16 +4049,36 @@ document.addEventListener('DOMContentLoaded', function () {
     if (data.telefono) footerParts.push('<span>' + data.telefono + '</span>');
     footerParts.push('<span>' + cuando + '</span>');
     var footerHtml = footerParts.join('<span class="tj-footer-sep"> · </span>');
+    var nombre = data.nombre   || '—';
+    var tel    = data.telefono || '—';
+    var popId  = 'pop-' + docId;
     return '<div class="tjt-row tjt-active-row" data-active-id="' + docId + '">' +
       '<div><span class="tjt-live"><span class="tjt-dot"></span>Activo</span></div>' +
       '<div class="tjt-svc-col"><div class="tjt-ico">' + ico + '</div>' +
         '<div class="tjt-svc-info"><strong>' + svc + '</strong><span>' + desc + '</span></div></div>' +
       '<div class="tjt-loc">' + (loc || '—') + '</div>' +
       '<div class="tjt-client-col">' +
-        (data.nombre   ? '<strong>' + data.nombre   + '</strong>' : '<strong>—</strong>') +
-        (data.telefono ? '<span>'   + data.telefono + '</span>'   : '') +
+        '<strong>' + nombre + '</strong>' +
+        (data.telefono ? '<span>' + tel + '</span>' : '') +
       '</div>' +
       '<div class="tjt-when">' + cuando + '</div>' +
+      '<div class="tjt-pop-wrap">' +
+        '<button class="tjt-detail-btn" data-pop="' + popId + '" title="Ver detalles">' +
+          '<svg width="15" height="15" viewBox="0 0 16 16" fill="none">' +
+            '<circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>' +
+            '<line x1="8" y1="7.2" x2="8" y2="11.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+            '<circle cx="8" cy="5" r="0.8" fill="currentColor"/>' +
+          '</svg>' +
+        '</button>' +
+        '<div class="tjt-popover" id="' + popId + '">' +
+          '<p class="tjt-pop-title">' + ico + ' ' + svc + '</p>' +
+          '<div class="tjt-pop-row"><span>Descripción</span><span>' + desc + '</span></div>' +
+          '<div class="tjt-pop-row"><span>Ubicación</span><span>' + (loc || '—') + '</span></div>' +
+          '<div class="tjt-pop-row"><span>Cliente</span><span>' + nombre + '</span></div>' +
+          '<div class="tjt-pop-row"><span>Teléfono</span><span>' + tel + '</span></div>' +
+          '<div class="tjt-pop-row"><span>Cuándo</span><span>' + cuando + '</span></div>' +
+        '</div>' +
+      '</div>' +
     '</div>';
   }
 
@@ -4044,10 +4100,29 @@ document.addEventListener('DOMContentLoaded', function () {
           '<div class="tjt-wrap">' +
             '<div class="tjt-head">' +
               '<span>Estado</span><span>Servicio</span><span>Ubicación</span>' +
-              '<span>Cliente</span><span>Cuándo</span>' +
+              '<span>Cliente</span><span>Cuándo</span><span></span>' +
             '</div>' +
             lista.map(function(s) { return buildActiveCard(s.id, s.data); }).join('') +
           '</div>';
+        /* Popover toggle — event delegation (register once) */
+        if (!window._tjtPopReady) {
+          window._tjtPopReady = true;
+          document.addEventListener('click', function(e) {
+            var btn = e.target.closest('.tjt-detail-btn');
+            if (btn) {
+              e.stopPropagation();
+              var popId  = btn.getAttribute('data-pop');
+              var pop    = document.getElementById(popId);
+              var isOpen = pop && pop.classList.contains('open');
+              document.querySelectorAll('.tjt-popover.open').forEach(function(p) { p.classList.remove('open'); });
+              if (!isOpen && pop) pop.classList.add('open');
+              return;
+            }
+            if (!e.target.closest('.tjt-popover')) {
+              document.querySelectorAll('.tjt-popover.open').forEach(function(p) { p.classList.remove('open'); });
+            }
+          });
+        }
       }
     }).catch(function(err) { console.error('[Thruver] Error trabajo activo:', err); });
   }
