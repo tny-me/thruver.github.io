@@ -74,13 +74,14 @@
     .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
 
     .btn-solid {
-      background: #fff; color: #0A0A0A !important; border: none;
-      padding: 0.48rem 1.2rem; border-radius: var(--rsm); font-size: 0.82rem;
+      background: var(--blue); color: #fff !important; border: none;
+      padding: 0.46rem 1.25rem; border-radius: 100px; font-size: 0.82rem;
       font-weight: 700; cursor: pointer; font-family: var(--font);
       text-decoration: none; min-height: 40px; display: inline-flex;
-      align-items: center; transition: opacity 0.15s;
+      align-items: center; transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      box-shadow: 0 0 0 rgba(26,86,232,0);
     }
-    .btn-solid:hover { opacity: 0.85; }
+    .btn-solid:hover { background: var(--blue-dark); box-shadow: 0 0 18px rgba(26,86,232,0.5), 0 4px 14px rgba(26,86,232,0.28); transform: translateY(-1px); }
 
     .nav-hamburger {
       display: none; flex-direction: column; justify-content: center;
@@ -107,7 +108,7 @@
     .mm-cta { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.4rem; }
     .mm-cta .btn-solid,
     .mm-cta .btn-ghost { width: 100%; justify-content: center; font-size: 0.95rem; padding: 0.85rem; border-radius: var(--radius); min-height: 52px; }
-    .mm-cta .btn-solid { background: #fff !important; color: #0A0A0A !important; }
+    .mm-cta .btn-solid { background: var(--blue) !important; color: #fff !important; }
 
     /* ══ HERO ══ */
     .hero { position: relative; margin-top: 60px; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden; }
@@ -223,9 +224,9 @@
     .form-group input, .form-group select { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--rsm); padding: 0.7rem 0.85rem; color: var(--text); font-size: 1rem; font-family: var(--font); outline: none; min-height: 48px; -webkit-appearance: none; transition: border-color 0.15s, background 0.15s; }
     .form-group input::placeholder { color: var(--muted2); }
     .form-group input:focus, .form-group select:focus { border-color: var(--black); background: var(--white); }
-    .btn-submit { width: 100%; background: var(--black); color: var(--white) !important; border: none; padding: 0.9rem; border-radius: var(--rsm); font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.18s; margin-top: 0.2rem; }
-    .btn-submit:hover { opacity: 0.78; transform: translateY(-1px); }
-    .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+    .btn-submit { width: 100%; background: var(--blue); color: #fff !important; border: none; padding: 0.9rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); min-height: 52px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: background 0.2s, box-shadow 0.2s, transform 0.15s; margin-top: 0.2rem; box-shadow: 0 0 0 rgba(26,86,232,0); }
+    .btn-submit:hover { background: var(--blue-dark); box-shadow: 0 0 22px rgba(26,86,232,0.55), 0 4px 16px rgba(26,86,232,0.3); transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; box-shadow: none; }
     .spinner { display: none; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin { to{transform:rotate(360deg)} }
     .form-note { font-size: 0.67rem; color: var(--muted2); margin-top: 0.5rem; text-align: center; }
@@ -651,14 +652,14 @@
 
     /* CTA principal */
     .tnl-cta {
-      width: 100%; background: var(--black); color: var(--white) !important; border: none;
-      border-radius: var(--radius); padding: 1.05rem; font-size: 0.96rem; font-weight: 700;
+      width: 100%; background: var(--blue); color: #fff !important; border: none;
+      border-radius: 100px; padding: 1.05rem; font-size: 0.96rem; font-weight: 700;
       font-family: var(--font); cursor: pointer; min-height: 54px;
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      transition: opacity 0.18s, transform 0.18s, box-shadow 0.18s;
-      margin-top: 0.3rem;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      margin-top: 0.3rem; box-shadow: 0 0 0 rgba(26,86,232,0);
     }
-    .tnl-cta:hover:not(:disabled) { opacity: 0.83; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+    .tnl-cta:hover:not(:disabled) { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 0 26px rgba(26,86,232,0.6), 0 6px 20px rgba(26,86,232,0.32); }
     .tnl-cta:disabled { opacity: 0.42; cursor: not-allowed; transform: none; box-shadow: none; }
     .tnl-cta-note { font-size: 0.64rem; color: var(--muted2); margin-top: 0.55rem; text-align: center; }
 
