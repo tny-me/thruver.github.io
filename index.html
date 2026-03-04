@@ -134,7 +134,7 @@
       margin-bottom: 1.3rem; max-width: 860px;
       animation: fadeUp 0.5s ease 0.07s both;
     }
-    .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.6); line-height: 1.7; max-width: 440px; margin-bottom: 2.5rem; animation: fadeUp 0.5s ease 0.14s both; }
+    .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.6); line-height: 1.7; max-width: 440px; margin-bottom: 2.5rem; animation: fadeUp 0.5s ease 0.14s both; border-left: 2px solid rgba(255,255,255,0.22); padding-left: 1rem; }
     .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; animation: fadeUp 0.5s ease 0.21s both; }
     .btn-blue { background: var(--blue); color: #fff !important; border: none; padding: 0.82rem 2rem; border-radius: var(--rsm); font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; transition: background 0.15s; }
     .btn-blue:hover { background: var(--blue-dark); }
@@ -678,6 +678,22 @@
 
 
     /* ══ FIREBASE AUTH — Paso 3 ══ */
+    .tnl-welcome-msg {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      background: #f8f9ff; border: 1.5px solid #dde3f5;
+      border-radius: 12px; padding: 1rem 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .tnl-welcome-msg-bar {
+      width: 3px; min-width: 3px; border-radius: 2px;
+      background: linear-gradient(180deg, #3b82f6 0%, #60a5fa 100%);
+      align-self: stretch;
+    }
+    .tnl-welcome-msg p {
+      font-size: 0.84rem; color: #374151; line-height: 1.55; margin: 0;
+    }
+    .tnl-welcome-msg p strong { color: #111; }
+
     .tnl-google-btn {
       width: 100%; background: var(--white); color: #3c3c3c;
       border: 1.5px solid var(--border); border-radius: var(--radius);
@@ -1389,8 +1405,7 @@
     <li><a href="#registro">Técnicos</a></li>
   </ul>
   <div class="nav-right">
-    <button class="btn-ghost" id="btn-open-login">Iniciar sesión</button>
-    <a href="#" class="btn-solid tnl-trigger">Solicitar servicio →</a>
+    <button class="btn-solid" id="btn-open-login">Iniciar sesión</button>
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú">
       <span></span><span></span><span></span>
     </button>
@@ -1405,8 +1420,7 @@
   <a href="#registro"      id="mm-link-4">Ser técnico</a>
   <div class="mm-divider"></div>
   <div class="mm-cta">
-    <button class="btn-ghost" id="btn-open-login-mobile">Iniciar sesión</button>
-    <button class="btn-solid tnl-trigger" id="mm-cta">Solicitar servicio →</button>
+    <button class="btn-solid" id="btn-open-login-mobile">Iniciar sesión</button>
   </div>
 </div>
 
@@ -1431,6 +1445,60 @@
   </div>
 
   <div class="tnl-body">
+
+    <!-- ─────────────── PASO 0: REGISTRO / INICIO DE SESIÓN ─────────────── -->
+    <div class="tnl-view" id="tnl-s0">
+      <div class="tnl-welcome-msg">
+        <div class="tnl-welcome-msg-bar"></div>
+        <p>Para mejorar tu experiencia <strong>Thruver</strong>, regístrate. Esto nos ayudará a llevar un historial y un mejor control de todos los servicios de tu hogar.</p>
+      </div>
+
+      <h2 class="tnl-title" id="tnl-s0-title">Crea tu cuenta</h2>
+      <p class="tnl-sub" id="tnl-s0-sub">Es gratis y solo toma un momento.</p>
+
+      <div class="tnl-auth-error" id="tnl-s0-error"></div>
+
+      <!-- Google -->
+      <button class="tnl-google-btn" id="tnl-s0-google" type="button">
+        <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/>
+          <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/>
+          <path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/>
+          <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/>
+        </svg>
+        Continuar con Google
+      </button>
+
+      <div class="tnl-auth-divider">o con tu correo</div>
+
+      <div class="tnl-field">
+        <label>Correo electrónico</label>
+        <input type="email" id="tnl-s0-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" />
+      </div>
+      <div class="tnl-field">
+        <label id="tnl-s0-pass-label">Contraseña <span id="tnl-s0-pass-hint" style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted2);"> — mínimo 6 caracteres</span></label>
+        <div class="tnl-pass-wrap">
+          <input type="password" id="tnl-s0-pass" placeholder="••••••••" autocomplete="new-password" />
+          <button class="tnl-pass-toggle" id="tnl-s0-pass-toggle" type="button" aria-label="Ver contraseña">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="tnl-field" id="tnl-s0-tel-wrap">
+        <label>Teléfono / WhatsApp</label>
+        <input type="tel" id="tnl-s0-tel" placeholder="667 000 0000" autocomplete="tel" inputmode="tel" />
+      </div>
+
+      <div class="tnl-mode-toggle">
+        <span id="tnl-s0-mode-text">¿Ya tienes cuenta?</span>
+        <button id="tnl-s0-mode-switch" type="button">Iniciar sesión</button>
+      </div>
+
+      <button class="tnl-cta" id="tnl-s0-submit">
+        <span class="spinner" id="tnl-s0-spinner"></span>
+        <span id="tnl-s0-submit-txt">Crear cuenta y continuar →</span>
+      </button>
+    </div>
 
     <!-- ─────────────── PASO 1 ─────────────── -->
     <div class="tnl-view tnl-active" id="tnl-s1">
@@ -1717,7 +1785,7 @@
         Culiacán, Sinaloa · Lanzando pronto
       </div>
       <h1 class="hero-h1">Hacer de cada hogar del mundo<br>un lugar más seguro, funcional y confiable.</h1>
-      <p class="hero-sub">Técnicos verificados, listos para cuidar tu hogar.<br>Agenda en minutos. Sin improvisación. Sin sorpresas.</p>
+      <p class="hero-sub">Con Thruver, solicita, controla y documenta cada servicio de mantenimiento de tu hogar.</p>
       <div class="hero-actions">
         <a href="#" class="btn-blue tnl-trigger">Solicitar servicio →</a>
         <a href="#como-funciona" class="btn-outline-white">Cómo funciona</a>
@@ -2850,7 +2918,7 @@ document.addEventListener('DOMContentLoaded', function () {
   /* Estado acumulado */
   var T = { servicio:'', ico:'🔧', espacio:'', desc:'', urgencia:'Lo antes posible', fecha:'', hora:'', nombre:'', email:'', tel:'', dir:'' };
 
-  var PROG = { 1:'14%', 2:'58%', 3:'90%' };
+  var PROG = { 0:'5%', 1:'14%', 2:'58%', 3:'90%' };
 
   /* ── Abrir túnel ── */
   function openTunnel(presetSvc) {
@@ -2859,7 +2927,13 @@ document.addEventListener('DOMContentLoaded', function () {
     overlay.classList.add('tnl-open');
     document.body.style.overflow = 'hidden';
     overlay.scrollTop = 0;
-    if (presetSvc) preselectService(presetSvc);
+    if (window.currentUser) {
+      showView(1, true);
+      if (presetSvc) preselectService(presetSvc);
+    } else {
+      showView(0, true);
+      if (presetSvc) { window._tnlPreset = presetSvc; }
+    }
   }
   window.openTunnel = openTunnel;
 
@@ -2873,7 +2947,8 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ── Reset completo ── */
   function resetTunnel() {
     T = { servicio:'', ico:'🔧', espacio:'', desc:'', urgencia:'Lo antes posible', fecha:'', hora:'', nombre:'', email:'', tel:'', dir:'' };
-    showView(1, true);
+    window._tnlPreset = null;
+    showView(window.currentUser ? 1 : 0, true);
     success.classList.remove('tnl-show');
     document.getElementById('tnl-form-fields').style.display = '';
     document.getElementById('tnl-espacio').value = '';
@@ -2900,6 +2975,18 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('tnl-spinner').style.display = 'none';
     document.getElementById('tnl-submit-txt').textContent = 'Confirmar solicitud ✓';
     clearErrors();
+    /* Reset step 0 fields */
+    s0AuthMode = 'register';
+    var s0Email = document.getElementById('tnl-s0-email'); if(s0Email) s0Email.value = '';
+    var s0Pass  = document.getElementById('tnl-s0-pass');  if(s0Pass)  s0Pass.value  = '';
+    var s0Tel   = document.getElementById('tnl-s0-tel');   if(s0Tel)   s0Tel.value   = '';
+    var s0Err   = document.getElementById('tnl-s0-error'); if(s0Err)   s0Err.classList.remove('visible');
+    var s0Title = document.getElementById('tnl-s0-title'); if(s0Title) s0Title.textContent = 'Crea tu cuenta';
+    var s0Sub   = document.getElementById('tnl-s0-sub');   if(s0Sub)   s0Sub.textContent   = 'Es gratis y solo toma un momento.';
+    var s0ModeT = document.getElementById('tnl-s0-mode-text');   if(s0ModeT)  s0ModeT.textContent  = '¿Ya tienes cuenta?';
+    var s0ModeB = document.getElementById('tnl-s0-mode-switch');  if(s0ModeB)  s0ModeB.textContent  = 'Iniciar sesión';
+    var s0SubTxt= document.getElementById('tnl-s0-submit-txt');   if(s0SubTxt) s0SubTxt.textContent = 'Crear cuenta y continuar →';
+    var s0TelWr = document.getElementById('tnl-s0-tel-wrap');     if(s0TelWr) s0TelWr.style.display = '';
   }
 
   /* ── Mostrar vista de paso ── */
@@ -3091,6 +3178,12 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   window.onUserLoggedIn = function(user) {
+    /* Si el túnel está abierto en el paso 0, avanzar a paso 1 */
+    var s0 = document.getElementById('tnl-s0');
+    if (s0 && s0.classList.contains('tnl-active') && overlay && overlay.classList.contains('tnl-open')) {
+      showView(1, true);
+      if (window._tnlPreset) { preselectService(window._tnlPreset); window._tnlPreset = null; }
+    }
     var banner = document.getElementById('tnl-session-banner');
     if (!banner) return;
     var initials = (user.displayName || user.email || '?').charAt(0).toUpperCase();
@@ -3117,6 +3210,106 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.getElementById('tnl-session-out').addEventListener('click', function() {
     if (window.fbSignOut && window.auth) window.fbSignOut(window.auth).catch(function(){});
+  });
+
+  /* ──────── PASO 0: lógica de registro / login ──────── */
+  var s0AuthMode = 'register';
+
+  document.getElementById('tnl-s0-pass-toggle').addEventListener('click', function() {
+    var inp = document.getElementById('tnl-s0-pass');
+    var eyeOpen  = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+    var eyeSlash = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+    if (inp.type === 'password') { inp.type = 'text'; this.innerHTML = eyeSlash; }
+    else { inp.type = 'password'; this.innerHTML = eyeOpen; }
+  });
+
+  document.getElementById('tnl-s0-mode-switch').addEventListener('click', function() {
+    var telWrap = document.getElementById('tnl-s0-tel-wrap');
+    if (s0AuthMode === 'register') {
+      s0AuthMode = 'login';
+      document.getElementById('tnl-s0-title').textContent      = 'Iniciar sesión';
+      document.getElementById('tnl-s0-sub').textContent        = 'Bienvenido de vuelta.';
+      document.getElementById('tnl-s0-mode-text').textContent  = '¿No tienes cuenta?';
+      document.getElementById('tnl-s0-pass-hint').textContent  = '';
+      document.getElementById('tnl-s0-submit-txt').textContent = 'Iniciar sesión y continuar →';
+      document.getElementById('tnl-s0-pass').setAttribute('autocomplete','current-password');
+      this.textContent = 'Crear cuenta';
+      if (telWrap) telWrap.style.display = 'none';
+    } else {
+      s0AuthMode = 'register';
+      document.getElementById('tnl-s0-title').textContent      = 'Crea tu cuenta';
+      document.getElementById('tnl-s0-sub').textContent        = 'Es gratis y solo toma un momento.';
+      document.getElementById('tnl-s0-mode-text').textContent  = '¿Ya tienes cuenta?';
+      document.getElementById('tnl-s0-pass-hint').textContent  = ' — mínimo 6 caracteres';
+      document.getElementById('tnl-s0-submit-txt').textContent = 'Crear cuenta y continuar →';
+      document.getElementById('tnl-s0-pass').setAttribute('autocomplete','new-password');
+      this.textContent = 'Iniciar sesión';
+      if (telWrap) telWrap.style.display = '';
+    }
+  });
+
+  document.getElementById('tnl-s0-google').addEventListener('click', function() {
+    var errEl = document.getElementById('tnl-s0-error');
+    errEl.classList.remove('visible');
+    if (!window.fbSignInWithPopup || !window.auth || !window.fbGoogleProvider) {
+      errEl.textContent = 'Firebase no está listo. Recarga la página.';
+      errEl.classList.add('visible'); return;
+    }
+    var btn = this; btn.disabled = true; btn.textContent = 'Conectando con Google...';
+    window.fbSignInWithPopup(window.auth, window.fbGoogleProvider)
+      .then(function(r) { window.currentUser = r.user; })
+      .catch(function(err) {
+        errEl.textContent = 'Error con Google: ' + err.message;
+        errEl.classList.add('visible');
+      })
+      .finally(function() { btn.disabled = false; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z"/></svg> Continuar con Google'; });
+  });
+
+  document.getElementById('tnl-s0-submit').addEventListener('click', function() {
+    var errEl  = document.getElementById('tnl-s0-error');
+    var email  = (document.getElementById('tnl-s0-email').value || '').trim();
+    var pass   = (document.getElementById('tnl-s0-pass').value  || '');
+    errEl.classList.remove('visible');
+
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errEl.textContent = 'Ingresa un correo válido.'; errEl.classList.add('visible'); return;
+    }
+    if (!pass || pass.length < 6) {
+      errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; errEl.classList.add('visible'); return;
+    }
+    if (!window.fbCreateUser || !window.fbSignIn || !window.auth) {
+      errEl.textContent = 'Firebase no está listo. Recarga la página.'; errEl.classList.add('visible'); return;
+    }
+
+    var btn = this; btn.disabled = true;
+    document.getElementById('tnl-s0-spinner').style.display = 'inline-block';
+    document.getElementById('tnl-s0-submit-txt').textContent = s0AuthMode === 'register' ? 'Creando cuenta...' : 'Iniciando sesión...';
+
+    var action = s0AuthMode === 'register'
+      ? window.fbCreateUser(window.auth, email, pass)
+      : window.fbSignIn(window.auth, email, pass);
+
+    action.then(function(result) {
+      window.currentUser = result.user;
+      /* Si hay teléfono guardarlo en localStorage para el paso 3 */
+      var tel = (document.getElementById('tnl-s0-tel').value || '').trim();
+      if (tel) localStorage.setItem('thruver_tel', tel);
+    }).catch(function(err) {
+      var msgs = {
+        'auth/email-already-in-use': 'Este correo ya tiene cuenta. Usa "Iniciar sesión".',
+        'auth/weak-password':        'La contraseña debe tener al menos 6 caracteres.',
+        'auth/invalid-email':        'Correo electrónico inválido.',
+        'auth/user-not-found':       'No encontramos una cuenta con ese correo.',
+        'auth/wrong-password':       'Contraseña incorrecta.',
+        'auth/invalid-credential':   'Correo o contraseña incorrectos.'
+      };
+      errEl.textContent = msgs[err.code] || ('Error: ' + err.message);
+      errEl.classList.add('visible');
+    }).finally(function() {
+      btn.disabled = false;
+      document.getElementById('tnl-s0-spinner').style.display = 'none';
+      document.getElementById('tnl-s0-submit-txt').textContent = s0AuthMode === 'register' ? 'Crear cuenta y continuar →' : 'Iniciar sesión y continuar →';
+    });
   });
 
   document.getElementById('tnl-pass-toggle').addEventListener('click', function() {
