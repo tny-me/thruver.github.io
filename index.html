@@ -103,8 +103,8 @@
     .hero {
       margin-top: 60px; min-height: calc(100vh - 60px);
       background: #0A0A0A;
-      display: flex; flex-direction: column;
-      position: relative; overflow: hidden;
+      display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; position: relative; overflow: hidden;
     }
     .hero-grid-pattern {
       position: absolute; inset: 0;
@@ -112,67 +112,42 @@
       background-size: 60px 60px; pointer-events: none; z-index: 0;
     }
     .hero-glow {
-      position: absolute; width: 900px; height: 900px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(99,102,241,0.11) 0%, transparent 60%);
-      top: 50%; left: 50%; transform: translate(-50%, -60%);
-      pointer-events: none; z-index: 0;
+      position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(99,102,241,0.10) 0%, transparent 65%);
+      top: -200px; left: -150px; pointer-events: none; z-index: 0;
     }
-    .hero-left {
-      flex: 1; position: relative; z-index: 1;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center;
-      padding: 5rem 2rem 3.5rem;
-    }
-    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); font-size: 0.71rem; padding: 0.35rem 0.95rem; border-radius: 100px; margin-bottom: 2.2rem; animation: fadeUp 0.5s ease both; letter-spacing: 0.01em; }
+    .hero-left { position: relative; z-index: 1; padding: 5rem 3rem 5rem 4rem; display: flex; flex-direction: column; }
+    .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.45); font-size: 0.71rem; padding: 0.35rem 0.95rem; border-radius: 100px; margin-bottom: 2.4rem; width: fit-content; animation: fadeUp 0.5s ease both; letter-spacing: 0.01em; }
     .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; flex-shrink: 0; }
     @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
-    .hero-h1 { font-weight: 900; font-size: clamp(3.2rem, 6vw, 6rem); letter-spacing: -0.045em; line-height: 1.02; color: #fff; margin-bottom: 1.4rem; animation: fadeUp 0.5s ease 0.07s both; max-width: 820px; }
-    .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.4); line-height: 1.7; max-width: 460px; margin-bottom: 2.8rem; animation: fadeUp 0.5s ease 0.14s both; }
-    .hero-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; justify-content: center; margin-bottom: 4rem; animation: fadeUp 0.5s ease 0.21s both; }
-    .hero-actions .btn-solid { padding: 0.82rem 2rem; font-size: 0.92rem; }
-    .hero-actions .btn-ghost  { padding: 0.82rem 2rem; font-size: 0.92rem; }
-    .hero-stats { display: flex; align-items: center; gap: 0; animation: fadeUp 0.5s ease 0.28s both; }
-    .hero-stat { text-align: center; padding: 0 1.8rem; }
-    .hero-stat strong { display: block; font-size: 1rem; font-weight: 900; color: #fff; letter-spacing: -0.02em; }
-    .hero-stat span   { font-size: 0.62rem; color: rgba(255,255,255,0.28); text-transform: uppercase; letter-spacing: 0.1em; }
-    .hero-stat-sep { width: 1px; height: 28px; background: rgba(255,255,255,0.1); flex-shrink: 0; }
+    .hero-h1 { font-weight: 900; font-size: clamp(2.8rem, 4.2vw, 4.4rem); letter-spacing: -0.04em; line-height: 1.04; color: #fff; margin-bottom: 1.5rem; animation: fadeUp 0.5s ease 0.07s both; }
+    .hero-sub { font-size: 1rem; color: rgba(255,255,255,0.42); line-height: 1.75; max-width: 400px; margin-bottom: 2.8rem; animation: fadeUp 0.5s ease 0.14s both; }
+    .hero-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-bottom: 4.5rem; animation: fadeUp 0.5s ease 0.21s both; }
+    .hero-actions .btn-solid { padding: 0.78rem 1.8rem; font-size: 0.9rem; }
+    .hero-actions .btn-ghost  { padding: 0.78rem 1.8rem; font-size: 0.9rem; }
+    .hero-stats { display: flex; align-items: center; animation: fadeUp 0.5s ease 0.28s both; }
+    .hero-stat { padding-right: 2rem; }
+    .hero-stat strong { display: block; font-size: 1.05rem; font-weight: 900; color: #fff; letter-spacing: -0.02em; }
+    .hero-stat span   { font-size: 0.64rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.09em; }
+    .hero-stat-sep { width: 1px; height: 26px; background: rgba(255,255,255,0.1); flex-shrink: 0; margin-right: 2rem; }
     @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
-    /* ══ MARQUEE ══ */
-    .hero-marquee {
-      position: relative; z-index: 1; flex-shrink: 0;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 1.1rem 0; overflow: hidden;
+    .hero-right { position: relative; z-index: 1; height: calc(100vh - 60px); display: flex; align-items: center; justify-content: center; padding: 3rem 4rem 3rem 1.5rem; }
+    .photo-mosaic {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 0.6rem;
+      width: 100%; max-width: 480px; height: 500px;
+      animation: fadeUp 0.7s ease 0.1s both;
     }
-    .hero-marquee::before,
-    .hero-marquee::after {
-      content: ''; position: absolute; top: 0; bottom: 0; width: 100px; z-index: 2; pointer-events: none;
+    .photo-tile {
+      border-radius: 18px; overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.55);
     }
-    .hero-marquee::before { left: 0;  background: linear-gradient(to right, #0A0A0A 20%, transparent); }
-    .hero-marquee::after  { right: 0; background: linear-gradient(to left,  #0A0A0A 20%, transparent); }
-    .hero-marquee-track {
-      display: flex; align-items: center;
-      width: max-content;
-      animation: marqueeScroll 30s linear infinite;
-    }
-    .hero-marquee-item {
-      display: inline-flex; align-items: center; gap: 0.55rem;
-      padding: 0 2.2rem;
-      font-size: 0.8rem; font-weight: 600;
-      color: rgba(255,255,255,0.38);
-      white-space: nowrap; letter-spacing: 0.01em;
-    }
-    .hero-marquee-item-icon { font-size: 1rem; }
-    .hero-marquee-dot {
-      width: 3px; height: 3px; border-radius: 50%;
-      background: rgba(255,255,255,0.14); flex-shrink: 0;
-    }
-    @keyframes marqueeScroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-    @media(prefers-reduced-motion:reduce) { .hero-marquee-track { animation: none; } }
+    .photo-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-tile:first-child { grid-row: 1 / 3; }
 
     /* ══ SERVICES ══ */
     .lp-services { background: var(--white); padding: 5.5rem 0; border-bottom: 1px solid var(--border); }
@@ -1272,7 +1247,9 @@
       nav { padding: 0 2rem; }
       .nav-center { display: none; }
       .nav-hamburger { display: flex; }
-      .hero-left { padding: 4.5rem 2rem 3rem; }
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero-left { padding: 4rem 2.5rem; min-height: calc(100vh - 60px); justify-content: center; }
       .lp-inner { padding: 0 2rem; }
       .lp-services, .lp-how, .lp-signup { padding: 4.5rem 0; }
       .lp-guarantee { padding: 5.5rem 0; }
@@ -1299,12 +1276,12 @@
       .nav-right .btn-ghost { display: none; }
       .nav-right .btn-solid { display: none; }
       .nav-hamburger { display: flex; }
-      .hero-left { padding: 3.5rem 1.5rem 2.5rem; }
-      .hero-h1 { font-size: clamp(2.6rem, 10vw, 3.5rem); }
-      .hero-sub { font-size: 0.92rem; margin-bottom: 2.2rem; }
+      .hero-left { padding: 3rem 1.5rem; }
+      .hero-h1 { font-size: clamp(2.2rem, 8vw, 3rem); }
+      .hero-sub { font-size: 0.9rem; margin-bottom: 2rem; }
       .hero-actions { flex-direction: column; gap: 0.5rem; margin-bottom: 3rem; }
       .hero-actions .btn-solid, .hero-actions .btn-ghost { width: 100%; justify-content: center; padding: 0.9rem; font-size: 0.95rem; border-radius: var(--radius); }
-      .hero-stat { padding: 0 1.1rem; }
+      .hero-stats { gap: 1.4rem; }
       .lp-inner { padding: 0 1.2rem; }
       .svc-grid { grid-template-columns: repeat(4,1fr); gap: 0.4rem; }
       .service-pill { padding: 0.75rem 0.2rem; border-radius: 10px; min-height: 68px; }
@@ -1727,43 +1704,17 @@
     </div>
   </div>
 
-  <!-- Marquee de servicios -->
-  <div class="hero-marquee">
-    <div class="hero-marquee-track">
-      <!-- set 1 -->
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🔧</span>Plomería</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">⚡</span>Electricidad</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🧹</span>Limpieza</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🖌️</span>Pintura</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🪚</span>Carpintería</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🌿</span>Jardinería</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">❄️</span>Aire / Clima</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🏗️</span>Remodelación</div>
-      <div class="hero-marquee-dot"></div>
-      <!-- set 2 (duplicado para el loop continuo) -->
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🔧</span>Plomería</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">⚡</span>Electricidad</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🧹</span>Limpieza</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🖌️</span>Pintura</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🪚</span>Carpintería</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🌿</span>Jardinería</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">❄️</span>Aire / Clima</div>
-      <div class="hero-marquee-dot"></div>
-      <div class="hero-marquee-item"><span class="hero-marquee-item-icon">🏗️</span>Remodelación</div>
-      <div class="hero-marquee-dot"></div>
+  <div class="hero-right">
+    <div class="photo-mosaic">
+      <div class="photo-tile">
+        <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Plomero.jpeg" alt="Plomería" />
+      </div>
+      <div class="photo-tile">
+        <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Electrico.jpeg" alt="Electricidad" loading="lazy" />
+      </div>
+      <div class="photo-tile">
+        <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Pintor.jpeg" alt="Pintura" loading="lazy" />
+      </div>
     </div>
   </div>
 </section>
