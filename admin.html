@@ -257,7 +257,10 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 1.25rem 1.4rem;
+      cursor: pointer;
+      transition: box-shadow .15s, transform .15s;
     }
+    .stat-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.1); transform: translateY(-2px); }
     .stat-label {
       font-size: 0.68rem; font-weight: 700;
       text-transform: uppercase; letter-spacing: 0.1em;
@@ -668,32 +671,32 @@
       <!-- ═══ DASHBOARD ═══ -->
       <div class="page-section active" id="sec-dashboard">
         <div class="stats-grid" id="stats-grid">
-          <div class="stat-card blue">
+          <div class="stat-card blue" onclick="goToFiltered('solicitudes','todas')">
             <div class="stat-label">Total Solicitudes</div>
             <div class="stat-value" id="st-total"><span class="skel" style="width:3rem"></span></div>
             <div class="stat-sub">Todas las solicitudes registradas</div>
           </div>
-          <div class="stat-card amber">
+          <div class="stat-card amber" onclick="goToFiltered('solicitudes','nueva')">
             <div class="stat-label">Nuevas / Pendientes</div>
             <div class="stat-value" id="st-nuevas"><span class="skel" style="width:2.5rem"></span></div>
             <div class="stat-sub">Sin asignar técnico</div>
           </div>
-          <div class="stat-card green">
+          <div class="stat-card green" onclick="goToFiltered('solicitudes','completado')">
             <div class="stat-label">Completadas</div>
             <div class="stat-value" id="st-comp"><span class="skel" style="width:2.5rem"></span></div>
             <div class="stat-sub">Servicios finalizados</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" onclick="goToFiltered('tecnicos','todos')">
             <div class="stat-label">Técnicos</div>
             <div class="stat-value" id="st-tec"><span class="skel" style="width:2.5rem"></span></div>
             <div class="stat-sub">Registrados en el sistema</div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" onclick="goToFiltered('clientes','todos')">
             <div class="stat-label">Clientes</div>
             <div class="stat-value" id="st-cli"><span class="skel" style="width:2.5rem"></span></div>
             <div class="stat-sub">Usuarios registrados</div>
           </div>
-          <div class="stat-card red">
+          <div class="stat-card red" onclick="goToFiltered('solicitudes','cancelado')">
             <div class="stat-label">Canceladas</div>
             <div class="stat-value" id="st-cancel"><span class="skel" style="width:2rem"></span></div>
             <div class="stat-sub">En el período</div>
@@ -876,6 +879,18 @@
   </div>
 </div>
 
+<!-- ═══ CONFIRM DELETE MODAL ═══ -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box" style="max-width:380px">
+    <h3 id="confirm-title">¿Eliminar?</h3>
+    <p id="confirm-msg" style="font-size:0.88rem;color:var(--muted);margin-bottom:1.25rem"></p>
+    <div style="display:flex;gap:0.6rem;justify-content:flex-end">
+      <button class="modal-cancel" onclick="closeConfirmModal()">Cancelar</button>
+      <button id="confirm-ok-btn" style="padding:0.55rem 1.2rem;border-radius:var(--rsm);border:none;background:#dc2626;color:#fff;font-weight:700;cursor:pointer" onclick="execConfirmDelete()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ TOAST CONTAINER ═══ -->
 <div id="toast-container"></div>
 
@@ -885,7 +900,7 @@
   import {
     getFirestore, collection, query, where, orderBy,
     getDocs, getDoc, doc, updateDoc, addDoc, serverTimestamp,
-    onSnapshot
+    onSnapshot, deleteDoc
   } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
   import {
     getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
@@ -1087,6 +1102,7 @@
         <td style="display:flex;gap:0.3rem;flex-wrap:wrap">
           <button class="act-btn" onclick="openSolicitudDrawer('${s.id}')">Ver</button>
           <button class="act-btn primary" onclick="openAssignModal('${s.id}')">Asignar</button>
+          <button class="act-btn danger" onclick="confirmDelete('solicitudes','${s.id}','Solicitud de ${esc(s.nombre||s.email||'—')}')">Eliminar</button>
         </td>
       </tr>`).join('');
   }
@@ -1116,10 +1132,11 @@
         <td>${esc(Array.isArray(t.especialidades) ? t.especialidades.join(', ') : (t.especialidad || t.servicio || '—'))}</td>
         <td><span class="badge badge-${t.estado || 'pendiente'}">${t.estado || 'pendiente'}</span></td>
         <td class="td-muted">${fmtDate(t.creadoEn)}</td>
-        <td style="display:flex;gap:0.3rem">
+        <td style="display:flex;gap:0.3rem;flex-wrap:wrap">
           <button class="act-btn" onclick="openTecnicoDrawer('${t.id}')">Ver</button>
           ${t.estado !== 'aprobado' ? `<button class="act-btn success" onclick="setTecnicoEstado('${t.id}','aprobado')">Aprobar</button>` : ''}
           ${t.estado !== 'rechazado' ? `<button class="act-btn danger" onclick="setTecnicoEstado('${t.id}','rechazado')">Rechazar</button>` : ''}
+          <button class="act-btn danger" onclick="confirmDelete('usuarios','${t.id}','Técnico: ${esc(t.nombre||t.email||'—')}')">Eliminar</button>
         </td>
       </tr>`).join('');
   }
@@ -1140,7 +1157,10 @@
         <td class="td-muted">${esc(c.direccion || c.calle || '—')}</td>
         <td style="font-weight:700">${numSol}</td>
         <td class="td-muted">${fmtDate(c.creadoEn)}</td>
-        <td><button class="act-btn" onclick="openClienteDrawer('${c.id}')">Ver historial</button></td>
+        <td style="display:flex;gap:0.3rem">
+          <button class="act-btn" onclick="openClienteDrawer('${c.id}')">Ver historial</button>
+          <button class="act-btn danger" onclick="confirmDelete('usuarios','${c.id}','Cliente: ${esc(c.nombre||c.email||'—')}')">Eliminar</button>
+        </td>
       </tr>`;
     }).join('');
   }
@@ -1333,6 +1353,76 @@
       renderTecnicosTable(); renderDashboard();
       showToast(`Técnico ${estado}`, 'success');
     } catch(e) { showToast('Error: ' + e.message, 'error'); }
+  };
+
+  /* ─── NAVIGATE FROM DASHBOARD CARD ─── */
+  window.goToFiltered = function(section, filter) {
+    // Navigate to the section
+    const navEl = document.querySelector(`.nav-item[data-section="${section}"]`);
+    goTo(section, navEl);
+    // Apply filter after a tiny tick so the section renders
+    setTimeout(() => {
+      if (section === 'solicitudes') {
+        solFilter = filter;
+        document.querySelectorAll('#sol-filter-pills .pill').forEach(p => p.classList.remove('active','blue-pill'));
+        const pill = document.querySelector(`#sol-filter-pills .pill[data-filter="${filter}"]`);
+        if (pill) pill.classList.add('active','blue-pill');
+        renderSolicitudesTable();
+      } else if (section === 'tecnicos') {
+        tecFilter = filter;
+        document.querySelectorAll('[data-tec-filter]').forEach(p => p.classList.remove('active','blue-pill'));
+        const pill = document.querySelector(`[data-tec-filter="${filter}"]`);
+        if (pill) pill.classList.add('active','blue-pill');
+        renderTecnicosTable();
+      }
+      // 'clientes' has no filter, just navigates
+    }, 50);
+  };
+
+  /* ─── CONFIRM DELETE MODAL ─── */
+  let _pendingDelete = null;
+
+  window.confirmDelete = function(coleccion, id, nombre) {
+    _pendingDelete = { coleccion, id, nombre };
+    document.getElementById('confirm-title').textContent = '¿Eliminar registro?';
+    document.getElementById('confirm-msg').textContent =
+      `Esta acción no se puede deshacer. Se eliminará permanentemente: "${nombre}"`;
+    document.getElementById('confirm-modal').classList.add('open');
+  };
+
+  window.closeConfirmModal = function() {
+    _pendingDelete = null;
+    document.getElementById('confirm-modal').classList.remove('open');
+  };
+
+  window.execConfirmDelete = async function() {
+    if (!_pendingDelete) return;
+    const { coleccion, id, nombre } = _pendingDelete;
+    const btn = document.getElementById('confirm-ok-btn');
+    btn.disabled = true; btn.textContent = 'Eliminando…';
+    try {
+      await deleteDoc(doc(db, coleccion, id));
+      // Remove from local arrays
+      if (coleccion === 'solicitudes') {
+        allSolicitudes = allSolicitudes.filter(s => s.id !== id);
+        renderDashboard(); renderSolicitudesTable();
+      } else if (coleccion === 'usuarios') {
+        const isTec = allTecnicos.some(t => t.id === id);
+        if (isTec) {
+          allTecnicos = allTecnicos.filter(t => t.id !== id);
+          renderTecnicosTable();
+        } else {
+          allClientes = allClientes.filter(c => c.id !== id);
+          renderClientesTable();
+        }
+        renderDashboard();
+      }
+      closeConfirmModal();
+      showToast(`"${nombre}" eliminado correctamente`, 'success');
+    } catch(e) {
+      showToast('Error al eliminar: ' + e.message, 'error');
+    }
+    btn.disabled = false; btn.textContent = 'Eliminar';
   };
 
   /* ─── SEARCH ─── */
