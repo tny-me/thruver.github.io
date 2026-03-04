@@ -349,6 +349,8 @@
       display: none;
       position: fixed; inset: 0; z-index: 1200;
       background: #f5f5f5;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.045) 1px, transparent 1px);
+      background-size: 22px 22px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -367,6 +369,16 @@
       border-bottom: 1px solid var(--border);
     }
     .tnl-logo { font-weight: 900; font-size: 1.25rem; letter-spacing: -0.04em; color: var(--black); }
+    .tnl-header-svc {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.85rem; font-weight: 700; color: var(--text);
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 999px; padding: 0.3rem 0.85rem 0.3rem 0.6rem;
+      opacity: 0; transform: translateY(4px) scale(0.95);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+    .tnl-header-svc.visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
     .tnl-close {
       display: flex; align-items: center; gap: 0.35rem;
       background: transparent; border: 1px solid var(--border);
@@ -377,27 +389,47 @@
     }
     .tnl-close:hover { background: var(--bg3); color: var(--black); border-color: rgba(0,0,0,0.16); }
 
-    .tnl-progress-bar {
+    /* ── Step breadcrumb ── */
+    .tnl-steps-bar {
       position: sticky; top: 64px; z-index: 9;
-      height: 3px; background: var(--bg3);
+      display: flex; align-items: center; justify-content: center; gap: 0;
+      padding: 0.9rem 2rem;
+      background: rgba(245,245,245,0.97);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: opacity 0.2s;
     }
-    .tnl-progress-fill {
-      height: 100%; background: var(--black);
-      border-radius: 0 2px 2px 0;
-      transition: width 0.45s cubic-bezier(0.4,0,0.2,1);
+    .tnl-steps-bar.tnl-steps-hidden { opacity: 0; pointer-events: none; }
+    .tnl-step-item {
+      display: flex; align-items: center; gap: 0.42rem;
+      opacity: 0.32; transition: opacity 0.35s;
+    }
+    .tnl-step-item.active { opacity: 1; }
+    .tnl-step-item.done   { opacity: 0.55; }
+    .tnl-step-circle {
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 800;
+      background: var(--bg3); color: var(--muted);
+      transition: background 0.35s, color 0.35s;
+    }
+    .tnl-step-item.active .tnl-step-circle { background: var(--black); color: var(--white); }
+    .tnl-step-item.done  .tnl-step-circle  { background: var(--black); color: var(--white); }
+    .tnl-step-label {
+      font-size: 0.74rem; font-weight: 600; color: var(--muted);
+    }
+    .tnl-step-item.active .tnl-step-label { color: var(--black); font-weight: 700; }
+    .tnl-step-rule {
+      width: 32px; height: 1.5px; background: var(--border); margin: 0 0.7rem; flex-shrink: 0;
     }
 
-    .tnl-step-indicator {
-      display: flex; justify-content: center; align-items: center;
-      gap: 0.6rem; padding: 1.6rem 1rem 0;
+    /* ── CTA sticky bottom ── */
+    .tnl-cta-sticky {
+      position: sticky; bottom: 0; z-index: 5;
+      background: linear-gradient(transparent, rgba(245,245,245,0.98) 36%);
+      padding: 2.5rem 0 0.5rem;
+      margin-top: 1.2rem;
     }
-    .tnl-dot {
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--bg3);
-      transition: background 0.3s, transform 0.3s, width 0.3s;
-    }
-    .tnl-dot.active  { background: var(--black); transform: scale(1.5); }
-    .tnl-dot.done    { background: var(--black); opacity: 0.3; }
 
     .tnl-body { max-width: 780px; margin: 0 auto; padding: 2.2rem 1.5rem 6rem; }
 
@@ -425,24 +457,28 @@
     }
     .tnl-svc-card {
       background: var(--white); border: 2px solid var(--border);
-      border-radius: var(--radius); padding: 1.6rem 0.8rem;
+      border-radius: 14px; padding: 1.65rem 0.8rem 1.4rem;
       text-align: center; cursor: pointer;
-      display: flex; flex-direction: column; align-items: center; gap: 0.55rem;
-      transition: border-color 0.18s, transform 0.18s, box-shadow 0.18s;
+      display: flex; flex-direction: column; align-items: center; gap: 0.6rem;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, background 0.2s;
       -webkit-tap-highlight-color: transparent; user-select: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
     }
     .tnl-svc-card:hover {
-      border-color: rgba(0,0,0,0.2);
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      border-color: rgba(0,0,0,0.22);
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 14px 32px rgba(0,0,0,0.1);
     }
     .tnl-svc-card.tnl-svc-selected {
       border-color: var(--black); background: var(--black);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.22);
     }
-    .tnl-svc-card.tnl-svc-selected .tnl-svc-icon { filter: grayscale(1) brightness(10); }
+    .tnl-svc-card.tnl-svc-selected .tnl-svc-icon { filter: grayscale(1) brightness(10); transform: scale(1.12); }
     .tnl-svc-card.tnl-svc-selected .tnl-svc-name { color: var(--white); }
-    .tnl-svc-icon { font-size: 2.1rem; line-height: 1; }
-    .tnl-svc-name { font-size: 0.83rem; font-weight: 700; color: var(--text); }
+    .tnl-svc-icon { font-size: 2.4rem; line-height: 1; transition: transform 0.2s; }
+    .tnl-svc-card:hover .tnl-svc-icon { transform: scale(1.1); }
+    .tnl-svc-name { font-size: 0.8rem; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
 
     /* ── PASO 2: Formulario de contexto ── */
     .tnl-back-btn {
@@ -1365,11 +1401,13 @@
       .modal-box h2 { font-size: 1.15rem; }
       /* Túnel móvil */
       .tnl-header  { padding: 0 1.2rem; height: 58px; }
+      .tnl-steps-bar { top: 58px; padding: 0.7rem 1.2rem; }
       .tnl-body    { padding: 1.5rem 1.2rem 5rem; }
       .tnl-title   { font-size: 1.45rem; }
       .tnl-svc-grid { grid-template-columns: repeat(3, 1fr); gap: 0.55rem; }
-      .tnl-svc-card { padding: 1.2rem 0.4rem; }
-      .tnl-svc-icon { font-size: 1.7rem; }
+      .tnl-svc-card { padding: 1.2rem 0.4rem 1rem; border-radius: 10px; }
+      .tnl-svc-icon { font-size: 1.9rem; }
+      .tnl-header-svc { font-size: 0.78rem; padding: 0.25rem 0.7rem 0.25rem 0.5rem; }
       .tnl-svc-name { font-size: 0.72rem; }
       .tnl-urgency-row { grid-template-columns: 1fr 1fr; }
       .tnl-step3-layout { grid-template-columns: 1fr; }
@@ -1431,17 +1469,25 @@
 
   <header class="tnl-header">
     <span class="tnl-logo">thruver</span>
+    <div class="tnl-header-svc" id="tnlHeaderSvc"></div>
     <button class="tnl-close" id="tnlClose" aria-label="Cerrar">✕ Cancelar</button>
   </header>
 
-  <div class="tnl-progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="33">
-    <div class="tnl-progress-fill" id="tnlFill" style="width:33%"></div>
-  </div>
-
-  <div class="tnl-step-indicator" id="tnlDots">
-    <div class="tnl-dot active"></div>
-    <div class="tnl-dot"></div>
-    <div class="tnl-dot"></div>
+  <div class="tnl-steps-bar tnl-steps-hidden" id="tnlStepsBar">
+    <div class="tnl-step-item active" id="tnl-si1">
+      <div class="tnl-step-circle">1</div>
+      <span class="tnl-step-label">Servicio</span>
+    </div>
+    <div class="tnl-step-rule"></div>
+    <div class="tnl-step-item" id="tnl-si2">
+      <div class="tnl-step-circle">2</div>
+      <span class="tnl-step-label">Detalles</span>
+    </div>
+    <div class="tnl-step-rule"></div>
+    <div class="tnl-step-item" id="tnl-si3">
+      <div class="tnl-step-circle">3</div>
+      <span class="tnl-step-label">Confirmar</span>
+    </div>
   </div>
 
   <div class="tnl-body">
@@ -1494,10 +1540,12 @@
         <button id="tnl-s0-mode-switch" type="button">Iniciar sesión</button>
       </div>
 
-      <button class="tnl-cta" id="tnl-s0-submit">
-        <span class="spinner" id="tnl-s0-spinner"></span>
-        <span id="tnl-s0-submit-txt">Crear cuenta y continuar →</span>
-      </button>
+      <div class="tnl-cta-sticky">
+        <button class="tnl-cta" id="tnl-s0-submit">
+          <span class="spinner" id="tnl-s0-spinner"></span>
+          <span id="tnl-s0-submit-txt">Crear cuenta y continuar →</span>
+        </button>
+      </div>
     </div>
 
     <!-- ─────────────── PASO 1 ─────────────── -->
@@ -1576,7 +1624,9 @@
         <p>Thruver te asignará a un técnico <b>verificado con antecedentes revisados</b> y respaldará el trabajo con nuestra <b>Garantía Total</b>. Si no queda bien, regresa sin costo.</p>
       </div>
 
-      <button class="tnl-cta" id="tnl-next2">Continuar →</button>
+      <div class="tnl-cta-sticky">
+        <button class="tnl-cta" id="tnl-next2">Continuar →</button>
+      </div>
     </div>
 
     <!-- ─────────────── PASO 3 ─────────────── -->
@@ -1737,10 +1787,12 @@
               </div>
             </div>
 
-            <button class="tnl-cta" id="tnl-submit">
-              <span class="spinner" id="tnl-spinner"></span>
-              <span id="tnl-submit-txt">Crear cuenta y confirmar ✓</span>
-            </button>
+            <div class="tnl-cta-sticky">
+              <button class="tnl-cta" id="tnl-submit">
+                <span class="spinner" id="tnl-spinner"></span>
+                <span id="tnl-submit-txt">Crear cuenta y confirmar ✓</span>
+              </button>
+            </div>
             <!-- Nota de correo — movida debajo del botón -->
             <div class="tnl-email-note" style="margin-top:0.9rem;">
               <span>✉️</span>
@@ -2909,10 +2961,11 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ═══════════════════════════════════════════
      TÚNEL DE CONVERSIÓN
   ═══════════════════════════════════════════ */
-  var overlay  = document.getElementById('tnlOverlay');
-  var fill     = document.getElementById('tnlFill');
-  var dots     = document.querySelectorAll('.tnl-dot');
-  var success  = document.getElementById('tnl-success');
+  var overlay   = document.getElementById('tnlOverlay');
+  var stepsBar  = document.getElementById('tnlStepsBar');
+  var stepItems = [document.getElementById('tnl-si1'), document.getElementById('tnl-si2'), document.getElementById('tnl-si3')];
+  var headerSvc = document.getElementById('tnlHeaderSvc');
+  var success   = document.getElementById('tnl-success');
   var dtWrap   = document.getElementById('tnl-datetime-wrap');
 
   /* Estado acumulado */
@@ -2970,6 +3023,7 @@ document.addEventListener('DOMContentLoaded', function () {
     dtWrap.classList.remove('visible');
     document.getElementById('r-fecha-row').classList.remove('visible');
     document.querySelectorAll('.tnl-svc-card').forEach(function(c){ c.classList.remove('tnl-svc-selected'); });
+    headerSvc.textContent = ''; headerSvc.classList.remove('visible');
     var submitBtn = document.getElementById('tnl-submit');
     submitBtn.disabled = false;
     document.getElementById('tnl-spinner').style.display = 'none';
@@ -2998,12 +3052,17 @@ document.addEventListener('DOMContentLoaded', function () {
     if (v) {
       v.classList.add(forward === false ? 'tnl-back' : 'tnl-active');
     }
-    fill.style.width = PROG[n] || '90%';
-    dots.forEach(function(d, i){
-      d.classList.remove('active','done');
-      if (i + 1 < n)  d.classList.add('done');
-      if (i + 1 === n) d.classList.add('active');
-    });
+    /* Step breadcrumb */
+    if (n === 0) {
+      stepsBar.classList.add('tnl-steps-hidden');
+    } else {
+      stepsBar.classList.remove('tnl-steps-hidden');
+      stepItems.forEach(function(item, i) {
+        item.classList.remove('active', 'done');
+        if (i + 1 < n)  item.classList.add('done');
+        if (i + 1 === n) item.classList.add('active');
+      });
+    }
     overlay.scrollTop = 0;
   }
 
@@ -3083,6 +3142,8 @@ document.addEventListener('DOMContentLoaded', function () {
       card.classList.add('tnl-svc-selected');
       T.servicio = card.getAttribute('data-svc');
       T.ico      = card.getAttribute('data-ico') || '🔧';
+      headerSvc.innerHTML = '<span>' + T.ico + '</span>' + T.servicio;
+      headerSvc.classList.add('visible');
       setTimeout(function(){ showView(2, true); }, 240);
     });
   });
