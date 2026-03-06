@@ -62,7 +62,8 @@
     .nav-center a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.82rem; padding: 0.4rem 0.9rem; border-radius: 6px; transition: color 0.15s; }
     .nav-center a:hover { color: #fff; }
     .nav-right { display: flex; gap: 0.5rem; align-items: center; }
-    .nav-greeting { display: none; color: rgba(255,255,255,0.92); font-size: 0.85rem; font-weight: 500; white-space: nowrap; }
+    .nav-greeting { display: none; color: #fff; font-size: 0.82rem; font-weight: 600; white-space: nowrap; cursor: pointer; padding: 0.46rem 1.25rem; border-radius: 100px; background: rgba(10,10,10,0.55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.12); transition: background 0.15s; }
+    .nav-greeting:hover { background: rgba(10,10,10,0.75); }
     .nav-greeting-mobile { display: none; color: rgba(255,255,255,0.85); font-size: 0.95rem; font-weight: 500; padding: 0.5rem 0; }
 
     .btn-ghost {
@@ -3933,6 +3934,15 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   document.getElementById('btn-google-login').addEventListener('click', function() { doGoogleModal('login-error'); });
   document.getElementById('btn-google-register').addEventListener('click', function() { doGoogleModal('register-error'); });
+
+  /* ── GREETING click → dashboard ── */
+  document.getElementById('nav-greeting').addEventListener('click', function() {
+    if (window.currentUser) cargarHistorialYMostrarDashboard(window.currentUser);
+  });
+  document.getElementById('nav-greeting-mobile').addEventListener('click', function() {
+    closeMobileMenu();
+    if (window.currentUser) cargarHistorialYMostrarDashboard(window.currentUser);
+  });
 
   /* ── EYE TOGGLES ── */
   function setupEyeToggle(btnId, inputId) {
