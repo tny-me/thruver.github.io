@@ -1656,6 +1656,14 @@
        REDESIGN: HOW IT WORKS V2
     ══════════════════════════════════════════ */
     .lp-how-v2 { background: #080808; padding: 4rem 0 8rem; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .tech-vid-wrap { position: relative; width: 100%; height: 480px; overflow: hidden; background: #000; }
+    .tech-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.55) saturate(0.7); }
+    .tech-vid-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(8,8,8,0.6) 0%, rgba(8,8,8,0.1) 40%, rgba(8,8,8,0.1) 60%, rgba(8,8,8,0.7) 100%); }
+    .tech-vid-caption { position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 0.72rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.35); font-weight: 600; }
+    @media(max-width: 600px) {
+      .tech-vid-wrap { height: 260px; }
+      .tech-vid-caption { font-size: 0.6rem; letter-spacing: 0.12em; white-space: normal; text-align: center; width: 90%; }
+    }
     .how-v2-header { text-align: center; margin-bottom: 5rem; }
     .how-v2-title { font-size: clamp(2.2rem, 3.5vw, 3.2rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1.06; color: #fff; margin-top: 1rem; }
     .how-v2-subtitle { font-size: 0.95rem; color: rgba(255,255,255,0.4); margin-top: 0.8rem; line-height: 1.7; max-width: 420px; margin-left: auto; margin-right: auto; }
@@ -2468,6 +2476,15 @@
     </div>
   </div>
 </section>
+
+<!-- TECH VIDEO -->
+<div class="tech-vid-wrap">
+  <video class="tech-vid" autoplay muted loop playsinline id="techVid">
+    <source src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/tecnicosupervision.mp4" type="video/mp4">
+  </video>
+  <div class="tech-vid-overlay"></div>
+  <p class="tech-vid-caption">Técnicos verificados · Trabajo documentado · Supervisión en tiempo real</p>
+</div>
 
 <!-- STATS BAR -->
 <div class="stats-bar-v2">
@@ -3523,6 +3540,14 @@
 </div>
 
 <script>
+/* ── TECH VIDEO SLOW PLAYBACK ── */
+(function(){
+  var v = document.getElementById('techVid');
+  if(!v) return;
+  v.addEventListener('loadedmetadata', function(){ v.playbackRate = 0.5; });
+  v.playbackRate = 0.5;
+})();
+
 /* ── NAV TRANSPARENCY OVER HERO ── */
 (function(){
   var nav = document.querySelector('nav');
