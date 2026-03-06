@@ -666,6 +666,36 @@
     .tnl-trust p { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
     .tnl-trust p b { color: var(--black); }
 
+    /* ── PRE-DIAGNOSIS: Preguntas dinámicas por servicio ── */
+    .tnl-diag-wrap { margin-bottom: 1.25rem; }
+    .tnl-diag-svc-badge {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: var(--black); color: var(--white);
+      font-size: 0.69rem; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+      padding: 0.38rem 0.95rem; border-radius: 100px; margin-bottom: 1.5rem;
+    }
+    .tnl-diag-question { margin-bottom: 1.15rem; }
+    .tnl-diag-q-label {
+      font-size: 0.84rem; font-weight: 700; color: var(--black);
+      margin-bottom: 0.5rem; line-height: 1.4; letter-spacing: -0.01em;
+    }
+    .tnl-diag-chips { display: flex; flex-wrap: wrap; gap: 0.42rem; }
+    .tnl-diag-chip {
+      display: inline-flex; align-items: center;
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: 100px; padding: 0.46rem 1rem;
+      font-family: var(--font); font-size: 0.8rem; font-weight: 600;
+      color: var(--text); cursor: pointer;
+      transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.12s, box-shadow 0.15s;
+      -webkit-tap-highlight-color: transparent; user-select: none;
+    }
+    .tnl-diag-chip:hover { border-color: rgba(0,0,0,0.3); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .tnl-diag-chip.selected { background: var(--black); border-color: var(--black); color: var(--white); }
+    .tnl-diag-divider { height: 1px; background: var(--border); margin: 1.4rem 0 1.3rem; }
+    .tnl-rrow-prediag { display: none; }
+    .tnl-rrow-prediag.visible { display: flex; }
+    .tnl-rrow-prediag-list { font-size: 0.74rem; opacity: 0.68; font-weight: 500; line-height: 1.75; }
+
     /* ── PASO 3: Grid resumen + formulario ── */
     .tnl-step3-layout {
       display: grid;
@@ -2048,6 +2078,13 @@
       <h2 class="tnl-title">Danos un poco más de contexto</h2>
       <p class="tnl-sub">Nos ayuda a asignarte al técnico correcto mucho más rápido.</p>
 
+      <!-- Servicio seleccionado badge -->
+      <div class="tnl-diag-svc-badge" id="tnl-diag-badge"></div>
+
+      <!-- Preguntas de pre-diagnóstico (se renderizan dinámicamente) -->
+      <div class="tnl-diag-wrap" id="tnl-diag-wrap"></div>
+      <div class="tnl-diag-divider"></div>
+
       <div class="tnl-field">
         <label>Tipo de espacio</label>
         <select id="tnl-espacio">
@@ -2148,6 +2185,14 @@
             <div class="tnl-rrow-info">
               <small>Detalle</small>
               <span id="r-desc" style="font-size:0.77rem;opacity:0.65;font-weight:500;">—</span>
+            </div>
+          </div>
+
+          <div class="tnl-rrow tnl-rrow-prediag" id="r-prediag-row">
+            <div class="tnl-rrow-ico">🔍</div>
+            <div class="tnl-rrow-info">
+              <small>Pre-diagnóstico</small>
+              <span class="tnl-rrow-prediag-list" id="r-prediag">—</span>
             </div>
           </div>
 
@@ -3739,12 +3784,121 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   /* ── Pre-seleccionar servicio ── */
+  /* ═══════════════════════════════════════════════════════
+     PRE-DIAGNÓSTICO — Preguntas dinámicas por tipo de servicio
+  ═══════════════════════════════════════════════════════ */
+  var PREDIAG = {
+    'Plomería': [
+      { id: 'pd_zona',  label: '¿Dónde está el problema?',
+        opts: ['Fregadero / Lavabo','Baño / Regadera','Lavadora / Tinaco','Tubería general','Terraza / Exterior'] },
+      { id: 'pd_tipo',  label: '¿Qué tipo de falla es?',
+        opts: ['Goteo / Fuga leve','Fuga constante','Taponamiento / Atasco','Presión baja','No sé aún'] },
+      { id: 'pd_agua',  label: '¿Hay agua acumulada?',
+        opts: ['Sí, bastante','Sí, un poco','No'] }
+    ],
+    'Electricidad': [
+      { id: 'pd_zona',  label: '¿Qué zona está afectada?',
+        opts: ['Cuarto / Habitación','Sala / Comedor','Cocina','Exterior / Jardín','Toda la casa / propiedad'] },
+      { id: 'pd_tipo',  label: '¿Cuál es el problema?',
+        opts: ['Sin luz / apagón parcial','Corto circuito','Contacto / enchufe dañado','Instalación nueva','Revisión general'] },
+      { id: 'pd_riesgo',label: '¿Hay chispas o olor a quemado?',
+        opts: ['Sí','No','No lo sé'] }
+    ],
+    'Limpieza': [
+      { id: 'pd_tipo',  label: '¿Qué tipo de limpieza necesitas?',
+        opts: ['Limpieza general','Limpieza profunda','Post obra / construcción','Post mudanza','Tapicería / alfombras'] },
+      { id: 'pd_tam',   label: '¿Tamaño aproximado del espacio?',
+        opts: ['Menos de 50 m²','50 – 100 m²','100 – 200 m²','Más de 200 m²'] },
+      { id: 'pd_areas', label: '¿Incluye cocina o baños?',
+        opts: ['Sí, ambos','Solo cocina','Solo baños','No'] }
+    ],
+    'Pintura': [
+      { id: 'pd_zona',  label: '¿Qué se va a pintar?',
+        opts: ['Interior','Exterior','Ambos (interior y exterior)'] },
+      { id: 'pd_cant',  label: '¿Cuántas habitaciones / áreas?',
+        opts: ['1 área','2 – 3 áreas','4 – 6 áreas','Más de 6 áreas'] },
+      { id: 'pd_mat',   label: '¿Ya tienen la pintura?',
+        opts: ['Sí, ya la tengo','No, necesito que la incluyan','Aún no lo sé'] }
+    ],
+    'Aire / Clima': [
+      { id: 'pd_equipo',label: '¿Qué tipo de equipo tienes?',
+        opts: ['Minisplit','Clima central','Ventilador / extractor','No sé el tipo'] },
+      { id: 'pd_tipo',  label: '¿Qué servicio necesitas?',
+        opts: ['Instalación nueva','Limpieza / mantenimiento','Reparación','Solo revisión / diagnóstico'] },
+      { id: 'pd_cant',  label: '¿Cuántas unidades?',
+        opts: ['1 unidad','2 – 3 unidades','Más de 3 unidades'] }
+    ],
+    'Carpintería': [
+      { id: 'pd_tipo',  label: '¿Qué tipo de trabajo?',
+        opts: ['Muebles','Puertas / ventanas','Pisos de madera','Reparación / restauración','Fabricación desde cero'] },
+      { id: 'pd_lugar', label: '¿Dónde se realiza el trabajo?',
+        opts: ['Interior','Exterior'] },
+      { id: 'pd_med',   label: '¿Tienes medidas o diseño?',
+        opts: ['Sí, ya tengo medidas','Sí, tengo un diseño / plano','No, necesito asesoría'] }
+    ],
+    'Jardinería': [
+      { id: 'pd_tipo',  label: '¿Qué necesitas?',
+        opts: ['Poda de árboles / plantas','Corte de pasto','Diseño de jardín','Sistema de riego','Limpieza general de área'] },
+      { id: 'pd_tam',   label: '¿Tamaño del área verde?',
+        opts: ['Pequeño (menos de 30 m²)','Mediano (30 – 100 m²)','Grande (más de 100 m²)'] },
+      { id: 'pd_frec',  label: '¿Con qué frecuencia?',
+        opts: ['Una sola vez','Semanal','Quincenal','Mensual'] }
+    ],
+    'Remodelación': [
+      { id: 'pd_area',  label: '¿Qué área vas a remodelar?',
+        opts: ['Cocina','Baño','Sala / comedor','Fachada / exterior','Todo el espacio'] },
+      { id: 'pd_plan',  label: '¿Tienes planos o diseño definido?',
+        opts: ['Sí, ya tengo planos','Tengo una idea, pero no planos','No, necesito asesoría de diseño'] },
+      { id: 'pd_demo',  label: '¿Incluye demolición?',
+        opts: ['Sí','No','No lo sé aún'] }
+    ]
+  };
+
+  /* Respuestas del pre-diagnóstico (se llenan al seleccionar chips) */
+  T.prediag = {};
+
+  function renderDiagQuestions(svc) {
+    var wrap  = document.getElementById('tnl-diag-wrap');
+    var badge = document.getElementById('tnl-diag-badge');
+    T.prediag = {};
+    if (!wrap) return;
+    var questions = PREDIAG[svc];
+    if (badge) {
+      badge.innerHTML = (T.ico || '') + ' ' + (svc || '');
+      badge.style.display = questions ? '' : 'none';
+    }
+    if (!questions) { wrap.innerHTML = ''; wrap.style.display = 'none'; return; }
+    wrap.style.display = '';
+    var html = '';
+    questions.forEach(function(q) {
+      html += '<div class="tnl-diag-question" data-qid="' + q.id + '">';
+      html += '<p class="tnl-diag-q-label">' + q.label + '</p>';
+      html += '<div class="tnl-diag-chips">';
+      q.opts.forEach(function(opt) {
+        html += '<button type="button" class="tnl-diag-chip" data-qid="' + q.id + '" data-val="' + opt + '">' + opt + '</button>';
+      });
+      html += '</div></div>';
+    });
+    wrap.innerHTML = html;
+    /* Event delegation: seleccionar chip */
+    wrap.addEventListener('click', function(e) {
+      var chip = e.target.closest('.tnl-diag-chip');
+      if (!chip) return;
+      var qid = chip.getAttribute('data-qid');
+      /* Deseleccionar otros chips del mismo grupo */
+      wrap.querySelectorAll('.tnl-diag-chip[data-qid="' + qid + '"]').forEach(function(c){ c.classList.remove('selected'); });
+      chip.classList.add('selected');
+      T.prediag[qid] = chip.getAttribute('data-val');
+    });
+  }
+
   function preselectService(svc) {
     var card = document.querySelector('.tnl-svc-card[data-svc="' + svc + '"]');
     if (card) {
       card.classList.add('tnl-svc-selected');
       T.servicio = svc;
       T.ico = card.getAttribute('data-ico') || '🔧';
+      renderDiagQuestions(svc);
       setTimeout(function(){ showView(2, true); }, 200);
     }
   }
@@ -3765,6 +3919,19 @@ document.addEventListener('DOMContentLoaded', function () {
       fechaRow.classList.add('visible');
     } else {
       fechaRow.classList.remove('visible');
+    }
+
+    /* Pre-diagnóstico: visible si hay respuestas */
+    var prediagRow = document.getElementById('r-prediag-row');
+    var prediagEl  = document.getElementById('r-prediag');
+    if (prediagRow && prediagEl) {
+      var answers = T.prediag ? Object.values(T.prediag) : [];
+      if (answers.length > 0) {
+        prediagEl.textContent = answers.join(' · ');
+        prediagRow.classList.add('visible');
+      } else {
+        prediagRow.classList.remove('visible');
+      }
     }
   }
 
@@ -3805,6 +3972,7 @@ document.addEventListener('DOMContentLoaded', function () {
       T.ico      = card.getAttribute('data-ico') || '🔧';
       headerSvc.innerHTML = '<span>' + T.ico + '</span>' + T.servicio;
       headerSvc.classList.add('visible');
+      renderDiagQuestions(T.servicio);
       setTimeout(function(){ showView(2, true); }, 240);
     });
   });
@@ -4170,6 +4338,7 @@ document.addEventListener('DOMContentLoaded', function () {
         tipo:'CLIENTE', uid:uid, servicio:T.servicio, espacio:T.espacio,
         descripcion:T.desc, urgencia:T.urgencia,
         fecha_programada: T.urgencia==='Agendar fecha' ? formatFecha(T.fecha,T.hora) : '',
+        prediagnostico: T.prediag || {},
         nombre:userName||T.nombre, email:userEmail||T.email,
         telefono:T.tel, direccion:T.dir, calle:T.calle, numero:T.numero, colonia:T.colonia, estado:'nueva',
         timestamp:new Date().toISOString()
