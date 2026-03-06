@@ -1498,7 +1498,386 @@
       .tnl-svc-icon { font-size: 1.5rem; }
       .tnl-svc-name { font-size: 0.65rem; }
     }
-  </style>
+
+    /* ══════════════════════════════════════════
+       REDESIGN: ABOUT V2 — Verification UI Card
+    ══════════════════════════════════════════ */
+    .lp-about { background: #080808; padding: 8rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .about-grid-v2 {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    }
+    .about-copy { }
+    .about-copy .lp-title { color: #fff; margin-bottom: 1.1rem; }
+    .about-copy .lp-label { color: rgba(255,255,255,0.35); margin-bottom: 0.5rem; }
+    .about-sub-v2 { font-size: 0.95rem; color: rgba(255,255,255,0.42); line-height: 1.85; margin-bottom: 2rem; }
+    .about-features { display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 2.8rem; }
+    .about-feat-item {
+      display: flex; align-items: flex-start; gap: 0.85rem;
+      padding: 0.9rem 1.1rem;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; transition: border-color 0.2s, background 0.2s;
+    }
+    .about-feat-item:hover { border-color: rgba(26,86,232,0.3); background: rgba(26,86,232,0.04); }
+    .about-feat-ico {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: rgba(26,86,232,0.12); border: 1px solid rgba(26,86,232,0.22);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: #6494ff;
+    }
+    .about-feat-ico svg { width: 16px; height: 16px; }
+    .about-feat-txt strong { display: block; font-size: 0.86rem; font-weight: 700; color: rgba(255,255,255,0.88); margin-bottom: 0.18rem; }
+    .about-feat-txt span { font-size: 0.77rem; color: rgba(255,255,255,0.38); line-height: 1.6; }
+
+    /* Verification card UI */
+    .about-visual-v2 { position: relative; }
+    .about-ui-card {
+      background: #0e0e0e; border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 40px 80px rgba(0,0,0,0.5);
+    }
+    .auc-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 1.4rem; border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(255,255,255,0.02);
+    }
+    .auc-header-left { display: flex; align-items: center; gap: 0.55rem; }
+    .auc-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .auc-dot--red { background: #ff5f57; }
+    .auc-dot--yellow { background: #febc2e; }
+    .auc-dot--green { background: #28c840; }
+    .auc-title { font-size: 0.7rem; font-weight: 700; color: rgba(255,255,255,0.28); letter-spacing: 0.06em; text-transform: uppercase; margin-left: 0.4rem; }
+    .auc-badge-live {
+      display: flex; align-items: center; gap: 0.4rem;
+      font-size: 0.64rem; font-weight: 700; color: #22c55e;
+      background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2);
+      padding: 0.22rem 0.7rem; border-radius: 100px;
+    }
+    .auc-badge-live-dot { width: 5px; height: 5px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; }
+
+    /* Tech profile row */
+    .auc-tech-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 1.4rem 1.4rem 1.1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .auc-avatar-wrap { position: relative; }
+    .auc-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, #1A56E8, #6494ff);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; font-weight: 800; color: #fff; flex-shrink: 0;
+    }
+    .auc-avatar-check {
+      position: absolute; bottom: -2px; right: -2px;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #22c55e; border: 2px solid #0e0e0e;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.55rem; color: #fff; font-weight: 900;
+    }
+    .auc-tech-name { font-size: 0.95rem; font-weight: 800; color: #fff; margin-bottom: 0.18rem; letter-spacing: -0.02em; }
+    .auc-tech-spec { font-size: 0.73rem; color: rgba(255,255,255,0.38); }
+    .auc-tech-zone {
+      margin-left: auto; font-size: 0.68rem; font-weight: 700;
+      color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.09); padding: 0.3rem 0.75rem; border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    /* Verification steps */
+    .auc-checks { padding: 1rem 1.4rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    .auc-check-row {
+      display: flex; align-items: center; gap: 0.85rem;
+      padding: 0.75rem 1rem; border-radius: 10px;
+      background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);
+      transition: background 0.2s;
+    }
+    .auc-check-row:hover { background: rgba(255,255,255,0.04); }
+    .auc-check-icon {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 0.68rem; font-weight: 900;
+    }
+    .auc-check-icon--ok { background: rgba(34,197,94,0.12); color: #22c55e; border: 1px solid rgba(34,197,94,0.25); }
+    .auc-check-label { flex: 1; font-size: 0.8rem; font-weight: 600; color: rgba(255,255,255,0.75); }
+    .auc-check-time { font-size: 0.65rem; color: rgba(255,255,255,0.22); }
+
+    /* Rating row */
+    .auc-footer {
+      padding: 1rem 1.4rem 1.4rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .auc-stars { color: #FACC15; font-size: 0.78rem; letter-spacing: 0.04em; }
+    .auc-rating-val { font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,0.6); margin-left: 0.4rem; }
+    .auc-jobs { font-size: 0.7rem; color: rgba(255,255,255,0.25); }
+
+    /* Floating glow behind card */
+    .about-visual-v2::before {
+      content: ''; position: absolute; width: 400px; height: 400px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(26,86,232,0.12) 0%, transparent 68%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      pointer-events: none; z-index: 0;
+    }
+    .about-ui-card { position: relative; z-index: 1; }
+
+    /* ══════════════════════════════════════════
+       REDESIGN: STATS BAR V2
+    ══════════════════════════════════════════ */
+    .stats-bar-v2 {
+      background: #060606; border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06); overflow: hidden; position: relative;
+    }
+    .stats-bar-v2::before {
+      content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 600px; height: 200px;
+      background: radial-gradient(ellipse at center, rgba(26,86,232,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .stats-bar-v2-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      max-width: 1100px; margin: 0 auto; padding: 0 3rem; position: relative; z-index: 1;
+    }
+    .stats-bar-v2-item {
+      text-align: center; padding: 3rem 2rem;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+    .stats-bar-v2-item:last-child { border-right: none; }
+    .stats-bar-v2-item strong {
+      display: block; font-size: clamp(2.4rem, 3.5vw, 3.6rem);
+      font-weight: 900; letter-spacing: -0.06em; line-height: 1;
+      background: linear-gradient(135deg, #fff 30%, rgba(255,255,255,0.5) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 0.4rem;
+    }
+    .stats-bar-v2-item span { font-size: 0.72rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; }
+
+    /* ══════════════════════════════════════════
+       REDESIGN: HOW IT WORKS V2
+    ══════════════════════════════════════════ */
+    .lp-how-v2 { background: #080808; padding: 8rem 0; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .how-v2-header { text-align: center; margin-bottom: 5rem; }
+    .how-v2-title { font-size: clamp(2.2rem, 3.5vw, 3.2rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1.06; color: #fff; margin-top: 1rem; }
+    .how-v2-subtitle { font-size: 0.95rem; color: rgba(255,255,255,0.4); margin-top: 0.8rem; line-height: 1.7; max-width: 420px; margin-left: auto; margin-right: auto; }
+
+    .how-v2-steps {
+      display: grid; grid-template-columns: 1fr 80px 1fr 80px 1fr; gap: 0;
+      align-items: start; position: relative;
+    }
+    .how-v2-step {
+      background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px; padding: 2.4rem 2rem; text-align: center;
+      transition: border-color 0.25s, background 0.25s, transform 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .how-v2-step::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 50% 0%, rgba(26,86,232,0.06) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .how-v2-step:hover { border-color: rgba(26,86,232,0.35); background: rgba(26,86,232,0.04); transform: translateY(-6px); }
+    .how-v2-step:hover::before { opacity: 1; }
+
+    .how-v2-step-num {
+      font-size: 4.5rem; font-weight: 900; letter-spacing: -0.07em; line-height: 1;
+      background: linear-gradient(135deg, rgba(26,86,232,0.5) 0%, rgba(26,86,232,0.1) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; margin-bottom: 1.4rem; display: block;
+    }
+    .how-v2-step-icon {
+      width: 52px; height: 52px; border-radius: 14px;
+      background: rgba(26,86,232,0.1); border: 1px solid rgba(26,86,232,0.22);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.4rem; color: #6494ff;
+    }
+    .how-v2-step-icon svg { width: 24px; height: 24px; }
+    .how-v2-step h3 { font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
+    .how-v2-step p { font-size: 0.82rem; color: rgba(255,255,255,0.42); line-height: 1.75; }
+
+    .how-v2-connector {
+      display: flex; align-items: center; justify-content: center;
+      padding-top: 5.5rem;
+    }
+    .how-v2-arrow {
+      width: 40px; height: 2px; background: rgba(26,86,232,0.3); position: relative;
+    }
+    .how-v2-arrow::after {
+      content: ''; position: absolute; right: -1px; top: 50%;
+      transform: translateY(-50%);
+      border-left: 8px solid rgba(26,86,232,0.4);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+
+    /* ══════════════════════════════════════════
+       REDESIGN: GUARANTEE V2 — Statement section
+    ══════════════════════════════════════════ */
+    .lp-guarantee-v2 {
+      background: #050505; padding: 10rem 0; position: relative; overflow: hidden;
+      text-align: center;
+    }
+    .lp-guarantee-v2::before {
+      content: ''; position: absolute; top: -300px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 900px;
+      background: radial-gradient(ellipse at center, rgba(26,86,232,0.11) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .lp-guarantee-v2::after {
+      content: ''; position: absolute; bottom: -200px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(26,86,232,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .guar-v2-inner { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; padding: 0 3rem; }
+    .guar-v2-title {
+      font-size: clamp(2.8rem, 5vw, 5rem); font-weight: 900; letter-spacing: -0.055em;
+      line-height: 1.02; color: #fff; margin-bottom: 1.5rem;
+    }
+    .guar-v2-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, #6494ff 0%, #1A56E8 50%, #a78bfa 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .guar-v2-sub {
+      font-size: 1rem; color: rgba(255,255,255,0.4); line-height: 1.8;
+      max-width: 500px; margin: 0 auto 3.5rem;
+    }
+    .guar-v2-metrics {
+      display: flex; gap: 0; justify-content: center;
+      border: 1px solid rgba(255,255,255,0.07); border-radius: 16px;
+      overflow: hidden; margin-bottom: 3.5rem; background: rgba(255,255,255,0.02);
+    }
+    .guar-v2-metric {
+      flex: 1; padding: 2rem 1.5rem; border-right: 1px solid rgba(255,255,255,0.07);
+    }
+    .guar-v2-metric:last-child { border-right: none; }
+    .guar-v2-metric strong {
+      display: block; font-size: clamp(1.7rem, 2.5vw, 2.4rem); font-weight: 900;
+      letter-spacing: -0.05em; color: #fff; margin-bottom: 0.3rem;
+    }
+    .guar-v2-metric span { font-size: 0.72rem; color: rgba(255,255,255,0.32); text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600; }
+    .guar-v2-cta-group { display: flex; gap: 0.75rem; justify-content: center; align-items: center; flex-wrap: wrap; }
+    .btn-guar-primary {
+      display: inline-flex; align-items: center;
+      background: var(--blue); color: #fff !important; border: none;
+      padding: 0.95rem 2.5rem; border-radius: 100px; font-size: 0.95rem; font-weight: 700;
+      cursor: pointer; font-family: var(--font); text-decoration: none; min-height: 52px;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      box-shadow: 0 0 30px rgba(26,86,232,0.35), 0 4px 20px rgba(26,86,232,0.2);
+    }
+    .btn-guar-primary:hover {
+      background: var(--blue-dark);
+      box-shadow: 0 0 45px rgba(26,86,232,0.5), 0 6px 24px rgba(26,86,232,0.35);
+      transform: translateY(-2px);
+    }
+    .btn-guar-ghost {
+      display: inline-flex; align-items: center;
+      background: transparent; color: rgba(255,255,255,0.55) !important;
+      border: 1px solid rgba(255,255,255,0.15); padding: 0.95rem 2.5rem;
+      border-radius: 100px; font-size: 0.95rem; font-weight: 600;
+      cursor: pointer; font-family: var(--font); text-decoration: none; min-height: 52px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-guar-ghost:hover { border-color: rgba(255,255,255,0.4); color: #fff !important; }
+
+    /* ══════════════════════════════════════════
+       REDESIGN: SIGNUP V2 — Two column
+    ══════════════════════════════════════════ */
+    .lp-signup-v2 { background: #090909; padding: 8rem 0; border-top: 1px solid rgba(255,255,255,0.06); }
+    .signup-v2-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    }
+    .signup-v2-copy .lp-title { color: #fff; margin-bottom: 1.2rem; }
+    .signup-v2-copy .lp-label { color: rgba(255,255,255,0.35); margin-bottom: 0.5rem; }
+    .signup-v2-desc { font-size: 0.95rem; color: rgba(255,255,255,0.42); line-height: 1.85; margin-bottom: 2.5rem; }
+    .signup-v2-trust { display: flex; flex-direction: column; gap: 0.65rem; }
+    .signup-trust-item {
+      display: flex; align-items: center; gap: 0.7rem;
+      font-size: 0.83rem; color: rgba(255,255,255,0.6); font-weight: 500;
+    }
+    .signup-trust-icon {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.25);
+      display: flex; align-items: center; justify-content: center;
+      color: #22c55e; font-size: 0.7rem; font-weight: 900; flex-shrink: 0;
+    }
+
+    .signup-v2-form-wrap { position: relative; }
+    .signup-v2-form-wrap::before {
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(26,86,232,0.1) 0%, transparent 68%);
+      pointer-events: none; z-index: 0;
+    }
+    .register-block-v2 {
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 32px 72px rgba(0,0,0,0.45);
+      position: relative; z-index: 1;
+    }
+
+    /* Services section V2 enhancements */
+    .lp-services-v2 { background: #0a0a0a; padding: 7rem 0; }
+    .svc-v2-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.4rem; }
+    .svc-v2-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.2rem; }
+    .svc-v2-card {
+      position: relative; border-radius: 20px; overflow: hidden;
+      aspect-ratio: 3/4; text-decoration: none; display: block; cursor: pointer;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), border-color 0.3s, box-shadow 0.3s;
+    }
+    .svc-v2-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      border-color: rgba(255,255,255,0.14);
+      box-shadow: 0 24px 56px rgba(0,0,0,0.5);
+    }
+    .svc-v2-card-bg { position: absolute; inset: 0; background-size: cover; background-position: center; transition: transform 0.55s ease; }
+    .svc-v2-card:hover .svc-v2-card-bg { transform: scale(1.06); }
+    .svc-v2-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 55%, transparent 100%); }
+    .svc-v2-card-body { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.6rem 1.3rem; }
+    .svc-v2-card-name { display: block; font-size: 1.05rem; font-weight: 800; color: #fff; letter-spacing: -0.025em; margin-bottom: 0.6rem; }
+    .svc-v2-card-btn {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      background: rgba(255,255,255,0.12); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.85) !important; border: 1px solid rgba(255,255,255,0.22);
+      padding: 0.35rem 0.9rem; border-radius: 100px; font-size: 0.72rem; font-weight: 700;
+      text-decoration: none; transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .svc-v2-card:hover .svc-v2-card-btn { background: var(--blue); border-color: var(--blue); color: #fff !important; }
+    .svc-v2-more { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .svc-v2-pill {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 100px; padding: 0.6rem 1.3rem; font-size: 0.8rem; font-weight: 600;
+      color: rgba(255,255,255,0.6); cursor: pointer; text-decoration: none;
+      transition: all 0.2s; letter-spacing: -0.01em;
+    }
+    .svc-v2-pill:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+
+    /* ══════════════════════════════════════════
+       RESPONSIVE: new sections
+    ══════════════════════════════════════════ */
+    @media(max-width: 960px) {
+      .about-grid-v2 { grid-template-columns: 1fr; gap: 3rem; }
+      .about-visual-v2 { order: -1; }
+      .how-v2-steps { grid-template-columns: 1fr; }
+      .how-v2-connector { display: none; }
+      .signup-v2-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .stats-bar-v2-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-bar-v2-item:nth-child(2) { border-right: none; }
+      .stats-bar-v2-item:nth-child(1),
+      .stats-bar-v2-item:nth-child(2) { border-bottom: 1px solid rgba(255,255,255,0.06); }
+      .guar-v2-metrics { flex-direction: column; border-radius: 0; border: none; gap: 0; }
+      .guar-v2-metric { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); border-radius: 0; }
+      .guar-v2-metric:last-child { border-bottom: none; }
+      .svc-v2-cards { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media(max-width: 600px) {
+      .about-grid-v2 { gap: 2rem; }
+      .guar-v2-inner { padding: 0 1.5rem; }
+      .stats-bar-v2-grid { padding: 0 1.5rem; }
+    }
 </head>
 <body>
 
@@ -2018,210 +2397,389 @@
 <!-- ABOUT -->
 <section class="lp-about">
   <div class="lp-inner">
-    <div class="about-grid">
-      <div class="about-photo-wrap">
-        <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Electrico.jpeg" alt="Técnico verificado" loading="lazy" />
-      </div>
-      <div>
-        <span class="about-pre">Por qué Thruver</span>
+    <div class="about-grid-v2">
+
+      <!-- Copy -->
+      <div class="about-copy">
+        <p class="lp-label">Por qué Thruver</p>
         <h2 class="lp-title">Técnicos que conoces<br>por nombre.</h2>
-        <p class="about-sub">Cada técnico en nuestra red pasa por un proceso riguroso antes de llegar a tu puerta. Verificamos identidad, capacidad técnica y antecedentes. Sin filtros, sin sorpresas.</p>
-        <ul class="about-checks">
-          <li><span class="about-check-icon">✓</span>Verificados con INE y prueba práctica antes de ingresar a la red</li>
-          <li><span class="about-check-icon">✓</span>Asignados por zona — conocen tu colonia, llegan puntual</li>
-          <li><span class="about-check-icon">✓</span>Garantía incluida en cada servicio, sin costo extra</li>
-          <li><span class="about-check-icon">✓</span>Cero antecedentes en toda la red Thruver</li>
-        </ul>
+        <p class="about-sub-v2">Cada técnico en nuestra red pasa por un proceso riguroso antes de llegar a tu puerta. Verificamos identidad, capacidad técnica y antecedentes. Sin filtros, sin sorpresas.</p>
+        <div class="about-features">
+          <div class="about-feat-item">
+            <div class="about-feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="about-feat-txt">
+              <strong>Verificados con INE y prueba práctica</strong>
+              <span>Antes de ingresar a la red, cada técnico pasa por entrevista y evaluación de habilidades.</span>
+            </div>
+          </div>
+          <div class="about-feat-item">
+            <div class="about-feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="about-feat-txt">
+              <strong>Asignados por zona</strong>
+              <span>Conocen tu colonia, conocen los tiempos. Llegan cuando dicen que llegan.</span>
+            </div>
+          </div>
+          <div class="about-feat-item">
+            <div class="about-feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="about-feat-txt">
+              <strong>Garantía incluida — sin costo extra</strong>
+              <span>Si el trabajo no queda bien, volvemos. Sin preguntas, sin costos adicionales.</span>
+            </div>
+          </div>
+          <div class="about-feat-item">
+            <div class="about-feat-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+            </div>
+            <div class="about-feat-txt">
+              <strong>Cero antecedentes en toda la red</strong>
+              <span>Revisión de antecedentes penales obligatoria. Sin excepciones.</span>
+            </div>
+          </div>
+        </div>
         <a href="#" class="btn-blue tnl-trigger">Solicitar servicio →</a>
       </div>
+
+      <!-- Visual: Verification UI Card -->
+      <div class="about-visual-v2">
+        <div class="about-ui-card">
+          <!-- Window chrome -->
+          <div class="auc-header">
+            <div class="auc-header-left">
+              <div class="auc-dot auc-dot--red"></div>
+              <div class="auc-dot auc-dot--yellow"></div>
+              <div class="auc-dot auc-dot--green"></div>
+              <span class="auc-title">Verificación · Thruver</span>
+            </div>
+            <div class="auc-badge-live">
+              <div class="auc-badge-live-dot"></div>
+              En proceso
+            </div>
+          </div>
+          <!-- Tech profile -->
+          <div class="auc-tech-row">
+            <div class="auc-avatar-wrap">
+              <div class="auc-avatar">JR</div>
+              <div class="auc-avatar-check">✓</div>
+            </div>
+            <div>
+              <div class="auc-tech-name">Juan Rodríguez</div>
+              <div class="auc-tech-spec">Electricista · 8 años de experiencia</div>
+            </div>
+            <div class="auc-tech-zone">📍 Las Quintas</div>
+          </div>
+          <!-- Verification steps -->
+          <div class="auc-checks">
+            <div class="auc-check-row">
+              <div class="auc-check-icon auc-check-icon--ok">✓</div>
+              <span class="auc-check-label">Identificación oficial (INE)</span>
+              <span class="auc-check-time">hace 1 día</span>
+            </div>
+            <div class="auc-check-row">
+              <div class="auc-check-icon auc-check-icon--ok">✓</div>
+              <span class="auc-check-label">Prueba técnica práctica</span>
+              <span class="auc-check-time">hace 2 días</span>
+            </div>
+            <div class="auc-check-row">
+              <div class="auc-check-icon auc-check-icon--ok">✓</div>
+              <span class="auc-check-label">Revisión de antecedentes</span>
+              <span class="auc-check-time">hace 2 días</span>
+            </div>
+            <div class="auc-check-row">
+              <div class="auc-check-icon auc-check-icon--ok">✓</div>
+              <span class="auc-check-label">Entrevista presencial</span>
+              <span class="auc-check-time">hace 3 días</span>
+            </div>
+          </div>
+          <!-- Footer: rating -->
+          <div class="auc-footer">
+            <div>
+              <span class="auc-stars">★★★★★</span>
+              <span class="auc-rating-val">4.9</span>
+            </div>
+            <div class="auc-jobs">143 servicios completados</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
 
 <!-- STATS BAR -->
-<div class="stats-bar">
-  <div class="stats-bar-grid">
-    <div class="stats-bar-item"><strong>200+</strong><span>Técnicos en red</span></div>
-    <div class="stats-bar-item"><strong>500+</strong><span>Servicios completados</span></div>
-    <div class="stats-bar-item"><strong>100%</strong><span>Garantía incluida</span></div>
+<div class="stats-bar-v2">
+  <div class="stats-bar-v2-grid">
+    <div class="stats-bar-v2-item"><strong>200+</strong><span>Técnicos en red</span></div>
+    <div class="stats-bar-v2-item"><strong>500+</strong><span>Servicios completados</span></div>
+    <div class="stats-bar-v2-item"><strong>4.9★</strong><span>Calificación promedio</span></div>
+    <div class="stats-bar-v2-item"><strong>100%</strong><span>Garantía incluida</span></div>
   </div>
 </div>
 
 <!-- SERVICES -->
-<section class="lp-services" id="servicios">
+<section class="lp-services-v2" id="servicios">
   <div class="lp-inner">
-    <p class="lp-label">Servicios</p>
-    <h2 class="lp-title">¿Qué necesitas hoy?</h2>
-    <div class="svc-cards">
-      <a href="#" class="svc-card tnl-trigger" data-preset="Plomería">
-        <div class="svc-card-bg" style="background-image:url('https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Plomero.jpeg')"></div>
-        <div class="svc-card-overlay"></div>
-        <div class="svc-card-body"><span class="svc-card-icon">🔧</span><span class="svc-card-name">Plomería</span><span class="svc-card-btn">Solicitar →</span></div>
+    <div class="svc-v2-header">
+      <div>
+        <p class="lp-label" style="color:rgba(255,255,255,0.35)">Servicios</p>
+        <h2 class="lp-title" style="color:#fff;margin-bottom:0">¿Qué necesitas hoy?</h2>
+      </div>
+      <a href="#" class="btn-ghost tnl-trigger" style="white-space:nowrap">Ver todos →</a>
+    </div>
+    <div class="svc-v2-cards">
+      <a href="#" class="svc-v2-card tnl-trigger" data-preset="Plomería">
+        <div class="svc-v2-card-bg" style="background-image:url('https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Plomero.jpeg')"></div>
+        <div class="svc-v2-card-overlay"></div>
+        <div class="svc-v2-card-body">
+          <span class="svc-v2-card-name">Plomería</span>
+          <span class="svc-v2-card-btn">Solicitar →</span>
+        </div>
       </a>
-      <a href="#" class="svc-card tnl-trigger" data-preset="Electricidad">
-        <div class="svc-card-bg" style="background-image:url('https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Electrico.jpeg')"></div>
-        <div class="svc-card-overlay"></div>
-        <div class="svc-card-body"><span class="svc-card-icon">⚡</span><span class="svc-card-name">Electricidad</span><span class="svc-card-btn">Solicitar →</span></div>
+      <a href="#" class="svc-v2-card tnl-trigger" data-preset="Electricidad">
+        <div class="svc-v2-card-bg" style="background-image:url('https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Electrico.jpeg')"></div>
+        <div class="svc-v2-card-overlay"></div>
+        <div class="svc-v2-card-body">
+          <span class="svc-v2-card-name">Electricidad</span>
+          <span class="svc-v2-card-btn">Solicitar →</span>
+        </div>
       </a>
-      <a href="#" class="svc-card tnl-trigger" data-preset="Limpieza">
-        <div class="svc-card-bg" style="background-image:url('https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Limpieza.jpeg')"></div>
-        <div class="svc-card-overlay"></div>
-        <div class="svc-card-body"><span class="svc-card-icon">🧹</span><span class="svc-card-name">Limpieza</span><span class="svc-card-btn">Solicitar →</span></div>
+      <a href="#" class="svc-v2-card tnl-trigger" data-preset="Limpieza">
+        <div class="svc-v2-card-bg" style="background-image:url('https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Limpieza.jpeg')"></div>
+        <div class="svc-v2-card-overlay"></div>
+        <div class="svc-v2-card-body">
+          <span class="svc-v2-card-name">Limpieza</span>
+          <span class="svc-v2-card-btn">Solicitar →</span>
+        </div>
       </a>
-      <a href="#" class="svc-card tnl-trigger" data-preset="Pintura">
-        <div class="svc-card-bg" style="background-image:url('https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Pintor.jpeg')"></div>
-        <div class="svc-card-overlay"></div>
-        <div class="svc-card-body"><span class="svc-card-icon">🖌️</span><span class="svc-card-name">Pintura</span><span class="svc-card-btn">Solicitar →</span></div>
+      <a href="#" class="svc-v2-card tnl-trigger" data-preset="Pintura">
+        <div class="svc-v2-card-bg" style="background-image:url('https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Pintor.jpeg')"></div>
+        <div class="svc-v2-card-overlay"></div>
+        <div class="svc-v2-card-body">
+          <span class="svc-v2-card-name">Pintura</span>
+          <span class="svc-v2-card-btn">Solicitar →</span>
+        </div>
       </a>
     </div>
-    <div class="svc-more">
-      <a href="#" class="svc-pill tnl-trigger" data-preset="Carpintería"><span>🪚</span> Carpintería</a>
-      <a href="#" class="svc-pill tnl-trigger" data-preset="Jardinería"><span>🌿</span> Jardinería</a>
-      <a href="#" class="svc-pill tnl-trigger" data-preset="Aire / Clima"><span>❄️</span> Aire / Clima</a>
-      <a href="#" class="svc-pill tnl-trigger" data-preset="Remodelación"><span>🏗️</span> Remodelación</a>
+    <div class="svc-v2-more">
+      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Carpintería">🪚 Carpintería</a>
+      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Jardinería">🌿 Jardinería</a>
+      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Aire / Clima">❄️ Aire / Clima</a>
+      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Remodelación">🏗️ Remodelación</a>
     </div>
   </div>
 </section>
 
 <!-- HOW IT WORKS -->
-<section class="lp-how" id="como-funciona">
+<section class="lp-how-v2" id="como-funciona">
   <div class="lp-inner">
-    <p class="lp-label">Cómo funciona</p>
-    <h2 class="lp-title">Simple por diseño.</h2>
-    <div class="how-grid">
-      <div class="how-item">
-        <span class="how-num">01</span>
+    <div class="how-v2-header">
+      <span class="feat-label">Cómo funciona</span>
+      <h2 class="how-v2-title">Tres pasos.<br>Sin complicaciones.</h2>
+      <p class="how-v2-subtitle">De solicitud a trabajo terminado — sin llamadas, sin incertidumbre, sin sorpresas en el precio.</p>
+    </div>
+    <div class="how-v2-steps">
+
+      <div class="how-v2-step">
+        <span class="how-v2-step-num">01</span>
+        <div class="how-v2-step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+        </div>
         <h3>Solicita tu servicio</h3>
-        <p>Dinos qué necesitas — plomería, electricidad, limpieza. Elige fecha y horario preferido.</p>
+        <p>Dinos qué necesitas — plomería, electricidad, limpieza. Elige fecha y horario. En minutos, no en llamadas.</p>
       </div>
-      <div class="how-item">
-        <span class="how-num">02</span>
+
+      <div class="how-v2-connector">
+        <div class="how-v2-arrow"></div>
+      </div>
+
+      <div class="how-v2-step">
+        <span class="how-v2-step-num">02</span>
+        <div class="how-v2-step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
         <h3>Asignamos al técnico</h3>
-        <p>Thruver asigna al profesional verificado en tu zona. Nosotros garantizamos el estándar.</p>
+        <p>Thruver conecta tu solicitud con el profesional verificado en tu zona. Nosotros garantizamos el estándar.</p>
       </div>
-      <div class="how-item">
-        <span class="how-num">03</span>
+
+      <div class="how-v2-connector">
+        <div class="how-v2-arrow"></div>
+      </div>
+
+      <div class="how-v2-step">
+        <span class="how-v2-step-num">03</span>
+        <div class="how-v2-step-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
         <h3>Trabajo garantizado</h3>
         <p>El técnico llega identificado, realiza el servicio y tú lo calificas. Si no queda bien, lo volvemos a hacer.</p>
       </div>
+
     </div>
   </div>
 </section>
 
 <!-- GUARANTEE -->
-<section class="lp-guarantee" id="garantia">
-  <div class="lp-inner">
-    <div class="lp-guarantee-inner">
-      <div>
-        <p class="lp-label lp-label-dim">Garantía Thruver</p>
-        <h2 class="guar-title">Si no queda bien,<br>lo volvemos a hacer.</h2>
-        <p class="guar-sub">Cada técnico pasa por entrevista, prueba práctica y revisión de antecedentes. Sin los tres, no hay cupo. Sin excepciones.</p>
-        <a href="#" class="guar-cta tnl-trigger">Solicitar servicio →</a>
+<section class="lp-guarantee-v2" id="garantia">
+  <div class="guar-v2-inner">
+    <span class="feat-label">Garantía Thruver</span>
+    <h2 class="guar-v2-title">Si no queda bien,<br><em>lo volvemos a hacer.</em></h2>
+    <p class="guar-v2-sub">Cada técnico pasa por entrevista, prueba práctica y revisión de antecedentes. Sin los tres, no hay cupo. Sin excepciones.</p>
+    <div class="guar-v2-metrics">
+      <div class="guar-v2-metric">
+        <strong>100%</strong>
+        <span>Verificados con INE</span>
       </div>
-      <div class="guar-stats">
-        <div class="guar-stat">
-          <strong>100%</strong>
-          <span>Técnicos verificados con INE</span>
-        </div>
-        <div class="guar-stat">
-          <strong>Cero</strong>
-          <span>Antecedentes en la red</span>
-        </div>
-        <div class="guar-stat">
-          <strong>Garantía</strong>
-          <span>Incluida en cada servicio</span>
-        </div>
+      <div class="guar-v2-metric">
+        <strong>0</strong>
+        <span>Antecedentes en la red</span>
       </div>
+      <div class="guar-v2-metric">
+        <strong>4.9★</strong>
+        <span>Calificación promedio</span>
+      </div>
+      <div class="guar-v2-metric">
+        <strong>∞</strong>
+        <span>Garantía de rehacer</span>
+      </div>
+    </div>
+    <div class="guar-v2-cta-group">
+      <a href="#" class="btn-guar-primary tnl-trigger">Solicitar servicio →</a>
+      <a href="#registro" class="btn-guar-ghost">Ver cómo funciona</a>
     </div>
   </div>
 </section>
 
 <!-- SIGNUP -->
-<section class="lp-signup" id="registro">
+<section class="lp-signup-v2" id="registro">
   <div class="lp-inner">
-    <p class="lp-label">Únete</p>
-    <h2 class="lp-title">Sé de los primeros.</h2>
-    <div class="register-block">
-      <div class="block-tabs">
-        <button class="block-tab active" data-tab="reg" data-target="reg-cliente">Solicitar servicio</button>
-        <button class="block-tab" data-tab="reg" data-target="reg-tecnico">Ser técnico</button>
-      </div>
-      <div class="register-form-panel active" id="reg-cliente">
-        <div id="rform-cliente">
-          <div class="form-row">
-            <div class="form-group"><label>Nombre</label><input type="text" id="c-nombre" placeholder="Tu nombre" autocomplete="given-name" /></div>
-            <div class="form-group"><label>WhatsApp</label><input type="tel" id="c-telefono" placeholder="667 000 0000" autocomplete="tel" inputmode="tel" /></div>
+    <div class="signup-v2-grid">
+
+      <!-- Left: Copy -->
+      <div class="signup-v2-copy">
+        <p class="lp-label">Únete</p>
+        <h2 class="lp-title">Sé de los<br>primeros.</h2>
+        <p class="signup-v2-desc">Thruver está lanzando en Culiacán. Regístrate ahora y recibe acceso anticipado, prioridad en asignación y precios de fundador.</p>
+        <div class="signup-v2-trust">
+          <div class="signup-trust-item">
+            <div class="signup-trust-icon">✓</div>
+            Sin costo de registro ni suscripción
           </div>
-          <div class="form-group"><label>Correo electrónico</label><input type="email" id="c-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" /></div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Tipo de espacio</label>
-              <select id="c-espacio">
-                <option value="">Selecciona...</option>
-                <option>Hogar / Casa</option><option>Oficina / Empresa</option>
-                <option>Local comercial</option><option>Industria / Planta</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Servicio</label>
-              <select id="c-servicio">
-                <option value="">Selecciona...</option>
-                <option>Plomería</option><option>Electricidad</option>
-                <option>Limpieza</option><option>Pintura</option>
-                <option>Carpintería</option><option>Jardinería</option><option>Otro</option>
-              </select>
-            </div>
+          <div class="signup-trust-item">
+            <div class="signup-trust-icon">✓</div>
+            Técnico asignado en menos de 24h
           </div>
-          <div id="error-cliente" style="display:none;background:rgba(204,51,51,0.12);border:1px solid rgba(204,51,51,0.3);border-radius:7px;padding:0.6rem 0.9rem;font-size:0.78rem;color:#ff8080;margin-bottom:0.5rem;"></div>
-          <button class="btn-submit" id="btn-cliente">
-            <span class="spinner" id="spinner-cliente"></span>
-            <span id="btn-cliente-text">Registrarme como cliente →</span>
-          </button>
-          <p class="form-note">Te contactamos por WhatsApp para agendar.</p>
-        </div>
-        <div class="success-msg" id="success-cliente">
-          <div class="check">✅</div><h4>¡Registro exitoso!</h4>
-          <p>Te contactamos por WhatsApp en las próximas horas.</p>
+          <div class="signup-trust-item">
+            <div class="signup-trust-icon">✓</div>
+            Garantía incluida en cada servicio
+          </div>
+          <div class="signup-trust-item">
+            <div class="signup-trust-icon">✓</div>
+            Historial y control desde tu cuenta
+          </div>
         </div>
       </div>
-      <div class="register-form-panel" id="reg-tecnico">
-        <div id="rform-tecnico">
-          <div class="form-row">
-            <div class="form-group"><label>Nombre</label><input type="text" id="t-nombre" placeholder="Tu nombre" autocomplete="given-name" /></div>
-            <div class="form-group"><label>WhatsApp</label><input type="tel" id="t-telefono" placeholder="667 000 0000" autocomplete="tel" inputmode="tel" /></div>
+
+      <!-- Right: Form -->
+      <div class="signup-v2-form-wrap">
+        <div class="register-block-v2">
+          <div class="block-tabs">
+            <button class="block-tab active" data-tab="reg" data-target="reg-cliente">Solicitar servicio</button>
+            <button class="block-tab" data-tab="reg" data-target="reg-tecnico">Ser técnico</button>
           </div>
-          <div class="form-group"><label>Correo electrónico</label><input type="email" id="t-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" /></div>
-          <div class="form-row">
-            <div class="form-group">
-              <label>Especialidad</label>
-              <select id="t-especialidad">
-                <option value="">Selecciona...</option>
-                <option>Plomero</option><option>Electricista</option><option>Limpieza</option>
-                <option>Pintor</option><option>Carpintero</option><option>Jardinero</option><option>Multi-servicio</option>
-              </select>
+          <div class="register-form-panel active" id="reg-cliente">
+            <div id="rform-cliente">
+              <div class="form-row">
+                <div class="form-group"><label>Nombre</label><input type="text" id="c-nombre" placeholder="Tu nombre" autocomplete="given-name" /></div>
+                <div class="form-group"><label>WhatsApp</label><input type="tel" id="c-telefono" placeholder="667 000 0000" autocomplete="tel" inputmode="tel" /></div>
+              </div>
+              <div class="form-group"><label>Correo electrónico</label><input type="email" id="c-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" /></div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Tipo de espacio</label>
+                  <select id="c-espacio">
+                    <option value="">Selecciona...</option>
+                    <option>Hogar / Casa</option><option>Oficina / Empresa</option>
+                    <option>Local comercial</option><option>Industria / Planta</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Servicio</label>
+                  <select id="c-servicio">
+                    <option value="">Selecciona...</option>
+                    <option>Plomería</option><option>Electricidad</option>
+                    <option>Limpieza</option><option>Pintura</option>
+                    <option>Carpintería</option><option>Jardinería</option><option>Otro</option>
+                  </select>
+                </div>
+              </div>
+              <div id="error-cliente" style="display:none;background:rgba(204,51,51,0.12);border:1px solid rgba(204,51,51,0.3);border-radius:7px;padding:0.6rem 0.9rem;font-size:0.78rem;color:#ff8080;margin-bottom:0.5rem;"></div>
+              <button class="btn-submit" id="btn-cliente">
+                <span class="spinner" id="spinner-cliente"></span>
+                <span id="btn-cliente-text">Registrarme como cliente →</span>
+              </button>
+              <p class="form-note">Te contactamos por WhatsApp para agendar.</p>
             </div>
-            <div class="form-group">
-              <label>Experiencia</label>
-              <select id="t-experiencia">
-                <option value="">Selecciona...</option>
-                <option>Menos de 1 año</option><option>1 a 3 años</option>
-                <option>3 a 5 años</option><option>Más de 5 años</option>
-              </select>
+            <div class="success-msg" id="success-cliente">
+              <div class="check">✅</div><h4>¡Registro exitoso!</h4>
+              <p>Te contactamos por WhatsApp en las próximas horas.</p>
             </div>
           </div>
-          <div class="form-group"><label>Colonia donde trabajas</label><input type="text" id="t-zona" placeholder="Ej. Las Quintas, Tres Ríos..." /></div>
-          <div id="error-tecnico" style="display:none;background:rgba(204,51,51,0.12);border:1px solid rgba(204,51,51,0.3);border-radius:7px;padding:0.6rem 0.9rem;font-size:0.78rem;color:#ff8080;margin-bottom:0.5rem;"></div>
-          <button class="btn-submit" id="btn-tecnico">
-            <span class="spinner" id="spinner-tecnico"></span>
-            <span id="btn-tecnico-text">Solicitar mi cupo →</span>
-          </button>
-          <p class="form-note">Cupos limitados. Te notificamos si hay disponibilidad.</p>
-        </div>
-        <div class="success-msg" id="success-tecnico">
-          <div class="check">✅</div><h4>¡Solicitud recibida!</h4>
-          <p>Si hay cupo en tu zona, te contactamos por WhatsApp.</p>
+          <div class="register-form-panel" id="reg-tecnico">
+            <div id="rform-tecnico">
+              <div class="form-row">
+                <div class="form-group"><label>Nombre</label><input type="text" id="t-nombre" placeholder="Tu nombre" autocomplete="given-name" /></div>
+                <div class="form-group"><label>WhatsApp</label><input type="tel" id="t-telefono" placeholder="667 000 0000" autocomplete="tel" inputmode="tel" /></div>
+              </div>
+              <div class="form-group"><label>Correo electrónico</label><input type="email" id="t-email" placeholder="tu@correo.com" autocomplete="email" inputmode="email" /></div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Especialidad</label>
+                  <select id="t-especialidad">
+                    <option value="">Selecciona...</option>
+                    <option>Plomero</option><option>Electricista</option><option>Limpieza</option>
+                    <option>Pintor</option><option>Carpintero</option><option>Jardinero</option><option>Multi-servicio</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Experiencia</label>
+                  <select id="t-experiencia">
+                    <option value="">Selecciona...</option>
+                    <option>Menos de 1 año</option><option>1 a 3 años</option>
+                    <option>3 a 5 años</option><option>Más de 5 años</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group"><label>Colonia donde trabajas</label><input type="text" id="t-zona" placeholder="Ej. Las Quintas, Tres Ríos..." /></div>
+              <div id="error-tecnico" style="display:none;background:rgba(204,51,51,0.12);border:1px solid rgba(204,51,51,0.3);border-radius:7px;padding:0.6rem 0.9rem;font-size:0.78rem;color:#ff8080;margin-bottom:0.5rem;"></div>
+              <button class="btn-submit" id="btn-tecnico">
+                <span class="spinner" id="spinner-tecnico"></span>
+                <span id="btn-tecnico-text">Solicitar mi cupo →</span>
+              </button>
+              <p class="form-note">Cupos limitados. Te notificamos si hay disponibilidad.</p>
+            </div>
+            <div class="success-msg" id="success-tecnico">
+              <div class="check">✅</div><h4>¡Solicitud recibida!</h4>
+              <p>Si hay cupo en tu zona, te contactamos por WhatsApp.</p>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
