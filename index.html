@@ -146,6 +146,55 @@
     .btn-outline-white:hover { border-color: rgba(255,255,255,0.65); background: rgba(255,255,255,0.14); }
     @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
+    /* ══ FEATURES DARK ══ */
+    .lp-features-dark { background: #080808; padding: 8rem 0; position: relative; overflow: hidden; }
+    .lp-features-dark::before { content: ''; position: absolute; top: -240px; left: 50%; transform: translateX(-50%); width: 700px; height: 700px; background: radial-gradient(ellipse at center, rgba(26,86,232,0.13) 0%, transparent 68%); pointer-events: none; }
+    .feat-header { text-align: center; margin-bottom: 4rem; }
+    .feat-label { display: inline-block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); background: rgba(26,86,232,0.1); border: 1px solid rgba(26,86,232,0.22); padding: 0.35rem 1.1rem; border-radius: 100px; margin-bottom: 1.25rem; }
+    .feat-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1.06; color: #fff; }
+    .feat-bento { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.07); border-radius: 24px; overflow: hidden; }
+    .feat-card { background: #0c0c0c; padding: 2.5rem; position: relative; overflow: hidden; transition: background 0.25s; }
+    .feat-card:hover { background: #111; }
+    .feat-card--c1 { grid-column: span 2; }
+    .feat-card--c2 { grid-column: span 3; }
+    .feat-card--c3 { grid-column: span 3; }
+    .feat-card--c4 { grid-column: span 2; }
+    .feat-num { font-size: 0.64rem; font-weight: 700; letter-spacing: 0.12em; color: var(--blue); margin-bottom: 1.5rem; font-variant-numeric: tabular-nums; }
+    .feat-card-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(26,86,232,0.1); border: 1px solid rgba(26,86,232,0.18); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; color: var(--blue); flex-shrink: 0; }
+    .feat-card h3 { font-size: 1.18rem; font-weight: 800; letter-spacing: -0.03em; color: #fff; margin-bottom: 0.75rem; line-height: 1.2; }
+    .feat-card p { font-size: 0.855rem; color: rgba(255,255,255,0.42); line-height: 1.78; max-width: 380px; }
+    /* Avatars chip */
+    .feat-avatars { display: flex; gap: 0.5rem; margin-top: 2rem; flex-wrap: wrap; }
+    .feat-avatar-chip { display: flex; align-items: center; gap: 0.45rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 100px; padding: 0.3rem 0.75rem 0.3rem 0.3rem; font-size: 0.7rem; color: rgba(255,255,255,0.55); font-weight: 600; }
+    .feat-avatar-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 0.58rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .feat-verified-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.65rem; color: #10b981; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.18); border-radius: 100px; padding: 0.22rem 0.7rem; margin-top: 1.1rem; }
+    /* Dashboard mock */
+    .feat-dash-mock { margin-top: 2rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; overflow: hidden; }
+    .feat-dash-header { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .feat-dash-header-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.12); }
+    .feat-dash-header-title { font-size: 0.68rem; font-weight: 700; color: rgba(255,255,255,0.3); letter-spacing: 0.06em; text-transform: uppercase; margin-left: 0.2rem; }
+    .feat-dash-row { display: flex; align-items: center; gap: 1rem; padding: 0.82rem 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.78rem; }
+    .feat-dash-row:last-child { border-bottom: none; }
+    .feat-dash-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .feat-dash-dot--green { background: #10b981; box-shadow: 0 0 6px rgba(16,185,129,0.5); }
+    .feat-dash-dot--blue  { background: var(--blue); box-shadow: 0 0 6px rgba(26,86,232,0.5); }
+    .feat-dash-dot--amber { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.4); }
+    .feat-dash-name { color: rgba(255,255,255,0.7); font-weight: 600; flex: 1; }
+    .feat-dash-date { color: rgba(255,255,255,0.25); font-size: 0.71rem; }
+    .feat-dash-cost { color: rgba(255,255,255,0.5); font-size: 0.72rem; font-weight: 700; min-width: 50px; text-align: right; }
+    /* Video card */
+    .feat-card--video { padding: 0; cursor: default; }
+    .feat-card--video:hover { background: #0c0c0c; }
+    .feat-card--video video { width: 100%; height: 100%; min-height: 340px; object-fit: cover; display: block; }
+    .feat-card-video-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.93) 0%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.08) 100%); padding: 2.5rem; display: flex; flex-direction: column; justify-content: flex-end; }
+    .feat-card-video-overlay p { max-width: 400px; }
+    /* Reminder mock */
+    .feat-reminder { margin-top: 2rem; background: rgba(26,86,232,0.07); border: 1px solid rgba(26,86,232,0.18); border-radius: 14px; padding: 1.1rem 1.2rem; display: flex; align-items: flex-start; gap: 1rem; }
+    .feat-reminder-icon { width: 38px; height: 38px; border-radius: 10px; background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.05rem; }
+    .feat-reminder-title { font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 0.2rem; }
+    .feat-reminder-sub   { font-size: 0.72rem; color: rgba(255,255,255,0.4); }
+    .feat-reminder-badge { margin-top: 0.65rem; display: inline-block; font-size: 0.63rem; font-weight: 700; background: rgba(26,86,232,0.18); color: var(--blue); padding: 0.22rem 0.75rem; border-radius: 100px; border: 1px solid rgba(26,86,232,0.25); cursor: pointer; }
+
     /* ══ ABOUT ══ */
     .lp-about { background: var(--white); padding: 7rem 0; border-bottom: 1px solid var(--border); }
     .about-grid { display: grid; grid-template-columns: 0.92fr 1.08fr; gap: 5rem; align-items: center; }
@@ -1334,6 +1383,9 @@
       .nav-hamburger { display: flex; }
       .hero-lp-inner { padding-bottom: 1.5rem; }
       .lp-inner { padding-left: 2rem; padding-right: 2rem; }
+      .lp-features-dark { padding: 5rem 0; }
+      .feat-bento { grid-template-columns: 1fr 1fr; }
+      .feat-card--c1, .feat-card--c2, .feat-card--c3, .feat-card--c4 { grid-column: span 1; }
       .lp-about, .lp-services, .lp-how, .lp-signup { padding: 5rem 0; }
       .lp-guarantee { padding: 5.5rem 0; }
       .about-grid { grid-template-columns: 1fr; gap: 3rem; }
@@ -1368,6 +1420,11 @@
       .hero-actions { flex-direction: column; gap: 0.5rem; }
       .hero-actions .btn-blue, .hero-actions .btn-outline-white { width: 100%; justify-content: center; }
       .lp-inner { padding-left: 1.2rem; padding-right: 1.2rem; }
+      .lp-features-dark { padding: 4rem 0; }
+      .feat-bento { grid-template-columns: 1fr; border-radius: 18px; }
+      .feat-card--c1, .feat-card--c2, .feat-card--c3, .feat-card--c4 { grid-column: span 1; }
+      .feat-card--video video { min-height: 260px; }
+      .feat-title { font-size: clamp(1.6rem, 6vw, 2.2rem); }
       .lp-about, .lp-services, .lp-how { padding: 4rem 0; }
       .about-photo-wrap { aspect-ratio: 4/3; }
       .stats-bar-grid { grid-template-columns: 1fr 1fr; padding: 0 1.2rem; }
@@ -1853,6 +1910,104 @@
         <a href="#" class="btn-blue tnl-trigger">Solicitar servicio →</a>
         <a href="empresas.html" class="btn-outline-white">Para empresas →</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES DARK -->
+<section class="lp-features-dark">
+  <div class="lp-inner">
+    <div class="feat-header">
+      <span class="feat-label">Lo que Thruver hace por ti</span>
+      <h2 class="feat-title">Todo bajo control,<br>desde el primer servicio.</h2>
+    </div>
+    <div class="feat-bento">
+
+      <!-- 01 Profesionales verificados -->
+      <div class="feat-card feat-card--c1">
+        <div class="feat-num">01</div>
+        <div class="feat-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Profesionales verificados</h3>
+        <p>Cada profesional supera una rigurosa verificación de antecedentes y certificaciones para garantizar la seguridad total de tu espacio.</p>
+        <div class="feat-avatars">
+          <div class="feat-avatar-chip"><div class="feat-avatar-dot">JM</div>J. Morales</div>
+          <div class="feat-avatar-chip"><div class="feat-avatar-dot">CR</div>C. Ramos</div>
+          <div class="feat-avatar-chip"><div class="feat-avatar-dot">AL</div>A. López</div>
+        </div>
+        <div class="feat-verified-badge">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Verificados por Thruver
+        </div>
+      </div>
+
+      <!-- 02 Historial de mantenimiento -->
+      <div class="feat-card feat-card--c2">
+        <div class="feat-num">02</div>
+        <div class="feat-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        </div>
+        <h3>Historial de mantenimiento</h3>
+        <p>Accede a un dashboard personal con el registro exacto de cada servicio. Qué se hizo, cuándo, quién lo realizó y cuánto te costó — todo en un solo lugar.</p>
+        <div class="feat-dash-mock">
+          <div class="feat-dash-header">
+            <div class="feat-dash-header-dot"></div>
+            <div class="feat-dash-header-dot"></div>
+            <div class="feat-dash-header-dot"></div>
+            <span class="feat-dash-header-title">Mis servicios</span>
+          </div>
+          <div class="feat-dash-row">
+            <div class="feat-dash-dot feat-dash-dot--green"></div>
+            <span class="feat-dash-name">Revisión eléctrica</span>
+            <span class="feat-dash-date">14 Feb 2025</span>
+            <span class="feat-dash-cost">$680</span>
+          </div>
+          <div class="feat-dash-row">
+            <div class="feat-dash-dot feat-dash-dot--blue"></div>
+            <span class="feat-dash-name">Plomería — cocina</span>
+            <span class="feat-dash-date">02 Ene 2025</span>
+            <span class="feat-dash-cost">$450</span>
+          </div>
+          <div class="feat-dash-row">
+            <div class="feat-dash-dot feat-dash-dot--amber"></div>
+            <span class="feat-dash-name">Pintura exterior</span>
+            <span class="feat-dash-date">18 Nov 2024</span>
+            <span class="feat-dash-cost">$1,200</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 Reporte técnico digital (video) -->
+      <div class="feat-card feat-card--c3 feat-card--video">
+        <video autoplay muted loop playsinline>
+          <source src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/videotecnico.mp4" type="video/mp4">
+        </video>
+        <div class="feat-card-video-overlay">
+          <div class="feat-num">03</div>
+          <h3>Reporte técnico digital</h3>
+          <p>Al finalizar la visita, recibe un Reporte Técnico detallado: diagnóstico exacto, piezas reemplazadas, marcas utilizadas y el estado real de tus equipos.</p>
+        </div>
+      </div>
+
+      <!-- 04 Mantenimiento programado -->
+      <div class="feat-card feat-card--c4">
+        <div class="feat-num">04</div>
+        <div class="feat-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3>Mantenimiento programado</h3>
+        <p>El sistema proyecta tu próxima necesidad. El técnico deja recomendada la fecha de tu siguiente servicio para que confirmes y pagues en línea, 100% seguro.</p>
+        <div class="feat-reminder">
+          <div class="feat-reminder-icon">📅</div>
+          <div>
+            <div class="feat-reminder-title">Próximo servicio sugerido</div>
+            <div class="feat-reminder-sub">Revisión eléctrica · Ago 2025</div>
+            <span class="feat-reminder-badge">Confirmar cita →</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
