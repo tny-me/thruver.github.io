@@ -62,6 +62,8 @@
     .nav-center a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.82rem; padding: 0.4rem 0.9rem; border-radius: 6px; transition: color 0.15s; }
     .nav-center a:hover { color: #fff; }
     .nav-right { display: flex; gap: 0.5rem; align-items: center; }
+    .nav-greeting { display: none; color: rgba(255,255,255,0.92); font-size: 0.85rem; font-weight: 500; white-space: nowrap; }
+    .nav-greeting-mobile { display: none; color: rgba(255,255,255,0.85); font-size: 0.95rem; font-weight: 500; padding: 0.5rem 0; }
 
     .btn-ghost {
       background: transparent; color: rgba(255,255,255,0.6);
@@ -1450,6 +1452,7 @@
   </ul>
   <div class="nav-right">
     <button class="btn-solid" id="btn-open-login">Iniciar sesión</button>
+    <span class="nav-greeting" id="nav-greeting"></span>
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Menú">
       <span></span><span></span><span></span>
     </button>
@@ -1465,6 +1468,7 @@
   <div class="mm-divider"></div>
   <div class="mm-cta">
     <button class="btn-solid" id="btn-open-login-mobile">Iniciar sesión</button>
+    <span class="nav-greeting-mobile" id="nav-greeting-mobile"></span>
   </div>
 </div>
 
@@ -3283,6 +3287,15 @@ document.addEventListener('DOMContentLoaded', function () {
     var card = document.getElementById('tnl-saved-card');
     if (wrap) wrap.style.display = '';
     if (card) card.style.display = 'none';
+    /* Restaurar botón de login en nav */
+    var btnLogin = document.getElementById('btn-open-login');
+    var navGreeting = document.getElementById('nav-greeting');
+    if (btnLogin) btnLogin.style.display = '';
+    if (navGreeting) { navGreeting.style.display = 'none'; navGreeting.textContent = ''; }
+    var btnLoginMobile = document.getElementById('btn-open-login-mobile');
+    var navGreetingMobile = document.getElementById('nav-greeting-mobile');
+    if (btnLoginMobile) btnLoginMobile.style.display = '';
+    if (navGreetingMobile) { navGreetingMobile.style.display = 'none'; navGreetingMobile.textContent = ''; }
   };
 
   document.getElementById('tnl-session-out').addEventListener('click', function() {
@@ -3592,9 +3605,16 @@ document.addEventListener('DOMContentLoaded', function () {
       var creado = user.metadata && user.metadata.creationTime ? new Date(user.metadata.creationTime) : new Date();
       ps.textContent = creado.toLocaleDateString('es-MX', { month:'long', year:'numeric' });
     }
-    /* Landing nav button */
+    /* Landing nav button — mostrar saludo, ocultar botón */
     var btnLogin = document.getElementById('btn-open-login');
-    if (btnLogin) btnLogin.textContent = nombre;
+    var navGreeting = document.getElementById('nav-greeting');
+    if (btnLogin) btnLogin.style.display = 'none';
+    if (navGreeting) { navGreeting.style.display = 'inline'; navGreeting.textContent = 'Hola, ' + nombre + '.'; }
+    /* Mobile menu */
+    var btnLoginMobile = document.getElementById('btn-open-login-mobile');
+    var navGreetingMobile = document.getElementById('nav-greeting-mobile');
+    if (btnLoginMobile) btnLoginMobile.style.display = 'none';
+    if (navGreetingMobile) { navGreetingMobile.style.display = 'block'; navGreetingMobile.textContent = 'Hola, ' + nombre + '.'; }
   }
 
   /* ------- Cargar historial y mostrar dashboard ------- */
