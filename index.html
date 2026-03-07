@@ -8,6 +8,9 @@
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Favicon.png" />
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#111111" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Thruver" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -26,7 +29,7 @@
       --border:    rgba(0,0,0,0.07);
       --radius:    14px;
       --rsm:       9px;
-      --font:      -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+      --font:      'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
       --blue:      #1A56E8;
       --blue-dark: #1443C0;
       --blue-light:#EEF4FF;
@@ -415,9 +418,9 @@
     }
     .tnl-overlay.tnl-open {
       display: block;
-      animation: tnlIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) both;
+      animation: tnlIn 0.42s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
-    @keyframes tnlIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes tnlIn { from{opacity:0;transform:scale(0.984)} to{opacity:1;transform:scale(1)} }
     /* Thin progress accent line */
     .tnl-overlay::before {
       content: '';
@@ -455,49 +458,38 @@
     }
     .tnl-close:hover { background: #f7f7f7; color: var(--black); border-color: rgba(0,0,0,0.16); }
 
-    /* ── Step breadcrumb ── */
+    /* ── Step progress bar (segmented Linear-style) ── */
     .tnl-steps-bar {
       position: sticky; top: 64px; z-index: 9;
-      display: flex; align-items: center; justify-content: center; gap: 0;
-      padding: 1rem 2rem;
+      padding: 0.9rem 2rem 0.7rem;
       background: rgba(255,255,255,0.97);
       backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.05);
       transition: opacity 0.2s;
     }
     .tnl-steps-bar.tnl-steps-hidden { opacity: 0; pointer-events: none; }
+    .tnl-prog-row { display: flex; gap: 7px; }
     .tnl-step-item {
-      display: flex; align-items: center; gap: 0.48rem;
-      opacity: 0.32; transition: opacity 0.35s;
+      flex: 1; display: flex; flex-direction: column; gap: 0.42rem;
     }
-    .tnl-step-item.active { opacity: 1; }
-    .tnl-step-item.done   { opacity: 0.7; }
-    .tnl-step-circle {
-      width: 24px; height: 24px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.68rem; font-weight: 800;
-      background: #f0f0f0; color: #9ca3af;
-      transition: background 0.35s, color 0.35s, box-shadow 0.35s;
-      border: 1.5px solid transparent;
+    .tnl-prog-track {
+      height: 3px; background: rgba(0,0,0,0.08); border-radius: 99px; overflow: hidden;
     }
-    .tnl-step-item.active .tnl-step-circle {
-      background: var(--black); color: var(--white);
-      box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
-      border-color: var(--black);
+    .tnl-prog-fill {
+      height: 100%; background: #111; border-radius: 99px;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), background 0.35s;
     }
-    .tnl-step-item.done .tnl-step-circle {
-      background: #16a34a; color: #fff; border-color: #16a34a;
-    }
+    .tnl-step-item.active .tnl-prog-fill { transform: scaleX(0.45); }
+    .tnl-step-item.done   .tnl-prog-fill { transform: scaleX(1); background: #16a34a; }
     .tnl-step-label {
-      font-size: 0.75rem; font-weight: 600; color: #9ca3af; letter-spacing: -0.01em;
+      font-size: 0.63rem; font-weight: 600; color: rgba(0,0,0,0.22);
+      letter-spacing: 0.01em; transition: color 0.35s;
     }
-    .tnl-step-item.active .tnl-step-label { color: var(--black); font-weight: 700; }
-    .tnl-step-item.done .tnl-step-label { color: #16a34a; }
-    .tnl-step-rule {
-      width: 40px; height: 1.5px;
-      background: linear-gradient(90deg, rgba(0,0,0,0.1), rgba(0,0,0,0.05));
-      margin: 0 0.75rem; flex-shrink: 0; border-radius: 2px;
-    }
+    .tnl-step-item.active .tnl-step-label { color: #111; font-weight: 700; }
+    .tnl-step-item.done   .tnl-step-label { color: #16a34a; }
+    .tnl-step-circle { display: none; }
+    .tnl-step-rule   { display: none; }
 
     /* ── CTA sticky bottom ── */
     .tnl-cta-sticky {
@@ -522,78 +514,88 @@
     @keyframes tnlStepBack { from{opacity:0;transform:translateX(-24px)} to{opacity:1;transform:translateX(0)} }
 
     .tnl-eyebrow {
-      font-size: 0.68rem; font-weight: 700; color: #6b7280;
-      text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.6rem;
-      display: flex; align-items: center; gap: 0.45rem;
+      font-size: 0.67rem; font-weight: 700; color: #9ca3af;
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.75rem;
+      display: flex; align-items: center; gap: 0.5rem;
     }
     .tnl-eyebrow::before {
-      content: ''; width: 16px; height: 2px;
-      background: var(--blue); border-radius: 2px; display: inline-block; flex-shrink: 0;
+      content: ''; width: 20px; height: 1.5px;
+      background: #111; border-radius: 2px; display: inline-block; flex-shrink: 0;
     }
-    .tnl-title   { font-size: clamp(1.7rem, 4vw, 2.3rem); font-weight: 900; letter-spacing: -0.045em; line-height: 1.08; color: var(--black); margin-bottom: 0.5rem; }
-    .tnl-sub     { font-size: 0.9rem; color: #6b7280; line-height: 1.65; margin-bottom: 2.2rem; max-width: 480px; }
+    .tnl-title   { font-size: clamp(1.8rem, 4vw, 2.45rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1.06; color: var(--black); margin-bottom: 0.6rem; }
+    .tnl-sub     { font-size: 0.92rem; color: #6b7280; line-height: 1.7; margin-bottom: 2.4rem; max-width: 460px; }
 
     /* ── PASO 1: Grid de servicios ── */
     .tnl-svc-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.7rem;
+      gap: 0.75rem;
     }
     .tnl-svc-card {
-      background: #fff; border: 1px solid rgba(0,0,0,0.08);
-      border-radius: 18px; padding: 1.9rem 0.8rem 1.6rem;
+      background: #fff; border: 1px solid rgba(0,0,0,0.07);
+      border-radius: 18px; padding: 1.75rem 0.9rem 1.5rem;
       text-align: center; cursor: pointer;
-      display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
-      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s, background 0.2s;
+      display: flex; flex-direction: column; align-items: center; gap: 0.72rem;
+      transition: border-color 0.22s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s, background 0.22s;
       -webkit-tap-highlight-color: transparent; user-select: none;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 0 0 0 transparent;
-      position: relative; overflow: hidden;
-    }
-    .tnl-svc-card::after {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(circle at 50% 0%, rgba(26,86,232,0.05), transparent 65%);
-      opacity: 0; transition: opacity 0.25s; pointer-events: none;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      position: relative;
     }
     .tnl-svc-card:hover {
-      border-color: rgba(0,0,0,0.14);
-      transform: translateY(-4px);
-      box-shadow: 0 4px 6px rgba(0,0,0,0.04), 0 12px 32px rgba(0,0,0,0.09);
+      border-color: rgba(0,0,0,0.13);
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05), 0 16px 32px rgba(0,0,0,0.09);
     }
-    .tnl-svc-card:hover::after { opacity: 1; }
-    .tnl-svc-card:active { transform: translateY(-1px); }
+    .tnl-svc-card:active { transform: translateY(-1px) scale(0.99); transition-duration: 0.1s; }
     .tnl-svc-card.tnl-svc-selected {
       border-color: #111; background: #111;
-      transform: translateY(-3px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.14), 0 18px 44px rgba(0,0,0,0.22);
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 8px 14px rgba(0,0,0,0.13), 0 22px 44px rgba(0,0,0,0.2);
     }
-    .tnl-svc-card.tnl-svc-selected::after { display: none; }
-    .tnl-svc-icon {
-      width: 58px; height: 58px;
-      background: #f5f5f5; border-radius: 15px;
-      display: inline-flex; align-items: center; justify-content: center;
-      font-size: 1.9rem; line-height: 1;
-      transition: transform 0.2s, background 0.2s;
-      flex-shrink: 0;
+    /* SVG icon wrapper */
+    .tnl-svc-icon-wrap {
+      width: 54px; height: 54px; background: #f4f4f4; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background 0.22s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
     }
-    .tnl-svc-card:hover .tnl-svc-icon { transform: scale(1.08); background: #efefef; }
-    .tnl-svc-card.tnl-svc-selected .tnl-svc-icon {
-      background: rgba(255,255,255,0.1); filter: grayscale(1) brightness(10); transform: scale(1.08);
-    }
-    .tnl-svc-name { font-size: 0.83rem; font-weight: 700; color: #111; letter-spacing: -0.02em; line-height: 1.2; }
+    .tnl-svc-svg { width: 24px; height: 24px; color: #555; transition: color 0.22s; }
+    .tnl-svc-card:hover .tnl-svc-icon-wrap { background: #eaeaea; transform: scale(1.1) translateY(-1px); }
+    .tnl-svc-card.tnl-svc-selected .tnl-svc-icon-wrap { background: rgba(255,255,255,0.1); }
+    .tnl-svc-card.tnl-svc-selected .tnl-svc-svg { color: #fff; }
+    .tnl-svc-name { font-size: 0.82rem; font-weight: 700; color: #111; letter-spacing: -0.02em; line-height: 1.25; }
     .tnl-svc-card.tnl-svc-selected .tnl-svc-name { color: #fff; }
+    /* Legacy emoji icon hidden */
+    .tnl-svc-icon { display: none; }
+    /* Card entrance stagger on step activation */
+    .tnl-view.tnl-active .tnl-svc-card, .tnl-view.tnl-back .tnl-svc-card {
+      animation: tnlCardIn 0.45s cubic-bezier(0.16,1,0.3,1) both;
+    }
+    .tnl-view.tnl-active .tnl-svc-card:nth-child(1),.tnl-view.tnl-back .tnl-svc-card:nth-child(1) { animation-delay:  0ms; }
+    .tnl-view.tnl-active .tnl-svc-card:nth-child(2),.tnl-view.tnl-back .tnl-svc-card:nth-child(2) { animation-delay: 35ms; }
+    .tnl-view.tnl-active .tnl-svc-card:nth-child(3),.tnl-view.tnl-back .tnl-svc-card:nth-child(3) { animation-delay: 70ms; }
+    .tnl-view.tnl-active .tnl-svc-card:nth-child(4),.tnl-view.tnl-back .tnl-svc-card:nth-child(4) { animation-delay:105ms; }
+    .tnl-view.tnl-active .tnl-svc-card:nth-child(5),.tnl-view.tnl-back .tnl-svc-card:nth-child(5) { animation-delay:140ms; }
+    .tnl-view.tnl-active .tnl-svc-card:nth-child(6),.tnl-view.tnl-back .tnl-svc-card:nth-child(6) { animation-delay:175ms; }
+    .tnl-view.tnl-active .tnl-svc-card:nth-child(7),.tnl-view.tnl-back .tnl-svc-card:nth-child(7) { animation-delay:210ms; }
+    .tnl-view.tnl-active .tnl-svc-card:nth-child(8),.tnl-view.tnl-back .tnl-svc-card:nth-child(8) { animation-delay:245ms; }
+    .tnl-view.tnl-active .tnl-svc-card:nth-child(9),.tnl-view.tnl-back .tnl-svc-card:nth-child(9) { animation-delay:280ms; }
+    @keyframes tnlCardIn {
+      from { opacity:0; transform:translateY(14px) scale(0.96); }
+      to   { opacity:1; transform:translateY(0)    scale(1);    }
+    }
 
     /* ── PASO 2: Formulario de contexto ── */
     .tnl-back-btn {
-      display: inline-flex; align-items: center; gap: 0.35rem;
-      background: transparent; border: none; cursor: pointer;
-      font-family: var(--font); font-size: 0.82rem; color: #9ca3af;
-      padding: 0.4rem 0; margin-bottom: 1.6rem;
-      transition: color 0.15s;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: transparent; border: 1px solid rgba(0,0,0,0.1); border-radius: 8px;
+      cursor: pointer; font-family: var(--font); font-size: 0.8rem; color: #6b7280;
+      padding: 0.38rem 0.85rem; margin-bottom: 1.8rem;
+      transition: color 0.15s, border-color 0.15s, background 0.15s;
     }
-    .tnl-back-btn:hover { color: var(--black); }
+    .tnl-back-btn:hover { color: var(--black); border-color: rgba(0,0,0,0.18); background: #f9f9f9; }
 
-    .tnl-field { margin-bottom: 1.2rem; }
-    .tnl-field label { display: block; font-size: 0.7rem; font-weight: 700; color: #374151; letter-spacing: 0.03em; margin-bottom: 0.45rem; }
+    .tnl-field { margin-bottom: 1.25rem; }
+    .tnl-field label { display: block; font-size: 0.7rem; font-weight: 700; color: #374151; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 0.48rem; }
     .tnl-field select,
     .tnl-field textarea,
     .tnl-field input[type="text"],
@@ -622,15 +624,15 @@
     .tnl-urgency-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.9rem; }
     .tnl-urgency-btn {
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      background: #fff; border: 1.5px solid rgba(0,0,0,0.1);
-      border-radius: 10px; padding: 0.9rem 0.6rem;
+      background: #fff; border: 1.5px solid rgba(0,0,0,0.09);
+      border-radius: 12px; padding: 0.95rem 0.6rem;
       font-family: var(--font); font-size: 0.85rem; font-weight: 600;
-      color: #6b7280; cursor: pointer; min-height: 52px;
-      transition: all 0.18s; -webkit-tap-highlight-color: transparent;
+      color: #6b7280; cursor: pointer; min-height: 54px;
+      transition: all 0.22s cubic-bezier(0.34,1.56,0.64,1); -webkit-tap-highlight-color: transparent;
       box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
-    .tnl-urgency-btn:hover { border-color: rgba(0,0,0,0.18); color: #111; background: #fafafa; }
-    .tnl-urgency-btn.tnl-urg-sel { border-color: #111; background: #111; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .tnl-urgency-btn:hover { border-color: rgba(0,0,0,0.18); color: #111; background: #fafafa; transform: translateY(-1px); }
+    .tnl-urgency-btn.tnl-urg-sel { border-color: #111; background: #111; color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.18); transform: translateY(-1px); }
 
     /* ── CALENDARIO DE FECHA Y HORA ── */
     .tnl-datetime-wrap {
@@ -702,10 +704,10 @@
 
     /* Trust box */
     .tnl-trust {
-      display: flex; gap: 1rem; align-items: flex-start;
-      background: linear-gradient(135deg, #f0fdf4, #f0f9ff);
-      border: 1px solid rgba(22,163,74,0.14);
-      border-radius: 12px; padding: 1.1rem 1.25rem; margin-bottom: 1.5rem;
+      display: flex; gap: 0.85rem; align-items: flex-start;
+      background: #f9fafb;
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.5rem;
     }
     .tnl-trust-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 1px; }
     .tnl-trust p { font-size: 0.8rem; color: #374151; line-height: 1.65; }
@@ -722,22 +724,22 @@
     }
     .tnl-diag-question { margin-bottom: 1.4rem; }
     .tnl-diag-q-label {
-      font-size: 0.88rem; font-weight: 700; color: #111;
-      margin-bottom: 0.65rem; line-height: 1.4; letter-spacing: -0.02em;
+      font-size: 0.9rem; font-weight: 700; color: #111;
+      margin-bottom: 0.7rem; line-height: 1.45; letter-spacing: -0.025em;
     }
     .tnl-diag-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     .tnl-diag-chip {
       display: inline-flex; align-items: center;
-      background: #fff; border: 1.5px solid rgba(0,0,0,0.1);
-      border-radius: 8px; padding: 0.52rem 1.1rem;
-      font-family: var(--font); font-size: 0.82rem; font-weight: 600;
+      background: #fff; border: 1.5px solid rgba(0,0,0,0.09);
+      border-radius: 100px; padding: 0.48rem 1.1rem;
+      font-family: var(--font); font-size: 0.81rem; font-weight: 600;
       color: #374151; cursor: pointer;
-      transition: border-color 0.15s, background 0.15s, color 0.15s, transform 0.12s, box-shadow 0.15s;
+      transition: border-color 0.18s, background 0.18s, color 0.18s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.18s;
       -webkit-tap-highlight-color: transparent; user-select: none;
       box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
-    .tnl-diag-chip:hover { border-color: rgba(0,0,0,0.22); color: #111; transform: translateY(-1px); box-shadow: 0 3px 10px rgba(0,0,0,0.08); }
-    .tnl-diag-chip.selected { background: #111; border-color: #111; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }
+    .tnl-diag-chip:hover { border-color: rgba(0,0,0,0.2); color: #111; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .tnl-diag-chip.selected { background: #111; border-color: #111; color: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.16); }
     .tnl-diag-divider { height: 1px; background: rgba(0,0,0,0.06); margin: 1.6rem 0 1.4rem; }
     .tnl-rrow-prediag { display: none; }
     .tnl-rrow-prediag.visible { display: flex; }
@@ -753,9 +755,9 @@
 
     /* Recibo */
     .tnl-receipt {
-      background: #111; border-radius: 18px;
-      padding: 1.6rem; position: sticky; top: 136px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.06), 0 18px 50px rgba(0,0,0,0.2);
+      background: #111; border-radius: 20px;
+      padding: 1.7rem; position: sticky; top: 148px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.08), 0 22px 52px rgba(0,0,0,0.22);
     }
     .tnl-receipt-title { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: rgba(255,255,255,0.28); margin-bottom: 1.2rem; }
     .tnl-rrow { display: flex; align-items: flex-start; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -773,7 +775,7 @@
     .tnl-rrow-fecha.visible { display: flex; }
 
     /* Formulario paso 3 */
-    .tnl-form-card { background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 18px; padding: 1.8rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.06); }
+    .tnl-form-card { background: #fff; border: 1px solid rgba(0,0,0,0.07); border-radius: 20px; padding: 2rem; box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.05); }
     .tnl-form-title { font-size: 1.1rem; font-weight: 900; letter-spacing: -0.035em; color: #111; margin-bottom: 0.3rem; }
     .tnl-form-sub   { font-size: 0.78rem; color: #6b7280; margin-bottom: 1.5rem; line-height: 1.6; }
 
@@ -790,16 +792,17 @@
 
     /* CTA principal */
     .tnl-cta {
-      width: 100%; background: var(--blue); color: #fff !important; border: none;
-      border-radius: 12px; padding: 1rem; font-size: 0.95rem; font-weight: 700;
-      font-family: var(--font); cursor: pointer; min-height: 52px;
+      width: 100%; background: #111; color: #fff !important; border: none;
+      border-radius: 14px; padding: 1.05rem; font-size: 0.95rem; font-weight: 800;
+      font-family: var(--font); cursor: pointer; min-height: 54px;
       display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-      margin-top: 0.3rem; letter-spacing: -0.01em;
-      box-shadow: 0 2px 4px rgba(26,86,232,0.2), 0 4px 16px rgba(26,86,232,0.15);
+      transition: background 0.18s, box-shadow 0.18s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+      margin-top: 0.3rem; letter-spacing: -0.025em;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 4px 14px rgba(0,0,0,0.1);
     }
-    .tnl-cta:hover:not(:disabled) { background: var(--blue-dark); transform: translateY(-2px); box-shadow: 0 0 28px rgba(26,86,232,0.55), 0 8px 24px rgba(26,86,232,0.3); }
-    .tnl-cta:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+    .tnl-cta:hover:not(:disabled) { background: #0a0a0a; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.14), 0 14px 30px rgba(0,0,0,0.15); }
+    .tnl-cta:active:not(:disabled) { transform: translateY(0); transition-duration: 0.08s; }
+    .tnl-cta:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
     .tnl-cta-note { font-size: 0.64rem; color: #9ca3af; margin-top: 0.6rem; text-align: center; }
 
     /* ── ÉXITO con palomita animada ── */
@@ -849,8 +852,8 @@
       100% { transform: scale(1);   opacity: 1; }
     }
 
-    .tnl-success h2 { font-size: 1.7rem; font-weight: 900; letter-spacing: -0.04em; color: var(--black); margin-bottom: 0.55rem; }
-    .tnl-success p  { font-size: 0.9rem; color: var(--muted); line-height: 1.7; max-width: 380px; margin: 0 auto 2rem; }
+    .tnl-success h2 { font-size: 1.9rem; font-weight: 900; letter-spacing: -0.05em; color: var(--black); margin-bottom: 0.6rem; }
+    .tnl-success p  { font-size: 0.92rem; color: var(--muted); line-height: 1.75; max-width: 380px; margin: 0 auto 2rem; }
 
 
     /* ══ FIREBASE AUTH — Paso 3 ══ */
@@ -2027,19 +2030,19 @@
   </header>
 
   <div class="tnl-steps-bar tnl-steps-hidden" id="tnlStepsBar">
-    <div class="tnl-step-item active" id="tnl-si1">
-      <div class="tnl-step-circle">1</div>
-      <span class="tnl-step-label">Servicio</span>
-    </div>
-    <div class="tnl-step-rule"></div>
-    <div class="tnl-step-item" id="tnl-si2">
-      <div class="tnl-step-circle">2</div>
-      <span class="tnl-step-label">Detalles</span>
-    </div>
-    <div class="tnl-step-rule"></div>
-    <div class="tnl-step-item" id="tnl-si3">
-      <div class="tnl-step-circle">3</div>
-      <span class="tnl-step-label">Confirmar</span>
+    <div class="tnl-prog-row">
+      <div class="tnl-step-item active" id="tnl-si1">
+        <div class="tnl-prog-track"><div class="tnl-prog-fill"></div></div>
+        <span class="tnl-step-label">Servicio</span>
+      </div>
+      <div class="tnl-step-item" id="tnl-si2">
+        <div class="tnl-prog-track"><div class="tnl-prog-fill"></div></div>
+        <span class="tnl-step-label">Detalles</span>
+      </div>
+      <div class="tnl-step-item" id="tnl-si3">
+        <div class="tnl-prog-track"><div class="tnl-prog-fill"></div></div>
+        <span class="tnl-step-label">Confirmar</span>
+      </div>
     </div>
   </div>
 
@@ -2108,15 +2111,99 @@
       <p class="tnl-sub">Selecciona el tipo de servicio y te asignamos un técnico verificado en tu zona.</p>
 
       <div class="tnl-svc-grid">
-        <div class="tnl-svc-card" data-svc="Plomería"      data-ico="🔧"><span class="tnl-svc-icon">🔧</span><span class="tnl-svc-name">Plomería</span></div>
-        <div class="tnl-svc-card" data-svc="Electricidad"  data-ico="⚡"><span class="tnl-svc-icon">⚡</span><span class="tnl-svc-name">Electricidad</span></div>
-        <div class="tnl-svc-card" data-svc="Limpieza"      data-ico="🧹"><span class="tnl-svc-icon">🧹</span><span class="tnl-svc-name">Limpieza</span></div>
-        <div class="tnl-svc-card" data-svc="Pintura"       data-ico="🖌️"><span class="tnl-svc-icon">🖌️</span><span class="tnl-svc-name">Pintura</span></div>
-        <div class="tnl-svc-card" data-svc="Aire / Clima"  data-ico="❄️"><span class="tnl-svc-icon">❄️</span><span class="tnl-svc-name">Aire / Clima</span></div>
-        <div class="tnl-svc-card" data-svc="Carpintería"   data-ico="🪚"><span class="tnl-svc-icon">🪚</span><span class="tnl-svc-name">Carpintería</span></div>
-        <div class="tnl-svc-card" data-svc="Jardinería"    data-ico="🌿"><span class="tnl-svc-icon">🌿</span><span class="tnl-svc-name">Jardinería</span></div>
-        <div class="tnl-svc-card" data-svc="Remodelación"  data-ico="🏗️"><span class="tnl-svc-icon">🏗️</span><span class="tnl-svc-name">Remodelación</span></div>
-        <div class="tnl-svc-card" data-svc="Otro"          data-ico="💬"><span class="tnl-svc-icon">💬</span><span class="tnl-svc-name">Otro</span></div>
+
+        <div class="tnl-svc-card" data-svc="Plomería" data-ico="🔧">
+          <div class="tnl-svc-icon-wrap">
+            <svg class="tnl-svc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+            </svg>
+          </div>
+          <span class="tnl-svc-name">Plomería</span>
+        </div>
+
+        <div class="tnl-svc-card" data-svc="Electricidad" data-ico="⚡">
+          <div class="tnl-svc-icon-wrap">
+            <svg class="tnl-svc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+            </svg>
+          </div>
+          <span class="tnl-svc-name">Electricidad</span>
+        </div>
+
+        <div class="tnl-svc-card" data-svc="Limpieza" data-ico="🧹">
+          <div class="tnl-svc-icon-wrap">
+            <svg class="tnl-svc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.937A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/>
+              <path d="M20 3v4m2-2h-4M4 17v2m1-1H3"/>
+            </svg>
+          </div>
+          <span class="tnl-svc-name">Limpieza</span>
+        </div>
+
+        <div class="tnl-svc-card" data-svc="Pintura" data-ico="🖌️">
+          <div class="tnl-svc-icon-wrap">
+            <svg class="tnl-svc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9.06 11.9 8.07-8.06a2.85 2.85 0 1 1 4.03 4.03l-8.06 8.08"/>
+              <path d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1 1 2.48 1.02 3.5 1.02 2.2 0 3.43-1.57 3.43-3.04 0-1.66-1.35-3.02-1.93-3.02z"/>
+            </svg>
+          </div>
+          <span class="tnl-svc-name">Pintura</span>
+        </div>
+
+        <div class="tnl-svc-card" data-svc="Aire / Clima" data-ico="❄️">
+          <div class="tnl-svc-icon-wrap">
+            <svg class="tnl-svc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="2" x2="22" y1="12" y2="12"/>
+              <line x1="12" x2="12" y1="2" y2="22"/>
+              <path d="m20 16-4-4 4-4"/>
+              <path d="m4 8 4 4-4 4"/>
+              <path d="m16 4-4 4-4-4"/>
+              <path d="m8 20 4-4 4 4"/>
+            </svg>
+          </div>
+          <span class="tnl-svc-name">Aire / Clima</span>
+        </div>
+
+        <div class="tnl-svc-card" data-svc="Carpintería" data-ico="🪚">
+          <div class="tnl-svc-icon-wrap">
+            <svg class="tnl-svc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 12-8.5 8.5a2.12 2.12 0 1 1-3-3L12 9"/>
+              <path d="M17.64 15 22 10.64"/>
+              <path d="m20.91 11.7-1.25-1.25c-.6-.6-.93-1.4-.93-2.25v-.86L16.01 4.6a5.56 5.56 0 0 0-3.94-1.64H9l.92.82A6.18 6.18 0 0 1 12 8.4v1.56l2 2h2.47z"/>
+            </svg>
+          </div>
+          <span class="tnl-svc-name">Carpintería</span>
+        </div>
+
+        <div class="tnl-svc-card" data-svc="Jardinería" data-ico="🌿">
+          <div class="tnl-svc-icon-wrap">
+            <svg class="tnl-svc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
+              <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+            </svg>
+          </div>
+          <span class="tnl-svc-name">Jardinería</span>
+        </div>
+
+        <div class="tnl-svc-card" data-svc="Remodelación" data-ico="🏗️">
+          <div class="tnl-svc-icon-wrap">
+            <svg class="tnl-svc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.3 8.7 8.7 21.3c-1 1-2.5 1-3.4 0l-2.6-2.6c-1-1-1-2.5 0-3.4L15.3 2.7c1-1 2.5-1 3.4 0l2.6 2.6c1 1 1 2.5 0 3.4z"/>
+              <path d="m7.5 10.5 2 2m1-5 2 2m1-5 2 2m-9 9 2 2"/>
+            </svg>
+          </div>
+          <span class="tnl-svc-name">Remodelación</span>
+        </div>
+
+        <div class="tnl-svc-card" data-svc="Otro" data-ico="💬">
+          <div class="tnl-svc-icon-wrap">
+            <svg class="tnl-svc-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+          </div>
+          <span class="tnl-svc-name">Otro</span>
+        </div>
+
       </div>
     </div>
 
