@@ -412,7 +412,9 @@
     .tnl-overlay {
       display: none;
       position: fixed; inset: 0; z-index: 1200;
-      background: #ffffff;
+      background-color: #ffffff;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.055) 1px, transparent 1px);
+      background-size: 22px 22px;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -499,7 +501,7 @@
       margin-top: 1.2rem;
     }
 
-    .tnl-body { max-width: 760px; margin: 0 auto; padding: 2.8rem 1.5rem 6rem; }
+    .tnl-body { max-width: 760px; margin: 0 auto; padding: 2.8rem 1.5rem 6rem; position: relative; }
 
     .tnl-view { display: none; }
     .tnl-view.tnl-active {
@@ -806,7 +808,7 @@
     .tnl-cta-note { font-size: 0.64rem; color: #9ca3af; margin-top: 0.6rem; text-align: center; }
 
     /* ── ÉXITO con palomita animada ── */
-    .tnl-success { display: none; text-align: center; padding: 5rem 2rem 4rem; }
+    .tnl-success { display: none; text-align: center; padding: 5rem 2rem 4rem; background: #fff; border-radius: 24px; max-width: 520px; margin: 2rem auto; box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 32px rgba(0,0,0,0.07); }
     .tnl-success.tnl-show { display: block; animation: fadeUp 0.5s ease both; }
 
     /* Círculo negro con SVG animado */
@@ -4485,8 +4487,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var h2 = document.querySelector('#tnl-success h2');
         if (h2) h2.textContent = '\u00A1Listo, ' + (userName||T.nombre).split(' ')[0] + '!';
         document.querySelectorAll('.tnl-view').forEach(function(v){ v.classList.remove('tnl-active','tnl-back'); });
-        fill.style.width = '100%';
-        dots.forEach(function(d){ d.classList.add('done'); d.classList.remove('active'); });
+        stepsBar.classList.add('tnl-steps-hidden');
         success.classList.add('tnl-show');
         overlay.scrollTop = 0;
       });
