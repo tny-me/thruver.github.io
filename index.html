@@ -745,38 +745,32 @@
     .tnl-diag-chip.selected:hover { transform: none; box-shadow: 0 2px 8px rgba(0,0,0,0.16); }
     .tnl-diag-divider { height: 1px; background: rgba(0,0,0,0.06); margin: 1.6rem 0 1.4rem; }
 
-    /* ── OPTION LIST (4+ opciones) ── */
-    .tnl-opt-list { display: flex; flex-direction: column; gap: 0.3rem; }
-    .tnl-opt-row {
-      display: flex; align-items: center; gap: 0.9rem;
-      padding: 0.8rem 1rem; background: #fff;
-      border: 1.5px solid rgba(0,0,0,0.08); border-radius: 10px;
-      cursor: pointer; font-family: var(--font);
-      transition: border-color 0.15s, background 0.15s;
-      -webkit-tap-highlight-color: transparent;
+    /* ── OPTION TILES (4+ opciones) ── */
+    .tnl-opt-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem;
     }
-    .tnl-opt-row:hover { border-color: rgba(0,0,0,0.18); background: #fafafa; }
-    .tnl-opt-row.selected { background: #111; border-color: #111; }
-    .tnl-opt-num {
-      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.05em;
-      color: rgba(0,0,0,0.2); min-width: 16px; font-variant-numeric: tabular-nums;
+    .tnl-opt-tile {
+      padding: 0.85rem 1rem; background: #fff;
+      border: 1.5px solid rgba(0,0,0,0.08); border-radius: 14px;
+      font-family: var(--font); font-size: 0.83rem; font-weight: 600;
+      color: #222; cursor: pointer; text-align: left; line-height: 1.35;
+      transition: border-color 0.18s, background 0.18s, color 0.18s, box-shadow 0.18s;
+      -webkit-tap-highlight-color: transparent; position: relative; overflow: hidden;
     }
-    .tnl-opt-row.selected .tnl-opt-num { color: rgba(255,255,255,0.3); }
-    .tnl-opt-txt { flex: 1; font-size: 0.85rem; font-weight: 600; color: #1a1a1a; line-height: 1.3; }
-    .tnl-opt-row.selected .tnl-opt-txt { color: #fff; }
-    .tnl-opt-dot {
-      width: 17px; height: 17px; border-radius: 50%; flex-shrink: 0;
-      border: 1.5px solid rgba(0,0,0,0.15);
-      display: flex; align-items: center; justify-content: center;
-      transition: border-color 0.15s;
+    .tnl-opt-tile:last-child:nth-child(odd) { grid-column: span 2; }
+    .tnl-opt-tile:hover {
+      border-color: var(--dc, #111);
+      background: var(--db, #fafafa);
+      color: var(--dc, #111);
     }
-    .tnl-opt-dot::after {
-      content: ''; width: 7px; height: 7px; border-radius: 50%;
-      background: transparent; transition: background 0.15s;
+    .tnl-opt-tile.selected {
+      background: var(--dc, #111); border-color: var(--dc, #111);
+      color: #fff; box-shadow: 0 4px 14px var(--ds, rgba(0,0,0,0.2));
     }
-    .tnl-opt-row:hover .tnl-opt-dot { border-color: rgba(0,0,0,0.3); }
-    .tnl-opt-row.selected .tnl-opt-dot { border-color: rgba(255,255,255,0.35); }
-    .tnl-opt-row.selected .tnl-opt-dot::after { background: #fff; }
+    .tnl-opt-tile.selected::after {
+      content: ''; position: absolute; top: 10px; right: 10px;
+      width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.5);
+    }
 
     /* ── SEGMENTED CONTROL (≤3 opciones) ── */
     .tnl-segment { display: flex; background: rgba(0,0,0,0.05); border-radius: 12px; padding: 3px; gap: 2px; }
@@ -787,7 +781,10 @@
       -webkit-tap-highlight-color: transparent;
     }
     .tnl-seg-btn:hover { color: #111; }
-    .tnl-seg-btn.selected { background: #fff; color: #111; box-shadow: 0 1px 4px rgba(0,0,0,0.12); }
+    .tnl-seg-btn.selected {
+      background: var(--dc, #111); color: #fff;
+      box-shadow: 0 1px 4px var(--ds, rgba(0,0,0,0.15));
+    }
     .tnl-rrow-prediag { display: none; }
     .tnl-rrow-prediag.visible { display: flex; }
     .tnl-rrow-prediag-list { font-size: 0.74rem; opacity: 0.65; font-weight: 500; line-height: 1.75; }
@@ -4040,6 +4037,17 @@ document.addEventListener('DOMContentLoaded', function () {
   /* Respuestas del pre-diagnóstico */
   T.prediag = {};
 
+  var SVC_PALETTE = {
+    'Plomería':     { c:'#2563EB', b:'rgba(37,99,235,0.07)',  s:'rgba(37,99,235,0.28)' },
+    'Electricidad': { c:'#D97706', b:'rgba(217,119,6,0.07)',  s:'rgba(217,119,6,0.28)' },
+    'Limpieza':     { c:'#059669', b:'rgba(5,150,105,0.07)',  s:'rgba(5,150,105,0.28)' },
+    'Pintura':      { c:'#7C3AED', b:'rgba(124,58,237,0.07)', s:'rgba(124,58,237,0.28)' },
+    'Aire / Clima': { c:'#0891B2', b:'rgba(8,145,178,0.07)',  s:'rgba(8,145,178,0.28)' },
+    'Carpintería':  { c:'#B45309', b:'rgba(180,83,9,0.07)',   s:'rgba(180,83,9,0.28)' },
+    'Jardinería':   { c:'#16A34A', b:'rgba(22,163,74,0.07)',  s:'rgba(22,163,74,0.28)' },
+    'Remodelación': { c:'#4F46E5', b:'rgba(79,70,229,0.07)',  s:'rgba(79,70,229,0.28)' }
+  };
+
   function renderDiagQuestions(svc) {
     var wrap  = document.getElementById('tnl-diag-wrap');
     var badge = document.getElementById('tnl-diag-badge');
@@ -4051,28 +4059,26 @@ document.addEventListener('DOMContentLoaded', function () {
       badge.style.display = questions ? '' : 'none';
     }
     if (!questions) { wrap.innerHTML = ''; wrap.style.display = 'none'; return; }
+    /* Aplicar paleta del servicio */
+    var pal = SVC_PALETTE[svc] || { c:'#111', b:'rgba(0,0,0,0.05)', s:'rgba(0,0,0,0.18)' };
+    wrap.style.setProperty('--dc', pal.c);
+    wrap.style.setProperty('--db', pal.b);
+    wrap.style.setProperty('--ds', pal.s);
     wrap.style.display = '';
     var html = '';
     questions.forEach(function(q) {
       html += '<div class="tnl-diag-question" data-qid="' + q.id + '">';
       html += '<p class="tnl-diag-q-label">' + q.label + '</p>';
       if (q.opts.length <= 3) {
-        /* Segmented control */
         html += '<div class="tnl-segment">';
         q.opts.forEach(function(opt) {
           html += '<button type="button" class="tnl-seg-btn" data-qid="' + q.id + '" data-val="' + opt + '">' + opt + '</button>';
         });
         html += '</div>';
       } else {
-        /* Numbered list */
-        html += '<div class="tnl-opt-list">';
-        q.opts.forEach(function(opt, i) {
-          var num = (i + 1 < 10 ? '0' : '') + (i + 1);
-          html += '<button type="button" class="tnl-opt-row" data-qid="' + q.id + '" data-val="' + opt + '">';
-          html += '<span class="tnl-opt-num">' + num + '</span>';
-          html += '<span class="tnl-opt-txt">' + opt + '</span>';
-          html += '<span class="tnl-opt-dot"></span>';
-          html += '</button>';
+        html += '<div class="tnl-opt-grid">';
+        q.opts.forEach(function(opt) {
+          html += '<button type="button" class="tnl-opt-tile" data-qid="' + q.id + '" data-val="' + opt + '">' + opt + '</button>';
         });
         html += '</div>';
       }
@@ -4081,10 +4087,10 @@ document.addEventListener('DOMContentLoaded', function () {
     wrap.innerHTML = html;
     /* Event delegation */
     wrap.addEventListener('click', function(e) {
-      var btn = e.target.closest('.tnl-opt-row, .tnl-seg-btn');
+      var btn = e.target.closest('.tnl-opt-tile, .tnl-seg-btn');
       if (!btn) return;
       var qid = btn.getAttribute('data-qid');
-      var sel = btn.classList.contains('tnl-opt-row') ? '.tnl-opt-row' : '.tnl-seg-btn';
+      var sel = btn.classList.contains('tnl-opt-tile') ? '.tnl-opt-tile' : '.tnl-seg-btn';
       wrap.querySelectorAll(sel + '[data-qid="' + qid + '"]').forEach(function(c){ c.classList.remove('selected'); });
       btn.classList.add('selected');
       T.prediag[qid] = btn.getAttribute('data-val');
