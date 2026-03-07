@@ -745,33 +745,45 @@
     .tnl-diag-chip.selected:hover { transform: none; box-shadow: 0 2px 8px rgba(0,0,0,0.16); }
     .tnl-diag-divider { height: 1px; background: rgba(0,0,0,0.06); margin: 1.6rem 0 1.4rem; }
 
-    /* ── OPTION CARDS (4+ opciones) ── */
-    .tnl-opt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); gap: 0.55rem; }
-    .tnl-opt-card {
-      position: relative; display: flex; flex-direction: column; align-items: center;
-      gap: 0.4rem; padding: 0.9rem 0.5rem 0.75rem;
-      background: #fff; border: 1.5px solid rgba(0,0,0,0.08); border-radius: 14px;
-      cursor: pointer; text-align: center; font-family: var(--font);
-      transition: border-color 0.18s, background 0.18s, box-shadow 0.18s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04); -webkit-tap-highlight-color: transparent;
+    /* ── OPTION LIST (4+ opciones) ── */
+    .tnl-opt-list { display: flex; flex-direction: column; gap: 0.3rem; }
+    .tnl-opt-row {
+      display: flex; align-items: center; gap: 0.9rem;
+      padding: 0.8rem 1rem; background: #fff;
+      border: 1.5px solid rgba(0,0,0,0.08); border-radius: 10px;
+      cursor: pointer; font-family: var(--font);
+      transition: border-color 0.15s, background 0.15s;
+      -webkit-tap-highlight-color: transparent;
     }
-    .tnl-opt-card:hover { border-color: rgba(0,0,0,0.18); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-    .tnl-opt-card.selected { border-color: #111; background: #f8f8f8; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    .tnl-opt-check {
-      position: absolute; top: 7px; right: 7px; width: 16px; height: 16px;
-      border-radius: 50%; background: #111; color: #fff; font-size: 8px; font-weight: 800;
-      display: none; align-items: center; justify-content: center;
+    .tnl-opt-row:hover { border-color: rgba(0,0,0,0.18); background: #fafafa; }
+    .tnl-opt-row.selected { background: #111; border-color: #111; }
+    .tnl-opt-num {
+      font-size: 0.63rem; font-weight: 700; letter-spacing: 0.05em;
+      color: rgba(0,0,0,0.2); min-width: 16px; font-variant-numeric: tabular-nums;
     }
-    .tnl-opt-card.selected .tnl-opt-check { display: flex; }
-    .tnl-opt-icon { font-size: 1.5rem; line-height: 1; }
-    .tnl-opt-lbl { font-size: 0.71rem; font-weight: 600; color: #333; line-height: 1.3; }
+    .tnl-opt-row.selected .tnl-opt-num { color: rgba(255,255,255,0.3); }
+    .tnl-opt-txt { flex: 1; font-size: 0.85rem; font-weight: 600; color: #1a1a1a; line-height: 1.3; }
+    .tnl-opt-row.selected .tnl-opt-txt { color: #fff; }
+    .tnl-opt-dot {
+      width: 17px; height: 17px; border-radius: 50%; flex-shrink: 0;
+      border: 1.5px solid rgba(0,0,0,0.15);
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color 0.15s;
+    }
+    .tnl-opt-dot::after {
+      content: ''; width: 7px; height: 7px; border-radius: 50%;
+      background: transparent; transition: background 0.15s;
+    }
+    .tnl-opt-row:hover .tnl-opt-dot { border-color: rgba(0,0,0,0.3); }
+    .tnl-opt-row.selected .tnl-opt-dot { border-color: rgba(255,255,255,0.35); }
+    .tnl-opt-row.selected .tnl-opt-dot::after { background: #fff; }
 
     /* ── SEGMENTED CONTROL (≤3 opciones) ── */
     .tnl-segment { display: flex; background: rgba(0,0,0,0.05); border-radius: 12px; padding: 3px; gap: 2px; }
     .tnl-seg-btn {
       flex: 1; padding: 0.55rem 0.4rem; border: none; border-radius: 10px;
       background: transparent; font-family: var(--font); font-size: 0.81rem; font-weight: 600;
-      color: #666; cursor: pointer; transition: all 0.2s; line-height: 1.2;
+      color: #666; cursor: pointer; transition: all 0.18s; line-height: 1.2;
       -webkit-tap-highlight-color: transparent;
     }
     .tnl-seg-btn:hover { color: #111; }
@@ -4028,37 +4040,6 @@ document.addEventListener('DOMContentLoaded', function () {
   /* Respuestas del pre-diagnóstico */
   T.prediag = {};
 
-  var OPT_ICONS = {
-    'Fregadero / Lavabo':'🚿','Baño / Regadera':'🛁','Lavadora / Tinaco':'🧺',
-    'Tubería general':'🔧','Terraza / Exterior':'🌿',
-    'Goteo / Fuga leve':'💧','Fuga constante':'🌊','Taponamiento / Atasco':'🪣',
-    'Presión baja':'📉','No sé aún':'❓',
-    'Sí, bastante':'💦','Sí, un poco':'💧','No':'✅','Sí':'⚠️','No lo sé':'❓','No lo sé aún':'❓',
-    'Cuarto / Habitación':'🛏️','Sala / Comedor':'🛋️','Cocina':'🍳',
-    'Exterior / Jardín':'🌿','Toda la casa / propiedad':'🏠',
-    'Sin luz / apagón parcial':'💡','Corto circuito':'⚡','Contacto / enchufe dañado':'🔌',
-    'Instalación nueva':'🔧','Revisión general':'🔍',
-    'Limpieza general':'🧹','Limpieza profunda':'✨','Post obra / construcción':'🏗️',
-    'Post mudanza':'📦','Tapicería / alfombras':'🛋️',
-    'Menos de 50 m²':'🏠','50 – 100 m²':'🏡','100 – 200 m²':'🏢','Más de 200 m²':'🏗️',
-    'Sí, ambos':'✅','Solo cocina':'🍳','Solo baños':'🚿',
-    'Interior':'🏠','Exterior':'🏡','Ambos (interior y exterior)':'🎨',
-    '1 área':'1️⃣','2 – 3 áreas':'2️⃣','4 – 6 áreas':'3️⃣','Más de 6 áreas':'➕',
-    'Sí, ya la tengo':'✅','No, necesito que la incluyan':'🛒','Aún no lo sé':'❓',
-    'Minisplit':'❄️','Clima central':'🌡️','Ventilador / extractor':'💨','No sé el tipo':'❓',
-    'Limpieza / mantenimiento':'🧹','Reparación':'🔨','Solo revisión / diagnóstico':'🔍',
-    '1 unidad':'1️⃣','2 – 3 unidades':'2️⃣','Más de 3 unidades':'➕',
-    'Muebles':'🪑','Puertas / ventanas':'🚪','Pisos de madera':'🪵',
-    'Reparación / restauración':'🔨','Fabricación desde cero':'⚒️',
-    'Sí, ya tengo medidas':'📏','Sí, tengo un diseño / plano':'📐','No, necesito asesoría':'💬',
-    'Poda de árboles / plantas':'✂️','Corte de pasto':'🌿','Diseño de jardín':'🌺',
-    'Sistema de riego':'💧','Limpieza general de área':'🧹',
-    'Pequeño (menos de 30 m²)':'🪴','Mediano (30 – 100 m²)':'🌳','Grande (más de 100 m²)':'🌲',
-    'Una sola vez':'1️⃣','Semanal':'📅','Quincenal':'📅','Mensual':'🗓️',
-    'Cocina':'🍳','Baño':'🚿','Sala / comedor':'🛋️','Fachada / exterior':'🏡','Todo el espacio':'🏗️',
-    'Sí, ya tengo planos':'📐','Tengo una idea, pero no planos':'💡','No, necesito asesoría de diseño':'💬'
-  };
-
   function renderDiagQuestions(svc) {
     var wrap  = document.getElementById('tnl-diag-wrap');
     var badge = document.getElementById('tnl-diag-badge');
@@ -4083,14 +4064,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         html += '</div>';
       } else {
-        /* Cards grid */
-        html += '<div class="tnl-opt-grid">';
-        q.opts.forEach(function(opt) {
-          var icon = OPT_ICONS[opt] || '•';
-          html += '<button type="button" class="tnl-opt-card" data-qid="' + q.id + '" data-val="' + opt + '">';
-          html += '<span class="tnl-opt-check">✓</span>';
-          html += '<span class="tnl-opt-icon">' + icon + '</span>';
-          html += '<span class="tnl-opt-lbl">' + opt + '</span>';
+        /* Numbered list */
+        html += '<div class="tnl-opt-list">';
+        q.opts.forEach(function(opt, i) {
+          var num = (i + 1 < 10 ? '0' : '') + (i + 1);
+          html += '<button type="button" class="tnl-opt-row" data-qid="' + q.id + '" data-val="' + opt + '">';
+          html += '<span class="tnl-opt-num">' + num + '</span>';
+          html += '<span class="tnl-opt-txt">' + opt + '</span>';
+          html += '<span class="tnl-opt-dot"></span>';
           html += '</button>';
         });
         html += '</div>';
@@ -4100,10 +4081,10 @@ document.addEventListener('DOMContentLoaded', function () {
     wrap.innerHTML = html;
     /* Event delegation */
     wrap.addEventListener('click', function(e) {
-      var btn = e.target.closest('.tnl-opt-card, .tnl-seg-btn');
+      var btn = e.target.closest('.tnl-opt-row, .tnl-seg-btn');
       if (!btn) return;
       var qid = btn.getAttribute('data-qid');
-      var sel = btn.classList.contains('tnl-opt-card') ? '.tnl-opt-card' : '.tnl-seg-btn';
+      var sel = btn.classList.contains('tnl-opt-row') ? '.tnl-opt-row' : '.tnl-seg-btn';
       wrap.querySelectorAll(sel + '[data-qid="' + qid + '"]').forEach(function(c){ c.classList.remove('selected'); });
       btn.classList.add('selected');
       T.prediag[qid] = btn.getAttribute('data-val');
