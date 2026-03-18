@@ -113,38 +113,154 @@
     .mm-cta .btn-ghost { width: 100%; justify-content: center; font-size: 0.95rem; padding: 0.85rem; border-radius: var(--radius); min-height: 52px; }
     .mm-cta .btn-solid { background: #0f172a !important; color: #fff !important; }
 
-    /* ══ HERO ══ */
-    .hero { position: relative; margin-top: 60px; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden; }
-    .hero-bg { position: absolute; inset: 0; }
-    .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
-    .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.48) 50%, rgba(0,0,0,0.12) 100%); }
-    .hero-inner { position: relative; z-index: 1; width: 100%; }
-    .hero-lp-inner { padding-bottom: 1.5rem; }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 0.7rem;
-      background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.18);
-      padding: 0.4rem 1.1rem; border-radius: 100px;
-      color: rgba(255,255,255,0.92); font-size: 0.73rem; font-weight: 600;
-      margin-bottom: 1.8rem; letter-spacing: 0.01em; width: fit-content;
+    /* ══ HERO V3 — Light, 2-column, Stripe-style ══ */
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes hvFloat1 { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-8px) rotate(0.5deg)} }
+    @keyframes hvFloat2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
+
+    .hero { display: none; } /* hide old hero class if any stray ref */
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; flex-shrink: 0; }
+
+    .hero-v3 {
+      position: relative; margin-top: 60px;
+      padding: 6rem 0 5rem; overflow: hidden;
+      background: #ffffff;
+    }
+    .hero-v3::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 55% 65% at 90% 35%, rgba(37,99,235,0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 45% 55% at 10% 65%, rgba(99,102,241,0.05) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(226,232,240,0.6) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-v3::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(0,0,0,0.048) 1px, transparent 1px);
+      background-size: 28px 28px;
+      pointer-events: none;
+      mask-image: radial-gradient(ellipse 90% 90% at 50% 0%, black 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 0%, black 30%, transparent 80%);
+    }
+    .hero-v3-inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    /* ── Copy ── */
+    .hero-v3-badge {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      background: #f0f9ff; border: 1px solid #bae6fd;
+      color: #0369a1; font-size: 0.72rem; font-weight: 700;
+      padding: 0.35rem 1rem; border-radius: 100px;
+      margin-bottom: 2rem; letter-spacing: 0.01em; width: fit-content;
       animation: fadeUp 0.5s ease both;
     }
-    .hero-stars { color: #FACC15; letter-spacing: 0.04em; font-size: 0.85rem; }
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; flex-shrink: 0; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
-    .hero-h1 {
-      font-weight: 900; font-size: clamp(1.9rem, 3.8vw, 4.5rem);
-      letter-spacing: -0.04em; line-height: 1.1; color: #fff;
-      margin-bottom: 1.3rem; max-width: 860px;
+    .hero-v3-h1 {
+      font-size: clamp(2.4rem, 4.2vw, 4.8rem);
+      font-weight: 900; letter-spacing: -0.055em;
+      line-height: 1.05; color: #0f172a;
+      margin-bottom: 1.5rem;
       animation: fadeUp 0.5s ease 0.07s both;
     }
-    .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.6); line-height: 1.7; max-width: 440px; margin-bottom: 2.5rem; animation: fadeUp 0.5s ease 0.14s both; border-left: 2px solid rgba(255,255,255,0.22); padding-left: 1rem; }
-    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; animation: fadeUp 0.5s ease 0.21s both; }
-    .btn-blue { background: var(--blue); color: #fff !important; border: none; padding: 0.82rem 2rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; transition: background 0.2s, box-shadow 0.2s, transform 0.15s; box-shadow: 0 0 0 rgba(26,86,232,0); }
-    .btn-blue:hover { background: var(--blue-dark); box-shadow: 0 0 22px rgba(26,86,232,0.55), 0 4px 16px rgba(26,86,232,0.3); transform: translateY(-1px); }
-    .btn-outline-white { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9) !important; border: 1.5px solid rgba(255,255,255,0.3); padding: 0.82rem 2rem; border-radius: 100px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; transition: border-color 0.15s, background 0.15s; }
-    .btn-outline-white:hover { border-color: rgba(255,255,255,0.65); background: rgba(255,255,255,0.14); }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+    .hero-v3-h1-accent {
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 55%, #a855f7 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-v3-sub {
+      font-size: 1.05rem; color: #475569; line-height: 1.78;
+      max-width: 430px; margin-bottom: 2.5rem;
+      animation: fadeUp 0.5s ease 0.14s both;
+    }
+    .hero-v3-actions {
+      display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem;
+      animation: fadeUp 0.5s ease 0.21s both;
+    }
+    .hero-v3-btn-primary {
+      background: #0f172a; color: #fff !important; border: none;
+      padding: 0.85rem 2rem; border-radius: 100px; font-size: 0.9rem;
+      font-weight: 700; cursor: pointer; font-family: var(--font);
+      text-decoration: none; display: inline-flex; align-items: center;
+      min-height: 48px; transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+    .hero-v3-btn-primary:hover { background: #1e293b; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(15,23,42,0.22); }
+    .hero-v3-btn-outline {
+      background: transparent; color: #374151 !important;
+      border: 1.5px solid #d1d5db;
+      padding: 0.85rem 2rem; border-radius: 100px; font-size: 0.9rem;
+      font-weight: 600; cursor: pointer; font-family: var(--font);
+      text-decoration: none; display: inline-flex; align-items: center; min-height: 48px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .hero-v3-btn-outline:hover { border-color: #9ca3af; color: #0f172a !important; }
+    .hero-v3-trust {
+      display: flex; align-items: center; gap: 0.65rem;
+      animation: fadeUp 0.5s ease 0.28s both;
+    }
+    .hero-v3-stars { color: #f59e0b; letter-spacing: 0.03em; font-size: 0.85rem; }
+    .hero-v3-trust-text { font-size: 0.77rem; color: #94a3b8; }
+    /* ── Visual column ── */
+    .hero-v3-visual {
+      position: relative;
+      animation: fadeUp 0.65s ease 0.18s both;
+    }
+    .hero-v3-card {
+      background: #ffffff; border: 1px solid #e2e8f0;
+      border-radius: 20px; overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03), 0 12px 40px rgba(0,0,0,0.09), 0 40px 80px rgba(0,0,0,0.05);
+    }
+    .hero-v3-card-chrome {
+      display: flex; align-items: center; gap: 0.5rem;
+      background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+      padding: 0.8rem 1rem;
+    }
+    .hv3-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .hv3-dot-r { background: #ff5f57; } .hv3-dot-y { background: #febc2e; } .hv3-dot-g { background: #28c840; }
+    .hv3-chrome-label { font-size: 0.7rem; color: #9ca3af; font-weight: 500; flex: 1; margin-left: 0.35rem; }
+    .hv3-live { display: flex; align-items: center; gap: 0.3rem; font-size: 0.62rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; }
+    .hv3-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: pulse 1.8s ease-in-out infinite; }
+    .hero-v3-card-body { padding: 1.4rem 1.4rem 1.2rem; }
+    .hv3-svc-row { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.2rem; margin-bottom: 1.2rem; border-bottom: 1px solid #f1f5f9; }
+    .hv3-svc-icon { width: 46px; height: 46px; border-radius: 12px; background: #eff6ff; border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .hv3-svc-title { font-size: 0.97rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
+    .hv3-svc-sub { font-size: 0.73rem; color: #94a3b8; margin-top: 0.12rem; }
+    .hv3-svc-badge { margin-left: auto; font-size: 0.65rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; padding: 0.25rem 0.7rem; border-radius: 100px; white-space: nowrap; display: flex; align-items: center; gap: 0.35rem; }
+    .hv3-svc-bdot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; animation: pulse 2s ease-in-out infinite; }
+    .hv3-tech { display: flex; align-items: center; gap: 0.8rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1.2rem; }
+    .hv3-tech-av { width: 38px; height: 38px; border-radius: 50%; background: #0f172a; color: #fff; font-size: 0.72rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .hv3-tech-name { font-size: 0.85rem; font-weight: 700; color: #0f172a; }
+    .hv3-tech-meta { font-size: 0.71rem; color: #94a3b8; margin-top: 0.1rem; }
+    .hv3-tech-badge { margin-left: auto; font-size: 0.62rem; font-weight: 700; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 0.22rem 0.65rem; border-radius: 100px; }
+    .hv3-prog-bar { height: 4px; background: #f1f5f9; border-radius: 100px; overflow: hidden; margin-bottom: 0.7rem; }
+    .hv3-prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #2563eb, #7c3aed); width: 65%; }
+    .hv3-steps { display: flex; }
+    .hv3-step { flex: 1; text-align: center; font-size: 0.58rem; font-weight: 600; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.15rem 0; }
+    .hv3-step.done { color: #2563eb; }
+    .hv3-step.active { color: #0f172a; font-weight: 800; }
+    .hero-v3-card-footer { padding: 0.9rem 1.4rem; border-top: 1px solid #f1f5f9; background: #fafafa; }
+    .hv3-cta-btn { width: 100%; background: #0f172a; color: #fff; border: none; padding: 0.7rem 1rem; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: var(--font); transition: background 0.2s; }
+    .hv3-cta-btn:hover { background: #1e293b; }
+    /* Floating notification pills */
+    .hv3-notif { position: absolute; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 0.6rem 0.9rem; font-size: 0.71rem; font-weight: 600; color: #374151; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,0.09); display: flex; align-items: center; gap: 0.5rem; }
+    .hv3-notif-1 { top: -1.2rem; right: -0.8rem; animation: hvFloat1 4s ease-in-out infinite; }
+    .hv3-notif-2 { bottom: 2.5rem; left: -2rem; animation: hvFloat2 4s ease-in-out 1.2s infinite; }
+    /* Compat aliases */
+    .hero-stars { color: #f59e0b; }
+    .btn-blue { background: var(--blue); color: #fff !important; border: none; padding: 0.82rem 2rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; transition: background 0.2s; }
+    .btn-blue:hover { background: var(--blue-dark); }
+    .btn-outline-white { background: transparent; color: #374151 !important; border: 1.5px solid #d1d5db; padding: 0.82rem 2rem; border-radius: 100px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; transition: border-color 0.15s; }
+    @media(max-width: 900px) {
+      .hero-v3-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .hero-v3-visual { display: none; }
+      .hero-v3 { padding: 4rem 0 3rem; }
+    }
+    @media(max-width: 600px) {
+      .hero-v3-h1 { font-size: clamp(1.9rem, 6vw, 2.8rem); }
+    }
 
     /* ══ FEATURES DARK ══ */
     .lp-features-dark { background: #f5f5f5; padding: 8rem 0 4rem; position: relative; overflow: hidden; border-top: 1px solid #e5e7eb; }
@@ -342,14 +458,14 @@
     .success-msg p  { font-size: 0.79rem; color: var(--muted); }
 
     /* ══ FOOTER ══ */
-    .lp-footer { background: #0A0A0A; border-top: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
+    .lp-footer { background: #ffffff; border-top: 1px solid #e2e8f0; overflow: hidden; }
     .lp-footer-inner { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
-    .footer-logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.06em; color: #fff; }
+    .footer-logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.06em; color: #0f172a; }
     .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
-    .footer-links a, .footer-links button { font-size: 0.78rem; color: rgba(255,255,255,0.35); text-decoration: none; background: none; border: none; cursor: pointer; font-family: var(--font); padding: 0; transition: color 0.15s; }
-    .footer-links a:hover, .footer-links button:hover { color: rgba(255,255,255,0.8); }
-    .footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.18); }
-    .footer-wm { display: block; text-align: center; font-size: clamp(4.5rem, 18vw, 13rem); font-weight: 900; letter-spacing: -0.06em; line-height: 0.82; color: rgba(255,255,255,0.025); pointer-events: none; user-select: none; padding: 0.5rem 0 0; }
+    .footer-links a, .footer-links button { font-size: 0.78rem; color: #94a3b8; text-decoration: none; background: none; border: none; cursor: pointer; font-family: var(--font); padding: 0; transition: color 0.15s; }
+    .footer-links a:hover, .footer-links button:hover { color: #0f172a; }
+    .footer-copy { font-size: 0.68rem; color: #cbd5e1; }
+    .footer-wm { display: block; text-align: center; font-size: clamp(4.5rem, 18vw, 13rem); font-weight: 900; letter-spacing: -0.06em; line-height: 0.82; color: rgba(0,0,0,0.04); pointer-events: none; user-select: none; padding: 0.5rem 0 0; }
 
     /* ══ LOGIN MODAL ══ */
     .modal-overlay { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
@@ -2002,22 +2118,23 @@
     .lp-features-dark, .lp-how-v2, .lp-guarantee-v2, .lp-signup-v2 { background-image: linear-gradient(rgba(0,0,0,0.038) 1px,transparent 1px), linear-gradient(90deg,rgba(0,0,0,0.038) 1px,transparent 1px); background-size:44px 44px; }
     /* Sección casi blanca */
     .lp-services-v2 { background-image: linear-gradient(rgba(0,0,0,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(0,0,0,0.03) 1px,transparent 1px); background-size:44px 44px; }
-    /* Globe (dark) */
-    .lp-globe { background-image: linear-gradient(rgba(255,255,255,0.042) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.042) 1px,transparent 1px); background-size:44px 44px; }
+    /* Globe (dark navy) */
+    .lp-globe { background-image: linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px); background-size:44px 44px; }
 
     /* ══════════════════════════════════════════
        GLOBE — Red de infraestructura Thruver
     ══════════════════════════════════════════ */
-    .lp-globe { background-color:#080808; padding:6.5rem 0; position:relative; overflow:hidden; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); }
+    .lp-globe { background-color:#0f172a; padding:6.5rem 0; position:relative; overflow:hidden; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); }
     .globe-layout { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
     .globe-copy { }
     .globe-title { font-size:clamp(2rem,3.5vw,3rem); font-weight:900; letter-spacing:-0.05em; color:#fff; margin-top:0.8rem; line-height:1.08; }
-    .globe-sub { font-size:0.9rem; color:rgba(255,255,255,0.42); margin-top:0.9rem; line-height:1.75; max-width:400px; }
+    .globe-sub { font-size:0.9rem; color:rgba(255,255,255,0.5); margin-top:0.9rem; line-height:1.75; max-width:400px; }
     .globe-chips { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.6rem; }
-    .globe-chip { display:flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:0.3rem 0.85rem; font-size:0.72rem; color:rgba(255,255,255,0.6); font-weight:500; }
+    .globe-chip { display:flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:0.3rem 0.85rem; font-size:0.72rem; color:rgba(255,255,255,0.65); font-weight:500; }
     .globe-chip-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
     .globe-canvas-wrap { display:flex; justify-content:center; align-items:center; }
     #globe-canvas { display:block; max-width:100%; }
+    .lp-globe .feat-label { color:rgba(120,160,255,0.9); background:rgba(37,99,235,0.15); border-color:rgba(37,99,235,0.3); }
 
     /* Services section V2 enhancements */
     .lp-services-v2 { background: #fafafa; padding: 7rem 0; border-bottom: 1px solid #e5e7eb; }
@@ -2599,23 +2716,73 @@
   </div><!-- /tnl-body -->
 </div><!-- /tnl-overlay -->
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg">
-    <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Plomero.jpeg" alt="Técnico Thruver" />
-  </div>
-  <div class="hero-inner">
-    <div class="lp-inner hero-lp-inner">
-      <div class="hero-badge">
-        <span class="hero-stars">★★★★★</span>
-        <span class="badge-dot"></span>
-        Culiacán, Sinaloa · Lanzando pronto
+<!-- HERO V3 -->
+<section class="hero-v3">
+  <div class="lp-inner">
+    <div class="hero-v3-inner">
+      <!-- Copy -->
+      <div class="hero-v3-copy">
+        <div class="hero-v3-badge">
+          <span class="badge-dot"></span>
+          Lanzando en Culiacán, Sinaloa · 2026
+        </div>
+        <h1 class="hero-v3-h1">Tu hogar en<br><span class="hero-v3-h1-accent">las mejores manos.</span></h1>
+        <p class="hero-v3-sub">Técnicos verificados, precios claros y garantía incluida. Solicita, controla y documenta cada servicio de mantenimiento desde una sola plataforma.</p>
+        <div class="hero-v3-actions">
+          <a href="#" class="hero-v3-btn-primary tnl-trigger">Solicitar servicio →</a>
+          <a href="empresas.html" class="hero-v3-btn-outline">Para empresas</a>
+        </div>
+        <div class="hero-v3-trust">
+          <span class="hero-v3-stars">★★★★★</span>
+          <span class="hero-v3-trust-text">4.9 · +500 servicios completados · Culiacán, Sinaloa</span>
+        </div>
       </div>
-      <h1 class="hero-h1">Hacer de cada hogar del mundo<br>un lugar más seguro, funcional y confiable.</h1>
-      <p class="hero-sub">Con Thruver, solicita, controla y documenta cada servicio de mantenimiento de tu hogar.</p>
-      <div class="hero-actions">
-        <a href="#" class="btn-blue tnl-trigger">Solicitar servicio →</a>
-        <a href="empresas.html" class="btn-outline-white">Para empresas →</a>
+      <!-- Visual -->
+      <div class="hero-v3-visual">
+        <div class="hero-v3-card">
+          <div class="hero-v3-card-chrome">
+            <span class="hv3-dot hv3-dot-r"></span>
+            <span class="hv3-dot hv3-dot-y"></span>
+            <span class="hv3-dot hv3-dot-g"></span>
+            <span class="hv3-chrome-label">Thruver · Seguimiento de servicio</span>
+            <span class="hv3-live"><span class="hv3-live-dot"></span>En vivo</span>
+          </div>
+          <div class="hero-v3-card-body">
+            <div class="hv3-svc-row">
+              <div class="hv3-svc-icon">⚡</div>
+              <div>
+                <div class="hv3-svc-title">Electricidad</div>
+                <div class="hv3-svc-sub">Diagnóstico y reparación · Hoy, 10:00am</div>
+              </div>
+              <div class="hv3-svc-badge"><span class="hv3-svc-bdot"></span>En camino</div>
+            </div>
+            <div class="hv3-tech">
+              <div class="hv3-tech-av">JM</div>
+              <div>
+                <div class="hv3-tech-name">José Morales</div>
+                <div class="hv3-tech-meta">★ 4.9 · 0.8 km · Llega en ~45 min</div>
+              </div>
+              <div class="hv3-tech-badge">Verificado ✓</div>
+            </div>
+            <div class="hv3-prog-bar"><div class="hv3-prog-fill"></div></div>
+            <div class="hv3-steps">
+              <div class="hv3-step done">Solicitud</div>
+              <div class="hv3-step done">Asignado</div>
+              <div class="hv3-step active">En camino</div>
+              <div class="hv3-step">Completado</div>
+            </div>
+          </div>
+          <div class="hero-v3-card-footer">
+            <button class="hv3-cta-btn tnl-trigger">Solicitar mi servicio →</button>
+          </div>
+        </div>
+        <div class="hv3-notif hv3-notif-1">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="#10b981"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          Técnico verificado con INE
+        </div>
+        <div class="hv3-notif hv3-notif-2">
+          <span style="color:#f59e0b;font-size:0.8rem">★★★★★</span>&nbsp;5.0 — "Excelente trabajo"
+        </div>
       </div>
     </div>
   </div>
