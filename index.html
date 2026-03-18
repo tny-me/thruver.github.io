@@ -1861,22 +1861,22 @@
 
     /* ── Historial widget (card 02) ── */
     .hs-wrap { margin-top: 1.8rem; }
-    .hs-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; }
-    .hs-card-header { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; }
-    .hs-card-title { font-size: 0.65rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.08em; }
+    .hs-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 14px; overflow: hidden; }
+    .hs-card-header { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; }
+    .hs-card-title { font-size: 0.65rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; }
     .hs-card-badge { font-size: 0.58rem; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.18); border-radius: 20px; padding: 0.12rem 0.55rem; display: flex; align-items: center; gap: 0.3rem; }
     .hs-card-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #10b981; animation: pulse 2s ease-in-out infinite; }
-    .hs-row { display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; cursor: pointer; transition: background 0.18s; border-bottom: 1px solid rgba(255,255,255,0.04); position: relative; }
+    .hs-row { display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; cursor: pointer; transition: background 0.18s; border-bottom: 1px solid rgba(255,255,255,0.08); position: relative; }
     .hs-row:last-child { border-bottom: none; }
-    .hs-row:hover { background: rgba(255,255,255,0.04); }
+    .hs-row:hover { background: rgba(255,255,255,0.08); }
     .hs-row.hs-demo-active { background: rgba(26,86,232,0.07); }
     .hs-row-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
     .hs-row-info { flex: 1; min-width: 0; }
     .hs-row-name { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .hs-row-meta { font-size: 0.62rem; color: #4b5563; margin-top: 0.12rem; }
+    .hs-row-meta { font-size: 0.62rem; color: #6b7280; margin-top: 0.12rem; }
     .hs-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; flex-shrink: 0; }
     .hs-row-cost { font-size: 0.72rem; font-weight: 600; color: #94a3b8; }
-    .hs-row-open { font-size: 0.58rem; color: #4b5563; border: 1px solid rgba(255,255,255,0.08); border-radius: 5px; padding: 0.1rem 0.4rem; transition: color 0.15s, border-color 0.15s; white-space: nowrap; }
+    .hs-row-open { font-size: 0.58rem; color: #6b7280; border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; padding: 0.1rem 0.4rem; transition: color 0.15s, border-color 0.15s; white-space: nowrap; }
     .hs-row:hover .hs-row-open, .hs-row.hs-demo-active .hs-row-open { color: #6b8ff5; border-color: rgba(107,143,245,0.3); }
     /* cursor demo ripple */
     .hs-cursor { position: absolute; width: 18px; height: 18px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 2; }
@@ -6267,6 +6267,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <!-- ── Historial widget — card 02 ── -->
 <script>
+document.addEventListener('DOMContentLoaded', function(){
 (function(){
   var DATA = [
     {
@@ -6447,6 +6448,7 @@ document.addEventListener('DOMContentLoaded', function () {
   setTimeout(runDemo, 2800);
 
 })();
+});
 </script>
 
 <!-- ── Network — Infraestructura de servicios Thruver ── -->
