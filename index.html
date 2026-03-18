@@ -1837,46 +1837,60 @@
     .how-v2-title { font-size: clamp(2.2rem, 3.5vw, 3.2rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1.06; color: #0a0a0a; margin-top: 1rem; }
     .how-v2-subtitle { font-size: 0.95rem; color: #6b7280; margin-top: 0.8rem; line-height: 1.7; max-width: 420px; margin-left: auto; margin-right: auto; }
 
-    .how-v2-steps {
-      display: grid; grid-template-columns: 1fr 80px 1fr 80px 1fr; gap: 0;
-      align-items: start; position: relative;
+    /* 2-col how-v2 body */
+    .how-v2-body { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+    .how-v2-left { position: sticky; top: 5rem; }
+    .how-v2-widget-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: #9ca3af; margin-bottom: 0.75rem; }
+    .how-v2-right { display: flex; flex-direction: column; }
+    /* vertical step cards */
+    .how-v2-step-v {
+      background: #fff; border: 1px solid #e5e7eb; border-radius: 18px;
+      padding: 1.6rem 1.8rem; display: flex; gap: 1.2rem; align-items: flex-start;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
     }
-    .how-v2-step {
-      background: #ffffff; border: 1px solid #e5e7eb;
-      border-radius: 20px; padding: 2.4rem 2rem; text-align: center;
-      transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
-      position: relative; overflow: hidden;
-    }
-    .how-v2-step:hover { border-color: rgba(26,86,232,0.3); box-shadow: 0 12px 40px rgba(0,0,0,0.08); transform: translateY(-6px); }
+    .how-v2-step-v:hover { border-color: rgba(26,86,232,0.3); box-shadow: 0 8px 28px rgba(0,0,0,0.06); transform: translateX(4px); }
+    .how-v2-step-v-icon { width: 46px; height: 46px; border-radius: 13px; background: rgba(26,86,232,0.08); border: 1px solid rgba(26,86,232,0.18); display: flex; align-items: center; justify-content: center; color: var(--blue); flex-shrink: 0; }
+    .how-v2-step-v-icon svg { width: 22px; height: 22px; }
+    .how-v2-step-v-body { flex: 1; }
+    .how-v2-step-v-head { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; }
+    .how-v2-step-v-num { font-size: 0.62rem; font-weight: 900; letter-spacing: 0.1em; color: #0a0a0a; background: #f3f4f6; padding: 0.18rem 0.5rem; border-radius: 6px; }
+    .how-v2-step-v-body h3 { font-size: 0.97rem; font-weight: 800; color: #0a0a0a; letter-spacing: -0.02em; margin: 0; }
+    .how-v2-step-v-body p { font-size: 0.8rem; color: #6b7280; line-height: 1.75; margin: 0.3rem 0 0; }
+    .how-v2-conn-v { height: 24px; display: flex; justify-content: center; align-items: stretch; }
+    .how-v2-conn-v::after { content: ''; width: 2px; background: #e5e7eb; display: block; }
 
-    .how-v2-step-num {
-      font-size: 4.5rem; font-weight: 900; letter-spacing: -0.07em; line-height: 1;
-      color: #e5e7eb; margin-bottom: 1.4rem; display: block;
-    }
-    .how-v2-step-icon {
-      width: 52px; height: 52px; border-radius: 14px;
-      background: rgba(26,86,232,0.08); border: 1px solid rgba(26,86,232,0.18);
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1.4rem; color: var(--blue);
-    }
-    .how-v2-step-icon svg { width: 24px; height: 24px; }
-    .how-v2-step h3 { font-size: 1.05rem; font-weight: 800; color: #0a0a0a; margin-bottom: 0.6rem; letter-spacing: -0.02em; }
-    .how-v2-step p { font-size: 0.82rem; color: #6b7280; line-height: 1.75; }
-
-    .how-v2-connector {
-      display: flex; align-items: center; justify-content: center;
-      padding-top: 5.5rem;
-    }
-    .how-v2-arrow {
-      width: 40px; height: 2px; background: #d1d5db; position: relative;
-    }
-    .how-v2-arrow::after {
-      content: ''; position: absolute; right: -1px; top: 50%;
-      transform: translateY(-50%);
-      border-left: 8px solid #d1d5db;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-    }
+    /* ── Vercel-style log (card 02) ── */
+    .vl-wrap { margin-top: 2rem; }
+    .vl-panel { background: #0a0a0a; border-radius: 14px; border: 1px solid #222; overflow: hidden; }
+    .vl-header { display: flex; align-items: center; gap: 0.45rem; padding: 0.7rem 1rem; border-bottom: 1px solid #1a1a1a; }
+    .vl-header-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .vl-dot-r { background: #ff5f57; } .vl-dot-y { background: #febc2e; } .vl-dot-g { background: #28c840; }
+    .vl-header-title { font-size: 0.7rem; color: #555; font-weight: 500; flex: 1; margin-left: 0.3rem; font-family: 'SF Mono','Fira Code',monospace; }
+    .vl-sync { display: flex; align-items: center; gap: 0.3rem; font-size: 0.62rem; color: #10b981; font-weight: 700; letter-spacing: 0.08em; }
+    .vl-sync-dot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; animation: pulse 2s ease-in-out infinite; }
+    .vl-meta { padding: 0.55rem 1rem; border-bottom: 1px solid #161616; display: flex; align-items: center; gap: 0.5rem; }
+    .vl-branch { font-size: 0.65rem; background: #1a1a1a; color: #888; padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid #2a2a2a; font-family: monospace; }
+    .vl-sep { color: #333; font-size: 0.7rem; }
+    .vl-total { font-size: 0.68rem; color: #555; font-family: monospace; }
+    .vl-log { min-height: 148px; }
+    .vl-entry { padding: 0.6rem 1rem; border-bottom: 1px solid #111; display: grid; grid-template-columns: 12px 1fr auto; gap: 0.7rem; align-items: start; cursor: pointer; transition: background 0.15s; opacity: 0; transform: translateX(-6px); }
+    .vl-entry:last-child { border-bottom: none; }
+    .vl-entry:hover { background: #111; }
+    .vl-entry--in { opacity: 1; transform: translateX(0); transition: opacity 0.35s, transform 0.35s; }
+    .vl-entry-dot { width: 12px; height: 12px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px rgba(16,185,129,0.4); flex-shrink: 0; margin-top: 2px; }
+    .vl-entry-body { display: flex; flex-direction: column; gap: 0.18rem; overflow: hidden; }
+    .vl-entry-title { font-size: 0.78rem; color: #e5e7eb; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .vl-entry-sub { font-size: 0.63rem; color: #555; font-family: 'SF Mono','Fira Code',monospace; }
+    .vl-entry-detail { font-size: 0.62rem; color: #444; display: none; flex-direction: column; gap: 0.15rem; margin-top: 0.3rem; font-family: monospace; }
+    .vl-entry--expanded .vl-entry-detail { display: flex; }
+    .vl-entry-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.22rem; }
+    .vl-badge { font-size: 0.58rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; white-space: nowrap; }
+    .vl-badge--ready { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.22); }
+    .vl-badge--new { background: rgba(26,86,232,0.12); color: #6b8ff5; border: 1px solid rgba(26,86,232,0.25); }
+    .vl-cost { font-size: 0.64rem; color: #666; font-family: monospace; }
+    .vl-footer { padding: 0.6rem 1rem; border-top: 1px solid #161616; }
+    .vl-footer-link { font-size: 0.68rem; color: #444; cursor: default; }
+    .vl-footer-link:hover { color: #888; transition: color 0.2s; }
 
     /* ══════════════════════════════════════════
        REDESIGN: GUARANTEE V2 — Statement section
@@ -2030,8 +2044,8 @@
     @media(max-width: 960px) {
       .about-grid-v2 { grid-template-columns: 1fr; gap: 3rem; }
       .about-visual-v2 { order: -1; }
-      .how-v2-steps { grid-template-columns: 1fr; }
-      .how-v2-connector { display: none; }
+      .how-v2-body { grid-template-columns: 1fr; }
+      .how-v2-left { position: static; }
       .signup-v2-grid { grid-template-columns: 1fr; gap: 3rem; }
       .stats-bar-v2-grid { grid-template-columns: repeat(2, 1fr); }
       .stats-bar-v2-item:nth-child(2) { border-right: none; }
@@ -2053,7 +2067,8 @@
       .lp-guarantee-v2 { padding: 3rem 0; }
       .lp-signup-v2 { padding: 3rem 0; }
       /* How v2 steps — móvil */
-      .how-v2-step { padding: 1.5rem; }
+      .how-v2-step-v { padding: 1.2rem 1.2rem; }
+      .how-v2-step-v:hover { transform: none; }
       .how-v2-title { font-size: clamp(1.6rem, 5vw, 2.2rem); }
       /* Servicios v2 — una columna en móvil */
       .svc-v2-cards { grid-template-columns: 1fr; }
@@ -2628,60 +2643,23 @@
         </div>
         <h3>Historial de mantenimiento</h3>
         <p>Accede a un dashboard personal con el registro exacto de cada servicio. Qué se hizo, cuándo, quién lo realizó y cuánto te costó — todo en un solo lugar.</p>
-        <div class="mw-wrap">
-          <div class="match-widget" id="match-widget">
-            <div class="mw-header">
-              <span class="mw-header-dot mw-dot-red"></span>
-              <span class="mw-header-dot mw-dot-yellow"></span>
-              <span class="mw-header-dot mw-dot-green"></span>
-              <span class="mw-header-title">Thruver · Asignación automática</span>
-              <span class="mw-live-badge"><span class="mw-live-pulse"></span>En vivo</span>
+        <div class="vl-wrap">
+          <div class="vl-panel" id="vl-panel">
+            <div class="vl-header">
+              <span class="vl-header-dot vl-dot-r"></span>
+              <span class="vl-header-dot vl-dot-y"></span>
+              <span class="vl-header-dot vl-dot-g"></span>
+              <span class="vl-header-title">~/thruver/historial-servicios</span>
+              <span class="vl-sync"><span class="vl-sync-dot"></span>sync</span>
             </div>
-            <div class="mw-body">
-              <div class="mw-step" id="mw-step-request">
-                <div class="mw-req-tag" id="mw-req-tag"></div>
-                <div class="mw-req-row">
-                  <div class="mw-req-icon" id="mw-req-icon"></div>
-                  <div>
-                    <div class="mw-req-title" id="mw-req-title"></div>
-                    <div class="mw-req-meta" id="mw-req-meta"></div>
-                  </div>
-                  <div class="mw-req-badge" id="mw-req-badge"></div>
-                </div>
-              </div>
-              <div class="mw-step mw-step--hidden" id="mw-step-search">
-                <div class="mw-search-label" id="mw-search-label">Analizando técnicos disponibles...</div>
-                <div class="mw-bar-wrap"><div class="mw-bar-fill" id="mw-bar-fill"></div></div>
-                <div class="mw-filters">
-                  <span class="mw-filter" id="mwf-cert">✓ Certificado</span>
-                  <span class="mw-filter" id="mwf-prox">✓ Cercanía</span>
-                  <span class="mw-filter" id="mwf-rat">✓ Calificación</span>
-                </div>
-              </div>
-              <div class="mw-step mw-step--hidden" id="mw-step-list">
-                <div class="mw-list-label">Mejores coincidencias</div>
-                <div class="mw-candidates" id="mw-candidates"></div>
-              </div>
-              <div class="mw-step mw-step--hidden" id="mw-step-done">
-                <div class="mw-done-ring" id="mw-done-ring">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-                <div class="mw-done-text">
-                  <div class="mw-done-title" id="mw-done-title">Técnico asignado</div>
-                  <div class="mw-done-sub" id="mw-done-sub"></div>
-                </div>
-              </div>
+            <div class="vl-meta">
+              <span class="vl-branch">main</span>
+              <span class="vl-sep">·</span>
+              <span class="vl-total" id="vl-total">4 servicios · $4,430 total</span>
             </div>
-            <div class="mw-footer">
-              <div class="mw-timeline">
-                <div class="mw-tl-step" id="mw-tl-0"><span>Solicitud</span></div>
-                <div class="mw-tl-line" id="mw-tl-line-0"></div>
-                <div class="mw-tl-step" id="mw-tl-1"><span>Búsqueda</span></div>
-                <div class="mw-tl-line" id="mw-tl-line-1"></div>
-                <div class="mw-tl-step" id="mw-tl-2"><span>Selección</span></div>
-                <div class="mw-tl-line" id="mw-tl-line-2"></div>
-                <div class="mw-tl-step" id="mw-tl-3"><span>Asignado</span></div>
-              </div>
+            <div class="vl-log" id="vl-log"></div>
+            <div class="vl-footer">
+              <span class="vl-footer-link">Ver historial completo →</span>
             </div>
           </div>
         </div>
@@ -2729,53 +2707,125 @@
       <h2 class="how-v2-title">Tres pasos.<br>Sin complicaciones.</h2>
       <p class="how-v2-subtitle">De solicitud a trabajo terminado — sin llamadas, sin incertidumbre, sin sorpresas en el precio.</p>
     </div>
-    <div class="how-v2-steps">
+    <div class="how-v2-body">
 
-      <div class="how-v2-step">
-        <span class="how-v2-step-num">01</span>
-        <div class="how-v2-step-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-          </svg>
+      <!-- LEFT: Match en vivo -->
+      <div class="how-v2-left">
+        <div class="how-v2-widget-label">Paso 02 — asignación en tiempo real</div>
+        <div class="match-widget" id="how-match-widget">
+          <div class="mw-header">
+            <span class="mw-header-dot mw-dot-red"></span>
+            <span class="mw-header-dot mw-dot-yellow"></span>
+            <span class="mw-header-dot mw-dot-green"></span>
+            <span class="mw-header-title">Thruver · Asignación automática</span>
+            <span class="mw-live-badge"><span class="mw-live-pulse"></span>En vivo</span>
+          </div>
+          <div class="mw-body">
+            <div class="mw-step" id="hmw-step-request">
+              <div class="mw-req-tag" id="hmw-req-tag"></div>
+              <div class="mw-req-row">
+                <div class="mw-req-icon" id="hmw-req-icon"></div>
+                <div>
+                  <div class="mw-req-title" id="hmw-req-title"></div>
+                  <div class="mw-req-meta" id="hmw-req-meta"></div>
+                </div>
+                <div class="mw-req-badge" id="hmw-req-badge"></div>
+              </div>
+            </div>
+            <div class="mw-step mw-step--hidden" id="hmw-step-search">
+              <div class="mw-search-label" id="hmw-search-label">Analizando técnicos disponibles...</div>
+              <div class="mw-bar-wrap"><div class="mw-bar-fill" id="hmw-bar-fill"></div></div>
+              <div class="mw-filters">
+                <span class="mw-filter" id="hmwf-cert">✓ Certificado</span>
+                <span class="mw-filter" id="hmwf-prox">✓ Cercanía</span>
+                <span class="mw-filter" id="hmwf-rat">✓ Calificación</span>
+              </div>
+            </div>
+            <div class="mw-step mw-step--hidden" id="hmw-step-list">
+              <div class="mw-list-label">Mejores coincidencias</div>
+              <div class="mw-candidates" id="hmw-candidates"></div>
+            </div>
+            <div class="mw-step mw-step--hidden" id="hmw-step-done">
+              <div class="mw-done-ring" id="hmw-done-ring">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <div class="mw-done-text">
+                <div class="mw-done-title" id="hmw-done-title">Técnico asignado</div>
+                <div class="mw-done-sub" id="hmw-done-sub"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mw-footer">
+            <div class="mw-timeline">
+              <div class="mw-tl-step" id="hmw-tl-0"><span>Solicitud</span></div>
+              <div class="mw-tl-line" id="hmw-tl-line-0"></div>
+              <div class="mw-tl-step" id="hmw-tl-1"><span>Búsqueda</span></div>
+              <div class="mw-tl-line" id="hmw-tl-line-1"></div>
+              <div class="mw-tl-step" id="hmw-tl-2"><span>Selección</span></div>
+              <div class="mw-tl-line" id="hmw-tl-line-2"></div>
+              <div class="mw-tl-step" id="hmw-tl-3"><span>Asignado</span></div>
+            </div>
+          </div>
         </div>
-        <h3>Solicita tu servicio</h3>
-        <p>Dinos qué necesitas — plomería, electricidad, limpieza. Elige fecha y horario. En minutos, no en llamadas.</p>
       </div>
 
-      <div class="how-v2-connector">
-        <div class="how-v2-arrow"></div>
-      </div>
+      <!-- RIGHT: Steps vertical -->
+      <div class="how-v2-right">
 
-      <div class="how-v2-step">
-        <span class="how-v2-step-num">02</span>
-        <div class="how-v2-step-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
+        <div class="how-v2-step-v">
+          <div class="how-v2-step-v-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </div>
+          <div class="how-v2-step-v-body">
+            <div class="how-v2-step-v-head">
+              <span class="how-v2-step-v-num">01</span>
+              <h3>Solicita tu servicio</h3>
+            </div>
+            <p>Dinos qué necesitas — plomería, electricidad, limpieza. Elige fecha y horario. En minutos, no en llamadas.</p>
+          </div>
         </div>
-        <h3>Asignamos al técnico</h3>
-        <p>Thruver conecta tu solicitud con el profesional verificado en tu zona. Nosotros garantizamos el estándar.</p>
-      </div>
 
-      <div class="how-v2-connector">
-        <div class="how-v2-arrow"></div>
-      </div>
+        <div class="how-v2-conn-v"></div>
 
-      <div class="how-v2-step">
-        <span class="how-v2-step-num">03</span>
-        <div class="how-v2-step-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
+        <div class="how-v2-step-v">
+          <div class="how-v2-step-v-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+          <div class="how-v2-step-v-body">
+            <div class="how-v2-step-v-head">
+              <span class="how-v2-step-v-num">02</span>
+              <h3>Asignamos al técnico</h3>
+            </div>
+            <p>Thruver conecta tu solicitud con el profesional verificado en tu zona. Nosotros garantizamos el estándar.</p>
+          </div>
         </div>
-        <h3>Trabajo garantizado</h3>
-        <p>El técnico llega identificado, realiza el servicio y tú lo calificas. Si no queda bien, lo volvemos a hacer.</p>
-      </div>
 
+        <div class="how-v2-conn-v"></div>
+
+        <div class="how-v2-step-v">
+          <div class="how-v2-step-v-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <div class="how-v2-step-v-body">
+            <div class="how-v2-step-v-head">
+              <span class="how-v2-step-v-num">03</span>
+              <h3>Trabajo garantizado</h3>
+            </div>
+            <p>El técnico llega identificado, realiza el servicio y tú lo calificas. Si no queda bien, lo volvemos a hacer.</p>
+          </div>
+        </div>
+
+      </div>
     </div>
   </div>
 </section>
@@ -5997,118 +6047,89 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 </script>
 
-<!-- ── Match en vivo animation (card 02) ── -->
+<!-- ── Match widget — Cómo funciona (left col) ── -->
 <script>
 (function(){
   var SCENARIOS = [
     { emoji:'🔧', service:'Plomería', meta:'Culiacán Norte · Urgente', badge:'urgent', badgeText:'Urgente',
-      techs:[{i:'JM',n:'J. Morales',r:'⭐ 4.9',d:'2.1 km'},{i:'CR',n:'C. Ramos',r:'⭐ 4.7',d:'3.8 km'},{i:'AL',n:'A. López',r:'⭐ 4.8',d:'5.2 km'}],
-      time:'1.8s' },
+      techs:[{i:'JM',n:'J. Morales',r:'⭐ 4.9',d:'2.1 km'},{i:'CR',n:'C. Ramos',r:'⭐ 4.7',d:'3.8 km'},{i:'AL',n:'A. López',r:'⭐ 4.8',d:'5.2 km'}], time:'1.8s' },
     { emoji:'⚡', service:'Electricidad', meta:'Culiacán Centro · Normal', badge:'normal', badgeText:'Programado',
-      techs:[{i:'DH',n:'D. Herrera',r:'⭐ 5.0',d:'1.7 km'},{i:'MG',n:'M. García',r:'⭐ 4.8',d:'2.9 km'},{i:'LS',n:'L. Sánchez',r:'⭐ 4.6',d:'4.1 km'}],
-      time:'2.1s' },
+      techs:[{i:'DH',n:'D. Herrera',r:'⭐ 5.0',d:'1.7 km'},{i:'MG',n:'M. García',r:'⭐ 4.8',d:'2.9 km'},{i:'LS',n:'L. Sánchez',r:'⭐ 4.6',d:'4.1 km'}], time:'2.1s' },
     { emoji:'📷', service:'CCTV / Cámaras', meta:'Culiacán Sur · Urgente', badge:'urgent', badgeText:'Urgente',
-      techs:[{i:'RA',n:'R. Acosta',r:'⭐ 4.9',d:'0.9 km'},{i:'VM',n:'V. Meza',r:'⭐ 4.7',d:'2.4 km'},{i:'OC',n:'O. Castillo',r:'⭐ 4.8',d:'3.6 km'}],
-      time:'1.4s' },
+      techs:[{i:'RA',n:'R. Acosta',r:'⭐ 4.9',d:'0.9 km'},{i:'VM',n:'V. Meza',r:'⭐ 4.7',d:'2.4 km'},{i:'OC',n:'O. Castillo',r:'⭐ 4.8',d:'3.6 km'}], time:'1.4s' },
     { emoji:'📡', service:'Redes / WiFi', meta:'Culiacán Nte · Normal', badge:'normal', badgeText:'Programado',
-      techs:[{i:'EL',n:'E. Leal',r:'⭐ 4.8',d:'1.2 km'},{i:'NR',n:'N. Reyes',r:'⭐ 4.9',d:'2.0 km'},{i:'AR',n:'A. Ruiz',r:'⭐ 4.7',d:'3.3 km'}],
-      time:'2.4s' },
+      techs:[{i:'EL',n:'E. Leal',r:'⭐ 4.8',d:'1.2 km'},{i:'NR',n:'N. Reyes',r:'⭐ 4.9',d:'2.0 km'},{i:'AR',n:'A. Ruiz',r:'⭐ 4.7',d:'3.3 km'}], time:'2.4s' },
   ];
+  var P = 'hmw';
   var el = {
-    reqTag:    document.getElementById('mw-req-tag'),
-    reqIcon:   document.getElementById('mw-req-icon'),
-    reqTitle:  document.getElementById('mw-req-title'),
-    reqMeta:   document.getElementById('mw-req-meta'),
-    reqBadge:  document.getElementById('mw-req-badge'),
-    barFill:   document.getElementById('mw-bar-fill'),
-    srLabel:   document.getElementById('mw-search-label'),
-    fCert:     document.getElementById('mwf-cert'),
-    fProx:     document.getElementById('mwf-prox'),
-    fRat:      document.getElementById('mwf-rat'),
-    candidates:document.getElementById('mw-candidates'),
-    doneTitle: document.getElementById('mw-done-title'),
-    doneSub:   document.getElementById('mw-done-sub'),
-    doneRing:  document.getElementById('mw-done-ring'),
-    stepReq:   document.getElementById('mw-step-request'),
-    stepSrch:  document.getElementById('mw-step-search'),
-    stepList:  document.getElementById('mw-step-list'),
-    stepDone:  document.getElementById('mw-step-done'),
-    tl:        [0,1,2,3].map(function(i){ return document.getElementById('mw-tl-'+i); }),
-    tlLine:    [0,1,2].map(function(i){ return document.getElementById('mw-tl-line-'+i); }),
+    reqTag:    document.getElementById(P+'-req-tag'),
+    reqIcon:   document.getElementById(P+'-req-icon'),
+    reqTitle:  document.getElementById(P+'-req-title'),
+    reqMeta:   document.getElementById(P+'-req-meta'),
+    reqBadge:  document.getElementById(P+'-req-badge'),
+    barFill:   document.getElementById(P+'-bar-fill'),
+    srLabel:   document.getElementById(P+'-search-label'),
+    fCert:     document.getElementById(P+'f-cert'),
+    fProx:     document.getElementById(P+'f-prox'),
+    fRat:      document.getElementById(P+'f-rat'),
+    candidates:document.getElementById(P+'-candidates'),
+    doneTitle: document.getElementById(P+'-done-title'),
+    doneSub:   document.getElementById(P+'-done-sub'),
+    doneRing:  document.getElementById(P+'-done-ring'),
+    stepReq:   document.getElementById(P+'-step-request'),
+    stepSrch:  document.getElementById(P+'-step-search'),
+    stepList:  document.getElementById(P+'-step-list'),
+    stepDone:  document.getElementById(P+'-step-done'),
+    tl:        [0,1,2,3].map(function(i){ return document.getElementById(P+'-tl-'+i); }),
+    tlLine:    [0,1,2].map(function(i){ return document.getElementById(P+'-tl-line-'+i); }),
   };
   if (!el.reqTag) return;
-
   var idx = 0, paused = false;
-  document.getElementById('match-widget').addEventListener('mouseenter', function(){ paused = true; });
-  document.getElementById('match-widget').addEventListener('mouseleave', function(){ paused = false; });
-
+  var widget = document.getElementById('how-match-widget');
+  if (widget) { widget.addEventListener('mouseenter', function(){ paused=true; }); widget.addEventListener('mouseleave', function(){ paused=false; }); }
   function show(s){ s.classList.remove('mw-step--hidden'); }
   function hide(s){ s.classList.add('mw-step--hidden'); }
   function tlActive(i){ el.tl[i].classList.add('mw-tl-step--active'); }
   function tlDone(i){ el.tl[i].classList.remove('mw-tl-step--active'); el.tl[i].classList.add('mw-tl-step--done'); el.tlLine[i] && el.tlLine[i].classList.add('mw-tl-line--done'); }
   function tlReset(){ el.tl.forEach(function(t){ t.className='mw-tl-step'; }); el.tlLine.forEach(function(l){ l.className='mw-tl-line'; }); }
   function delay(ms, fn){ return setTimeout(fn, ms); }
-
   function run(){
     var sc = SCENARIOS[idx % SCENARIOS.length]; idx++;
-    [el.stepSrch, el.stepList, el.stepDone].forEach(hide);
-    show(el.stepReq);
-    el.barFill.style.width = '0%'; el.barFill.style.transition = 'none';
+    [el.stepSrch,el.stepList,el.stepDone].forEach(hide); show(el.stepReq);
+    el.barFill.style.width='0%'; el.barFill.style.transition='none';
     [el.fCert,el.fProx,el.fRat].forEach(function(f){ f.classList.remove('mw-filter--active'); });
-    el.doneRing.classList.remove('mw-done-ring--pop');
-    tlReset();
-    el.reqTag.textContent = '📋 Nueva solicitud recibida';
-    el.reqIcon.textContent = sc.emoji;
-    el.reqTitle.textContent = sc.service;
-    el.reqMeta.textContent = sc.meta;
-    el.reqBadge.textContent = sc.badgeText;
-    el.reqBadge.className = 'mw-req-badge mw-req-badge--' + sc.badge;
+    el.doneRing.classList.remove('mw-done-ring--pop'); tlReset();
+    el.reqTag.textContent='📋 Nueva solicitud recibida'; el.reqIcon.textContent=sc.emoji;
+    el.reqTitle.textContent=sc.service; el.reqMeta.textContent=sc.meta;
+    el.reqBadge.textContent=sc.badgeText; el.reqBadge.className='mw-req-badge mw-req-badge--'+sc.badge;
     tlActive(0);
-
     delay(1200, function(){
-      if(paused){ delay(400, run); return; }
-      tlDone(0); tlActive(1);
-      show(el.stepSrch);
-      el.srLabel.textContent = 'Analizando técnicos disponibles...';
-      requestAnimationFrame(function(){
-        el.barFill.style.transition = 'width 2.2s cubic-bezier(0.4,0,0.2,1)';
-        el.barFill.style.width = '100%';
-      });
+      if(paused){ delay(400,run); return; }
+      tlDone(0); tlActive(1); show(el.stepSrch);
+      el.srLabel.textContent='Analizando técnicos disponibles...';
+      requestAnimationFrame(function(){ el.barFill.style.transition='width 2.2s cubic-bezier(0.4,0,0.2,1)'; el.barFill.style.width='100%'; });
       delay(500,  function(){ el.fCert.classList.add('mw-filter--active'); });
       delay(1000, function(){ el.fProx.classList.add('mw-filter--active'); });
-      delay(1500, function(){ el.fRat.classList.add('mw-filter--active'); el.srLabel.textContent = 'Mejores técnicos encontrados ✓'; });
-
+      delay(1500, function(){ el.fRat.classList.add('mw-filter--active'); el.srLabel.textContent='Mejores técnicos encontrados ✓'; });
       delay(2400, function(){
-        if(paused){ delay(400, run); return; }
-        tlDone(1); tlActive(2);
-        hide(el.stepSrch); show(el.stepList);
-        el.candidates.innerHTML = '';
-        sc.techs.forEach(function(t, i){
-          var card = document.createElement('div');
-          card.className = 'mw-candidate';
-          card.innerHTML =
-            '<div class="mw-cand-avatar">'+t.i+'</div>'+
-            '<span class="mw-cand-name">'+t.n+'</span>'+
-            '<span class="mw-cand-rating">'+t.r+'</span>'+
-            '<span class="mw-cand-dist">📍 '+t.d+'</span>'+
-            '<div class="mw-cand-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
-          el.candidates.appendChild(card);
-          delay(i * 280, function(){ card.classList.add('mw-candidate--visible'); });
+        if(paused){ delay(400,run); return; }
+        tlDone(1); tlActive(2); hide(el.stepSrch); show(el.stepList);
+        el.candidates.innerHTML='';
+        sc.techs.forEach(function(t,i){
+          var c=document.createElement('div'); c.className='mw-candidate';
+          c.innerHTML='<div class="mw-cand-avatar">'+t.i+'</div><span class="mw-cand-name">'+t.n+'</span><span class="mw-cand-rating">'+t.r+'</span><span class="mw-cand-dist">📍 '+t.d+'</span><div class="mw-cand-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
+          el.candidates.appendChild(c);
+          delay(i*280, function(){ c.classList.add('mw-candidate--visible'); });
         });
         delay(1100, function(){
-          if(paused){ delay(400, run); return; }
-          var cards = el.candidates.querySelectorAll('.mw-candidate');
-          if(cards[0]){
-            cards[0].classList.add('mw-candidate--selected');
-            var chk = cards[0].querySelector('.mw-cand-check');
-            if(chk) chk.classList.add('mw-cand-check--done');
-          }
+          if(paused){ delay(400,run); return; }
+          var cards=el.candidates.querySelectorAll('.mw-candidate');
+          if(cards[0]){ cards[0].classList.add('mw-candidate--selected'); var chk=cards[0].querySelector('.mw-cand-check'); if(chk) chk.classList.add('mw-cand-check--done'); }
           delay(500, function(){
-            if(paused){ delay(400, run); return; }
-            tlDone(2); tlActive(3);
-            hide(el.stepList); show(el.stepDone);
-            el.doneTitle.textContent = sc.techs[0].n + ' asignado';
-            el.doneSub.textContent = 'En camino · ' + sc.techs[0].d + ' · Asignación: ' + sc.time;
+            if(paused){ delay(400,run); return; }
+            tlDone(2); tlActive(3); hide(el.stepList); show(el.stepDone);
+            el.doneTitle.textContent=sc.techs[0].n+' asignado';
+            el.doneSub.textContent='En camino · '+sc.techs[0].d+' · Asignación: '+sc.time;
             requestAnimationFrame(function(){ el.doneRing.classList.add('mw-done-ring--pop'); });
             delay(500, function(){ tlDone(3); });
             delay(3200, run);
@@ -6118,6 +6139,57 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
   run();
+})();
+</script>
+
+<!-- ── Vercel-style log — card 02 (Historial) ── -->
+<script>
+(function(){
+  var DATA = [
+    { id:'#4a2f1e', s:'Revisión eléctrica',  t:'J. Morales', d:'14 Feb 2025', cost:'$680',   det:['Panel principal revisado','Breakers: OK','Sin fallas detectadas'] },
+    { id:'#b1e4f9', s:'Plomería — cocina',    t:'C. Ramos',   d:'02 Ene 2025', cost:'$450',   det:['Sello lavabo reemplazado','Tubería limpiada','Flujo normalizado'] },
+    { id:'#d9c3ff', s:'Pintura exterior',     t:'A. López',   d:'18 Nov 2024', cost:'$1,200', det:['2 capas fachada','Impermeabilizante','Garantía 12 meses'] },
+    { id:'#a3f7c1', s:'CCTV instalación',     t:'R. Acosta',  d:'05 Oct 2024', cost:'$2,100', det:['4 cámaras instaladas','DVR configurado','Acceso remoto activo'] },
+  ];
+  var log = document.getElementById('vl-log');
+  if (!log) return;
+  var entries = [], cycle = 0;
+  function addEntry(data, isNew) {
+    var div = document.createElement('div');
+    div.className = 'vl-entry';
+    div.innerHTML =
+      '<div class="vl-entry-dot"></div>'+
+      '<div class="vl-entry-body">'+
+        '<span class="vl-entry-title">'+data.s+'</span>'+
+        '<span class="vl-entry-sub">'+data.id+' · '+data.t+' · '+data.d+'</span>'+
+        '<div class="vl-entry-detail">'+data.det.map(function(x){ return '<span>→ '+x+'</span>'; }).join('')+'</div>'+
+      '</div>'+
+      '<div class="vl-entry-right">'+
+        '<span class="vl-badge '+(isNew?'vl-badge--new':'vl-badge--ready')+'">'+(isNew?'● nuevo':'✓ Ready')+'</span>'+
+        '<span class="vl-cost">'+data.cost+'</span>'+
+      '</div>';
+    div.addEventListener('click', function(){ div.classList.toggle('vl-entry--expanded'); });
+    log.insertBefore(div, log.firstChild);
+    requestAnimationFrame(function(){ div.classList.add('vl-entry--in'); });
+    entries.unshift(div);
+    if (isNew) {
+      setTimeout(function(){ var b=div.querySelector('.vl-badge'); if(b){ b.className='vl-badge vl-badge--ready'; b.textContent='✓ Ready'; } }, 2000);
+    }
+    while (entries.length > 3) {
+      var old = entries.pop();
+      old.style.opacity='0'; old.style.transform='translateX(6px)'; old.style.transition='opacity 0.35s,transform 0.35s';
+      setTimeout(function(o){ o.parentNode && o.parentNode.removeChild(o); }, 380, old);
+    }
+  }
+  DATA.slice(0,3).reverse().forEach(function(d,i){ setTimeout(function(){ addEntry(d,false); }, i*220); });
+  setTimeout(function loop(){
+    if(!document.hidden){
+      if(entries[0]){ var b=entries[0].querySelector('.vl-badge'); if(b){ b.className='vl-badge vl-badge--ready'; b.textContent='✓ Ready'; } }
+      cycle=(cycle+1)%DATA.length;
+      addEntry(DATA[cycle], true);
+    }
+    setTimeout(loop, 4500);
+  }, 3200);
 })();
 </script>
 
