@@ -1996,6 +1996,32 @@
     .register-block-v2 .block-tab { color: #9ca3af; border-bottom: 2px solid transparent; }
     .register-block-v2 .block-tab.active { color: #0a0a0a; border-bottom-color: var(--blue); background: #ffffff; }
 
+    /* ══════════════════════════════════════════
+       CUADRÍCULA VERCEL — fondo global
+    ══════════════════════════════════════════ */
+    /* Hero: grid sobre la imagen de fondo */
+    .hero-bg::after { content:''; position:absolute; inset:0; pointer-events:none; background-image: linear-gradient(rgba(255,255,255,0.042) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.042) 1px,transparent 1px); background-size:44px 44px; }
+    /* Secciones claras */
+    .lp-features-dark, .lp-how-v2, .lp-guarantee-v2, .lp-signup-v2 { background-image: linear-gradient(rgba(0,0,0,0.038) 1px,transparent 1px), linear-gradient(90deg,rgba(0,0,0,0.038) 1px,transparent 1px); background-size:44px 44px; }
+    /* Sección casi blanca */
+    .lp-services-v2 { background-image: linear-gradient(rgba(0,0,0,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(0,0,0,0.03) 1px,transparent 1px); background-size:44px 44px; }
+    /* Globe (dark) */
+    .lp-globe { background-image: linear-gradient(rgba(255,255,255,0.042) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.042) 1px,transparent 1px); background-size:44px 44px; }
+
+    /* ══════════════════════════════════════════
+       GLOBE — Red de infraestructura Thruver
+    ══════════════════════════════════════════ */
+    .lp-globe { background-color:#080808; padding:6.5rem 0; position:relative; overflow:hidden; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); }
+    .globe-layout { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
+    .globe-copy { }
+    .globe-title { font-size:clamp(2rem,3.5vw,3rem); font-weight:900; letter-spacing:-0.05em; color:#fff; margin-top:0.8rem; line-height:1.08; }
+    .globe-sub { font-size:0.9rem; color:rgba(255,255,255,0.42); margin-top:0.9rem; line-height:1.75; max-width:400px; }
+    .globe-chips { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.6rem; }
+    .globe-chip { display:flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:0.3rem 0.85rem; font-size:0.72rem; color:rgba(255,255,255,0.6); font-weight:500; }
+    .globe-chip-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .globe-canvas-wrap { display:flex; justify-content:center; align-items:center; }
+    #globe-canvas { display:block; max-width:100%; }
+
     /* Services section V2 enhancements */
     .lp-services-v2 { background: #fafafa; padding: 7rem 0; border-bottom: 1px solid #e5e7eb; }
     .svc-v2-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 2.4rem; }
@@ -2063,6 +2089,9 @@
       /* Secciones v2 — padding móvil */
       .lp-features-dark { padding: 3rem 0 2rem; }
       .lp-how-v2 { padding: 2rem 0 3rem; }
+      .globe-layout { grid-template-columns:1fr; }
+      .globe-canvas-wrap { order:-1; }
+      .lp-globe { padding:3.5rem 0; }
       .lp-services-v2 { padding: 3rem 0; }
       .lp-guarantee-v2 { padding: 3rem 0; }
       .lp-signup-v2 { padding: 3rem 0; }
@@ -2830,14 +2859,27 @@
   </div>
 </section>
 
-<!-- TECH VIDEO -->
-<div class="tech-vid-wrap">
-  <video class="tech-vid" autoplay muted loop playsinline id="techVid">
-    <source src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/tecnicosupervision.mp4" type="video/mp4">
-  </video>
-  <div class="tech-vid-overlay"></div>
-  <p class="tech-vid-caption">Técnicos verificados · Trabajo documentado · Supervisión en tiempo real</p>
-</div>
+<!-- GLOBE — Red Thruver -->
+<section class="lp-globe" id="red-thruver">
+  <div class="lp-inner globe-layout">
+    <div class="globe-copy">
+      <span class="feat-label">Red Thruver</span>
+      <h2 class="globe-title">Infraestructura pensada<br>para tu hogar.</h2>
+      <p class="globe-sub">Una red activa de técnicos verificados, conectando cada servicio de mantenimiento y remodelación con el hogar correcto — en tiempo real.</p>
+      <div class="globe-chips">
+        <div class="globe-chip"><span class="globe-chip-dot" style="background:#1A56E8"></span>Plomería</div>
+        <div class="globe-chip"><span class="globe-chip-dot" style="background:#f59e0b"></span>Electricidad</div>
+        <div class="globe-chip"><span class="globe-chip-dot" style="background:#10b981"></span>Remodelación</div>
+        <div class="globe-chip"><span class="globe-chip-dot" style="background:#8b5cf6"></span>Pintura</div>
+        <div class="globe-chip"><span class="globe-chip-dot" style="background:#ef4444"></span>HVAC / Clima</div>
+        <div class="globe-chip"><span class="globe-chip-dot" style="background:#06b6d4"></span>CCTV / Redes</div>
+      </div>
+    </div>
+    <div class="globe-canvas-wrap">
+      <canvas id="globe-canvas"></canvas>
+    </div>
+  </div>
+</section>
 
 <!-- STATS BAR -->
 <div class="stats-bar-v2">
@@ -6190,6 +6232,159 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     setTimeout(loop, 4500);
   }, 3200);
+})();
+</script>
+
+<!-- ── Globe — Red de infraestructura Thruver ── -->
+<script>
+(function(){
+  var cv = document.getElementById('globe-canvas');
+  if (!cv) return;
+  var ctx = cv.getContext('2d');
+  var dpr = window.devicePixelRatio || 1;
+  var SZ = 480;
+  cv.width = SZ*dpr; cv.height = SZ*dpr;
+  cv.style.width = SZ+'px'; cv.style.height = SZ+'px';
+  ctx.scale(dpr, dpr);
+
+  var CX=SZ/2, CY=SZ/2, R=SZ*0.345, rotY=0, SPEED=0.0022;
+  var raf;
+
+  // Service nodes [lat, lon, color, label]
+  var NODES = [
+    [24.8,-107.4,'#1A56E8','Plomería'],
+    [19.4,-99.1, '#f59e0b','Electricidad'],
+    [20.9,-89.6, '#10b981','Remodelación'],
+    [25.6,-100.3,'#1A56E8','Plomería'],
+    [23.2,-106.4,'#8b5cf6','Pintura'],
+    [17.1,-96.7, '#f59e0b','Electricidad'],
+    [22.2,-100.9,'#10b981','Remodelación'],
+    [29.1,-110.9,'#ef4444','HVAC'],
+    [21.2,-86.8, '#8b5cf6','Pintura'],
+    [16.8,-99.8, '#f59e0b','Electricidad'],
+    [26.0,-111.3,'#06b6d4','CCTV'],
+    [18.5,-97.5, '#1A56E8','Plomería'],
+    [27.5,-109.9,'#10b981','Remodelación'],
+    [15.9,-97.1, '#ef4444','HVAC'],
+  ];
+
+  var ARCS = [[0,3],[1,5],[2,6],[3,7],[4,10],[8,11],[6,12],[9,13]];
+  var arcT = ARCS.map(function(_,i){ return i*0.18; });
+
+  function rad(d){ return d*Math.PI/180; }
+
+  function sph(lat, lon){
+    var ph=rad(90-lat), th=rad(lon)+rotY;
+    return { x:Math.sin(ph)*Math.cos(th), y:Math.cos(ph), z:Math.sin(ph)*Math.sin(th) };
+  }
+
+  function p2d(v){ return { px:CX+R*v.x, py:CY-R*v.y, z:v.z }; }
+
+  function hexRgba(hex,a){
+    var r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);
+    return 'rgba('+r+','+g+','+b+','+a+')';
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,SZ,SZ);
+
+    // Atmosphere
+    var ag=ctx.createRadialGradient(CX,CY,R*0.6,CX,CY,R*1.5);
+    ag.addColorStop(0,'rgba(26,86,232,0.07)');
+    ag.addColorStop(0.6,'rgba(26,86,232,0.02)');
+    ag.addColorStop(1,'transparent');
+    ctx.beginPath(); ctx.arc(CX,CY,R*1.5,0,Math.PI*2); ctx.fillStyle=ag; ctx.fill();
+
+    // Sphere fill
+    var sg=ctx.createRadialGradient(CX-R*0.28,CY-R*0.28,0,CX,CY,R);
+    sg.addColorStop(0,'rgba(26,86,232,0.11)');
+    sg.addColorStop(0.55,'rgba(8,8,12,0.5)');
+    sg.addColorStop(1,'rgba(0,0,0,0.9)');
+    ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2); ctx.fillStyle=sg; ctx.fill();
+
+    // Latitude lines
+    for(var lt=-60;lt<=60;lt+=20){
+      var ph2=rad(90-lt), r2=R*Math.sin(ph2), yp=CY-R*Math.cos(ph2);
+      ctx.beginPath();
+      ctx.ellipse(CX,yp,r2,r2*0.13,0,0,Math.PI*2);
+      ctx.strokeStyle='rgba(255,255,255,0.065)'; ctx.lineWidth=0.5; ctx.stroke();
+    }
+
+    // Longitude lines (visible half)
+    for(var li=0;li<12;li++){
+      var th2=(li*30)*Math.PI/180+rotY;
+      var ca=Math.cos(th2);
+      var al=Math.max(0,ca)*0.13;
+      if(al<0.01) continue;
+      ctx.beginPath();
+      for(var s=0;s<=40;s++){
+        var a=s/40*Math.PI;
+        var px2=CX+R*Math.sin(a)*Math.cos(th2), py2=CY-R*Math.cos(a);
+        s===0?ctx.moveTo(px2,py2):ctx.lineTo(px2,py2);
+      }
+      ctx.strokeStyle='rgba(255,255,255,'+al+')'; ctx.lineWidth=0.5; ctx.stroke();
+    }
+
+    // Compute node 2D positions
+    var npos=NODES.map(function(n){ return p2d(sph(n[0],n[1])); });
+
+    // Arcs
+    ARCS.forEach(function(arc,i){
+      var p1=npos[arc[0]], p2=npos[arc[1]];
+      if(p1.z<-0.15||p2.z<-0.15) return;
+      arcT[i]=(arcT[i]+0.0038)%1.5;
+      var prog=Math.min(arcT[i],1);
+      var mx=(p1.px+p2.px)/2, my=(p1.py+p2.py)/2-R*0.24;
+
+      // Ghost arc
+      ctx.beginPath(); ctx.moveTo(p1.px,p1.py); ctx.quadraticCurveTo(mx,my,p2.px,p2.py);
+      ctx.strokeStyle='rgba(26,86,232,0.1)'; ctx.lineWidth=1; ctx.stroke();
+
+      // Animated portion
+      if(prog>0){
+        var pts=[];
+        for(var t=0;t<=prog;t+=0.02){
+          pts.push([(1-t)*(1-t)*p1.px+2*(1-t)*t*mx+t*t*p2.px,(1-t)*(1-t)*p1.py+2*(1-t)*t*my+t*t*p2.py]);
+        }
+        ctx.beginPath(); ctx.moveTo(pts[0][0],pts[0][1]);
+        for(var j=1;j<pts.length;j++) ctx.lineTo(pts[j][0],pts[j][1]);
+        ctx.strokeStyle='rgba(99,140,255,0.75)'; ctx.lineWidth=1.5; ctx.stroke();
+        if(prog<1&&pts.length){
+          var tip=pts[pts.length-1];
+          ctx.beginPath(); ctx.arc(tip[0],tip[1],2.8,0,Math.PI*2);
+          ctx.fillStyle='#6b9fff'; ctx.fill();
+        }
+      }
+    });
+
+    // Nodes
+    var now=Date.now();
+    npos.forEach(function(p,i){
+      if(p.z<0) return;
+      var n=NODES[i];
+      var alpha=Math.min(1,(p.z+0.05)*5);
+      var pt=((now/1600+i*0.17)%1);
+      // Pulse ring
+      ctx.beginPath(); ctx.arc(p.px,p.py,3.5+pt*13,0,Math.PI*2);
+      ctx.strokeStyle=hexRgba(n[2],(0.35*(1-pt)*alpha)); ctx.lineWidth=1; ctx.stroke();
+      // Core dot
+      ctx.beginPath(); ctx.arc(p.px,p.py,3.8,0,Math.PI*2);
+      ctx.fillStyle=n[2]; ctx.globalAlpha=alpha; ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,0.45)'; ctx.lineWidth=0.8; ctx.stroke();
+      ctx.globalAlpha=1;
+    });
+
+    // Edge ring
+    ctx.beginPath(); ctx.arc(CX,CY,R,0,Math.PI*2);
+    ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=1; ctx.stroke();
+
+    rotY+=SPEED;
+    raf=requestAnimationFrame(draw);
+  }
+
+  // Pause on hidden tab
+  document.addEventListener('visibilitychange',function(){ document.hidden?cancelAnimationFrame(raf):draw(); });
+  draw();
 })();
 </script>
 
