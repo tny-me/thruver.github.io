@@ -1859,40 +1859,28 @@
     .how-v2-conn-v { height: 24px; display: flex; justify-content: center; align-items: stretch; }
     .how-v2-conn-v::after { content: ''; width: 2px; background: #e5e7eb; display: block; }
 
-    /* ── Vercel-style log (card 02) ── */
-    .vl-wrap { margin-top: 2rem; }
-    .vl-panel { background: #0a0a0a; border-radius: 14px; border: 1px solid #222; overflow: hidden; }
-    .vl-header { display: flex; align-items: center; gap: 0.45rem; padding: 0.7rem 1rem; border-bottom: 1px solid #1a1a1a; }
-    .vl-header-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .vl-dot-r { background: #ff5f57; } .vl-dot-y { background: #febc2e; } .vl-dot-g { background: #28c840; }
-    .vl-header-title { font-size: 0.7rem; color: #555; font-weight: 500; flex: 1; margin-left: 0.3rem; font-family: 'SF Mono','Fira Code',monospace; }
-    .vl-sync { display: flex; align-items: center; gap: 0.3rem; font-size: 0.62rem; color: #10b981; font-weight: 700; letter-spacing: 0.08em; }
-    .vl-sync-dot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; animation: pulse 2s ease-in-out infinite; }
-    .vl-meta { padding: 0.55rem 1rem; border-bottom: 1px solid #161616; display: flex; align-items: center; gap: 0.5rem; }
-    .vl-branch { font-size: 0.65rem; background: #1a1a1a; color: #888; padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid #2a2a2a; font-family: monospace; }
-    .vl-sep { color: #333; font-size: 0.7rem; }
-    .vl-total { font-size: 0.68rem; color: #555; font-family: monospace; }
-    .vl-log { min-height: 148px; }
-    .vl-entry { padding: 0.6rem 1rem; border-bottom: 1px solid #111; display: grid; grid-template-columns: 12px 1fr auto; gap: 0.7rem; align-items: start; cursor: pointer; transition: background 0.15s; opacity: 0; transform: translateX(-6px); }
-    .vl-entry:last-child { border-bottom: none; }
-    .vl-entry:hover { background: #111; }
-    .vl-entry--in { opacity: 1; transform: translateX(0); transition: opacity 0.35s, transform 0.35s; }
-    .vl-entry-dot { width: 12px; height: 12px; border-radius: 50%; background: #10b981; box-shadow: 0 0 6px rgba(16,185,129,0.4); flex-shrink: 0; margin-top: 2px; }
-    .vl-entry-body { display: flex; flex-direction: column; gap: 0.18rem; overflow: hidden; }
-    .vl-entry-title { font-size: 0.78rem; color: #e5e7eb; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .vl-entry-sub { font-size: 0.63rem; color: #555; font-family: 'SF Mono','Fira Code',monospace; }
-    .vl-entry-detail { font-size: 0.62rem; color: #444; display: none; flex-direction: column; gap: 0.15rem; margin-top: 0.3rem; font-family: monospace; }
-    .vl-entry--expanded .vl-entry-detail { display: flex; }
-    .vl-entry-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.22rem; }
-    .vl-badge { font-size: 0.58rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 4px; white-space: nowrap; }
-    .vl-badge--ready { background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.22); }
-    .vl-badge--new { background: rgba(26,86,232,0.12); color: #6b8ff5; border: 1px solid rgba(26,86,232,0.25); }
-    .vl-cost { font-size: 0.64rem; color: #666; font-family: monospace; }
-    .vl-footer { padding: 0.6rem 1rem; border-top: 1px solid #161616; }
-    .vl-footer-link { font-size: 0.68rem; color: #444; cursor: default; }
-    .vl-footer-link:hover { color: #888; transition: color 0.2s; }
-    .vl-entry-open-btn { font-size: 0.58rem; color: #555; border: 1px solid #222; border-radius: 4px; padding: 0.12rem 0.45rem; cursor: pointer; margin-top: 0.18rem; white-space: nowrap; transition: color 0.15s, border-color 0.15s; background: transparent; font-family: inherit; }
-    .vl-entry:hover .vl-entry-open-btn { color: #9ca3af; border-color: #333; }
+    /* ── Historial widget (card 02) ── */
+    .hs-wrap { margin-top: 1.8rem; }
+    .hs-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; overflow: hidden; }
+    .hs-card-header { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: space-between; }
+    .hs-card-title { font-size: 0.65rem; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.08em; }
+    .hs-card-badge { font-size: 0.58rem; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.18); border-radius: 20px; padding: 0.12rem 0.55rem; display: flex; align-items: center; gap: 0.3rem; }
+    .hs-card-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #10b981; animation: pulse 2s ease-in-out infinite; }
+    .hs-row { display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; cursor: pointer; transition: background 0.18s; border-bottom: 1px solid rgba(255,255,255,0.04); position: relative; }
+    .hs-row:last-child { border-bottom: none; }
+    .hs-row:hover { background: rgba(255,255,255,0.04); }
+    .hs-row.hs-demo-active { background: rgba(26,86,232,0.07); }
+    .hs-row-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
+    .hs-row-info { flex: 1; min-width: 0; }
+    .hs-row-name { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hs-row-meta { font-size: 0.62rem; color: #4b5563; margin-top: 0.12rem; }
+    .hs-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; flex-shrink: 0; }
+    .hs-row-cost { font-size: 0.72rem; font-weight: 600; color: #94a3b8; }
+    .hs-row-open { font-size: 0.58rem; color: #4b5563; border: 1px solid rgba(255,255,255,0.08); border-radius: 5px; padding: 0.1rem 0.4rem; transition: color 0.15s, border-color 0.15s; white-space: nowrap; }
+    .hs-row:hover .hs-row-open, .hs-row.hs-demo-active .hs-row-open { color: #6b8ff5; border-color: rgba(107,143,245,0.3); }
+    /* cursor demo ripple */
+    .hs-cursor { position: absolute; width: 18px; height: 18px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 2; }
+    .hs-cursor svg { filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5)); }
 
     /* ── Reporte técnico modal ── */
     .tr-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(4px); z-index: 9900; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.22s; }
@@ -2754,23 +2742,34 @@
         </div>
         <h3>Historial de mantenimiento</h3>
         <p>Accede a un dashboard personal con el registro exacto de cada servicio. Qué se hizo, cuándo, quién lo realizó y cuánto te costó — todo en un solo lugar.</p>
-        <div class="vl-wrap">
-          <div class="vl-panel" id="vl-panel">
-            <div class="vl-header">
-              <span class="vl-header-dot vl-dot-r"></span>
-              <span class="vl-header-dot vl-dot-y"></span>
-              <span class="vl-header-dot vl-dot-g"></span>
-              <span class="vl-header-title">~/thruver/historial-servicios</span>
-              <span class="vl-sync"><span class="vl-sync-dot"></span>sync</span>
+        <div class="hs-wrap">
+          <div class="hs-card">
+            <div class="hs-card-header">
+              <span class="hs-card-title">Mis servicios</span>
+              <span class="hs-card-badge">Al día</span>
             </div>
-            <div class="vl-meta">
-              <span class="vl-branch">main</span>
-              <span class="vl-sep">·</span>
-              <span class="vl-total" id="vl-total">4 servicios · $4,430 total</span>
+            <div class="hs-row" id="hs-row-0" data-key="0">
+              <div class="hs-row-icon" style="background:rgba(26,86,232,0.12);">⚡</div>
+              <div class="hs-row-info">
+                <div class="hs-row-name">Revisión eléctrica</div>
+                <div class="hs-row-meta">J. Morales · 14 Feb 2025</div>
+              </div>
+              <div class="hs-row-right">
+                <span class="hs-row-cost">$680</span>
+                <span class="hs-row-open">Ver reporte →</span>
+              </div>
+              <svg class="hs-cursor" id="hs-cursor" width="18" height="18" viewBox="0 0 18 18"><path d="M2 2l10 5-5 1-3 7z" fill="white" stroke="#1A56E8" stroke-width="1"/></svg>
             </div>
-            <div class="vl-log" id="vl-log"></div>
-            <div class="vl-footer">
-              <span class="vl-footer-link">Ver historial completo →</span>
+            <div class="hs-row" id="hs-row-1" data-key="3">
+              <div class="hs-row-icon" style="background:rgba(16,185,129,0.1);">📷</div>
+              <div class="hs-row-info">
+                <div class="hs-row-name">CCTV instalación</div>
+                <div class="hs-row-meta">R. Acosta · 05 Oct 2024</div>
+              </div>
+              <div class="hs-row-right">
+                <span class="hs-row-cost">$2,100</span>
+                <span class="hs-row-open">Ver reporte →</span>
+              </div>
             </div>
           </div>
         </div>
@@ -6266,10 +6265,9 @@ document.addEventListener('DOMContentLoaded', function () {
 })();
 </script>
 
-<!-- ── Vercel-style log — card 02 (Historial) ── -->
+<!-- ── Historial widget — card 02 ── -->
 <script>
 (function(){
-  // DATA extendida con reporte técnico completo
   var DATA = [
     {
       id:'#4a2f1e', s:'Revisión eléctrica', t:'J. Morales', tFull:'José Morales', tSpec:'Electricista certificado · 6 años exp.', tRating:'★★★★★ 4.9',
@@ -6369,10 +6367,6 @@ document.addEventListener('DOMContentLoaded', function () {
     },
   ];
 
-  var log = document.getElementById('vl-log');
-  if (!log) return;
-  var entries = [], cycle = 0;
-
   // ── Modal helpers ──
   var overlay = document.getElementById('tr-overlay');
   var closeBtn = document.getElementById('tr-close');
@@ -6381,8 +6375,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('tr-title').textContent = data.s;
     document.getElementById('tr-meta').textContent = data.id + ' · ' + data.t + ' · ' + data.d;
     document.getElementById('tr-folio').textContent = 'Folio THR-' + data.id.replace('#','').toUpperCase() + '-' + data.d.replace(/ /g,'-');
-
-    // status bar
     var sb = document.getElementById('tr-statusbar');
     sb.innerHTML =
       '<div class="tr-stat"><span class="tr-stat-label">Estado</span><span class="tr-stat-value green">✓ Completado</span></div>'+
@@ -6392,14 +6384,9 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="tr-stat"><span class="tr-stat-label">Técnico</span><span class="tr-stat-value">'+data.t+'</span></div>'+
       '<div class="tr-divider-v"></div>'+
       '<div class="tr-stat"><span class="tr-stat-label">Fecha</span><span class="tr-stat-value">'+data.d+'</span></div>';
-
-    // body
     var body = document.getElementById('tr-body');
-    // diagnóstico
     var workItems = data.trabajo.map(function(w){ return '<div class="tr-work-item"><div class="tr-work-bullet"></div><span class="tr-work-text">'+w+'</span></div>'; }).join('');
-    // partes
     var partRows = data.partes.map(function(p){ return '<tr><td><div class="tr-part-name">'+p.n+'</div><div class="tr-part-brand">'+p.marca+'</div></td><td style="text-align:center;color:#555;font-size:0.68rem;">×'+p.qty+'</td><td>'+p.precio+'</td></tr>'; }).join('');
-    // vida útil
     var lifeCards = data.vida.map(function(v){
       return '<div class="tr-life-item">'+
         '<span class="tr-life-name">'+v.eq+'</span>'+
@@ -6410,56 +6397,15 @@ document.addEventListener('DOMContentLoaded', function () {
         '</div>'+
       '</div>';
     }).join('');
-    // costo
     var partTotal = data.partes.reduce(function(acc,p){ return acc + parseInt(p.precio.replace(/[$,]/g,'')); }, 0);
-
     body.innerHTML =
-      // diagnóstico
-      '<div class="tr-section">'+
-        '<div class="tr-section-title">Diagnóstico</div>'+
-        '<p style="font-size:0.72rem;color:#6b7280;line-height:1.6;margin:0;">'+data.diagnostico+'</p>'+
-      '</div>'+
-      // trabajo
-      '<div class="tr-section">'+
-        '<div class="tr-section-title">Trabajo realizado</div>'+
-        '<div class="tr-work-list">'+workItems+'</div>'+
-      '</div>'+
-      // piezas
-      '<div class="tr-section">'+
-        '<div class="tr-section-title">Piezas y refacciones</div>'+
-        '<table class="tr-parts-table"><thead><tr><th>Pieza / Material</th><th style="text-align:center">Qty</th><th style="text-align:right">Precio</th></tr></thead><tbody>'+partRows+'</tbody></table>'+
-      '</div>'+
-      // vida útil
-      '<div class="tr-section">'+
-        '<div class="tr-section-title">Estado de vida del equipo</div>'+
-        '<div class="tr-life-grid">'+lifeCards+'</div>'+
-      '</div>'+
-      // técnico
-      '<div class="tr-section">'+
-        '<div class="tr-section-title">Técnico asignado</div>'+
-        '<div class="tr-tech-card">'+
-          '<div class="tr-tech-avatar">'+data.tFull.split(' ').map(function(x){return x[0];}).join('')+'</div>'+
-          '<div class="tr-tech-info"><div class="tr-tech-name">'+data.tFull+'</div><div class="tr-tech-meta">'+data.tSpec+'</div></div>'+
-          '<span class="tr-tech-badge">'+data.tRating+'</span>'+
-        '</div>'+
-      '</div>'+
-      // costo
-      '<div class="tr-section">'+
-        '<div class="tr-section-title">Desglose de costo</div>'+
-        '<div class="tr-cost-rows">'+
-          '<div class="tr-cost-row"><span>Materiales y refacciones</span><span>$'+partTotal.toLocaleString()+'</span></div>'+
-          '<div class="tr-cost-row"><span>Mano de obra</span><span>'+data.manoObra+'</span></div>'+
-          '<div class="tr-cost-row tr-cost-total"><span>Total</span><span>'+data.cost+'</span></div>'+
-        '</div>'+
-      '</div>'+
-      // garantía
-      '<div class="tr-section">'+
-        '<div class="tr-garantia">'+
-          '<span class="tr-garantia-icon">🛡</span>'+
-          '<span class="tr-garantia-text"><strong>Garantía incluida:</strong> '+data.garantia+'. Si algo falla dentro del periodo, Thruver lo resuelve sin costo adicional.</span>'+
-        '</div>'+
-      '</div>';
-
+      '<div class="tr-section"><div class="tr-section-title">Diagnóstico</div><p style="font-size:0.72rem;color:#6b7280;line-height:1.6;margin:0;">'+data.diagnostico+'</p></div>'+
+      '<div class="tr-section"><div class="tr-section-title">Trabajo realizado</div><div class="tr-work-list">'+workItems+'</div></div>'+
+      '<div class="tr-section"><div class="tr-section-title">Piezas y refacciones</div><table class="tr-parts-table"><thead><tr><th>Pieza / Material</th><th style="text-align:center">Qty</th><th style="text-align:right">Precio</th></tr></thead><tbody>'+partRows+'</tbody></table></div>'+
+      '<div class="tr-section"><div class="tr-section-title">Estado de vida del equipo</div><div class="tr-life-grid">'+lifeCards+'</div></div>'+
+      '<div class="tr-section"><div class="tr-section-title">Técnico asignado</div><div class="tr-tech-card"><div class="tr-tech-avatar">'+data.tFull.split(' ').map(function(x){return x[0];}).join('')+'</div><div class="tr-tech-info"><div class="tr-tech-name">'+data.tFull+'</div><div class="tr-tech-meta">'+data.tSpec+'</div></div><span class="tr-tech-badge">'+data.tRating+'</span></div></div>'+
+      '<div class="tr-section"><div class="tr-section-title">Desglose de costo</div><div class="tr-cost-rows"><div class="tr-cost-row"><span>Materiales y refacciones</span><span>$'+partTotal.toLocaleString()+'</span></div><div class="tr-cost-row"><span>Mano de obra</span><span>'+data.manoObra+'</span></div><div class="tr-cost-row tr-cost-total"><span>Total</span><span>'+data.cost+'</span></div></div></div>'+
+      '<div class="tr-section"><div class="tr-garantia"><span class="tr-garantia-icon">🛡</span><span class="tr-garantia-text"><strong>Garantía incluida:</strong> '+data.garantia+'. Si algo falla dentro del periodo, Thruver lo resuelve sin costo adicional.</span></div></div>';
     overlay.classList.add('tr-open');
     document.body.style.overflow = 'hidden';
   }
@@ -6473,44 +6419,33 @@ document.addEventListener('DOMContentLoaded', function () {
   if (overlay) overlay.addEventListener('click', function(e){ if(e.target===overlay) closeModal(); });
   document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
 
-  // ── Render entries ──
-  function addEntry(data, isNew) {
-    var div = document.createElement('div');
-    div.className = 'vl-entry';
-    div.innerHTML =
-      '<div class="vl-entry-dot"></div>'+
-      '<div class="vl-entry-body">'+
-        '<span class="vl-entry-title">'+data.s+'</span>'+
-        '<span class="vl-entry-sub">'+data.id+' · '+data.t+' · '+data.d+'</span>'+
-        '<button class="vl-entry-open-btn">Ver reporte →</button>'+
-      '</div>'+
-      '<div class="vl-entry-right">'+
-        '<span class="vl-badge '+(isNew?'vl-badge--new':'vl-badge--ready')+'">'+(isNew?'● nuevo':'✓ Ready')+'</span>'+
-        '<span class="vl-cost">'+data.cost+'</span>'+
-      '</div>';
-    div.addEventListener('click', function(e){ openModal(data); });
-    log.insertBefore(div, log.firstChild);
-    requestAnimationFrame(function(){ div.classList.add('vl-entry--in'); });
-    entries.unshift(div);
-    if (isNew) {
-      setTimeout(function(){ var b=div.querySelector('.vl-badge'); if(b){ b.className='vl-badge vl-badge--ready'; b.textContent='✓ Ready'; } }, 2000);
-    }
-    while (entries.length > 3) {
-      var old = entries.pop();
-      old.style.opacity='0'; old.style.transform='translateX(6px)'; old.style.transition='opacity 0.35s,transform 0.35s';
-      setTimeout(function(o){ o.parentNode && o.parentNode.removeChild(o); }, 380, old);
-    }
-  }
+  // ── Wire up rows ──
+  var rowEls = [document.getElementById('hs-row-0'), document.getElementById('hs-row-1')];
+  var rowData = [DATA[0], DATA[3]];
+  rowEls.forEach(function(row, i){
+    if (!row) return;
+    row.addEventListener('click', function(){ openModal(rowData[i]); });
+  });
 
-  DATA.slice(0,3).reverse().forEach(function(d,i){ setTimeout(function(){ addEntry(d,false); }, i*220); });
-  setTimeout(function loop(){
-    if(!document.hidden){
-      if(entries[0]){ var b=entries[0].querySelector('.vl-badge'); if(b){ b.className='vl-badge vl-badge--ready'; b.textContent='✓ Ready'; } }
-      cycle=(cycle+1)%DATA.length;
-      addEntry(DATA[cycle], true);
-    }
-    setTimeout(loop, 4500);
-  }, 3200);
+  // ── Auto-demo: animate cursor on first row then open modal ──
+  var demoRow = document.getElementById('hs-row-0');
+  var demoCursor = document.getElementById('hs-cursor');
+  function runDemo() {
+    if (!demoRow || !demoCursor || overlay.classList.contains('tr-open')) return;
+    // show cursor drifting to "Ver reporte"
+    demoCursor.style.opacity = '1';
+    demoCursor.style.right = '60px';
+    demoCursor.style.top = '50%';
+    demoCursor.style.transform = 'translateY(-50%)';
+    demoRow.classList.add('hs-demo-active');
+    setTimeout(function(){
+      demoCursor.style.opacity = '0';
+      demoRow.classList.remove('hs-demo-active');
+      openModal(rowData[0]);
+    }, 900);
+  }
+  setTimeout(runDemo, 2800);
+
 })();
 </script>
 
