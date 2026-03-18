@@ -50,217 +50,104 @@
       position: fixed; top: 0; left: 0; right: 0; z-index: 300;
       height: 60px; display: flex; align-items: center;
       justify-content: space-between; padding: 0 3rem;
-      background: rgba(255,255,255,0.96); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(0,0,0,0.07);
-      transition: background 0.35s, border-color 0.35s;
+      background: rgba(10,10,10,0.9); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.35s, border-color 0.35s, backdrop-filter 0.35s;
     }
     nav.nav-transparent {
-      background: rgba(255,255,255,0.96);
-      border-bottom-color: rgba(0,0,0,0.07);
+      background: transparent !important;
+      border-bottom-color: transparent;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
     }
-    .nav-logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -0.06em; color: #0f172a; text-decoration: none; }
+    .nav-logo { font-weight: 900; font-size: 1.2rem; letter-spacing: -0.06em; color: #fff; text-decoration: none; }
     .nav-center { display: flex; gap: 0.1rem; list-style: none; }
-    .nav-center a { color: #64748b; text-decoration: none; font-size: 0.82rem; padding: 0.4rem 0.9rem; border-radius: 6px; transition: color 0.15s; }
-    .nav-center a:hover { color: #0f172a; }
+    .nav-center a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.82rem; padding: 0.4rem 0.9rem; border-radius: 6px; transition: color 0.15s; }
+    .nav-center a:hover { color: #fff; }
     .nav-right { display: flex; gap: 0.5rem; align-items: center; }
-    .nav-greeting { display: none; color: #0f172a; font-size: 0.82rem; font-weight: 600; white-space: nowrap; cursor: pointer; }
-    nav:not(.nav-transparent) .nav-greeting { color: #0f172a; }
-    .nav-greeting-mobile { display: none; color: #374151; font-size: 0.95rem; font-weight: 500; padding: 0.5rem 0; }
+    .nav-greeting { display: none; color: #111; font-size: 0.82rem; font-weight: 600; white-space: nowrap; cursor: pointer; transition: color 0.35s; }
+    nav:not(.nav-transparent) .nav-greeting { color: #fff; }
+    .nav-greeting-mobile { display: none; color: rgba(255,255,255,0.85); font-size: 0.95rem; font-weight: 500; padding: 0.5rem 0; }
 
     .btn-ghost {
-      background: transparent; color: #374151;
-      border: 1px solid #d1d5db;
+      background: transparent; color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.13);
       padding: 0.42rem 1rem; border-radius: var(--rsm); font-size: 0.82rem;
       cursor: pointer; font-family: var(--font); text-decoration: none;
       min-height: 40px; display: inline-flex; align-items: center;
-      transition: border-color 0.15s, color 0.15s, background 0.15s;
+      transition: border-color 0.15s, color 0.15s;
     }
-    .btn-ghost:hover { border-color: #9ca3af; color: #0f172a; background: #f8fafc; }
+    .btn-ghost:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
 
     .btn-solid {
-      background: #0f172a; color: #fff !important; border: none;
+      background: var(--blue); color: #fff !important; border: none;
       padding: 0.46rem 1.25rem; border-radius: 100px; font-size: 0.82rem;
       font-weight: 700; cursor: pointer; font-family: var(--font);
       text-decoration: none; min-height: 40px; display: inline-flex;
-      align-items: center; transition: background 0.2s, transform 0.15s;
+      align-items: center; transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      box-shadow: 0 0 0 rgba(26,86,232,0);
     }
-    .btn-solid:hover { background: #1e293b; transform: translateY(-1px); }
+    .btn-solid:hover { background: var(--blue-dark); box-shadow: 0 0 18px rgba(26,86,232,0.5), 0 4px 14px rgba(26,86,232,0.28); transform: translateY(-1px); }
 
     .nav-hamburger {
       display: none; flex-direction: column; justify-content: center;
       align-items: center; gap: 5px; width: 40px; height: 40px;
-      background: transparent; border: 1px solid rgba(0,0,0,0.12);
+      background: transparent; border: 1px solid rgba(255,255,255,0.13);
       border-radius: var(--rsm); cursor: pointer;
     }
-    .nav-hamburger span { display: block; width: 18px; height: 2px; background: #475569; border-radius: 2px; transition: all 0.25s ease; }
+    .nav-hamburger span { display: block; width: 18px; height: 2px; background: rgba(255,255,255,0.7); border-radius: 2px; transition: all 0.25s ease; }
     .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .nav-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
     .mobile-menu {
       display: none; position: fixed; top: 60px; left: 0; right: 0; bottom: 0;
-      z-index: 250; background: #ffffff; padding: 1.2rem 1.5rem 2rem;
+      z-index: 250; background: #0A0A0A; padding: 1.2rem 1.5rem 2rem;
       flex-direction: column; gap: 0.2rem; overflow-y: auto;
-      animation: slideDown 0.22s ease; border-top: 1px solid #e2e8f0;
+      animation: slideDown 0.22s ease;
     }
     .mobile-menu.open { display: flex; }
     @keyframes slideDown { from{opacity:0;transform:translateY(-8px)} to{opacity:1;transform:translateY(0)} }
-    .mobile-menu a { display: flex; align-items: center; padding: 0.9rem 1rem; font-size: 0.97rem; font-weight: 600; color: #475569; text-decoration: none; border-radius: var(--radius); min-height: 52px; transition: color 0.15s, background 0.15s; }
-    .mobile-menu a:hover { color: #0f172a; background: #f8fafc; }
-    .mm-divider { height: 1px; background: rgba(0,0,0,0.07); margin: 0.5rem 0; }
+    .mobile-menu a { display: flex; align-items: center; padding: 0.9rem 1rem; font-size: 0.97rem; font-weight: 600; color: rgba(255,255,255,0.65); text-decoration: none; border-radius: var(--radius); min-height: 52px; transition: color 0.15s; }
+    .mobile-menu a:hover { color: #fff; }
+    .mm-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 0.5rem 0; }
     .mm-cta { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.4rem; }
     .mm-cta .btn-solid,
     .mm-cta .btn-ghost { width: 100%; justify-content: center; font-size: 0.95rem; padding: 0.85rem; border-radius: var(--radius); min-height: 52px; }
-    .mm-cta .btn-solid { background: #0f172a !important; color: #fff !important; }
+    .mm-cta .btn-solid { background: var(--blue) !important; color: #fff !important; }
 
-    /* ══ HERO V3 — Light, 2-column, Stripe-style ══ */
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes hvFloat1 { 0%,100%{transform:translateY(0) rotate(-1deg)} 50%{transform:translateY(-8px) rotate(0.5deg)} }
-    @keyframes hvFloat2 { 0%,100%{transform:translateY(0)} 50%{transform:translateY(7px)} }
-
-    .hero { display: none; } /* hide old hero class if any stray ref */
-    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; flex-shrink: 0; }
-
-    .hero-v3 {
-      position: relative; margin-top: 60px;
-      padding: 6rem 0 5rem; overflow: hidden;
-      background: #ffffff;
-    }
-    .hero-v3::before {
-      content: '';
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 55% 65% at 90% 35%, rgba(37,99,235,0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 45% 55% at 10% 65%, rgba(99,102,241,0.05) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 40% at 50% 0%, rgba(226,232,240,0.6) 0%, transparent 50%);
-      pointer-events: none;
-    }
-    .hero-v3::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: radial-gradient(circle, rgba(0,0,0,0.048) 1px, transparent 1px);
-      background-size: 28px 28px;
-      pointer-events: none;
-      mask-image: radial-gradient(ellipse 90% 90% at 50% 0%, black 30%, transparent 80%);
-      -webkit-mask-image: radial-gradient(ellipse 90% 90% at 50% 0%, black 30%, transparent 80%);
-    }
-    .hero-v3-inner {
-      position: relative; z-index: 1;
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 4rem; align-items: center;
-    }
-    /* ── Copy ── */
-    .hero-v3-badge {
-      display: inline-flex; align-items: center; gap: 0.55rem;
-      background: #f0f9ff; border: 1px solid #bae6fd;
-      color: #0369a1; font-size: 0.72rem; font-weight: 700;
-      padding: 0.35rem 1rem; border-radius: 100px;
-      margin-bottom: 2rem; letter-spacing: 0.01em; width: fit-content;
+    /* ══ HERO ══ */
+    .hero { position: relative; margin-top: 60px; min-height: 92vh; display: flex; align-items: flex-end; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; }
+    .hero-bg img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; display: block; }
+    .hero-bg::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.48) 50%, rgba(0,0,0,0.12) 100%); }
+    .hero-inner { position: relative; z-index: 1; width: 100%; }
+    .hero-lp-inner { padding-bottom: 1.5rem; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.7rem;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.18);
+      padding: 0.4rem 1.1rem; border-radius: 100px;
+      color: rgba(255,255,255,0.92); font-size: 0.73rem; font-weight: 600;
+      margin-bottom: 1.8rem; letter-spacing: 0.01em; width: fit-content;
       animation: fadeUp 0.5s ease both;
     }
-    .hero-v3-h1 {
-      font-size: clamp(2.4rem, 4.2vw, 4.8rem);
-      font-weight: 900; letter-spacing: -0.055em;
-      line-height: 1.05; color: #0f172a;
-      margin-bottom: 1.5rem;
+    .hero-stars { color: #FACC15; letter-spacing: 0.04em; font-size: 0.85rem; }
+    .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #22c55e; animation: pulse 2s infinite; flex-shrink: 0; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(.8)} }
+    .hero-h1 {
+      font-weight: 900; font-size: clamp(1.9rem, 3.8vw, 4.5rem);
+      letter-spacing: -0.04em; line-height: 1.1; color: #fff;
+      margin-bottom: 1.3rem; max-width: 860px;
       animation: fadeUp 0.5s ease 0.07s both;
     }
-    .hero-v3-h1-accent {
-      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 55%, #a855f7 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .hero-v3-sub {
-      font-size: 1.05rem; color: #475569; line-height: 1.78;
-      max-width: 430px; margin-bottom: 2.5rem;
-      animation: fadeUp 0.5s ease 0.14s both;
-    }
-    .hero-v3-actions {
-      display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2.5rem;
-      animation: fadeUp 0.5s ease 0.21s both;
-    }
-    .hero-v3-btn-primary {
-      background: #0f172a; color: #fff !important; border: none;
-      padding: 0.85rem 2rem; border-radius: 100px; font-size: 0.9rem;
-      font-weight: 700; cursor: pointer; font-family: var(--font);
-      text-decoration: none; display: inline-flex; align-items: center;
-      min-height: 48px; transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
-    }
-    .hero-v3-btn-primary:hover { background: #1e293b; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(15,23,42,0.22); }
-    .hero-v3-btn-outline {
-      background: transparent; color: #374151 !important;
-      border: 1.5px solid #d1d5db;
-      padding: 0.85rem 2rem; border-radius: 100px; font-size: 0.9rem;
-      font-weight: 600; cursor: pointer; font-family: var(--font);
-      text-decoration: none; display: inline-flex; align-items: center; min-height: 48px;
-      transition: border-color 0.15s, color 0.15s;
-    }
-    .hero-v3-btn-outline:hover { border-color: #9ca3af; color: #0f172a !important; }
-    .hero-v3-trust {
-      display: flex; align-items: center; gap: 0.65rem;
-      animation: fadeUp 0.5s ease 0.28s both;
-    }
-    .hero-v3-stars { color: #f59e0b; letter-spacing: 0.03em; font-size: 0.85rem; }
-    .hero-v3-trust-text { font-size: 0.77rem; color: #94a3b8; }
-    /* ── Visual column ── */
-    .hero-v3-visual {
-      position: relative;
-      animation: fadeUp 0.65s ease 0.18s both;
-    }
-    .hero-v3-card {
-      background: #ffffff; border: 1px solid #e2e8f0;
-      border-radius: 20px; overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.03), 0 12px 40px rgba(0,0,0,0.09), 0 40px 80px rgba(0,0,0,0.05);
-    }
-    .hero-v3-card-chrome {
-      display: flex; align-items: center; gap: 0.5rem;
-      background: #f8fafc; border-bottom: 1px solid #e2e8f0;
-      padding: 0.8rem 1rem;
-    }
-    .hv3-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .hv3-dot-r { background: #ff5f57; } .hv3-dot-y { background: #febc2e; } .hv3-dot-g { background: #28c840; }
-    .hv3-chrome-label { font-size: 0.7rem; color: #9ca3af; font-weight: 500; flex: 1; margin-left: 0.35rem; }
-    .hv3-live { display: flex; align-items: center; gap: 0.3rem; font-size: 0.62rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; }
-    .hv3-live-dot { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: pulse 1.8s ease-in-out infinite; }
-    .hero-v3-card-body { padding: 1.4rem 1.4rem 1.2rem; }
-    .hv3-svc-row { display: flex; align-items: center; gap: 1rem; padding-bottom: 1.2rem; margin-bottom: 1.2rem; border-bottom: 1px solid #f1f5f9; }
-    .hv3-svc-icon { width: 46px; height: 46px; border-radius: 12px; background: #eff6ff; border: 1px solid #bfdbfe; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
-    .hv3-svc-title { font-size: 0.97rem; font-weight: 800; color: #0f172a; letter-spacing: -0.02em; }
-    .hv3-svc-sub { font-size: 0.73rem; color: #94a3b8; margin-top: 0.12rem; }
-    .hv3-svc-badge { margin-left: auto; font-size: 0.65rem; font-weight: 700; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; padding: 0.25rem 0.7rem; border-radius: 100px; white-space: nowrap; display: flex; align-items: center; gap: 0.35rem; }
-    .hv3-svc-bdot { width: 5px; height: 5px; border-radius: 50%; background: #10b981; animation: pulse 2s ease-in-out infinite; }
-    .hv3-tech { display: flex; align-items: center; gap: 0.8rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 0.85rem 1rem; margin-bottom: 1.2rem; }
-    .hv3-tech-av { width: 38px; height: 38px; border-radius: 50%; background: #0f172a; color: #fff; font-size: 0.72rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .hv3-tech-name { font-size: 0.85rem; font-weight: 700; color: #0f172a; }
-    .hv3-tech-meta { font-size: 0.71rem; color: #94a3b8; margin-top: 0.1rem; }
-    .hv3-tech-badge { margin-left: auto; font-size: 0.62rem; font-weight: 700; background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; padding: 0.22rem 0.65rem; border-radius: 100px; }
-    .hv3-prog-bar { height: 4px; background: #f1f5f9; border-radius: 100px; overflow: hidden; margin-bottom: 0.7rem; }
-    .hv3-prog-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #2563eb, #7c3aed); width: 65%; }
-    .hv3-steps { display: flex; }
-    .hv3-step { flex: 1; text-align: center; font-size: 0.58rem; font-weight: 600; color: #cbd5e1; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.15rem 0; }
-    .hv3-step.done { color: #2563eb; }
-    .hv3-step.active { color: #0f172a; font-weight: 800; }
-    .hero-v3-card-footer { padding: 0.9rem 1.4rem; border-top: 1px solid #f1f5f9; background: #fafafa; }
-    .hv3-cta-btn { width: 100%; background: #0f172a; color: #fff; border: none; padding: 0.7rem 1rem; border-radius: 10px; font-size: 0.8rem; font-weight: 700; cursor: pointer; font-family: var(--font); transition: background 0.2s; }
-    .hv3-cta-btn:hover { background: #1e293b; }
-    /* Floating notification pills */
-    .hv3-notif { position: absolute; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 0.6rem 0.9rem; font-size: 0.71rem; font-weight: 600; color: #374151; white-space: nowrap; box-shadow: 0 4px 16px rgba(0,0,0,0.09); display: flex; align-items: center; gap: 0.5rem; }
-    .hv3-notif-1 { top: -1.2rem; right: -0.8rem; animation: hvFloat1 4s ease-in-out infinite; }
-    .hv3-notif-2 { bottom: 2.5rem; left: -2rem; animation: hvFloat2 4s ease-in-out 1.2s infinite; }
-    /* Compat aliases */
-    .hero-stars { color: #f59e0b; }
-    .btn-blue { background: var(--blue); color: #fff !important; border: none; padding: 0.82rem 2rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; transition: background 0.2s; }
-    .btn-blue:hover { background: var(--blue-dark); }
-    .btn-outline-white { background: transparent; color: #374151 !important; border: 1.5px solid #d1d5db; padding: 0.82rem 2rem; border-radius: 100px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; transition: border-color 0.15s; }
-    @media(max-width: 900px) {
-      .hero-v3-inner { grid-template-columns: 1fr; gap: 3rem; }
-      .hero-v3-visual { display: none; }
-      .hero-v3 { padding: 4rem 0 3rem; }
-    }
-    @media(max-width: 600px) {
-      .hero-v3-h1 { font-size: clamp(1.9rem, 6vw, 2.8rem); }
-    }
+    .hero-sub { font-size: 1.05rem; color: rgba(255,255,255,0.6); line-height: 1.7; max-width: 440px; margin-bottom: 2.5rem; animation: fadeUp 0.5s ease 0.14s both; border-left: 2px solid rgba(255,255,255,0.22); padding-left: 1rem; }
+    .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; animation: fadeUp 0.5s ease 0.21s both; }
+    .btn-blue { background: var(--blue); color: #fff !important; border: none; padding: 0.82rem 2rem; border-radius: 100px; font-size: 0.9rem; font-weight: 700; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; transition: background 0.2s, box-shadow 0.2s, transform 0.15s; box-shadow: 0 0 0 rgba(26,86,232,0); }
+    .btn-blue:hover { background: var(--blue-dark); box-shadow: 0 0 22px rgba(26,86,232,0.55), 0 4px 16px rgba(26,86,232,0.3); transform: translateY(-1px); }
+    .btn-outline-white { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.9) !important; border: 1.5px solid rgba(255,255,255,0.3); padding: 0.82rem 2rem; border-radius: 100px; font-size: 0.9rem; font-weight: 600; cursor: pointer; font-family: var(--font); text-decoration: none; display: inline-flex; align-items: center; min-height: 46px; transition: border-color 0.15s, background 0.15s; }
+    .btn-outline-white:hover { border-color: rgba(255,255,255,0.65); background: rgba(255,255,255,0.14); }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
 
     /* ══ FEATURES DARK ══ */
     .lp-features-dark { background: #f5f5f5; padding: 8rem 0 4rem; position: relative; overflow: hidden; border-top: 1px solid #e5e7eb; }
@@ -458,14 +345,14 @@
     .success-msg p  { font-size: 0.79rem; color: var(--muted); }
 
     /* ══ FOOTER ══ */
-    .lp-footer { background: #ffffff; border-top: 1px solid #e2e8f0; overflow: hidden; }
+    .lp-footer { background: #0A0A0A; border-top: 1px solid rgba(255,255,255,0.05); overflow: hidden; }
     .lp-footer-inner { max-width: 1100px; margin: 0 auto; padding: 2.5rem 3rem 1.5rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
-    .footer-logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.06em; color: #0f172a; }
+    .footer-logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.06em; color: #fff; }
     .footer-links { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
-    .footer-links a, .footer-links button { font-size: 0.78rem; color: #94a3b8; text-decoration: none; background: none; border: none; cursor: pointer; font-family: var(--font); padding: 0; transition: color 0.15s; }
-    .footer-links a:hover, .footer-links button:hover { color: #0f172a; }
-    .footer-copy { font-size: 0.68rem; color: #cbd5e1; }
-    .footer-wm { display: block; text-align: center; font-size: clamp(4.5rem, 18vw, 13rem); font-weight: 900; letter-spacing: -0.06em; line-height: 0.82; color: rgba(0,0,0,0.04); pointer-events: none; user-select: none; padding: 0.5rem 0 0; }
+    .footer-links a, .footer-links button { font-size: 0.78rem; color: rgba(255,255,255,0.35); text-decoration: none; background: none; border: none; cursor: pointer; font-family: var(--font); padding: 0; transition: color 0.15s; }
+    .footer-links a:hover, .footer-links button:hover { color: rgba(255,255,255,0.8); }
+    .footer-copy { font-size: 0.68rem; color: rgba(255,255,255,0.18); }
+    .footer-wm { display: block; text-align: center; font-size: clamp(4.5rem, 18vw, 13rem); font-weight: 900; letter-spacing: -0.06em; line-height: 0.82; color: rgba(255,255,255,0.025); pointer-events: none; user-select: none; padding: 0.5rem 0 0; }
 
     /* ══ LOGIN MODAL ══ */
     .modal-overlay { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.45); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
@@ -2004,6 +1891,88 @@
     .vl-footer { padding: 0.6rem 1rem; border-top: 1px solid #161616; }
     .vl-footer-link { font-size: 0.68rem; color: #444; cursor: default; }
     .vl-footer-link:hover { color: #888; transition: color 0.2s; }
+    .vl-entry-open-btn { font-size: 0.58rem; color: #555; border: 1px solid #222; border-radius: 4px; padding: 0.12rem 0.45rem; cursor: pointer; margin-top: 0.18rem; white-space: nowrap; transition: color 0.15s, border-color 0.15s; background: transparent; font-family: inherit; }
+    .vl-entry:hover .vl-entry-open-btn { color: #9ca3af; border-color: #333; }
+
+    /* ── Reporte técnico modal ── */
+    .tr-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(4px); z-index: 9900; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.22s; }
+    .tr-overlay.tr-open { opacity: 1; pointer-events: auto; }
+    .tr-modal { background: #0d0d0d; border: 1px solid #222; border-radius: 16px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; transform: translateY(12px) scale(0.98); transition: transform 0.22s; }
+    .tr-overlay.tr-open .tr-modal { transform: translateY(0) scale(1); }
+    .tr-modal::-webkit-scrollbar { width: 4px; } .tr-modal::-webkit-scrollbar-thumb { background: #222; border-radius: 4px; }
+    /* header */
+    .tr-header { padding: 1.1rem 1.3rem 0.9rem; border-bottom: 1px solid #1a1a1a; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+    .tr-header-left { display: flex; flex-direction: column; gap: 0.3rem; }
+    .tr-header-tag { font-size: 0.58rem; font-weight: 700; letter-spacing: 0.1em; color: #10b981; text-transform: uppercase; font-family: 'SF Mono','Fira Code',monospace; }
+    .tr-header-title { font-size: 1rem; font-weight: 700; color: #f1f5f9; line-height: 1.3; }
+    .tr-header-meta { font-size: 0.65rem; color: #555; font-family: monospace; }
+    .tr-close { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #666; flex-shrink: 0; transition: background 0.15s, color 0.15s; }
+    .tr-close:hover { background: #222; color: #ccc; }
+    /* status bar */
+    .tr-status-bar { padding: 0.65rem 1.3rem; border-bottom: 1px solid #1a1a1a; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .tr-stat { display: flex; flex-direction: column; gap: 0.12rem; }
+    .tr-stat-label { font-size: 0.57rem; color: #444; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; }
+    .tr-stat-value { font-size: 0.72rem; color: #cbd5e1; font-weight: 600; }
+    .tr-stat-value.green { color: #10b981; } .tr-stat-value.blue { color: #6b8ff5; } .tr-stat-value.amber { color: #f59e0b; }
+    .tr-divider-v { width: 1px; height: 28px; background: #1e1e1e; }
+    /* section */
+    .tr-section { padding: 0.9rem 1.3rem; border-bottom: 1px solid #111; }
+    .tr-section:last-child { border-bottom: none; }
+    .tr-section-title { font-size: 0.62rem; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.7rem; display: flex; align-items: center; gap: 0.4rem; }
+    .tr-section-title::before { content: ''; display: inline-block; width: 3px; height: 10px; background: #1A56E8; border-radius: 2px; }
+    /* trabajo realizado */
+    .tr-work-list { display: flex; flex-direction: column; gap: 0.45rem; }
+    .tr-work-item { display: flex; align-items: flex-start; gap: 0.55rem; }
+    .tr-work-bullet { width: 5px; height: 5px; border-radius: 50%; background: #10b981; flex-shrink: 0; margin-top: 4px; }
+    .tr-work-text { font-size: 0.73rem; color: #9ca3af; line-height: 1.5; }
+    /* piezas */
+    .tr-parts-table { width: 100%; border-collapse: collapse; }
+    .tr-parts-table th { font-size: 0.58rem; color: #444; text-transform: uppercase; letter-spacing: 0.08em; text-align: left; padding: 0 0 0.45rem; font-weight: 600; }
+    .tr-parts-table th:last-child { text-align: right; }
+    .tr-parts-table td { font-size: 0.7rem; color: #9ca3af; padding: 0.4rem 0; border-top: 1px solid #111; vertical-align: top; }
+    .tr-parts-table td:last-child { text-align: right; color: #6b7280; font-family: monospace; }
+    .tr-parts-table td .tr-part-name { color: #cbd5e1; font-weight: 500; }
+    .tr-parts-table td .tr-part-brand { font-size: 0.6rem; color: #444; }
+    /* vida útil */
+    .tr-life-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.7rem; }
+    .tr-life-item { background: #111; border: 1px solid #1a1a1a; border-radius: 10px; padding: 0.7rem 0.8rem; display: flex; flex-direction: column; gap: 0.35rem; }
+    .tr-life-name { font-size: 0.65rem; color: #9ca3af; font-weight: 500; }
+    .tr-life-bar-wrap { height: 4px; background: #1e1e1e; border-radius: 4px; overflow: hidden; }
+    .tr-life-bar { height: 100%; border-radius: 4px; }
+    .tr-life-bar.green { background: #10b981; } .tr-life-bar.amber { background: #f59e0b; } .tr-life-bar.red { background: #ef4444; }
+    .tr-life-pct { font-size: 0.62rem; font-weight: 700; } .tr-life-pct.green { color: #10b981; } .tr-life-pct.amber { color: #f59e0b; } .tr-life-pct.red { color: #ef4444; }
+    .tr-life-next { font-size: 0.6rem; color: #444; }
+    /* técnico */
+    .tr-tech-card { display: flex; align-items: center; gap: 0.75rem; background: #111; border: 1px solid #1a1a1a; border-radius: 10px; padding: 0.7rem 0.9rem; }
+    .tr-tech-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg,#1A56E8,#7c3aed); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .tr-tech-info { flex: 1; }
+    .tr-tech-name { font-size: 0.75rem; font-weight: 600; color: #e5e7eb; }
+    .tr-tech-meta { font-size: 0.62rem; color: #555; margin-top: 0.1rem; }
+    .tr-tech-badge { font-size: 0.57rem; font-weight: 700; background: rgba(16,185,129,0.1); color: #10b981; border: 1px solid rgba(16,185,129,0.2); padding: 0.12rem 0.45rem; border-radius: 4px; white-space: nowrap; }
+    /* costo */
+    .tr-cost-rows { display: flex; flex-direction: column; gap: 0.35rem; }
+    .tr-cost-row { display: flex; justify-content: space-between; font-size: 0.7rem; }
+    .tr-cost-row span:first-child { color: #555; }
+    .tr-cost-row span:last-child { color: #9ca3af; font-family: monospace; }
+    .tr-cost-total { border-top: 1px solid #1e1e1e; margin-top: 0.45rem; padding-top: 0.45rem; }
+    .tr-cost-total span:first-child { color: #9ca3af; font-weight: 600; }
+    .tr-cost-total span:last-child { color: #f1f5f9; font-weight: 700; font-family: monospace; }
+    /* garantía */
+    .tr-garantia { display: flex; align-items: center; gap: 0.6rem; background: rgba(16,185,129,0.04); border: 1px solid rgba(16,185,129,0.12); border-radius: 10px; padding: 0.65rem 0.9rem; }
+    .tr-garantia-icon { font-size: 1rem; flex-shrink: 0; }
+    .tr-garantia-text { font-size: 0.68rem; color: #6b7280; } .tr-garantia-text strong { color: #10b981; }
+    /* footer del modal */
+    .tr-modal-footer { padding: 0.8rem 1.3rem; border-top: 1px solid #1a1a1a; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
+    .tr-folio { font-size: 0.6rem; color: #333; font-family: monospace; }
+    .tr-download-btn { font-size: 0.65rem; font-weight: 600; color: #6b8ff5; border: 1px solid rgba(107,143,245,0.25); background: rgba(107,143,245,0.06); border-radius: 7px; padding: 0.35rem 0.8rem; cursor: pointer; transition: background 0.15s; }
+    .tr-download-btn:hover { background: rgba(107,143,245,0.12); }
+    /* mobile */
+    @media (max-width: 520px) {
+      .tr-modal { border-radius: 14px 14px 0 0; max-height: 92vh; }
+      .tr-overlay { align-items: flex-end; padding: 0; }
+      .tr-life-grid { grid-template-columns: 1fr; }
+      .tr-status-bar { gap: 0.6rem; }
+    }
 
     /* ══════════════════════════════════════════
        REDESIGN: GUARANTEE V2 — Statement section
@@ -2118,23 +2087,22 @@
     .lp-features-dark, .lp-how-v2, .lp-guarantee-v2, .lp-signup-v2 { background-image: linear-gradient(rgba(0,0,0,0.038) 1px,transparent 1px), linear-gradient(90deg,rgba(0,0,0,0.038) 1px,transparent 1px); background-size:44px 44px; }
     /* Sección casi blanca */
     .lp-services-v2 { background-image: linear-gradient(rgba(0,0,0,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(0,0,0,0.03) 1px,transparent 1px); background-size:44px 44px; }
-    /* Globe (dark navy) */
-    .lp-globe { background-image: linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px); background-size:44px 44px; }
+    /* Globe (dark) */
+    .lp-globe { background-image: linear-gradient(rgba(255,255,255,0.042) 1px,transparent 1px), linear-gradient(90deg,rgba(255,255,255,0.042) 1px,transparent 1px); background-size:44px 44px; }
 
     /* ══════════════════════════════════════════
        GLOBE — Red de infraestructura Thruver
     ══════════════════════════════════════════ */
-    .lp-globe { background-color:#0f172a; padding:6.5rem 0; position:relative; overflow:hidden; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); }
+    .lp-globe { background-color:#080808; padding:6.5rem 0; position:relative; overflow:hidden; border-top:1px solid rgba(255,255,255,0.06); border-bottom:1px solid rgba(255,255,255,0.06); }
     .globe-layout { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:center; }
     .globe-copy { }
     .globe-title { font-size:clamp(2rem,3.5vw,3rem); font-weight:900; letter-spacing:-0.05em; color:#fff; margin-top:0.8rem; line-height:1.08; }
-    .globe-sub { font-size:0.9rem; color:rgba(255,255,255,0.5); margin-top:0.9rem; line-height:1.75; max-width:400px; }
+    .globe-sub { font-size:0.9rem; color:rgba(255,255,255,0.42); margin-top:0.9rem; line-height:1.75; max-width:400px; }
     .globe-chips { display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:1.6rem; }
-    .globe-chip { display:flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:20px; padding:0.3rem 0.85rem; font-size:0.72rem; color:rgba(255,255,255,0.65); font-weight:500; }
+    .globe-chip { display:flex; align-items:center; gap:0.4rem; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:0.3rem 0.85rem; font-size:0.72rem; color:rgba(255,255,255,0.6); font-weight:500; }
     .globe-chip-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
     .globe-canvas-wrap { display:flex; justify-content:center; align-items:center; }
     #globe-canvas { display:block; max-width:100%; }
-    .lp-globe .feat-label { color:rgba(120,160,255,0.9); background:rgba(37,99,235,0.15); border-color:rgba(37,99,235,0.3); }
 
     /* Services section V2 enhancements */
     .lp-services-v2 { background: #fafafa; padding: 7rem 0; border-bottom: 1px solid #e5e7eb; }
@@ -2716,73 +2684,23 @@
   </div><!-- /tnl-body -->
 </div><!-- /tnl-overlay -->
 
-<!-- HERO V3 -->
-<section class="hero-v3">
-  <div class="lp-inner">
-    <div class="hero-v3-inner">
-      <!-- Copy -->
-      <div class="hero-v3-copy">
-        <div class="hero-v3-badge">
-          <span class="badge-dot"></span>
-          Lanzando en Culiacán, Sinaloa · 2026
-        </div>
-        <h1 class="hero-v3-h1">Tu hogar en<br><span class="hero-v3-h1-accent">las mejores manos.</span></h1>
-        <p class="hero-v3-sub">Técnicos verificados, precios claros y garantía incluida. Solicita, controla y documenta cada servicio de mantenimiento desde una sola plataforma.</p>
-        <div class="hero-v3-actions">
-          <a href="#" class="hero-v3-btn-primary tnl-trigger">Solicitar servicio →</a>
-          <a href="empresas.html" class="hero-v3-btn-outline">Para empresas</a>
-        </div>
-        <div class="hero-v3-trust">
-          <span class="hero-v3-stars">★★★★★</span>
-          <span class="hero-v3-trust-text">4.9 · +500 servicios completados · Culiacán, Sinaloa</span>
-        </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg">
+    <img src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/Plomero.jpeg" alt="Técnico Thruver" />
+  </div>
+  <div class="hero-inner">
+    <div class="lp-inner hero-lp-inner">
+      <div class="hero-badge">
+        <span class="hero-stars">★★★★★</span>
+        <span class="badge-dot"></span>
+        Culiacán, Sinaloa · Lanzando pronto
       </div>
-      <!-- Visual -->
-      <div class="hero-v3-visual">
-        <div class="hero-v3-card">
-          <div class="hero-v3-card-chrome">
-            <span class="hv3-dot hv3-dot-r"></span>
-            <span class="hv3-dot hv3-dot-y"></span>
-            <span class="hv3-dot hv3-dot-g"></span>
-            <span class="hv3-chrome-label">Thruver · Seguimiento de servicio</span>
-            <span class="hv3-live"><span class="hv3-live-dot"></span>En vivo</span>
-          </div>
-          <div class="hero-v3-card-body">
-            <div class="hv3-svc-row">
-              <div class="hv3-svc-icon">⚡</div>
-              <div>
-                <div class="hv3-svc-title">Electricidad</div>
-                <div class="hv3-svc-sub">Diagnóstico y reparación · Hoy, 10:00am</div>
-              </div>
-              <div class="hv3-svc-badge"><span class="hv3-svc-bdot"></span>En camino</div>
-            </div>
-            <div class="hv3-tech">
-              <div class="hv3-tech-av">JM</div>
-              <div>
-                <div class="hv3-tech-name">José Morales</div>
-                <div class="hv3-tech-meta">★ 4.9 · 0.8 km · Llega en ~45 min</div>
-              </div>
-              <div class="hv3-tech-badge">Verificado ✓</div>
-            </div>
-            <div class="hv3-prog-bar"><div class="hv3-prog-fill"></div></div>
-            <div class="hv3-steps">
-              <div class="hv3-step done">Solicitud</div>
-              <div class="hv3-step done">Asignado</div>
-              <div class="hv3-step active">En camino</div>
-              <div class="hv3-step">Completado</div>
-            </div>
-          </div>
-          <div class="hero-v3-card-footer">
-            <button class="hv3-cta-btn tnl-trigger">Solicitar mi servicio →</button>
-          </div>
-        </div>
-        <div class="hv3-notif hv3-notif-1">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="#10b981"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-          Técnico verificado con INE
-        </div>
-        <div class="hv3-notif hv3-notif-2">
-          <span style="color:#f59e0b;font-size:0.8rem">★★★★★</span>&nbsp;5.0 — "Excelente trabajo"
-        </div>
+      <h1 class="hero-h1">Hacer de cada hogar del mundo<br>un lugar más seguro, funcional y confiable.</h1>
+      <p class="hero-sub">Con Thruver, solicita, controla y documenta cada servicio de mantenimiento de tu hogar.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn-blue tnl-trigger">Solicitar servicio →</a>
+        <a href="empresas.html" class="btn-outline-white">Para empresas →</a>
       </div>
     </div>
   </div>
@@ -6351,15 +6269,211 @@ document.addEventListener('DOMContentLoaded', function () {
 <!-- ── Vercel-style log — card 02 (Historial) ── -->
 <script>
 (function(){
+  // DATA extendida con reporte técnico completo
   var DATA = [
-    { id:'#4a2f1e', s:'Revisión eléctrica',  t:'J. Morales', d:'14 Feb 2025', cost:'$680',   det:['Panel principal revisado','Breakers: OK','Sin fallas detectadas'] },
-    { id:'#b1e4f9', s:'Plomería — cocina',    t:'C. Ramos',   d:'02 Ene 2025', cost:'$450',   det:['Sello lavabo reemplazado','Tubería limpiada','Flujo normalizado'] },
-    { id:'#d9c3ff', s:'Pintura exterior',     t:'A. López',   d:'18 Nov 2024', cost:'$1,200', det:['2 capas fachada','Impermeabilizante','Garantía 12 meses'] },
-    { id:'#a3f7c1', s:'CCTV instalación',     t:'R. Acosta',  d:'05 Oct 2024', cost:'$2,100', det:['4 cámaras instaladas','DVR configurado','Acceso remoto activo'] },
+    {
+      id:'#4a2f1e', s:'Revisión eléctrica', t:'J. Morales', tFull:'José Morales', tSpec:'Electricista certificado · 6 años exp.', tRating:'★★★★★ 4.9',
+      d:'14 Feb 2025', cost:'$680',
+      diagnostico:'Panel eléctrico con breaker principal sin respuesta intermitente. Se detectó corrosión en borneras del sub-panel y desequilibrio de carga en circuito de cocina.',
+      trabajo:[
+        'Inspección completa del panel principal y sub-panel',
+        'Limpieza y ajuste de borneras con corrosión leve',
+        'Balanceo de cargas en circuito de cocina',
+        'Verificación de tierra física y continuidad',
+        'Prueba de disparo en todos los breakers',
+      ],
+      partes:[
+        { n:'Breaker doble 30A Siemens', marca:'Siemens', qty:1, precio:'$180' },
+        { n:'Terminal de tierra AWG-6', marca:'Leviton', qty:2, precio:'$45' },
+        { n:'Cinta autofundente 3M', marca:'3M', qty:1, precio:'$12' },
+      ],
+      vida:[
+        { eq:'Panel principal', pct:78, color:'green', next:'Ago 2027' },
+        { eq:'Sub-panel cocina', pct:62, color:'amber', next:'Mar 2026' },
+        { eq:'Breakers generales', pct:90, color:'green', next:'Ene 2028' },
+        { eq:'Cableado visible', pct:55, color:'amber', next:'Nov 2025' },
+      ],
+      manoObra:'$443', garantia:'6 meses en trabajo realizado',
+    },
+    {
+      id:'#b1e4f9', s:'Plomería — cocina', t:'C. Ramos', tFull:'Carlos Ramos', tSpec:'Plomero certificado · 4 años exp.', tRating:'★★★★☆ 4.7',
+      d:'02 Ene 2025', cost:'$450',
+      diagnostico:'Fuga menor bajo lavabo de cocina con escurrimiento hacia mueble inferior. Acumulación de sarro en tubería de drenaje que reducía el flujo al 40% de su capacidad.',
+      trabajo:[
+        'Desmontaje y revisión de sifón y mangueras de suministro',
+        'Reemplazo de empaques y sello mecánico del lavabo',
+        'Limpieza química de tubería de drenaje con desincrustante',
+        'Ajuste de llave de paso individual bajo fregadero',
+        'Prueba de presión y verificación sin fugas',
+      ],
+      partes:[
+        { n:'Kit de empaques universales', marca:'Aqua Pro', qty:1, precio:'$65' },
+        { n:'Sello mecánico lavabo 4"', marca:'Coflex', qty:1, precio:'$88' },
+        { n:'Desincrustante líquido 1L', marca:'Rectorseal', qty:1, precio:'$55' },
+      ],
+      vida:[
+        { eq:'Tubería suministro PVC', pct:85, color:'green', next:'Jun 2028' },
+        { eq:'Sifón y trampa', pct:70, color:'green', next:'Ene 2027' },
+        { eq:'Llave de paso', pct:50, color:'amber', next:'Jul 2025' },
+        { eq:'Mangueras flexibles', pct:40, color:'red', next:'Pronto' },
+      ],
+      manoObra:'$242', garantia:'3 meses en trabajo realizado',
+    },
+    {
+      id:'#d9c3ff', s:'Pintura exterior', t:'A. López', tFull:'Alejandro López', tSpec:'Pintor profesional · 8 años exp.', tRating:'★★★★★ 4.8',
+      d:'18 Nov 2024', cost:'$1,200',
+      diagnostico:'Fachada con pintura original de más de 5 años con descascaramiento en zona norte y manchas de humedad en viga de cornisa. Sin daño estructural.',
+      trabajo:[
+        'Preparación de superficie: lijado y remoción de pintura suelta',
+        'Aplicación de sellador anti-humedad en zona norte',
+        'Impermeabilizante de base en toda la fachada',
+        'Dos capas de pintura vinílica exterior color original',
+        'Retoque de zoclo y cornisas con esmalte',
+      ],
+      partes:[
+        { n:'Impermeabilizante Berel 4L', marca:'Berel', qty:3, precio:'$360' },
+        { n:'Pintura vinílica Comex 19L', marca:'Comex', qty:2, precio:'$480' },
+        { n:'Sellador anti-humedad 1L', marca:'Fester', qty:2, precio:'$120' },
+      ],
+      vida:[
+        { eq:'Pintura fachada', pct:95, color:'green', next:'Nov 2026' },
+        { eq:'Impermeabilizado', pct:95, color:'green', next:'Nov 2026' },
+        { eq:'Esmalte cornisas', pct:88, color:'green', next:'May 2026' },
+        { eq:'Sellado juntas', pct:80, color:'green', next:'Nov 2026' },
+      ],
+      manoObra:'$240', garantia:'12 meses en trabajo realizado',
+    },
+    {
+      id:'#a3f7c1', s:'CCTV instalación', t:'R. Acosta', tFull:'Roberto Acosta', tSpec:'Técnico en seguridad electrónica · 5 años exp.', tRating:'★★★★★ 5.0',
+      d:'05 Oct 2024', cost:'$2,100',
+      diagnostico:'Domicilio sin sistema de videovigilancia. Se requería cobertura de puntos clave: acceso principal, estacionamiento, patio trasero y zona de servicios.',
+      trabajo:[
+        'Instalación de 4 cámaras domo HD 1080p en puntos estratégicos',
+        'Tendido de cable UTP cat6 empotrado en muros',
+        'Configuración de DVR de 8 canales con disco 1TB',
+        'Configuración de acceso remoto vía app móvil',
+        'Calibración de ángulos y zonas de detección de movimiento',
+      ],
+      partes:[
+        { n:'Cámara domo HD 1080p', marca:'Hikvision', qty:4, precio:'$1,200' },
+        { n:'DVR 8ch + disco 1TB', marca:'Hikvision', qty:1, precio:'$650' },
+        { n:'Cable UTP cat6 (rollo 50m)', marca:'Condumex', qty:1, precio:'$120' },
+      ],
+      vida:[
+        { eq:'Cámaras (4 uds)', pct:98, color:'green', next:'Oct 2029' },
+        { eq:'DVR y almacenamiento', pct:97, color:'green', next:'Oct 2028' },
+        { eq:'Cableado estructurado', pct:100, color:'green', next:'Oct 2034' },
+        { eq:'Fuentes de poder', pct:92, color:'green', next:'Oct 2026' },
+      ],
+      manoObra:'$130', garantia:'12 meses en trabajo realizado',
+    },
   ];
+
   var log = document.getElementById('vl-log');
   if (!log) return;
   var entries = [], cycle = 0;
+
+  // ── Modal helpers ──
+  var overlay = document.getElementById('tr-overlay');
+  var closeBtn = document.getElementById('tr-close');
+
+  function openModal(data) {
+    document.getElementById('tr-title').textContent = data.s;
+    document.getElementById('tr-meta').textContent = data.id + ' · ' + data.t + ' · ' + data.d;
+    document.getElementById('tr-folio').textContent = 'Folio THR-' + data.id.replace('#','').toUpperCase() + '-' + data.d.replace(/ /g,'-');
+
+    // status bar
+    var sb = document.getElementById('tr-statusbar');
+    sb.innerHTML =
+      '<div class="tr-stat"><span class="tr-stat-label">Estado</span><span class="tr-stat-value green">✓ Completado</span></div>'+
+      '<div class="tr-divider-v"></div>'+
+      '<div class="tr-stat"><span class="tr-stat-label">Costo total</span><span class="tr-stat-value blue">'+data.cost+'</span></div>'+
+      '<div class="tr-divider-v"></div>'+
+      '<div class="tr-stat"><span class="tr-stat-label">Técnico</span><span class="tr-stat-value">'+data.t+'</span></div>'+
+      '<div class="tr-divider-v"></div>'+
+      '<div class="tr-stat"><span class="tr-stat-label">Fecha</span><span class="tr-stat-value">'+data.d+'</span></div>';
+
+    // body
+    var body = document.getElementById('tr-body');
+    // diagnóstico
+    var workItems = data.trabajo.map(function(w){ return '<div class="tr-work-item"><div class="tr-work-bullet"></div><span class="tr-work-text">'+w+'</span></div>'; }).join('');
+    // partes
+    var partRows = data.partes.map(function(p){ return '<tr><td><div class="tr-part-name">'+p.n+'</div><div class="tr-part-brand">'+p.marca+'</div></td><td style="text-align:center;color:#555;font-size:0.68rem;">×'+p.qty+'</td><td>'+p.precio+'</td></tr>'; }).join('');
+    // vida útil
+    var lifeCards = data.vida.map(function(v){
+      return '<div class="tr-life-item">'+
+        '<span class="tr-life-name">'+v.eq+'</span>'+
+        '<div class="tr-life-bar-wrap"><div class="tr-life-bar '+v.color+'" style="width:'+v.pct+'%"></div></div>'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;">'+
+          '<span class="tr-life-pct '+v.color+'">'+v.pct+'%</span>'+
+          '<span class="tr-life-next">Próx. revisión: '+v.next+'</span>'+
+        '</div>'+
+      '</div>';
+    }).join('');
+    // costo
+    var partTotal = data.partes.reduce(function(acc,p){ return acc + parseInt(p.precio.replace(/[$,]/g,'')); }, 0);
+
+    body.innerHTML =
+      // diagnóstico
+      '<div class="tr-section">'+
+        '<div class="tr-section-title">Diagnóstico</div>'+
+        '<p style="font-size:0.72rem;color:#6b7280;line-height:1.6;margin:0;">'+data.diagnostico+'</p>'+
+      '</div>'+
+      // trabajo
+      '<div class="tr-section">'+
+        '<div class="tr-section-title">Trabajo realizado</div>'+
+        '<div class="tr-work-list">'+workItems+'</div>'+
+      '</div>'+
+      // piezas
+      '<div class="tr-section">'+
+        '<div class="tr-section-title">Piezas y refacciones</div>'+
+        '<table class="tr-parts-table"><thead><tr><th>Pieza / Material</th><th style="text-align:center">Qty</th><th style="text-align:right">Precio</th></tr></thead><tbody>'+partRows+'</tbody></table>'+
+      '</div>'+
+      // vida útil
+      '<div class="tr-section">'+
+        '<div class="tr-section-title">Estado de vida del equipo</div>'+
+        '<div class="tr-life-grid">'+lifeCards+'</div>'+
+      '</div>'+
+      // técnico
+      '<div class="tr-section">'+
+        '<div class="tr-section-title">Técnico asignado</div>'+
+        '<div class="tr-tech-card">'+
+          '<div class="tr-tech-avatar">'+data.tFull.split(' ').map(function(x){return x[0];}).join('')+'</div>'+
+          '<div class="tr-tech-info"><div class="tr-tech-name">'+data.tFull+'</div><div class="tr-tech-meta">'+data.tSpec+'</div></div>'+
+          '<span class="tr-tech-badge">'+data.tRating+'</span>'+
+        '</div>'+
+      '</div>'+
+      // costo
+      '<div class="tr-section">'+
+        '<div class="tr-section-title">Desglose de costo</div>'+
+        '<div class="tr-cost-rows">'+
+          '<div class="tr-cost-row"><span>Materiales y refacciones</span><span>$'+partTotal.toLocaleString()+'</span></div>'+
+          '<div class="tr-cost-row"><span>Mano de obra</span><span>'+data.manoObra+'</span></div>'+
+          '<div class="tr-cost-row tr-cost-total"><span>Total</span><span>'+data.cost+'</span></div>'+
+        '</div>'+
+      '</div>'+
+      // garantía
+      '<div class="tr-section">'+
+        '<div class="tr-garantia">'+
+          '<span class="tr-garantia-icon">🛡</span>'+
+          '<span class="tr-garantia-text"><strong>Garantía incluida:</strong> '+data.garantia+'. Si algo falla dentro del periodo, Thruver lo resuelve sin costo adicional.</span>'+
+        '</div>'+
+      '</div>';
+
+    overlay.classList.add('tr-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    overlay.classList.remove('tr-open');
+    document.body.style.overflow = '';
+  }
+
+  if (closeBtn) closeBtn.addEventListener('click', closeModal);
+  if (overlay) overlay.addEventListener('click', function(e){ if(e.target===overlay) closeModal(); });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
+
+  // ── Render entries ──
   function addEntry(data, isNew) {
     var div = document.createElement('div');
     div.className = 'vl-entry';
@@ -6368,13 +6482,13 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="vl-entry-body">'+
         '<span class="vl-entry-title">'+data.s+'</span>'+
         '<span class="vl-entry-sub">'+data.id+' · '+data.t+' · '+data.d+'</span>'+
-        '<div class="vl-entry-detail">'+data.det.map(function(x){ return '<span>→ '+x+'</span>'; }).join('')+'</div>'+
+        '<button class="vl-entry-open-btn">Ver reporte →</button>'+
       '</div>'+
       '<div class="vl-entry-right">'+
         '<span class="vl-badge '+(isNew?'vl-badge--new':'vl-badge--ready')+'">'+(isNew?'● nuevo':'✓ Ready')+'</span>'+
         '<span class="vl-cost">'+data.cost+'</span>'+
       '</div>';
-    div.addEventListener('click', function(){ div.classList.toggle('vl-entry--expanded'); });
+    div.addEventListener('click', function(e){ openModal(data); });
     log.insertBefore(div, log.firstChild);
     requestAnimationFrame(function(){ div.classList.add('vl-entry--in'); });
     entries.unshift(div);
@@ -6387,6 +6501,7 @@ document.addEventListener('DOMContentLoaded', function () {
       setTimeout(function(o){ o.parentNode && o.parentNode.removeChild(o); }, 380, old);
     }
   }
+
   DATA.slice(0,3).reverse().forEach(function(d,i){ setTimeout(function(){ addEntry(d,false); }, i*220); });
   setTimeout(function loop(){
     if(!document.hidden){
@@ -6793,6 +6908,32 @@ document.addEventListener('DOMContentLoaded', function () {
       <button class="rpt-modal-close" id="rpt-modal-close">✕</button>
     </div>
     <div class="rpt-doc" id="rpt-modal-body"></div>
+  </div>
+</div>
+
+<!-- ── Reporte técnico modal ── -->
+<div class="tr-overlay" id="tr-overlay" role="dialog" aria-modal="true" aria-labelledby="tr-modal-title">
+  <div class="tr-modal" id="tr-modal">
+    <!-- header -->
+    <div class="tr-header">
+      <div class="tr-header-left">
+        <span class="tr-header-tag">Reporte técnico · Thruver</span>
+        <div class="tr-header-title" id="tr-title">—</div>
+        <div class="tr-header-meta" id="tr-meta">—</div>
+      </div>
+      <button class="tr-close" id="tr-close" aria-label="Cerrar">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <!-- status bar -->
+    <div class="tr-status-bar" id="tr-statusbar"></div>
+    <!-- body sections (rendered by JS) -->
+    <div id="tr-body"></div>
+    <!-- footer -->
+    <div class="tr-modal-footer">
+      <span class="tr-folio" id="tr-folio">—</span>
+      <button class="tr-download-btn">↓ Descargar PDF</button>
+    </div>
   </div>
 </div>
 
