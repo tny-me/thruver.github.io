@@ -1860,27 +1860,58 @@
     .how-v2-conn-v::after { content: ''; width: 2px; background: #e5e7eb; display: block; }
 
     /* ── Historial widget (card 02) ── */
-    .hs-wrap { margin-top: 1.8rem; }
-    .hs-card { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); border-radius: 14px; overflow: hidden; }
-    .hs-card-header { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; }
-    .hs-card-title { font-size: 0.65rem; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; }
-    .hs-card-badge { font-size: 0.58rem; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.18); border-radius: 20px; padding: 0.12rem 0.55rem; display: flex; align-items: center; gap: 0.3rem; }
-    .hs-card-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #10b981; animation: pulse 2s ease-in-out infinite; }
-    .hs-row { display: flex; align-items: center; gap: 0.85rem; padding: 0.9rem 1rem; cursor: pointer; transition: background 0.18s; border-bottom: 1px solid rgba(255,255,255,0.08); position: relative; }
+    .hs-wrap { margin-top: 1.8rem; border: 1px solid #e5e7eb; border-radius: 14px; overflow: hidden; background: #f9fafb; }
+    .hs-list-header { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1rem; border-bottom: 1px solid #e5e7eb; }
+    .hs-list-label { font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9ca3af; }
+    .hs-badge-ok { font-size: 0.58rem; font-weight: 700; color: #10b981; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); border-radius: 20px; padding: 0.1rem 0.55rem; display: flex; align-items: center; gap: 0.28rem; }
+    .hs-badge-ok::before { content:''; width:5px; height:5px; border-radius:50%; background:#10b981; animation: pulse 2s ease-in-out infinite; }
+    .hs-row { display: flex; align-items: center; gap: 0.7rem; padding: 0.8rem 1rem; cursor: pointer; transition: background 0.15s; border-bottom: 1px solid #f3f4f6; position: relative; }
     .hs-row:last-child { border-bottom: none; }
-    .hs-row:hover { background: rgba(255,255,255,0.08); }
-    .hs-row.hs-demo-active { background: rgba(26,86,232,0.07); }
-    .hs-row-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1rem; }
+    .hs-row:hover, .hs-row.hs-active { background: rgba(26,86,232,0.04); }
+    .hs-row-icon { width: 34px; height: 34px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.95rem; }
     .hs-row-info { flex: 1; min-width: 0; }
-    .hs-row-name { font-size: 0.78rem; font-weight: 600; color: #e2e8f0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .hs-row-meta { font-size: 0.62rem; color: #6b7280; margin-top: 0.12rem; }
-    .hs-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.3rem; flex-shrink: 0; }
-    .hs-row-cost { font-size: 0.72rem; font-weight: 600; color: #94a3b8; }
-    .hs-row-open { font-size: 0.58rem; color: #6b7280; border: 1px solid rgba(255,255,255,0.15); border-radius: 5px; padding: 0.1rem 0.4rem; transition: color 0.15s, border-color 0.15s; white-space: nowrap; }
-    .hs-row:hover .hs-row-open, .hs-row.hs-demo-active .hs-row-open { color: #6b8ff5; border-color: rgba(107,143,245,0.3); }
-    /* cursor demo ripple */
-    .hs-cursor { position: absolute; width: 18px; height: 18px; pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 2; }
-    .hs-cursor svg { filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5)); }
+    .hs-row-name { font-size: 0.75rem; font-weight: 700; color: #111827; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hs-row-meta { font-size: 0.59rem; color: #9ca3af; margin-top: 0.1rem; }
+    .hs-row-cost { font-size: 0.7rem; font-weight: 600; color: #374151; flex-shrink: 0; }
+    .hs-row-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #e5e7eb; background: #fff; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: background 0.15s, border-color 0.15s, color 0.15s; color: #9ca3af; padding: 0; }
+    .hs-row:hover .hs-row-btn, .hs-row.hs-active .hs-row-btn { background: rgba(26,86,232,0.06); border-color: rgba(26,86,232,0.3); color: #1A56E8; }
+    .hs-cursor { position: absolute; right: 38px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; pointer-events: none; opacity: 0; z-index: 3; }
+    /* detail panel */
+    .hs-detail { display: none; }
+    .hs-detail.hs-visible { display: block; }
+    .hs-detail-head { display: flex; align-items: center; gap: 0.6rem; padding: 0.6rem 1rem; border-bottom: 1px solid #e5e7eb; background: #fff; }
+    .hs-back { background: none; border: 1px solid #e5e7eb; border-radius: 7px; font-size: 0.62rem; color: #6b7280; cursor: pointer; padding: 0.18rem 0.55rem; display: flex; align-items: center; gap: 0.2rem; transition: background 0.15s; font-family: inherit; flex-shrink: 0; }
+    .hs-back:hover { background: #f3f4f6; }
+    .hs-detail-title { font-size: 0.76rem; font-weight: 700; color: #111827; flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hs-detail-cost { font-size: 0.7rem; font-weight: 700; color: #1A56E8; flex-shrink: 0; }
+    .hs-dscroll { max-height: 270px; overflow-y: auto; padding: 0 1rem 0.8rem; background: #fff; }
+    .hs-dscroll::-webkit-scrollbar { width: 3px; }
+    .hs-dscroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 99px; }
+    .hs-dsec { margin-top: 0.8rem; }
+    .hs-dsec-title { font-size: 0.56rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #9ca3af; margin-bottom: 0.38rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 0.25rem; }
+    .hs-dsec-text { font-size: 0.66rem; color: #6b7280; line-height: 1.65; }
+    .hs-dwork-item { display: flex; align-items: flex-start; gap: 0.38rem; font-size: 0.65rem; color: #374151; margin-bottom: 0.22rem; line-height: 1.5; }
+    .hs-dwork-dot { width: 5px; height: 5px; border-radius: 50%; background: #1A56E8; flex-shrink: 0; margin-top: 0.42rem; }
+    .hs-dparts { width: 100%; border-collapse: collapse; font-size: 0.62rem; }
+    .hs-dparts th { color: #9ca3af; font-weight: 600; font-size: 0.56rem; text-align: left; padding-bottom: 0.28rem; border-bottom: 1px solid #f3f4f6; }
+    .hs-dparts th:last-child { text-align: right; }
+    .hs-dparts td { padding: 0.26rem 0; border-bottom: 1px solid #f9fafb; color: #374151; vertical-align: top; }
+    .hs-dparts td:last-child { text-align: right; font-weight: 600; color: #111827; }
+    .hs-dlife-item { margin-bottom: 0.42rem; }
+    .hs-dlife-row { display: flex; justify-content: space-between; font-size: 0.6rem; color: #6b7280; margin-bottom: 0.15rem; }
+    .hs-dlife-pct { font-weight: 600; }
+    .hs-dlife-pct.green { color: #10b981; } .hs-dlife-pct.amber { color: #f59e0b; } .hs-dlife-pct.red { color: #ef4444; }
+    .hs-dlife-bar-wrap { height: 4px; background: #f3f4f6; border-radius: 99px; overflow: hidden; }
+    .hs-dlife-bar { height: 100%; border-radius: 99px; }
+    .hs-dlife-bar.green { background: #10b981; } .hs-dlife-bar.amber { background: #f59e0b; } .hs-dlife-bar.red { background: #ef4444; }
+    .hs-dtech { display: flex; align-items: center; gap: 0.55rem; background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 10px; padding: 0.5rem 0.7rem; }
+    .hs-dtech-av { width: 28px; height: 28px; border-radius: 50%; background: #1A56E8; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 0.56rem; font-weight: 700; flex-shrink: 0; }
+    .hs-dtech-name { font-size: 0.66rem; font-weight: 700; color: #111827; }
+    .hs-dtech-spec { font-size: 0.57rem; color: #9ca3af; margin-top: 0.08rem; }
+    .hs-dtech-rating { margin-left: auto; font-size: 0.6rem; color: #f59e0b; white-space: nowrap; }
+    .hs-dcost-row { display: flex; justify-content: space-between; padding: 0.22rem 0; border-bottom: 1px solid #f3f4f6; font-size: 0.64rem; color: #6b7280; }
+    .hs-dcost-row.total { font-weight: 700; color: #111827; border-bottom: none; font-size: 0.7rem; padding-top: 0.35rem; }
+    .hs-dgarantia { font-size: 0.6rem; color: #059669; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.18); border-radius: 8px; padding: 0.4rem 0.6rem; line-height: 1.55; }
 
     /* ── Reporte técnico modal ── */
     .tr-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.72); backdrop-filter: blur(4px); z-index: 9900; display: flex; align-items: center; justify-content: center; padding: 1rem; opacity: 0; pointer-events: none; transition: opacity 0.22s; }
@@ -2743,34 +2774,45 @@
         <h3>Historial de mantenimiento</h3>
         <p>Accede a un dashboard personal con el registro exacto de cada servicio. Qué se hizo, cuándo, quién lo realizó y cuánto te costó — todo en un solo lugar.</p>
         <div class="hs-wrap">
-          <div class="hs-card">
-            <div class="hs-card-header">
-              <span class="hs-card-title">Mis servicios</span>
-              <span class="hs-card-badge">Al día</span>
+          <!-- lista de servicios -->
+          <div class="hs-list" id="hs-list">
+            <div class="hs-list-header">
+              <span class="hs-list-label">Mis servicios</span>
+              <span class="hs-badge-ok">Al día</span>
             </div>
-            <div class="hs-row" id="hs-row-0" data-key="0">
-              <div class="hs-row-icon" style="background:rgba(26,86,232,0.12);">⚡</div>
+            <div class="hs-row" id="hs-row-0">
+              <div class="hs-row-icon" style="background:#EEF2FF;">⚡</div>
               <div class="hs-row-info">
                 <div class="hs-row-name">Revisión eléctrica</div>
                 <div class="hs-row-meta">J. Morales · 14 Feb 2025</div>
               </div>
-              <div class="hs-row-right">
-                <span class="hs-row-cost">$680</span>
-                <span class="hs-row-open">Ver reporte →</span>
-              </div>
-              <svg class="hs-cursor" id="hs-cursor" width="18" height="18" viewBox="0 0 18 18"><path d="M2 2l10 5-5 1-3 7z" fill="white" stroke="#1A56E8" stroke-width="1"/></svg>
+              <span class="hs-row-cost">$680</span>
+              <button class="hs-row-btn" title="Ver reporte">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              </button>
+              <!-- cursor demo -->
+              <svg class="hs-cursor" id="hs-cursor" width="18" height="18" viewBox="0 0 18 18"><path d="M2 2l10 5-5 1-3 7z" fill="white" stroke="#1A56E8" stroke-width="1.2"/></svg>
             </div>
-            <div class="hs-row" id="hs-row-1" data-key="3">
-              <div class="hs-row-icon" style="background:rgba(16,185,129,0.1);">📷</div>
+            <div class="hs-row" id="hs-row-1">
+              <div class="hs-row-icon" style="background:#ECFDF5;">📷</div>
               <div class="hs-row-info">
                 <div class="hs-row-name">CCTV instalación</div>
                 <div class="hs-row-meta">R. Acosta · 05 Oct 2024</div>
               </div>
-              <div class="hs-row-right">
-                <span class="hs-row-cost">$2,100</span>
-                <span class="hs-row-open">Ver reporte →</span>
-              </div>
+              <span class="hs-row-cost">$2,100</span>
+              <button class="hs-row-btn" title="Ver reporte">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+              </button>
             </div>
+          </div>
+          <!-- reporte inline -->
+          <div class="hs-detail" id="hs-detail">
+            <div class="hs-detail-head">
+              <button class="hs-back" id="hs-back">← Volver</button>
+              <span class="hs-detail-title" id="hs-detail-title">—</span>
+              <span class="hs-detail-cost" id="hs-detail-cost">—</span>
+            </div>
+            <div class="hs-dscroll" id="hs-dscroll"></div>
           </div>
         </div>
       </div>
@@ -6295,54 +6337,6 @@ document.addEventListener('DOMContentLoaded', function(){
       manoObra:'$443', garantia:'6 meses en trabajo realizado',
     },
     {
-      id:'#b1e4f9', s:'Plomería — cocina', t:'C. Ramos', tFull:'Carlos Ramos', tSpec:'Plomero certificado · 4 años exp.', tRating:'★★★★☆ 4.7',
-      d:'02 Ene 2025', cost:'$450',
-      diagnostico:'Fuga menor bajo lavabo de cocina con escurrimiento hacia mueble inferior. Acumulación de sarro en tubería de drenaje que reducía el flujo al 40% de su capacidad.',
-      trabajo:[
-        'Desmontaje y revisión de sifón y mangueras de suministro',
-        'Reemplazo de empaques y sello mecánico del lavabo',
-        'Limpieza química de tubería de drenaje con desincrustante',
-        'Ajuste de llave de paso individual bajo fregadero',
-        'Prueba de presión y verificación sin fugas',
-      ],
-      partes:[
-        { n:'Kit de empaques universales', marca:'Aqua Pro', qty:1, precio:'$65' },
-        { n:'Sello mecánico lavabo 4"', marca:'Coflex', qty:1, precio:'$88' },
-        { n:'Desincrustante líquido 1L', marca:'Rectorseal', qty:1, precio:'$55' },
-      ],
-      vida:[
-        { eq:'Tubería suministro PVC', pct:85, color:'green', next:'Jun 2028' },
-        { eq:'Sifón y trampa', pct:70, color:'green', next:'Ene 2027' },
-        { eq:'Llave de paso', pct:50, color:'amber', next:'Jul 2025' },
-        { eq:'Mangueras flexibles', pct:40, color:'red', next:'Pronto' },
-      ],
-      manoObra:'$242', garantia:'3 meses en trabajo realizado',
-    },
-    {
-      id:'#d9c3ff', s:'Pintura exterior', t:'A. López', tFull:'Alejandro López', tSpec:'Pintor profesional · 8 años exp.', tRating:'★★★★★ 4.8',
-      d:'18 Nov 2024', cost:'$1,200',
-      diagnostico:'Fachada con pintura original de más de 5 años con descascaramiento en zona norte y manchas de humedad en viga de cornisa. Sin daño estructural.',
-      trabajo:[
-        'Preparación de superficie: lijado y remoción de pintura suelta',
-        'Aplicación de sellador anti-humedad en zona norte',
-        'Impermeabilizante de base en toda la fachada',
-        'Dos capas de pintura vinílica exterior color original',
-        'Retoque de zoclo y cornisas con esmalte',
-      ],
-      partes:[
-        { n:'Impermeabilizante Berel 4L', marca:'Berel', qty:3, precio:'$360' },
-        { n:'Pintura vinílica Comex 19L', marca:'Comex', qty:2, precio:'$480' },
-        { n:'Sellador anti-humedad 1L', marca:'Fester', qty:2, precio:'$120' },
-      ],
-      vida:[
-        { eq:'Pintura fachada', pct:95, color:'green', next:'Nov 2026' },
-        { eq:'Impermeabilizado', pct:95, color:'green', next:'Nov 2026' },
-        { eq:'Esmalte cornisas', pct:88, color:'green', next:'May 2026' },
-        { eq:'Sellado juntas', pct:80, color:'green', next:'Nov 2026' },
-      ],
-      manoObra:'$240', garantia:'12 meses en trabajo realizado',
-    },
-    {
       id:'#a3f7c1', s:'CCTV instalación', t:'R. Acosta', tFull:'Roberto Acosta', tSpec:'Técnico en seguridad electrónica · 5 años exp.', tRating:'★★★★★ 5.0',
       d:'05 Oct 2024', cost:'$2,100',
       diagnostico:'Domicilio sin sistema de videovigilancia. Se requería cobertura de puntos clave: acceso principal, estacionamiento, patio trasero y zona de servicios.',
@@ -6368,88 +6362,88 @@ document.addEventListener('DOMContentLoaded', function(){
     },
   ];
 
-  // ── Modal helpers ──
-  var overlay = document.getElementById('tr-overlay');
-  var closeBtn = document.getElementById('tr-close');
+  var listEl   = document.getElementById('hs-list');
+  var detailEl = document.getElementById('hs-detail');
+  var backBtn  = document.getElementById('hs-back');
+  var titleEl  = document.getElementById('hs-detail-title');
+  var costEl   = document.getElementById('hs-detail-cost');
+  var scroll   = document.getElementById('hs-dscroll');
+  var cursor   = document.getElementById('hs-cursor');
 
-  function openModal(data) {
-    document.getElementById('tr-title').textContent = data.s;
-    document.getElementById('tr-meta').textContent = data.id + ' · ' + data.t + ' · ' + data.d;
-    document.getElementById('tr-folio').textContent = 'Folio THR-' + data.id.replace('#','').toUpperCase() + '-' + data.d.replace(/ /g,'-');
-    var sb = document.getElementById('tr-statusbar');
-    sb.innerHTML =
-      '<div class="tr-stat"><span class="tr-stat-label">Estado</span><span class="tr-stat-value green">✓ Completado</span></div>'+
-      '<div class="tr-divider-v"></div>'+
-      '<div class="tr-stat"><span class="tr-stat-label">Costo total</span><span class="tr-stat-value blue">'+data.cost+'</span></div>'+
-      '<div class="tr-divider-v"></div>'+
-      '<div class="tr-stat"><span class="tr-stat-label">Técnico</span><span class="tr-stat-value">'+data.t+'</span></div>'+
-      '<div class="tr-divider-v"></div>'+
-      '<div class="tr-stat"><span class="tr-stat-label">Fecha</span><span class="tr-stat-value">'+data.d+'</span></div>';
-    var body = document.getElementById('tr-body');
-    var workItems = data.trabajo.map(function(w){ return '<div class="tr-work-item"><div class="tr-work-bullet"></div><span class="tr-work-text">'+w+'</span></div>'; }).join('');
-    var partRows = data.partes.map(function(p){ return '<tr><td><div class="tr-part-name">'+p.n+'</div><div class="tr-part-brand">'+p.marca+'</div></td><td style="text-align:center;color:#555;font-size:0.68rem;">×'+p.qty+'</td><td>'+p.precio+'</td></tr>'; }).join('');
-    var lifeCards = data.vida.map(function(v){
-      return '<div class="tr-life-item">'+
-        '<span class="tr-life-name">'+v.eq+'</span>'+
-        '<div class="tr-life-bar-wrap"><div class="tr-life-bar '+v.color+'" style="width:'+v.pct+'%"></div></div>'+
-        '<div style="display:flex;justify-content:space-between;align-items:center;">'+
-          '<span class="tr-life-pct '+v.color+'">'+v.pct+'%</span>'+
-          '<span class="tr-life-next">Próx. revisión: '+v.next+'</span>'+
-        '</div>'+
+  function openDetail(data) {
+    titleEl.textContent = data.s;
+    costEl.textContent  = data.cost;
+
+    var workItems = data.trabajo.map(function(w){
+      return '<div class="hs-dwork-item"><div class="hs-dwork-dot"></div><span>'+w+'</span></div>';
+    }).join('');
+
+    var partRows = data.partes.map(function(p){
+      return '<tr><td>'+p.n+'<br><span style="color:#9ca3af;font-size:0.56rem;">'+p.marca+'</span></td><td style="text-align:center;color:#9ca3af;">×'+p.qty+'</td><td>'+p.precio+'</td></tr>';
+    }).join('');
+
+    var lifeItems = data.vida.map(function(v){
+      return '<div class="hs-dlife-item">'+
+        '<div class="hs-dlife-row"><span>'+v.eq+'</span><span class="hs-dlife-pct '+v.color+'">'+v.pct+'% · Prox. '+v.next+'</span></div>'+
+        '<div class="hs-dlife-bar-wrap"><div class="hs-dlife-bar '+v.color+'" style="width:'+v.pct+'%"></div></div>'+
       '</div>';
     }).join('');
-    var partTotal = data.partes.reduce(function(acc,p){ return acc + parseInt(p.precio.replace(/[$,]/g,'')); }, 0);
-    body.innerHTML =
-      '<div class="tr-section"><div class="tr-section-title">Diagnóstico</div><p style="font-size:0.72rem;color:#6b7280;line-height:1.6;margin:0;">'+data.diagnostico+'</p></div>'+
-      '<div class="tr-section"><div class="tr-section-title">Trabajo realizado</div><div class="tr-work-list">'+workItems+'</div></div>'+
-      '<div class="tr-section"><div class="tr-section-title">Piezas y refacciones</div><table class="tr-parts-table"><thead><tr><th>Pieza / Material</th><th style="text-align:center">Qty</th><th style="text-align:right">Precio</th></tr></thead><tbody>'+partRows+'</tbody></table></div>'+
-      '<div class="tr-section"><div class="tr-section-title">Estado de vida del equipo</div><div class="tr-life-grid">'+lifeCards+'</div></div>'+
-      '<div class="tr-section"><div class="tr-section-title">Técnico asignado</div><div class="tr-tech-card"><div class="tr-tech-avatar">'+data.tFull.split(' ').map(function(x){return x[0];}).join('')+'</div><div class="tr-tech-info"><div class="tr-tech-name">'+data.tFull+'</div><div class="tr-tech-meta">'+data.tSpec+'</div></div><span class="tr-tech-badge">'+data.tRating+'</span></div></div>'+
-      '<div class="tr-section"><div class="tr-section-title">Desglose de costo</div><div class="tr-cost-rows"><div class="tr-cost-row"><span>Materiales y refacciones</span><span>$'+partTotal.toLocaleString()+'</span></div><div class="tr-cost-row"><span>Mano de obra</span><span>'+data.manoObra+'</span></div><div class="tr-cost-row tr-cost-total"><span>Total</span><span>'+data.cost+'</span></div></div></div>'+
-      '<div class="tr-section"><div class="tr-garantia"><span class="tr-garantia-icon">🛡</span><span class="tr-garantia-text"><strong>Garantía incluida:</strong> '+data.garantia+'. Si algo falla dentro del periodo, Thruver lo resuelve sin costo adicional.</span></div></div>';
-    overlay.classList.add('tr-open');
-    document.body.style.overflow = 'hidden';
+
+    var initials = data.tFull.split(' ').map(function(x){return x[0];}).join('');
+    var partTotal = data.partes.reduce(function(a,p){return a+parseInt(p.precio.replace(/[$,]/g,''));},0);
+
+    scroll.innerHTML =
+      '<div class="hs-dsec"><div class="hs-dsec-title">Diagnóstico</div><p class="hs-dsec-text">'+data.diagnostico+'</p></div>'+
+      '<div class="hs-dsec"><div class="hs-dsec-title">Trabajo realizado</div>'+workItems+'</div>'+
+      '<div class="hs-dsec"><div class="hs-dsec-title">Piezas y refacciones</div><table class="hs-dparts"><thead><tr><th>Pieza</th><th style="text-align:center">Qty</th><th style="text-align:right">Precio</th></tr></thead><tbody>'+partRows+'</tbody></table></div>'+
+      '<div class="hs-dsec"><div class="hs-dsec-title">Estado del equipo</div>'+lifeItems+'</div>'+
+      '<div class="hs-dsec"><div class="hs-dsec-title">Técnico</div><div class="hs-dtech"><div class="hs-dtech-av">'+initials+'</div><div><div class="hs-dtech-name">'+data.tFull+'</div><div class="hs-dtech-spec">'+data.tSpec+'</div></div><span class="hs-dtech-rating">'+data.tRating+'</span></div></div>'+
+      '<div class="hs-dsec"><div class="hs-dsec-title">Costo</div>'+
+        '<div class="hs-dcost-row"><span>Materiales</span><span>$'+partTotal.toLocaleString()+'</span></div>'+
+        '<div class="hs-dcost-row"><span>Mano de obra</span><span>'+data.manoObra+'</span></div>'+
+        '<div class="hs-dcost-row total"><span>Total</span><span>'+data.cost+'</span></div>'+
+      '</div>'+
+      '<div class="hs-dsec"><div class="hs-dgarantia">🛡 <strong>Garantía:</strong> '+data.garantia+'.</div></div>';
+
+    listEl.style.display = 'none';
+    detailEl.classList.add('hs-visible');
+    scroll.scrollTop = 0;
   }
 
-  function closeModal() {
-    overlay.classList.remove('tr-open');
-    document.body.style.overflow = '';
-  }
-
-  if (closeBtn) closeBtn.addEventListener('click', closeModal);
-  if (overlay) overlay.addEventListener('click', function(e){ if(e.target===overlay) closeModal(); });
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); });
-
-  // ── Wire up rows ──
-  var rowEls = [document.getElementById('hs-row-0'), document.getElementById('hs-row-1')];
-  var rowData = [DATA[0], DATA[3]];
-  rowEls.forEach(function(row, i){
-    if (!row) return;
-    row.addEventListener('click', function(){ openModal(rowData[i]); });
+  backBtn.addEventListener('click', function(){
+    detailEl.classList.remove('hs-visible');
+    listEl.style.display = '';
+    document.querySelectorAll('.hs-row').forEach(function(r){ r.classList.remove('hs-active'); });
   });
 
-  // ── Auto-demo: animate cursor on first row then open modal ──
-  var demoRow = document.getElementById('hs-row-0');
-  var demoCursor = document.getElementById('hs-cursor');
-  function runDemo() {
-    if (!demoRow || !demoCursor || overlay.classList.contains('tr-open')) return;
-    // show cursor drifting to "Ver reporte"
-    demoCursor.style.opacity = '1';
-    demoCursor.style.right = '60px';
-    demoCursor.style.top = '50%';
-    demoCursor.style.transform = 'translateY(-50%)';
-    demoRow.classList.add('hs-demo-active');
+  // wire rows
+  var rows = [document.getElementById('hs-row-0'), document.getElementById('hs-row-1')];
+  rows.forEach(function(row, i){
+    if (!row) return;
+    row.addEventListener('click', function(){
+      rows.forEach(function(r){ if(r) r.classList.remove('hs-active'); });
+      row.classList.add('hs-active');
+      openDetail(DATA[i]);
+    });
+  });
+
+  // auto-demo: show cursor → highlight row → open report
+  function runDemo(){
+    if (!cursor || !rows[0]) return;
+    cursor.style.opacity = '1';
+    rows[0].classList.add('hs-active');
     setTimeout(function(){
-      demoCursor.style.opacity = '0';
-      demoRow.classList.remove('hs-demo-active');
-      openModal(rowData[0]);
-    }, 900);
+      cursor.style.opacity = '0';
+      rows[0].classList.remove('hs-active');
+      openDetail(DATA[0]);
+    }, 1100);
   }
-  setTimeout(runDemo, 2800);
+  setTimeout(runDemo, 2600);
 
 })();
 });
 </script>
+
 
 <!-- ── Network — Infraestructura de servicios Thruver ── -->
 <script>
