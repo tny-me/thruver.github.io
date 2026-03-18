@@ -171,20 +171,62 @@
     .feat-avatar-chip { display: flex; align-items: center; gap: 0.45rem; background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 100px; padding: 0.3rem 0.75rem 0.3rem 0.3rem; font-size: 0.7rem; color: #374151; font-weight: 600; }
     .feat-avatar-dot { width: 24px; height: 24px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; font-size: 0.58rem; font-weight: 700; color: #fff; flex-shrink: 0; }
     .feat-verified-badge { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.65rem; color: #10b981; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.22); border-radius: 100px; padding: 0.22rem 0.7rem; margin-top: 1.1rem; }
-    /* Dashboard mock */
-    .feat-dash-mock { margin-top: 2rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 14px; overflow: hidden; }
-    .feat-dash-header { display: flex; align-items: center; gap: 0.6rem; padding: 0.75rem 1.1rem; border-bottom: 1px solid #f3f4f6; }
-    .feat-dash-header-dot { width: 8px; height: 8px; border-radius: 50%; background: #d1d5db; }
-    .feat-dash-header-title { font-size: 0.68rem; font-weight: 700; color: #9ca3af; letter-spacing: 0.06em; text-transform: uppercase; margin-left: 0.2rem; }
-    .feat-dash-row { display: flex; align-items: center; gap: 1rem; padding: 0.82rem 1.1rem; border-bottom: 1px solid #f3f4f6; font-size: 0.78rem; }
-    .feat-dash-row:last-child { border-bottom: none; }
-    .feat-dash-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-    .feat-dash-dot--green { background: #10b981; box-shadow: 0 0 6px rgba(16,185,129,0.5); }
-    .feat-dash-dot--blue  { background: var(--blue); box-shadow: 0 0 6px rgba(26,86,232,0.5); }
-    .feat-dash-dot--amber { background: #f59e0b; box-shadow: 0 0 6px rgba(245,158,11,0.4); }
-    .feat-dash-name { color: #374151; font-weight: 600; flex: 1; }
-    .feat-dash-date { color: #9ca3af; font-size: 0.71rem; }
-    .feat-dash-cost { color: #6b7280; font-size: 0.72rem; font-weight: 700; min-width: 50px; text-align: right; }
+    /* ── Match en vivo widget (card 02) ── */
+    .mw-wrap { margin-top: 2rem; }
+    .match-widget { width: 100%; border-radius: 18px; overflow: hidden; border: 1px solid #e5e7eb; box-shadow: 0 4px 24px rgba(0,0,0,0.06); background: #fff; }
+    .mw-header { display: flex; align-items: center; gap: 0.4rem; background: #fafafa; border-bottom: 1px solid #f3f4f6; padding: 0.7rem 1rem; }
+    .mw-header-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mw-dot-red { background: #ff5f57; } .mw-dot-yellow { background: #febc2e; } .mw-dot-green { background: #28c840; }
+    .mw-header-title { font-size: 0.72rem; font-weight: 600; color: #9ca3af; margin-left: 0.5rem; flex: 1; }
+    .mw-live-badge { display: flex; align-items: center; gap: 0.3rem; font-size: 0.62rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; }
+    .mw-live-pulse { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: pulse 1.8s ease-in-out infinite; }
+    .mw-body { padding: 1.4rem 1.4rem 1rem; min-height: 185px; display: flex; flex-direction: column; gap: 1rem; }
+    .mw-step { transition: opacity 0.35s, transform 0.35s; }
+    .mw-step--hidden { opacity: 0; pointer-events: none; height: 0; overflow: hidden; transform: translateY(6px); margin: 0 !important; }
+    .mw-req-tag { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); margin-bottom: 0.6rem; }
+    .mw-req-row { display: flex; align-items: center; gap: 0.85rem; }
+    .mw-req-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(26,86,232,0.08); border: 1px solid rgba(26,86,232,0.14); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .mw-req-title { font-size: 0.97rem; font-weight: 800; color: #0a0a0a; letter-spacing: -0.02em; }
+    .mw-req-meta { font-size: 0.77rem; color: #9ca3af; margin-top: 0.15rem; }
+    .mw-req-badge { margin-left: auto; font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 100px; white-space: nowrap; }
+    .mw-req-badge--urgent { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+    .mw-req-badge--normal  { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .mw-search-label { font-size: 0.8rem; font-weight: 600; color: #374151; margin-bottom: 0.6rem; }
+    .mw-bar-wrap { height: 5px; background: #f3f4f6; border-radius: 100px; overflow: hidden; margin-bottom: 0.75rem; }
+    .mw-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--blue), #6366f1); width: 0%; transition: width 0.08s linear; }
+    .mw-filters { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .mw-filter { font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 100px; background: #f3f4f6; color: #9ca3af; border: 1px solid #e5e7eb; transition: background 0.3s, color 0.3s; }
+    .mw-filter--active { background: rgba(26,86,232,0.07); color: var(--blue); border-color: rgba(26,86,232,0.2); }
+    .mw-list-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #9ca3af; margin-bottom: 0.55rem; }
+    .mw-candidates { display: flex; flex-direction: column; gap: 0.4rem; }
+    .mw-candidate { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem 0.8rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #fff; opacity: 0; transform: translateX(-8px); transition: opacity 0.3s, transform 0.3s, border-color 0.3s, background 0.3s; }
+    .mw-candidate--visible { opacity: 1; transform: translateX(0); }
+    .mw-candidate--selected { border-color: rgba(26,86,232,0.4); background: rgba(26,86,232,0.03); }
+    .mw-cand-avatar { width: 32px; height: 32px; border-radius: 50%; background: #0a0a0a; color: #fff; font-size: 0.62rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .mw-cand-name { font-size: 0.82rem; font-weight: 700; color: #0a0a0a; flex: 1; }
+    .mw-cand-rating { font-size: 0.72rem; color: #6b7280; }
+    .mw-cand-dist { font-size: 0.68rem; color: #9ca3af; }
+    .mw-cand-check { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #d1d5db; display: flex; align-items: center; justify-content: center; transition: background 0.3s, border-color 0.3s; flex-shrink: 0; }
+    .mw-cand-check--done { background: var(--blue); border-color: var(--blue); }
+    .mw-cand-check svg { opacity: 0; transition: opacity 0.2s; }
+    .mw-cand-check--done svg { opacity: 1; }
+    .mw-step#mw-step-done { display: flex; align-items: center; gap: 1rem; padding: 0.3rem 0; }
+    .mw-done-ring { width: 48px; height: 48px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transform: scale(0); transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    .mw-done-ring--pop { transform: scale(1); }
+    .mw-done-title { font-size: 1rem; font-weight: 800; color: #0a0a0a; letter-spacing: -0.02em; }
+    .mw-done-sub { font-size: 0.77rem; color: #9ca3af; margin-top: 0.1rem; }
+    .mw-footer { padding: 0.75rem 1.4rem 0.9rem; border-top: 1px solid #f3f4f6; background: #fafafa; }
+    .mw-timeline { display: flex; align-items: center; gap: 0; }
+    .mw-tl-step { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+    .mw-tl-step::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #d1d5db; background: #fff; transition: background 0.3s, border-color 0.3s; display: block; }
+    .mw-tl-step--active::before { border-color: var(--blue); background: var(--blue); }
+    .mw-tl-step--done::before { border-color: var(--blue); background: var(--blue); }
+    .mw-tl-step span { font-size: 0.6rem; font-weight: 600; color: #d1d5db; white-space: nowrap; transition: color 0.3s; }
+    .mw-tl-step--active span, .mw-tl-step--done span { color: var(--blue); }
+    .mw-tl-line { flex: 1; height: 1.5px; background: #e5e7eb; margin: 0 2px; margin-bottom: 14px; position: relative; overflow: hidden; }
+    .mw-tl-line::after { content: ''; position: absolute; inset: 0; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform 0.45s ease; }
+    .mw-tl-line--done::after { transform: scaleX(1); }
+    @media(max-width:540px){ .mw-tl-step span { display: none; } }
     /* Video card */
     .feat-card--video { padding: 0; cursor: default; }
     .feat-card--video:hover { background: #fff; }
@@ -2586,30 +2628,61 @@
         </div>
         <h3>Historial de mantenimiento</h3>
         <p>Accede a un dashboard personal con el registro exacto de cada servicio. Qué se hizo, cuándo, quién lo realizó y cuánto te costó — todo en un solo lugar.</p>
-        <div class="feat-dash-mock">
-          <div class="feat-dash-header">
-            <div class="feat-dash-header-dot"></div>
-            <div class="feat-dash-header-dot"></div>
-            <div class="feat-dash-header-dot"></div>
-            <span class="feat-dash-header-title">Mis servicios</span>
-          </div>
-          <div class="feat-dash-row">
-            <div class="feat-dash-dot feat-dash-dot--green"></div>
-            <span class="feat-dash-name">Revisión eléctrica</span>
-            <span class="feat-dash-date">14 Feb 2025</span>
-            <span class="feat-dash-cost">$680</span>
-          </div>
-          <div class="feat-dash-row">
-            <div class="feat-dash-dot feat-dash-dot--blue"></div>
-            <span class="feat-dash-name">Plomería — cocina</span>
-            <span class="feat-dash-date">02 Ene 2025</span>
-            <span class="feat-dash-cost">$450</span>
-          </div>
-          <div class="feat-dash-row">
-            <div class="feat-dash-dot feat-dash-dot--amber"></div>
-            <span class="feat-dash-name">Pintura exterior</span>
-            <span class="feat-dash-date">18 Nov 2024</span>
-            <span class="feat-dash-cost">$1,200</span>
+        <div class="mw-wrap">
+          <div class="match-widget" id="match-widget">
+            <div class="mw-header">
+              <span class="mw-header-dot mw-dot-red"></span>
+              <span class="mw-header-dot mw-dot-yellow"></span>
+              <span class="mw-header-dot mw-dot-green"></span>
+              <span class="mw-header-title">Thruver · Asignación automática</span>
+              <span class="mw-live-badge"><span class="mw-live-pulse"></span>En vivo</span>
+            </div>
+            <div class="mw-body">
+              <div class="mw-step" id="mw-step-request">
+                <div class="mw-req-tag" id="mw-req-tag"></div>
+                <div class="mw-req-row">
+                  <div class="mw-req-icon" id="mw-req-icon"></div>
+                  <div>
+                    <div class="mw-req-title" id="mw-req-title"></div>
+                    <div class="mw-req-meta" id="mw-req-meta"></div>
+                  </div>
+                  <div class="mw-req-badge" id="mw-req-badge"></div>
+                </div>
+              </div>
+              <div class="mw-step mw-step--hidden" id="mw-step-search">
+                <div class="mw-search-label" id="mw-search-label">Analizando técnicos disponibles...</div>
+                <div class="mw-bar-wrap"><div class="mw-bar-fill" id="mw-bar-fill"></div></div>
+                <div class="mw-filters">
+                  <span class="mw-filter" id="mwf-cert">✓ Certificado</span>
+                  <span class="mw-filter" id="mwf-prox">✓ Cercanía</span>
+                  <span class="mw-filter" id="mwf-rat">✓ Calificación</span>
+                </div>
+              </div>
+              <div class="mw-step mw-step--hidden" id="mw-step-list">
+                <div class="mw-list-label">Mejores coincidencias</div>
+                <div class="mw-candidates" id="mw-candidates"></div>
+              </div>
+              <div class="mw-step mw-step--hidden" id="mw-step-done">
+                <div class="mw-done-ring" id="mw-done-ring">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <div class="mw-done-text">
+                  <div class="mw-done-title" id="mw-done-title">Técnico asignado</div>
+                  <div class="mw-done-sub" id="mw-done-sub"></div>
+                </div>
+              </div>
+            </div>
+            <div class="mw-footer">
+              <div class="mw-timeline">
+                <div class="mw-tl-step" id="mw-tl-0"><span>Solicitud</span></div>
+                <div class="mw-tl-line" id="mw-tl-line-0"></div>
+                <div class="mw-tl-step" id="mw-tl-1"><span>Búsqueda</span></div>
+                <div class="mw-tl-line" id="mw-tl-line-1"></div>
+                <div class="mw-tl-step" id="mw-tl-2"><span>Selección</span></div>
+                <div class="mw-tl-line" id="mw-tl-line-2"></div>
+                <div class="mw-tl-step" id="mw-tl-3"><span>Asignado</span></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -5922,6 +5995,130 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     }
   });
+</script>
+
+<!-- ── Match en vivo animation (card 02) ── -->
+<script>
+(function(){
+  var SCENARIOS = [
+    { emoji:'🔧', service:'Plomería', meta:'Culiacán Norte · Urgente', badge:'urgent', badgeText:'Urgente',
+      techs:[{i:'JM',n:'J. Morales',r:'⭐ 4.9',d:'2.1 km'},{i:'CR',n:'C. Ramos',r:'⭐ 4.7',d:'3.8 km'},{i:'AL',n:'A. López',r:'⭐ 4.8',d:'5.2 km'}],
+      time:'1.8s' },
+    { emoji:'⚡', service:'Electricidad', meta:'Culiacán Centro · Normal', badge:'normal', badgeText:'Programado',
+      techs:[{i:'DH',n:'D. Herrera',r:'⭐ 5.0',d:'1.7 km'},{i:'MG',n:'M. García',r:'⭐ 4.8',d:'2.9 km'},{i:'LS',n:'L. Sánchez',r:'⭐ 4.6',d:'4.1 km'}],
+      time:'2.1s' },
+    { emoji:'📷', service:'CCTV / Cámaras', meta:'Culiacán Sur · Urgente', badge:'urgent', badgeText:'Urgente',
+      techs:[{i:'RA',n:'R. Acosta',r:'⭐ 4.9',d:'0.9 km'},{i:'VM',n:'V. Meza',r:'⭐ 4.7',d:'2.4 km'},{i:'OC',n:'O. Castillo',r:'⭐ 4.8',d:'3.6 km'}],
+      time:'1.4s' },
+    { emoji:'📡', service:'Redes / WiFi', meta:'Culiacán Nte · Normal', badge:'normal', badgeText:'Programado',
+      techs:[{i:'EL',n:'E. Leal',r:'⭐ 4.8',d:'1.2 km'},{i:'NR',n:'N. Reyes',r:'⭐ 4.9',d:'2.0 km'},{i:'AR',n:'A. Ruiz',r:'⭐ 4.7',d:'3.3 km'}],
+      time:'2.4s' },
+  ];
+  var el = {
+    reqTag:    document.getElementById('mw-req-tag'),
+    reqIcon:   document.getElementById('mw-req-icon'),
+    reqTitle:  document.getElementById('mw-req-title'),
+    reqMeta:   document.getElementById('mw-req-meta'),
+    reqBadge:  document.getElementById('mw-req-badge'),
+    barFill:   document.getElementById('mw-bar-fill'),
+    srLabel:   document.getElementById('mw-search-label'),
+    fCert:     document.getElementById('mwf-cert'),
+    fProx:     document.getElementById('mwf-prox'),
+    fRat:      document.getElementById('mwf-rat'),
+    candidates:document.getElementById('mw-candidates'),
+    doneTitle: document.getElementById('mw-done-title'),
+    doneSub:   document.getElementById('mw-done-sub'),
+    doneRing:  document.getElementById('mw-done-ring'),
+    stepReq:   document.getElementById('mw-step-request'),
+    stepSrch:  document.getElementById('mw-step-search'),
+    stepList:  document.getElementById('mw-step-list'),
+    stepDone:  document.getElementById('mw-step-done'),
+    tl:        [0,1,2,3].map(function(i){ return document.getElementById('mw-tl-'+i); }),
+    tlLine:    [0,1,2].map(function(i){ return document.getElementById('mw-tl-line-'+i); }),
+  };
+  if (!el.reqTag) return;
+
+  var idx = 0, paused = false;
+  document.getElementById('match-widget').addEventListener('mouseenter', function(){ paused = true; });
+  document.getElementById('match-widget').addEventListener('mouseleave', function(){ paused = false; });
+
+  function show(s){ s.classList.remove('mw-step--hidden'); }
+  function hide(s){ s.classList.add('mw-step--hidden'); }
+  function tlActive(i){ el.tl[i].classList.add('mw-tl-step--active'); }
+  function tlDone(i){ el.tl[i].classList.remove('mw-tl-step--active'); el.tl[i].classList.add('mw-tl-step--done'); el.tlLine[i] && el.tlLine[i].classList.add('mw-tl-line--done'); }
+  function tlReset(){ el.tl.forEach(function(t){ t.className='mw-tl-step'; }); el.tlLine.forEach(function(l){ l.className='mw-tl-line'; }); }
+  function delay(ms, fn){ return setTimeout(fn, ms); }
+
+  function run(){
+    var sc = SCENARIOS[idx % SCENARIOS.length]; idx++;
+    [el.stepSrch, el.stepList, el.stepDone].forEach(hide);
+    show(el.stepReq);
+    el.barFill.style.width = '0%'; el.barFill.style.transition = 'none';
+    [el.fCert,el.fProx,el.fRat].forEach(function(f){ f.classList.remove('mw-filter--active'); });
+    el.doneRing.classList.remove('mw-done-ring--pop');
+    tlReset();
+    el.reqTag.textContent = '📋 Nueva solicitud recibida';
+    el.reqIcon.textContent = sc.emoji;
+    el.reqTitle.textContent = sc.service;
+    el.reqMeta.textContent = sc.meta;
+    el.reqBadge.textContent = sc.badgeText;
+    el.reqBadge.className = 'mw-req-badge mw-req-badge--' + sc.badge;
+    tlActive(0);
+
+    delay(1200, function(){
+      if(paused){ delay(400, run); return; }
+      tlDone(0); tlActive(1);
+      show(el.stepSrch);
+      el.srLabel.textContent = 'Analizando técnicos disponibles...';
+      requestAnimationFrame(function(){
+        el.barFill.style.transition = 'width 2.2s cubic-bezier(0.4,0,0.2,1)';
+        el.barFill.style.width = '100%';
+      });
+      delay(500,  function(){ el.fCert.classList.add('mw-filter--active'); });
+      delay(1000, function(){ el.fProx.classList.add('mw-filter--active'); });
+      delay(1500, function(){ el.fRat.classList.add('mw-filter--active'); el.srLabel.textContent = 'Mejores técnicos encontrados ✓'; });
+
+      delay(2400, function(){
+        if(paused){ delay(400, run); return; }
+        tlDone(1); tlActive(2);
+        hide(el.stepSrch); show(el.stepList);
+        el.candidates.innerHTML = '';
+        sc.techs.forEach(function(t, i){
+          var card = document.createElement('div');
+          card.className = 'mw-candidate';
+          card.innerHTML =
+            '<div class="mw-cand-avatar">'+t.i+'</div>'+
+            '<span class="mw-cand-name">'+t.n+'</span>'+
+            '<span class="mw-cand-rating">'+t.r+'</span>'+
+            '<span class="mw-cand-dist">📍 '+t.d+'</span>'+
+            '<div class="mw-cand-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
+          el.candidates.appendChild(card);
+          delay(i * 280, function(){ card.classList.add('mw-candidate--visible'); });
+        });
+        delay(1100, function(){
+          if(paused){ delay(400, run); return; }
+          var cards = el.candidates.querySelectorAll('.mw-candidate');
+          if(cards[0]){
+            cards[0].classList.add('mw-candidate--selected');
+            var chk = cards[0].querySelector('.mw-cand-check');
+            if(chk) chk.classList.add('mw-cand-check--done');
+          }
+          delay(500, function(){
+            if(paused){ delay(400, run); return; }
+            tlDone(2); tlActive(3);
+            hide(el.stepList); show(el.stepDone);
+            el.doneTitle.textContent = sc.techs[0].n + ' asignado';
+            el.doneSub.textContent = 'En camino · ' + sc.techs[0].d + ' · Asignación: ' + sc.time;
+            requestAnimationFrame(function(){ el.doneRing.classList.add('mw-done-ring--pop'); });
+            delay(500, function(){ tlDone(3); });
+            delay(3200, run);
+          });
+        });
+      });
+    });
+  }
+  run();
+})();
 </script>
 
 <!-- ── Mapa isométrico Thruver ── -->
