@@ -197,15 +197,71 @@
     .feat-reminder-title { font-size: 0.8rem; font-weight: 700; color: #0a0a0a; margin-bottom: 0.2rem; }
     .feat-reminder-sub   { font-size: 0.72rem; color: #6b7280; }
     .feat-reminder-badge { margin-top: 0.65rem; display: inline-block; font-size: 0.63rem; font-weight: 700; background: rgba(26,86,232,0.1); color: var(--blue); padding: 0.22rem 0.75rem; border-radius: 100px; border: 1px solid rgba(26,86,232,0.2); cursor: pointer; }
-    /* Network canvas */
-    .feat-network-wrap { position: relative; margin: 2rem auto 3.5rem; max-width: 900px; height: 300px; border-radius: 20px; overflow: hidden; border: 1px solid #e5e7eb; background: #fff; cursor: crosshair; }
-    #thruver-net { display: block; width: 100%; height: 100%; }
-    .feat-network-legend { display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 3.5rem; }
-    .feat-net-leg { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; color: #6b7280; font-weight: 600; }
-    .feat-net-leg-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .feat-net-leg-dot--biz { background: var(--blue); }
-    .feat-net-leg-dot--tec { background: #10b981; border-radius: 3px; }
-    @media(max-width:768px){ .feat-network-wrap { height: 200px; margin-bottom: 2rem; } .feat-network-legend { margin-bottom: 2rem; } }
+    /* ── Match en vivo widget ── */
+    .match-widget-wrap { display: flex; justify-content: center; margin: 2.5rem auto 4rem; }
+    .match-widget { width: 100%; max-width: 480px; border-radius: 18px; overflow: hidden; border: 1px solid #e5e7eb; box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 2px 8px rgba(0,0,0,0.04); background: #fff; }
+    /* Header */
+    .mw-header { display: flex; align-items: center; gap: 0.4rem; background: #fafafa; border-bottom: 1px solid #f3f4f6; padding: 0.7rem 1rem; }
+    .mw-header-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mw-dot-red { background: #ff5f57; }
+    .mw-dot-yellow { background: #febc2e; }
+    .mw-dot-green { background: #28c840; }
+    .mw-header-title { font-size: 0.72rem; font-weight: 600; color: #9ca3af; margin-left: 0.5rem; flex: 1; }
+    .mw-live-badge { display: flex; align-items: center; gap: 0.3rem; font-size: 0.62rem; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.08em; }
+    .mw-live-pulse { width: 6px; height: 6px; border-radius: 50%; background: #10b981; animation: pulse 1.8s ease-in-out infinite; }
+    /* Body */
+    .mw-body { padding: 1.4rem 1.4rem 1rem; min-height: 200px; display: flex; flex-direction: column; gap: 1rem; }
+    .mw-step { transition: opacity 0.35s, transform 0.35s; }
+    .mw-step--hidden { opacity: 0; pointer-events: none; height: 0; overflow: hidden; transform: translateY(6px); margin: 0 !important; }
+    /* Step 1: request */
+    .mw-req-tag { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--blue); margin-bottom: 0.6rem; }
+    .mw-req-row { display: flex; align-items: center; gap: 0.85rem; }
+    .mw-req-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(26,86,232,0.08); border: 1px solid rgba(26,86,232,0.14); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; flex-shrink: 0; }
+    .mw-req-title { font-size: 0.97rem; font-weight: 800; color: #0a0a0a; letter-spacing: -0.02em; }
+    .mw-req-meta { font-size: 0.77rem; color: #9ca3af; margin-top: 0.15rem; }
+    .mw-req-badge { margin-left: auto; font-size: 0.65rem; font-weight: 700; padding: 0.25rem 0.65rem; border-radius: 100px; white-space: nowrap; }
+    .mw-req-badge--urgent { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+    .mw-req-badge--normal  { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    /* Step 2: search */
+    .mw-search-label { font-size: 0.8rem; font-weight: 600; color: #374151; margin-bottom: 0.6rem; }
+    .mw-bar-wrap { height: 5px; background: #f3f4f6; border-radius: 100px; overflow: hidden; margin-bottom: 0.75rem; }
+    .mw-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, var(--blue), #6366f1); width: 0%; transition: width 0.08s linear; }
+    .mw-filters { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .mw-filter { font-size: 0.65rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: 100px; background: #f3f4f6; color: #9ca3af; border: 1px solid #e5e7eb; transition: background 0.3s, color 0.3s; }
+    .mw-filter--active { background: rgba(26,86,232,0.07); color: var(--blue); border-color: rgba(26,86,232,0.2); }
+    /* Step 3: candidates */
+    .mw-list-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #9ca3af; margin-bottom: 0.55rem; }
+    .mw-candidates { display: flex; flex-direction: column; gap: 0.4rem; }
+    .mw-candidate { display: flex; align-items: center; gap: 0.7rem; padding: 0.6rem 0.8rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #fff; opacity: 0; transform: translateX(-8px); transition: opacity 0.3s, transform 0.3s, border-color 0.3s, background 0.3s; }
+    .mw-candidate--visible { opacity: 1; transform: translateX(0); }
+    .mw-candidate--selected { border-color: rgba(26,86,232,0.4); background: rgba(26,86,232,0.03); }
+    .mw-cand-avatar { width: 32px; height: 32px; border-radius: 50%; background: #0a0a0a; color: #fff; font-size: 0.62rem; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .mw-cand-name { font-size: 0.82rem; font-weight: 700; color: #0a0a0a; flex: 1; }
+    .mw-cand-rating { font-size: 0.72rem; color: #6b7280; }
+    .mw-cand-dist { font-size: 0.68rem; color: #9ca3af; }
+    .mw-cand-check { width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid #d1d5db; display: flex; align-items: center; justify-content: center; transition: background 0.3s, border-color 0.3s; }
+    .mw-cand-check--done { background: var(--blue); border-color: var(--blue); }
+    .mw-cand-check svg { opacity: 0; transition: opacity 0.2s; }
+    .mw-cand-check--done svg { opacity: 1; }
+    /* Step 4: done */
+    .mw-step#mw-step-done { display: flex; align-items: center; gap: 1rem; padding: 0.3rem 0; }
+    .mw-done-ring { width: 48px; height: 48px; border-radius: 50%; background: var(--blue); display: flex; align-items: center; justify-content: center; flex-shrink: 0; transform: scale(0); transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    .mw-done-ring--pop { transform: scale(1); }
+    .mw-done-title { font-size: 1rem; font-weight: 800; color: #0a0a0a; letter-spacing: -0.02em; }
+    .mw-done-sub { font-size: 0.77rem; color: #9ca3af; margin-top: 0.1rem; }
+    /* Footer timeline */
+    .mw-footer { padding: 0.75rem 1.4rem 0.9rem; border-top: 1px solid #f3f4f6; background: #fafafa; }
+    .mw-timeline { display: flex; align-items: center; gap: 0; }
+    .mw-tl-step { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
+    .mw-tl-step::before { content: ''; width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #d1d5db; background: #fff; transition: background 0.3s, border-color 0.3s; display: block; }
+    .mw-tl-step--active::before { border-color: var(--blue); background: var(--blue); }
+    .mw-tl-step--done::before { border-color: var(--blue); background: var(--blue); }
+    .mw-tl-step span { font-size: 0.6rem; font-weight: 600; color: #d1d5db; white-space: nowrap; transition: color 0.3s; }
+    .mw-tl-step--active span, .mw-tl-step--done span { color: var(--blue); }
+    .mw-tl-line { flex: 1; height: 1.5px; background: #e5e7eb; margin: 0 2px; margin-bottom: 14px; position: relative; overflow: hidden; }
+    .mw-tl-line::after { content: ''; position: absolute; inset: 0; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform 0.45s ease; }
+    .mw-tl-line--done::after { transform: scaleX(1); }
+    @media(max-width:540px){ .match-widget-wrap { padding: 0 1rem; } .mw-tl-step span { display: none; } }
 
     /* ══ ABOUT ══ */
     .lp-about { background: #090909; padding: 7rem 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
@@ -2545,13 +2601,70 @@
       <span class="feat-label">Lo que Thruver hace por ti</span>
       <h2 class="feat-title">Todo bajo control,<br>desde el primer servicio.</h2>
     </div>
-    <!-- Network canvas -->
-    <div class="feat-network-wrap" id="feat-network-wrap">
-      <canvas id="thruver-net"></canvas>
-    </div>
-    <div class="feat-network-legend">
-      <span class="feat-net-leg"><span class="feat-net-leg-dot feat-net-leg-dot--biz"></span>Empresa</span>
-      <span class="feat-net-leg"><span class="feat-net-leg-dot feat-net-leg-dot--tec" style="border-radius:3px"></span>Técnico verificado</span>
+    <!-- Match en vivo widget -->
+    <div class="match-widget-wrap">
+      <div class="match-widget" id="match-widget">
+        <!-- Header -->
+        <div class="mw-header">
+          <span class="mw-header-dot mw-dot-red"></span>
+          <span class="mw-header-dot mw-dot-yellow"></span>
+          <span class="mw-header-dot mw-dot-green"></span>
+          <span class="mw-header-title">Thruver · Asignación automática</span>
+          <span class="mw-live-badge"><span class="mw-live-pulse"></span>En vivo</span>
+        </div>
+        <!-- Body -->
+        <div class="mw-body">
+          <!-- Step 1: New request -->
+          <div class="mw-step" id="mw-step-request">
+            <div class="mw-req-tag" id="mw-req-tag"></div>
+            <div class="mw-req-row">
+              <div class="mw-req-icon" id="mw-req-icon"></div>
+              <div>
+                <div class="mw-req-title" id="mw-req-title"></div>
+                <div class="mw-req-meta" id="mw-req-meta"></div>
+              </div>
+              <div class="mw-req-badge" id="mw-req-badge"></div>
+            </div>
+          </div>
+          <!-- Step 2: Searching -->
+          <div class="mw-step mw-step--hidden" id="mw-step-search">
+            <div class="mw-search-label" id="mw-search-label">Analizando técnicos disponibles...</div>
+            <div class="mw-bar-wrap"><div class="mw-bar-fill" id="mw-bar-fill"></div></div>
+            <div class="mw-filters">
+              <span class="mw-filter" id="mwf-cert">✓ Certificado</span>
+              <span class="mw-filter" id="mwf-prox">✓ Cercanía</span>
+              <span class="mw-filter" id="mwf-rat">✓ Calificación</span>
+            </div>
+          </div>
+          <!-- Step 3: Candidates -->
+          <div class="mw-step mw-step--hidden" id="mw-step-list">
+            <div class="mw-list-label">Mejores coincidencias</div>
+            <div class="mw-candidates" id="mw-candidates"></div>
+          </div>
+          <!-- Step 4: Assigned -->
+          <div class="mw-step mw-step--hidden" id="mw-step-done">
+            <div class="mw-done-ring" id="mw-done-ring">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="mw-done-text">
+              <div class="mw-done-title" id="mw-done-title">Técnico asignado</div>
+              <div class="mw-done-sub" id="mw-done-sub"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Footer timeline -->
+        <div class="mw-footer">
+          <div class="mw-timeline">
+            <div class="mw-tl-step" id="mw-tl-0"><span>Solicitud</span></div>
+            <div class="mw-tl-line" id="mw-tl-line-0"></div>
+            <div class="mw-tl-step" id="mw-tl-1"><span>Búsqueda</span></div>
+            <div class="mw-tl-line" id="mw-tl-line-1"></div>
+            <div class="mw-tl-step" id="mw-tl-2"><span>Selección</span></div>
+            <div class="mw-tl-line" id="mw-tl-line-2"></div>
+            <div class="mw-tl-step" id="mw-tl-3"><span>Asignado</span></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="feat-bento">
 
@@ -5920,196 +6033,146 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 </script>
 
-<!-- ── Thruver Network Canvas ── -->
+<!-- ── Match en vivo animation ── -->
 <script>
 (function(){
-  var canvas = document.getElementById('thruver-net');
-  if (!canvas) return;
-  var wrap = document.getElementById('feat-network-wrap');
-  var ctx = canvas.getContext('2d');
-  var mouse = { x: -999, y: -999 };
-  var W, H, nodes, connections, packets;
-
-  // City nodes: [label, xRatio, yRatio, type: 'biz'|'tec']
-  var CITIES = [
-    { label: 'Culiacán', x: 0.22, y: 0.52, type: 'biz' },
-    { label: 'CDMX',     x: 0.58, y: 0.62, type: 'biz' },
-    { label: 'GDL',      x: 0.40, y: 0.55, type: 'biz' },
-    { label: 'MTY',      x: 0.52, y: 0.28, type: 'biz' },
-    { label: 'Tijuana',  x: 0.08, y: 0.20, type: 'biz' },
-    { label: 'Hermosillo', x: 0.16, y: 0.36, type: 'biz' },
-    { label: 'Mazatlán', x: 0.25, y: 0.65, type: 'tec' },
-    { label: 'Mérida',   x: 0.76, y: 0.60, type: 'tec' },
-    { label: 'Puebla',   x: 0.63, y: 0.68, type: 'tec' },
-    { label: 'León',     x: 0.47, y: 0.56, type: 'tec' },
-    { label: 'Chihuahua',x: 0.30, y: 0.22, type: 'tec' },
-    { label: 'Saltillo', x: 0.55, y: 0.34, type: 'tec' },
-    { label: 'Veracruz', x: 0.68, y: 0.65, type: 'tec' },
-    { label: 'Oaxaca',   x: 0.62, y: 0.78, type: 'tec' },
-    { label: 'Cancún',   x: 0.84, y: 0.52, type: 'biz' },
+  var SCENARIOS = [
+    { emoji:'🔧', service:'Plomería', meta:'Culiacán Norte · Urgente', badge:'urgent', badgeText:'Urgente',
+      techs:[{i:'JM',n:'J. Morales',r:'⭐ 4.9',d:'2.1 km'},{i:'CR',n:'C. Ramos',r:'⭐ 4.7',d:'3.8 km'},{i:'AL',n:'A. López',r:'⭐ 4.8',d:'5.2 km'}],
+      time:'1.8s' },
+    { emoji:'⚡', service:'Electricidad', meta:'Culiacán Centro · Normal', badge:'normal', badgeText:'Programado',
+      techs:[{i:'DH',n:'D. Herrera',r:'⭐ 5.0',d:'1.7 km'},{i:'MG',n:'M. García',r:'⭐ 4.8',d:'2.9 km'},{i:'LS',n:'L. Sánchez',r:'⭐ 4.6',d:'4.1 km'}],
+      time:'2.1s' },
+    { emoji:'📷', service:'CCTV / Cámaras', meta:'Culiacán Sur · Urgente', badge:'urgent', badgeText:'Urgente',
+      techs:[{i:'RA',n:'R. Acosta',r:'⭐ 4.9',d:'0.9 km'},{i:'VM',n:'V. Meza',r:'⭐ 4.7',d:'2.4 km'},{i:'OC',n:'O. Castillo',r:'⭐ 4.8',d:'3.6 km'}],
+      time:'1.4s' },
+    { emoji:'📡', service:'Redes / WiFi', meta:'Culiacán Nte · Normal', badge:'normal', badgeText:'Programado',
+      techs:[{i:'EL',n:'E. Leal',r:'⭐ 4.8',d:'1.2 km'},{i:'NR',n:'N. Reyes',r:'⭐ 4.9',d:'2.0 km'},{i:'AR',n:'A. Ruiz',r:'⭐ 4.7',d:'3.3 km'}],
+      time:'2.4s' },
   ];
 
-  // Connections: indices of CITIES that are linked
-  var LINKS = [
-    [0,6],[0,10],[0,5],[0,2],
-    [1,8],[1,9],[1,13],[1,7],
-    [2,9],[2,3],[2,11],
-    [3,11],[3,10],[3,4],
-    [4,5],[5,0],
-    [6,2],[7,14],[8,12],[9,2],
-    [11,3],[12,1],[13,8],[14,7]
-  ];
+  var el = {
+    reqTag:    document.getElementById('mw-req-tag'),
+    reqIcon:   document.getElementById('mw-req-icon'),
+    reqTitle:  document.getElementById('mw-req-title'),
+    reqMeta:   document.getElementById('mw-req-meta'),
+    reqBadge:  document.getElementById('mw-req-badge'),
+    barFill:   document.getElementById('mw-bar-fill'),
+    srLabel:   document.getElementById('mw-search-label'),
+    fCert:     document.getElementById('mwf-cert'),
+    fProx:     document.getElementById('mwf-prox'),
+    fRat:      document.getElementById('mwf-rat'),
+    candidates:document.getElementById('mw-candidates'),
+    doneTitle: document.getElementById('mw-done-title'),
+    doneSub:   document.getElementById('mw-done-sub'),
+    doneRing:  document.getElementById('mw-done-ring'),
+    stepReq:   document.getElementById('mw-step-request'),
+    stepSrch:  document.getElementById('mw-step-search'),
+    stepList:  document.getElementById('mw-step-list'),
+    stepDone:  document.getElementById('mw-step-done'),
+    tl:        [0,1,2,3].map(function(i){ return document.getElementById('mw-tl-'+i); }),
+    tlLine:    [0,1,2].map(function(i){ return document.getElementById('mw-tl-line-'+i); }),
+  };
 
-  function resize(){
-    W = canvas.width  = wrap.offsetWidth;
-    H = canvas.height = wrap.offsetHeight;
-    buildNodes();
+  if(!el.reqTag) return;
+
+  var idx = 0, paused = false, timer = null;
+  document.getElementById('match-widget').addEventListener('mouseenter', function(){ paused = true; });
+  document.getElementById('match-widget').addEventListener('mouseleave', function(){ paused = false; });
+
+  function show(step){ step.classList.remove('mw-step--hidden'); }
+  function hide(step){ step.classList.add('mw-step--hidden'); }
+  function tlActive(i){ el.tl[i].classList.add('mw-tl-step--active'); }
+  function tlDone(i){ el.tl[i].classList.remove('mw-tl-step--active'); el.tl[i].classList.add('mw-tl-step--done'); el.tlLine[i] && el.tlLine[i].classList.add('mw-tl-line--done'); }
+  function tlReset(){ el.tl.forEach(function(t){ t.className='mw-tl-step'; }); el.tlLine.forEach(function(l){ l.className='mw-tl-line'; }); }
+
+  function delay(ms, fn){ return setTimeout(fn, ms); }
+
+  function run(){
+    var sc = SCENARIOS[idx % SCENARIOS.length];
+    idx++;
+
+    // Reset
+    [el.stepSrch, el.stepList, el.stepDone].forEach(hide);
+    show(el.stepReq);
+    el.barFill.style.width = '0%';
+    el.barFill.style.transition = 'none';
+    [el.fCert,el.fProx,el.fRat].forEach(function(f){ f.classList.remove('mw-filter--active'); });
+    el.doneRing.classList.remove('mw-done-ring--pop');
+    tlReset();
+
+    // Step 0: request
+    el.reqTag.textContent = '📋 Nueva solicitud recibida';
+    el.reqIcon.textContent = sc.emoji;
+    el.reqTitle.textContent = sc.service;
+    el.reqMeta.textContent = sc.meta;
+    el.reqBadge.textContent = sc.badgeText;
+    el.reqBadge.className = 'mw-req-badge mw-req-badge--' + sc.badge;
+    tlActive(0);
+
+    delay(1200, function(){
+      if(paused){ timer = delay(400, run); return; }
+      tlDone(0); tlActive(1);
+      show(el.stepSrch);
+      el.srLabel.textContent = 'Analizando técnicos disponibles...';
+
+      // Progress bar
+      requestAnimationFrame(function(){
+        el.barFill.style.transition = 'width 2.2s cubic-bezier(0.4,0,0.2,1)';
+        el.barFill.style.width = '100%';
+      });
+
+      delay(500,  function(){ el.fCert.classList.add('mw-filter--active'); });
+      delay(1000, function(){ el.fProx.classList.add('mw-filter--active'); });
+      delay(1500, function(){ el.fRat.classList.add('mw-filter--active'); el.srLabel.textContent = 'Mejores técnicos encontrados ✓'; });
+
+      delay(2400, function(){
+        if(paused){ timer = delay(400, run); return; }
+        tlDone(1); tlActive(2);
+        hide(el.stepSrch);
+        show(el.stepList);
+        el.candidates.innerHTML = '';
+
+        sc.techs.forEach(function(t, i){
+          var card = document.createElement('div');
+          card.className = 'mw-candidate';
+          card.innerHTML =
+            '<div class="mw-cand-avatar">'+t.i+'</div>'+
+            '<span class="mw-cand-name">'+t.n+'</span>'+
+            '<span class="mw-cand-rating">'+t.r+'</span>'+
+            '<span class="mw-cand-dist">📍 '+t.d+'</span>'+
+            '<div class="mw-cand-check" id="mw-check-'+i+'"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>';
+          el.candidates.appendChild(card);
+          delay(i * 280, function(){ card.classList.add('mw-candidate--visible'); });
+        });
+
+        // Select first after show
+        delay(1100, function(){
+          if(paused){ timer = delay(400, run); return; }
+          var cards = el.candidates.querySelectorAll('.mw-candidate');
+          if(cards[0]){
+            cards[0].classList.add('mw-candidate--selected');
+            var chk = cards[0].querySelector('.mw-cand-check');
+            if(chk) chk.classList.add('mw-cand-check--done');
+          }
+          delay(500, function(){
+            if(paused){ timer = delay(400, run); return; }
+            tlDone(2); tlActive(3);
+            hide(el.stepList);
+            show(el.stepDone);
+            el.doneTitle.textContent = sc.techs[0].n + ' asignado';
+            el.doneSub.textContent = 'En camino · ' + sc.techs[0].d + ' · Tiempo de asignación: ' + sc.time;
+            requestAnimationFrame(function(){ el.doneRing.classList.add('mw-done-ring--pop'); });
+            delay(500, function(){ tlDone(3); });
+            // Loop
+            timer = delay(3200, run);
+          });
+        });
+      });
+    });
   }
 
-  function buildNodes(){
-    nodes = CITIES.map(function(c){
-      return {
-        label: c.label,
-        px: c.x * W,
-        py: c.y * H,
-        type: c.type,
-        pulse: Math.random() * Math.PI * 2,
-        r: c.type === 'biz' ? 5 : 4.5
-      };
-    });
-    // Re-init packets
-    packets = [];
-    LINKS.forEach(function(l, i){
-      if(Math.random() > 0.4) spawnPacket(l[0], l[1]);
-    });
-  }
-
-  function spawnPacket(a, b){
-    packets.push({ a: a, b: b, t: Math.random(), speed: 0.003 + Math.random() * 0.004, dir: Math.random() > 0.5 ? 1 : -1 });
-  }
-
-  function draw(ts){
-    requestAnimationFrame(draw);
-    ctx.clearRect(0, 0, W, H);
-
-    // Draw links
-    LINKS.forEach(function(l){
-      var na = nodes[l[0]], nb = nodes[l[1]];
-      var dx = nb.px - na.px, dy = nb.py - na.py;
-      var dist = Math.sqrt(dx*dx + dy*dy);
-      // Mouse proximity highlight
-      var mx = (na.px + nb.px) / 2, my = (na.py + nb.py) / 2;
-      var mdist = Math.sqrt((mx - mouse.x)*(mx - mouse.x) + (my - mouse.y)*(my - mouse.y));
-      var alpha = mdist < 100 ? 0.28 : 0.09;
-      ctx.beginPath();
-      ctx.moveTo(na.px, na.py);
-      ctx.lineTo(nb.px, nb.py);
-      ctx.strokeStyle = 'rgba(26,86,232,' + alpha + ')';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    });
-
-    // Draw packets (moving dots on lines)
-    packets.forEach(function(pk){
-      pk.t += pk.speed * pk.dir;
-      if(pk.t > 1){ pk.t = 1; pk.dir = -1; }
-      if(pk.t < 0){ pk.t = 0; pk.dir = 1; }
-      var na = nodes[pk.a], nb = nodes[pk.b];
-      var px = na.px + (nb.px - na.px) * pk.t;
-      var py = na.py + (nb.py - na.py) * pk.t;
-      ctx.beginPath();
-      ctx.arc(px, py, 2.5, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(26,86,232,0.65)';
-      ctx.fill();
-    });
-
-    // Draw nodes
-    var nowMs = ts * 0.001;
-    nodes.forEach(function(n){
-      var hovered = Math.sqrt((n.px-mouse.x)*(n.px-mouse.x)+(n.py-mouse.y)*(n.py-mouse.y)) < 28;
-      var pulse = 0.5 + 0.5 * Math.sin(nowMs * 1.8 + n.pulse);
-
-      if(n.type === 'biz'){
-        // Blue circle for business
-        // Pulse ring
-        ctx.beginPath();
-        ctx.arc(n.px, n.py, n.r + 4 + pulse * 4, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(26,86,232,' + (0.12 + pulse * 0.1) + ')';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        // Fill
-        ctx.beginPath();
-        ctx.arc(n.px, n.py, hovered ? n.r + 2 : n.r, 0, Math.PI * 2);
-        ctx.fillStyle = hovered ? '#1A56E8' : 'rgba(26,86,232,0.85)';
-        ctx.fill();
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      } else {
-        // Green rounded square for tech
-        var s = hovered ? n.r + 2 : n.r;
-        roundRect(ctx, n.px - s, n.py - s, s*2, s*2, 2.5);
-        ctx.fillStyle = hovered ? '#0d9e6e' : 'rgba(16,185,129,0.85)';
-        ctx.fill();
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-        // Pulse ring
-        var pr = s + 3 + pulse * 3;
-        roundRect(ctx, n.px - pr, n.py - pr, pr*2, pr*2, 3);
-        ctx.strokeStyle = 'rgba(16,185,129,' + (0.12 + pulse * 0.1) + ')';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-      }
-
-      // Label on hover
-      if(hovered){
-        ctx.font = '600 10px -apple-system, sans-serif';
-        ctx.fillStyle = '#0a0a0a';
-        ctx.textAlign = 'center';
-        var tw = ctx.measureText(n.label).width;
-        ctx.fillStyle = 'rgba(255,255,255,0.92)';
-        roundRect(ctx, n.px - tw/2 - 5, n.py - 22, tw + 10, 16, 4);
-        ctx.fill();
-        ctx.strokeStyle = '#e5e7eb';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-        ctx.fillStyle = '#0a0a0a';
-        ctx.fillText(n.label, n.px, n.py - 10);
-      }
-    });
-
-    // Occasionally spawn new packets
-    if(Math.random() < 0.012 && packets.length < 20){
-      var li = Math.floor(Math.random() * LINKS.length);
-      spawnPacket(LINKS[li][0], LINKS[li][1]);
-    }
-  }
-
-  function roundRect(c, x, y, w, h, r){
-    c.beginPath();
-    c.moveTo(x + r, y);
-    c.lineTo(x + w - r, y);
-    c.quadraticCurveTo(x + w, y, x + w, y + r);
-    c.lineTo(x + w, y + h - r);
-    c.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    c.lineTo(x + r, y + h);
-    c.quadraticCurveTo(x, y + h, x, y + h - r);
-    c.lineTo(x, y + r);
-    c.quadraticCurveTo(x, y, x + r, y);
-    c.closePath();
-  }
-
-  wrap.addEventListener('mousemove', function(e){
-    var rect = canvas.getBoundingClientRect();
-    mouse.x = (e.clientX - rect.left) * (W / rect.width);
-    mouse.y = (e.clientY - rect.top)  * (H / rect.height);
-  });
-  wrap.addEventListener('mouseleave', function(){ mouse.x = -999; mouse.y = -999; });
-
-  window.addEventListener('resize', resize);
-  resize();
-  requestAnimationFrame(draw);
+  run();
 })();
 </script>
 
