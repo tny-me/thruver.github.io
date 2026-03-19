@@ -2389,6 +2389,44 @@
       .hero-v3 { padding: 6rem 0 5rem; }
     }
 
+
+    /* ── Bento: wider, edge-to-edge feel ── */
+    .lp-features-dark .lp-inner { max-width: 1440px; padding-left: 2rem; padding-right: 2rem; }
+    .feat-bento { grid-template-columns: repeat(5,1fr); gap: 1px; }
+    .iso-wrap { max-width: none; margin-left: 0; margin-right: 0; }
+
+    /* ── Historial widget: side-by-side ── */
+    .hs-wrap {
+      display: grid !important;
+      grid-template-columns: 190px 1fr;
+      min-height: 248px;
+      margin-top: 1.5rem;
+      border-radius: 12px;
+    }
+    .hs-list { background: #fafafa; border-right: 1px solid #e5e7eb; }
+    .hs-list-header { background: #f9fafb; }
+    /* detail: always shown as right panel */
+    .hs-detail { display: block !important; border-left: none; }
+    .hs-detail.hs-visible { display: block !important; }
+    .hs-back { display: none !important; }
+    .hs-detail-head {
+      padding: 0.55rem 0.85rem;
+      background: #fff;
+      gap: 0.45rem;
+    }
+    .hs-detail-title { font-size: 0.7rem; }
+    .hs-detail-cost  { font-size: 0.66rem; }
+    .hs-dscroll { max-height: 202px; padding: 0 0.85rem 0.6rem; }
+    /* row transition when auto-switching */
+    .hs-row { transition: background 0.25s; }
+    .hs-row.hs-active { background: rgba(26,86,232,0.06) !important; }
+    .hs-row.hs-active .hs-row-name { color: #1A56E8; }
+
+    @media(max-width:900px){
+      .hs-wrap { grid-template-columns: 1fr; }
+      .hs-list { border-right: none; border-bottom: 1px solid #e5e7eb; }
+    }
+
   </style>
 </head>
 <body>
@@ -6589,40 +6627,32 @@ document.addEventListener('DOMContentLoaded', function(){
     },
   ];
 
-  var listEl   = document.getElementById('hs-list');
-  var detailEl = document.getElementById('hs-detail');
-  var backBtn  = document.getElementById('hs-back');
   var titleEl  = document.getElementById('hs-detail-title');
   var costEl   = document.getElementById('hs-detail-cost');
   var scroll   = document.getElementById('hs-dscroll');
-  var cursor   = document.getElementById('hs-cursor');
+  var rows     = [document.getElementById('hs-row-0'), document.getElementById('hs-row-1')];
 
-  function openDetail(data) {
+  function renderDetail(data) {
     titleEl.textContent = data.s;
     costEl.textContent  = data.cost;
-
     var workItems = data.trabajo.map(function(w){
       return '<div class="hs-dwork-item"><div class="hs-dwork-dot"></div><span>'+w+'</span></div>';
     }).join('');
-
     var partRows = data.partes.map(function(p){
       return '<tr><td>'+p.n+'<br><span style="color:#9ca3af;font-size:0.56rem;">'+p.marca+'</span></td><td style="text-align:center;color:#9ca3af;">×'+p.qty+'</td><td>'+p.precio+'</td></tr>';
     }).join('');
-
     var lifeItems = data.vida.map(function(v){
       return '<div class="hs-dlife-item">'+
         '<div class="hs-dlife-row"><span>'+v.eq+'</span><span class="hs-dlife-pct '+v.color+'">'+v.pct+'% · Prox. '+v.next+'</span></div>'+
         '<div class="hs-dlife-bar-wrap"><div class="hs-dlife-bar '+v.color+'" style="width:'+v.pct+'%"></div></div>'+
       '</div>';
     }).join('');
-
     var initials = data.tFull.split(' ').map(function(x){return x[0];}).join('');
     var partTotal = data.partes.reduce(function(a,p){return a+parseInt(p.precio.replace(/[$,]/g,''));},0);
-
     scroll.innerHTML =
       '<div class="hs-dsec"><div class="hs-dsec-title">Diagnóstico</div><p class="hs-dsec-text">'+data.diagnostico+'</p></div>'+
       '<div class="hs-dsec"><div class="hs-dsec-title">Trabajo realizado</div>'+workItems+'</div>'+
-      '<div class="hs-dsec"><div class="hs-dsec-title">Piezas y refacciones</div><table class="hs-dparts"><thead><tr><th>Pieza</th><th style="text-align:center">Qty</th><th style="text-align:right">Precio</th></tr></thead><tbody>'+partRows+'</tbody></table></div>'+
+      '<div class="hs-dsec"><div class="hs-dsec-title">Piezas</div><table class="hs-dparts"><thead><tr><th>Pieza</th><th style="text-align:center">Qty</th><th style="text-align:right">Precio</th></tr></thead><tbody>'+partRows+'</tbody></table></div>'+
       '<div class="hs-dsec"><div class="hs-dsec-title">Estado del equipo</div>'+lifeItems+'</div>'+
       '<div class="hs-dsec"><div class="hs-dsec-title">Técnico</div><div class="hs-dtech"><div class="hs-dtech-av">'+initials+'</div><div><div class="hs-dtech-name">'+data.tFull+'</div><div class="hs-dtech-spec">'+data.tSpec+'</div></div><span class="hs-dtech-rating">'+data.tRating+'</span></div></div>'+
       '<div class="hs-dsec"><div class="hs-dsec-title">Costo</div>'+
@@ -6631,41 +6661,37 @@ document.addEventListener('DOMContentLoaded', function(){
         '<div class="hs-dcost-row total"><span>Total</span><span>'+data.cost+'</span></div>'+
       '</div>'+
       '<div class="hs-dsec"><div class="hs-dgarantia">🛡 <strong>Garantía:</strong> '+data.garantia+'.</div></div>';
-
-    listEl.style.display = 'none';
-    detailEl.classList.add('hs-visible');
     scroll.scrollTop = 0;
   }
 
-  backBtn.addEventListener('click', function(){
-    detailEl.classList.remove('hs-visible');
-    listEl.style.display = '';
-    document.querySelectorAll('.hs-row').forEach(function(r){ r.classList.remove('hs-active'); });
-  });
+  function setActiveRow(idx) {
+    rows.forEach(function(r){ if(r) r.classList.remove('hs-active'); });
+    if (rows[idx]) rows[idx].classList.add('hs-active');
+  }
 
-  // wire rows
-  var rows = [document.getElementById('hs-row-0'), document.getElementById('hs-row-1')];
+  // wire manual clicks
   rows.forEach(function(row, i){
     if (!row) return;
-    row.addEventListener('click', function(){
-      rows.forEach(function(r){ if(r) r.classList.remove('hs-active'); });
-      row.classList.add('hs-active');
-      openDetail(DATA[i]);
-    });
+    row.addEventListener('click', function(){ setActiveRow(i); renderDetail(DATA[i]); });
   });
 
-  // auto-demo: show cursor → highlight row → open report
-  function runDemo(){
-    if (!cursor || !rows[0]) return;
-    cursor.style.opacity = '1';
-    rows[0].classList.add('hs-active');
-    setTimeout(function(){
-      cursor.style.opacity = '0';
-      rows[0].classList.remove('hs-active');
-      openDetail(DATA[0]);
-    }, 1100);
-  }
-  setTimeout(runDemo, 2600);
+  // auto-load first report immediately (no click needed)
+  setActiveRow(0);
+  renderDetail(DATA[0]);
+
+  // auto-cycle demo: every 3.5s switch to other report, then back
+  var demoIdx = 0;
+  var demoTimer = setInterval(function(){
+    demoIdx = (demoIdx + 1) % DATA.length;
+    setActiveRow(demoIdx);
+    renderDetail(DATA[demoIdx]);
+  }, 3500);
+
+  // stop cycling on manual interaction
+  rows.forEach(function(row){
+    if (!row) return;
+    row.addEventListener('click', function(){ clearInterval(demoTimer); });
+  });
 
 })();
 });
