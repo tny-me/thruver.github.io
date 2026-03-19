@@ -3045,15 +3045,65 @@
         </div>
       </div>
 
-      <!-- 03 Reporte técnico digital (video) -->
-      <div class="feat-card feat-card--c3 feat-card--video">
-        <video autoplay muted loop playsinline>
-          <source src="https://raw.githubusercontent.com/tny-me/thruver.github.io/main/videotecnico.mp4" type="video/mp4">
-        </video>
-        <div class="feat-card-video-overlay">
+      <!-- 03 Reporte técnico digital -->
+      <div class="feat-card feat-card--c3" style="padding:2.5rem;display:flex;flex-direction:column;gap:1.5rem;position:relative;overflow:hidden;">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 80% 20%,rgba(26,86,232,0.08) 0%,transparent 60%);pointer-events:none;"></div>
+        <div style="position:relative;z-index:1;">
           <div class="feat-num">03</div>
-          <h3>Reporte técnico digital</h3>
+          <h3 style="margin-top:0.75rem;">Reporte técnico digital</h3>
           <p>Al finalizar la visita, recibe un Reporte Técnico detallado: diagnóstico exacto, piezas reemplazadas, marcas utilizadas y el estado real de tus equipos.</p>
+        </div>
+        <!-- Digital report UI mock -->
+        <div style="position:relative;z-index:1;background:#0d0d0d;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;flex:1;min-height:220px;">
+          <!-- Header bar -->
+          <div style="background:#111;border-bottom:1px solid rgba(255,255,255,0.06);padding:0.65rem 1rem;display:flex;align-items:center;justify-content:space-between;">
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6b8ff5" stroke-width="2.5"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <span style="font-size:0.72rem;color:#a1a1aa;font-family:monospace;letter-spacing:0.02em;">reporte_tecnico_#TH-2847.pdf</span>
+            </div>
+            <span style="font-size:0.65rem;color:#22c55e;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.2);padding:0.15rem 0.5rem;border-radius:4px;font-weight:600;">FIRMADO</span>
+          </div>
+          <!-- Report body -->
+          <div style="padding:1rem;display:flex;flex-direction:column;gap:0.75rem;">
+            <!-- Equipment status row -->
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;">
+              <div style="background:#111;border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:0.6rem;text-align:center;">
+                <div style="font-size:1.1rem;font-weight:800;color:#f4f4f5;">A/C</div>
+                <div style="font-size:0.6rem;color:#22c55e;margin-top:0.15rem;">Óptimo</div>
+              </div>
+              <div style="background:#111;border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:0.6rem;text-align:center;">
+                <div style="font-size:1.1rem;font-weight:800;color:#f4f4f5;">HVAC</div>
+                <div style="font-size:0.6rem;color:#f59e0b;margin-top:0.15rem;">Revisión</div>
+              </div>
+              <div style="background:#111;border:1px solid rgba(255,255,255,0.05);border-radius:8px;padding:0.6rem;text-align:center;">
+                <div style="font-size:1.1rem;font-weight:800;color:#f4f4f5;">ELÉC</div>
+                <div style="font-size:0.6rem;color:#22c55e;margin-top:0.15rem;">Óptimo</div>
+              </div>
+            </div>
+            <!-- Diagnosis lines -->
+            <div style="display:flex;flex-direction:column;gap:0.4rem;">
+              <div style="display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.6rem;background:#111;border-radius:6px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;"></div>
+                <span style="font-size:0.7rem;color:#a1a1aa;flex:1;">Compresor — presión correcta</span>
+                <span style="font-size:0.65rem;color:#52525b;font-family:monospace;">✓</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.6rem;background:#111;border-radius:6px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#f59e0b;flex-shrink:0;"></div>
+                <span style="font-size:0.7rem;color:#a1a1aa;flex:1;">Filtro HEPA — requiere cambio</span>
+                <span style="font-size:0.65rem;color:#f59e0b;font-family:monospace;">!</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.6rem;background:#111;border-radius:6px;">
+                <div style="width:6px;height:6px;border-radius:50%;background:#22c55e;flex-shrink:0;"></div>
+                <span style="font-size:0.7rem;color:#a1a1aa;flex:1;">Refrigerante R-410A — nivel normal</span>
+                <span style="font-size:0.65rem;color:#52525b;font-family:monospace;">✓</span>
+              </div>
+            </div>
+            <!-- Footer action -->
+            <div style="display:flex;align-items:center;justify-content:space-between;padding-top:0.25rem;border-top:1px solid rgba(255,255,255,0.04);">
+              <span style="font-size:0.65rem;color:#52525b;">Técnico: Carlos M. · ID #TH-291</span>
+              <span style="font-size:0.65rem;color:#6b8ff5;font-weight:600;cursor:pointer;">Ver completo →</span>
+            </div>
+          </div>
         </div>
       </div>
 
