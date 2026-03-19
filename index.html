@@ -2427,6 +2427,15 @@
       .hs-list { border-right: none; border-bottom: 1px solid #e5e7eb; }
     }
 
+
+    /* ── Fix historial: left col wider, rows no-wrap ── */
+    .hs-wrap { grid-template-columns: 270px 1fr !important; }
+    .hs-row { flex-wrap: nowrap; gap: 0.55rem; padding: 0.7rem 0.85rem; }
+    .hs-row-meta { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .hs-row-name { font-size: 0.72rem; }
+    .hs-row-cost { font-size: 0.68rem; }
+    .hs-list-header { padding: 0.55rem 0.85rem; }
+
   </style>
 </head>
 <body>
