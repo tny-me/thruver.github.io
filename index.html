@@ -6656,6 +6656,54 @@ document.addEventListener('DOMContentLoaded', function(){
       ],
       manoObra:'$130', garantia:'12 meses en trabajo realizado',
     },
+    {
+      id:'#b1e4f9', s:'Plomería — cocina', t:'C. Ramos', tFull:'Carlos Ramos', tSpec:'Plomero certificado · 4 años exp.', tRating:'★★★★☆ 4.7',
+      d:'02 Ene 2025', cost:'$450',
+      diagnostico:'Fuga menor bajo lavabo de cocina con escurrimiento hacia mueble inferior. Acumulación de sarro en tubería de drenaje que reducía el flujo al 40% de su capacidad.',
+      trabajo:[
+        'Desmontaje y revisión de sifón y mangueras de suministro',
+        'Reemplazo de empaques y sello mecánico del lavabo',
+        'Limpieza química de tubería de drenaje',
+        'Ajuste de llave de paso individual bajo fregadero',
+        'Prueba de presión y verificación sin fugas',
+      ],
+      partes:[
+        { n:'Kit de empaques universales', marca:'Aqua Pro', qty:1, precio:'$65' },
+        { n:'Sello mecánico lavabo 4"', marca:'Coflex', qty:1, precio:'$88' },
+        { n:'Desincrustante líquido 1L', marca:'Rectorseal', qty:1, precio:'$55' },
+      ],
+      vida:[
+        { eq:'Tubería suministro PVC', pct:85, color:'green', next:'Jun 2028' },
+        { eq:'Sifón y trampa', pct:70, color:'green', next:'Ene 2027' },
+        { eq:'Llave de paso', pct:50, color:'amber', next:'Jul 2025' },
+        { eq:'Mangueras flexibles', pct:40, color:'red', next:'Pronto' },
+      ],
+      manoObra:'$242', garantia:'3 meses en trabajo realizado',
+    },
+    {
+      id:'#d9c3ff', s:'Pintura exterior', t:'A. López', tFull:'Alejandro López', tSpec:'Pintor profesional · 8 años exp.', tRating:'★★★★★ 4.8',
+      d:'18 Nov 2024', cost:'$1,200',
+      diagnostico:'Fachada con pintura original de más de 5 años con descascaramiento en zona norte y manchas de humedad en viga de cornisa. Sin daño estructural.',
+      trabajo:[
+        'Preparación: lijado y remoción de pintura suelta',
+        'Aplicación de sellador anti-humedad en zona norte',
+        'Impermeabilizante de base en toda la fachada',
+        'Dos capas de pintura vinílica exterior color original',
+        'Retoque de zoclo y cornisas con esmalte',
+      ],
+      partes:[
+        { n:'Impermeabilizante Berel 4L', marca:'Berel', qty:3, precio:'$360' },
+        { n:'Pintura vinílica Comex 19L', marca:'Comex', qty:2, precio:'$480' },
+        { n:'Sellador anti-humedad 1L', marca:'Fester', qty:2, precio:'$120' },
+      ],
+      vida:[
+        { eq:'Pintura fachada', pct:95, color:'green', next:'Nov 2026' },
+        { eq:'Impermeabilizado', pct:95, color:'green', next:'Nov 2026' },
+        { eq:'Esmalte cornisas', pct:88, color:'green', next:'May 2026' },
+        { eq:'Sellado juntas', pct:80, color:'green', next:'Nov 2026' },
+      ],
+      manoObra:'$240', garantia:'12 meses en trabajo realizado',
+    },
   ];
 
   var titleEl  = document.getElementById('hs-detail-title');
