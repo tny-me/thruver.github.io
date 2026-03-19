@@ -2251,6 +2251,13 @@
       position: relative !important;
       overflow: hidden !important;
     }
+    .hero-v3-inner {
+      max-width: 860px !important;
+      margin: 0 auto !important;
+      padding: 0 2rem !important;
+      box-sizing: border-box !important;
+      width: 100% !important;
+    }
     .hero-v3::before {
       content: '' !important;
       position: absolute !important;
@@ -2279,10 +2286,12 @@
       color: #6b8ff5 !important;
     }
     .hero-v3-h1 {
-      font-size: clamp(3.6rem, 8.5vw, 8.5rem) !important;
+      font-size: clamp(2.6rem, 6.5vw, 7rem) !important;
       font-weight: 800 !important;
       letter-spacing: -0.04em !important;
-      line-height: 1.02 !important;
+      line-height: 1.05 !important;
+      word-break: break-word !important;
+      overflow-wrap: break-word !important;
       background: linear-gradient(180deg, #ffffff 40%, rgba(255,255,255,0.42) 100%) !important;
       -webkit-background-clip: text !important;
       -webkit-text-fill-color: transparent !important;
@@ -2632,6 +2641,27 @@
     .tnl-error-msg { color: #ef4444 !important; }
     .tnl-success-msg { color: #22c55e !important; }
 
+    /* ── Pillar icon size fix ── */
+    .manifesto-pillar-icon {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 40px !important;
+      height: 40px !important;
+      border-radius: 10px !important;
+      flex-shrink: 0 !important;
+    }
+    /* ── Urgency btn flex ── */
+    .tnl-urgency-btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 0.4rem !important;
+    }
+    /* ── Manifesto label color fix ── */
+    .manifesto p[style*="color:#555"] {
+      color: #52525b !important;
+    }
+
     /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #000000; }
@@ -2895,15 +2925,15 @@
       <div style="margin-bottom:0.4rem;">
         <p style="font-size:0.66rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.09em;margin-bottom:0.55rem;">¿Cuándo lo necesitas?</p>
         <div class="tnl-urgency-row">
-          <button class="tnl-urgency-btn tnl-urg-sel" id="tnl-u1" data-val="Lo antes posible">⚡ Lo antes posible</button>
-          <button class="tnl-urgency-btn"              id="tnl-u2" data-val="Agendar fecha">📅 Agendar fecha</button>
+          <button class="tnl-urgency-btn tnl-urg-sel" id="tnl-u1" data-val="Lo antes posible"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> Lo antes posible</button>
+          <button class="tnl-urgency-btn"              id="tnl-u2" data-val="Agendar fecha"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Agendar fecha</button>
         </div>
       </div>
 
       <!-- CALENDARIO + HORA (aparece al elegir "Agendar fecha") -->
       <div class="tnl-datetime-wrap" id="tnl-datetime-wrap">
         <div class="tnl-datetime-header">
-          <span>📅</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           <span>Selecciona tu fecha y hora preferida</span>
         </div>
         <div class="tnl-datetime-grid">
@@ -2917,12 +2947,12 @@
           </div>
         </div>
         <div class="tnl-fecha-note">
-          ⚠️ La fecha es preferencial — Thruver la confirmará por WhatsApp.
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;vertical-align:middle;margin-right:4px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg> La fecha es preferencial — Thruver la confirmará por WhatsApp.
         </div>
       </div>
 
       <div class="tnl-trust">
-        <span class="tnl-trust-icon">🛡️</span>
+        <span class="tnl-trust-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
         <p>Thruver te asignará a un técnico <b>verificado con antecedentes revisados</b> y respaldará el trabajo con nuestra <b>Garantía Total</b>. Si no queda bien, regresa sin costo.</p>
       </div>
 
@@ -2943,21 +2973,21 @@
           <p class="tnl-receipt-title">Tu solicitud</p>
 
           <div class="tnl-rrow">
-            <div class="tnl-rrow-ico" id="r-svc-ico">🔧</div>
+            <div class="tnl-rrow-ico" id="r-svc-ico" style="display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
             <div class="tnl-rrow-info">
               <small>Servicio</small>
               <span id="r-svc">—</span>
             </div>
           </div>
           <div class="tnl-rrow">
-            <div class="tnl-rrow-ico">🏠</div>
+            <div class="tnl-rrow-ico" style="display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
             <div class="tnl-rrow-info">
               <small>Espacio</small>
               <span id="r-esp">—</span>
             </div>
           </div>
           <div class="tnl-rrow">
-            <div class="tnl-rrow-ico">⏱️</div>
+            <div class="tnl-rrow-ico" style="display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
             <div class="tnl-rrow-info">
               <small>Urgencia</small>
               <span id="r-urg">—</span>
@@ -2965,7 +2995,7 @@
           </div>
           <!-- FILA DE FECHA Y HORA (visible solo cuando se agenda fecha) -->
           <div class="tnl-rrow tnl-rrow-fecha" id="r-fecha-row">
-            <div class="tnl-rrow-ico">📅</div>
+            <div class="tnl-rrow-ico" style="display:flex;align-items:center;justify-content:center;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
             <div class="tnl-rrow-info">
               <small>Fecha programada</small>
               <span id="r-fecha">—</span>
@@ -3331,7 +3361,7 @@
               <span class="hs-badge-ok">Al día</span>
             </div>
             <div class="hs-row" id="hs-row-0">
-              <div class="hs-row-icon" style="background:#EEF2FF;">⚡</div>
+              <div class="hs-row-icon" style="background:rgba(26,86,232,0.12);display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6b8ff5" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
               <div class="hs-row-info">
                 <div class="hs-row-name">Revisión eléctrica</div>
                 <div class="hs-row-meta">J. Morales · 14 Feb 2025</div>
@@ -3344,7 +3374,7 @@
               <svg class="hs-cursor" id="hs-cursor" width="18" height="18" viewBox="0 0 18 18"><path d="M2 2l10 5-5 1-3 7z" fill="white" stroke="#1A56E8" stroke-width="1.2"/></svg>
             </div>
             <div class="hs-row" id="hs-row-1">
-              <div class="hs-row-icon" style="background:#ECFDF5;">📷</div>
+              <div class="hs-row-icon" style="background:rgba(16,185,129,0.12);display:flex;align-items:center;justify-content:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
               <div class="hs-row-info">
                 <div class="hs-row-name">CCTV instalación</div>
                 <div class="hs-row-meta">R. Acosta · 05 Oct 2024</div>
@@ -3460,7 +3490,7 @@
         <h3>Prevención inteligente</h3>
         <p>Thruver proyecta el estado de cada equipo en tu propiedad y te anticipa cuándo actuar — antes de que falle, no después. Tú confirmas, el sistema agenda.</p>
         <div class="feat-reminder">
-          <div class="feat-reminder-icon">📅</div>
+          <div class="feat-reminder-icon" style="display:flex;align-items:center;justify-content:center;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
           <div>
             <div class="feat-reminder-title">Próximo servicio sugerido</div>
             <div class="feat-reminder-sub">Revisión eléctrica · Ago 2025</div>
@@ -3561,10 +3591,10 @@
       </a>
     </div>
     <div class="svc-v2-more">
-      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Carpintería">🪚 Carpintería</a>
-      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Jardinería">🌿 Jardinería</a>
-      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Aire / Clima">❄️ Aire / Clima</a>
-      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Remodelación">🏗️ Remodelación</a>
+      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Carpintería">Carpintería</a>
+      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Jardinería">Jardinería</a>
+      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Aire / Clima">Aire / Clima</a>
+      <a href="#" class="svc-v2-pill tnl-trigger" data-preset="Remodelación">Remodelación</a>
     </div>
   </div>
 </section>
@@ -3729,28 +3759,36 @@
     </div>
     <div class="manifesto-pillars">
       <div class="manifesto-pillar">
-        <div class="manifesto-pillar-icon" style="background:rgba(26,86,232,0.12);">📋</div>
+        <div class="manifesto-pillar-icon" style="background:rgba(26,86,232,0.12);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6b8ff5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        </div>
         <div>
           <div class="manifesto-pillar-title">Historial completo</div>
           <div class="manifesto-pillar-desc">Cada servicio, cada parte, cada técnico — registrado para siempre.</div>
         </div>
       </div>
       <div class="manifesto-pillar">
-        <div class="manifesto-pillar-icon" style="background:rgba(16,185,129,0.12);">🔒</div>
+        <div class="manifesto-pillar-icon" style="background:rgba(16,185,129,0.12);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
         <div>
           <div class="manifesto-pillar-title">Técnicos verificados</div>
           <div class="manifesto-pillar-desc">Red exclusiva con identidad, antecedentes y certificación validados.</div>
         </div>
       </div>
       <div class="manifesto-pillar">
-        <div class="manifesto-pillar-icon" style="background:rgba(245,158,11,0.12);">⚡</div>
+        <div class="manifesto-pillar-icon" style="background:rgba(245,158,11,0.12);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
         <div>
           <div class="manifesto-pillar-title">Prevención activa</div>
           <div class="manifesto-pillar-desc">Thruver te avisa antes de que falle — no cuando ya falló.</div>
         </div>
       </div>
       <div class="manifesto-pillar">
-        <div class="manifesto-pillar-icon" style="background:rgba(139,92,246,0.12);">📊</div>
+        <div class="manifesto-pillar-icon" style="background:rgba(139,92,246,0.12);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
         <div>
           <div class="manifesto-pillar-title">Reportes digitales</div>
           <div class="manifesto-pillar-desc">Documentación técnica de cada intervención, siempre disponible.</div>
