@@ -2255,6 +2255,140 @@
       .hero-v3-actions .btn-blue, .hero-v3-actions .hero-v3-link { width:100%; justify-content:center; text-align:center; }
     }
 
+
+    /* ════════════════════════════════════════════════════════
+       VISUAL REDESIGN — Raycast/Resend style (dark hero,
+       white content, oscillating dark/light sections)
+    ════════════════════════════════════════════════════════ */
+
+    /* ── Nav: transparent over dark hero ── */
+    #main-nav { background: rgba(9,9,11,0.85); border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+    /* ── Hero V3: dark with center glow ── */
+    .hero-v3 { background: #09090b; padding: 10rem 0 9rem; border-bottom: none; }
+    .hero-v3::before {
+      background-image:
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 1;
+    }
+    .hero-v3::after {
+      top: -80px;
+      width: 1000px;
+      height: 600px;
+      background: radial-gradient(ellipse at 50% 0%,
+        rgba(26,86,232,0.28) 0%,
+        rgba(99,102,241,0.1) 35%,
+        transparent 65%);
+    }
+    /* gradient-text headline — signature Vercel/Linear look */
+    .hero-v3-h1 {
+      background: linear-gradient(180deg, #ffffff 55%, rgba(255,255,255,0.55) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: clamp(3.2rem, 7.5vw, 7rem);
+    }
+    .hero-v3-badge {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #a1a1aa;
+    }
+    .hero-v3-badge-dot { background: #22c55e; }
+    .hero-v3-sub { color: #71717a; font-size: clamp(1rem,1.6vw,1.2rem); max-width:520px; }
+    .hero-v3-link { color: #a1a1aa; border-color: rgba(255,255,255,0.12); font-size:0.92rem; }
+    .hero-v3-link:hover { border-color: rgba(255,255,255,0.28); color: #e4e4e7; }
+    .hero-v3-proof { color: #3f3f46; font-size:0.72rem; }
+    .hero-v3-proof-div { background: #27272a; }
+    /* primary CTA on dark: white button */
+    .hero-v3-actions .btn-blue {
+      background: #fff;
+      color: #09090b !important;
+      border: none;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.15), 0 4px 20px rgba(255,255,255,0.06);
+      font-weight: 700;
+    }
+    .hero-v3-actions .btn-blue:hover {
+      background: #f4f4f5;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.2), 0 8px 32px rgba(255,255,255,0.1);
+      transform: translateY(-1px);
+    }
+    /* bottom fade: hero → white features */
+    .hero-v3-bottom { position:absolute; bottom:0; left:0; right:0; height:120px; background:linear-gradient(transparent, #ffffff); pointer-events:none; z-index:1; }
+
+    /* ── Features section: pure white, generous padding ── */
+    .lp-features-dark { background: #ffffff !important; padding: 7rem 0 6rem; }
+    /* bento grid: more premium cards */
+    .feat-bento { background: transparent; gap: 2px; border-radius: 20px; border: 1px solid #e5e7eb; overflow: hidden; }
+    .feat-card { background: #fff; padding: 2.2rem 2.2rem 2rem; transition: background 0.2s; }
+    .feat-card:hover { background: #fafafa; }
+    .feat-card h3 { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.035em; }
+    .feat-card p { font-size: 0.82rem; line-height: 1.72; color: #6b7280; }
+
+    /* features header: more space, bigger title */
+    .feat-header-new h2 { font-size: clamp(2.2rem, 4vw, 3.4rem); letter-spacing: -0.055em; color: #09090b; }
+    .feat-header-new { margin-bottom: 4rem; }
+
+    /* ── Stats bar: cleaner ── */
+    .stats-bar-v2 { background: #fff; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; }
+    .stats-bar-v2-item strong { color: #09090b; font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 900; letter-spacing: -0.04em; }
+    .stats-bar-v2-item span { color: #9ca3af; font-size: 0.72rem; }
+
+    /* ── How it works: lighter, cleaner ── */
+    .lp-how-v2 { background: #fafafa; }
+    .how-v2-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: -0.05em; color: #09090b; }
+
+    /* ── Manifesto: add inner glow ── */
+    .manifesto { position: relative; overflow: hidden; }
+    .manifesto::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(26,86,232,0.15) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .manifesto-inner { position: relative; z-index: 1; }
+    .manifesto-quote { font-size: clamp(1.5rem, 2.8vw, 2.2rem); }
+
+    /* ── Services section: pure white ── */
+    .lp-services-v2 { background: #ffffff; }
+    .lp-title { font-size: clamp(2rem, 3.5vw, 3rem); font-weight: 900; letter-spacing: -0.05em; line-height: 1.1; }
+
+    /* ── Guarantee: darker for contrast ── */
+    .lp-guarantee-v2 { background: #09090b; }
+    .guar-v2-title { color: #f4f4f5; font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: -0.05em; }
+    .guar-v2-title em { color: #6b8ff5; }
+    .guar-v2-sub { color: #71717a; }
+    .guar-v2-metric strong { color: #f4f4f5; font-size: clamp(2rem,3.5vw,3rem); }
+    .guar-v2-metric span { color: #52525b; }
+    .guar-v2-metric { border-color: #27272a; }
+
+    /* ── Signup CTA: clean white ── */
+    .lp-signup-v2 { background: #ffffff; }
+    .lp-signup-v2 .lp-title { font-size: clamp(2.5rem, 5vw, 4.5rem); letter-spacing: -0.06em; color: #09090b; }
+    .lp-signup-v2 .lp-label { color: #1A56E8; font-weight: 700; }
+
+    /* ── Footer ── */
+    .lp-footer { background: #09090b; border-top: 1px solid #18181b; }
+    .footer-logo { color: #f4f4f5; }
+    .footer-links a, .footer-links button { color: #71717a; }
+    .footer-links a:hover, .footer-links button:hover { color: #a1a1aa; }
+    .footer-copy { color: #3f3f46; }
+
+    /* ── Responsive hero updates ── */
+    @media(max-width:768px){
+      .hero-v3 { padding: 7rem 0 6rem; }
+      .hero-v3-bottom { height: 80px; }
+    }
+    @media(max-width:480px){
+      .hero-v3 { padding: 6rem 0 5rem; }
+    }
+
   </style>
 </head>
 <body>
@@ -2772,6 +2906,7 @@
       <span>4.9★ calificación promedio</span>
     </div>
   </div>
+  <div class="hero-v3-bottom"></div>
 </section>
 
 <!-- FEATURES DARK -->
