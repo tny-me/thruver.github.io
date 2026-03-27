@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#f7f7f5">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Thruver SOP">
+<title>Thruver SOP</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --canvas:#f7f7f5;
+  --surface:#ffffff;
+  --surface-2:#f2f2f0;
+  --surface-3:#ebebea;
+  --border:#e4e4e0;
+  --border-2:#d0d0cc;
+  --text:#111110;
+  --text-2:#6b6b66;
+  --text-3:#a8a8a4;
+  --accent:#1a1a18;
+  --blue:#1d6bf3;
+  --blue-bg:#dbeafe;
+  --green:#16a34a;
+  --green-bg:#dcfce7;
+  --amber:#c27803;
+  --amber-bg:#fef9c3;
+  --red:#dc2626;
+  --red-bg:#fee2e2;
+  --r:8px;--rs:5px;
+  --shadow:0 1px 3px rgba(0,0,0,0.07),0 0 0 1px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.08),0 0 0 1px rgba(0,0,0,0.04);
+  --sidebar-w:220px;
+}
+html{font-size:14px;-webkit-text-size-adjust:100%}
+body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.55;min-height:100vh;overflow-x:hidden}
+
+/* ══════════════════════════════
+   LOGIN
+══════════════════════════════ */
+#screen-login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:var(--canvas)}
+.login-split{display:grid;grid-template-columns:1fr 1fr;max-width:900px;width:100%;min-height:560px;box-shadow:var(--shadow-md);border-radius:16px;overflow:hidden;border:1px solid var(--border)}
+.login-left{background:var(--accent);padding:40px;display:flex;flex-direction:column;justify-content:space-between}
+.login-left-logo{display:flex;align-items:center;gap:10px}
+.login-left-mark{width:32px;height:32px;background:rgba(255,255,255,.12);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.login-left-name{font-size:15px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.login-left-body{margin-top:auto;margin-bottom:auto}
+.login-left-title{font-size:32px;font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.15;margin-bottom:14px}
+.login-left-desc{font-size:13px;color:rgba(255,255,255,.45);line-height:1.7;max-width:280px}
+.login-left-stats{display:flex;gap:24px;margin-top:32px}
+.login-left-stat-val{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.03em;font-family:'DM Mono',monospace}
+.login-left-stat-label{font-size:10px;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.1em;margin-top:1px}
+.login-right{background:var(--surface);padding:40px;display:flex;flex-direction:column;justify-content:center}
+.login-right-title{font-size:20px;font-weight:700;letter-spacing:-.025em;margin-bottom:6px}
+.login-right-sub{font-size:13px;color:var(--text-2);margin-bottom:28px;line-height:1.5}
+.lfield{margin-bottom:14px}
+.llabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-2);margin-bottom:5px;display:block}
+.linput{width:100%;background:var(--surface-2);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 12px;outline:none;transition:border-color .15s,box-shadow .15s;-webkit-appearance:none}
+.linput:focus{border-color:var(--blue);background:var(--surface);box-shadow:0 0 0 3px rgba(29,107,243,.08)}
+.linput::placeholder{color:var(--text-3)}
+.lbtn{width:100%;background:var(--accent);color:#fff;font-size:13px;font-weight:700;padding:11px;border-radius:var(--rs);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:-.01em;margin-top:8px;transition:background .15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.lbtn:hover{background:#2d2d2b}
+.lerror{background:var(--red-bg);border:1px solid #fecaca;border-radius:var(--rs);padding:9px 12px;font-size:12px;color:var(--red);margin-top:10px;display:none}
+.lhint{font-size:11px;color:var(--text-3);margin-top:14px;line-height:1.6}
+
+/* ══════════════════════════════
+   APP SHELL — DESKTOP LAYOUT
+══════════════════════════════ */
+#app-shell{display:none;min-height:100vh}
+
+/* Sidebar */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;transition:transform .25s cubic-bezier(.25,1,.5,1)}
+.sb-brand{padding:18px 20px 16px;border-bottom:1px solid var(--border)}
+.sb-logo{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.sb-mark{width:26px;height:26px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-name{font-size:13px;font-weight:700;letter-spacing:-.01em}
+.sb-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;background:var(--surface-2);color:var(--text-3);border-radius:3px;padding:1px 6px}
+.sb-user{display:flex;align-items:center;gap:8px}
+.sb-avatar{width:28px;height:28px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-user-info{}
+.sb-user-name{font-size:12px;font-weight:600;letter-spacing:-.01em}
+.sb-user-id{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3)}
+
+/* Nav links */
+.sb-nav{padding:8px 0;flex:1;overflow-y:auto}
+.sb-section{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--text-3);padding:10px 20px 4px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:8px 16px 8px 20px;cursor:pointer;position:relative;transition:background .1s;border-radius:0;user-select:none}
+.sb-link::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;transition:background .15s}
+.sb-link:hover{background:var(--surface-2)}
+.sb-link.active::before{background:var(--blue)}
+.sb-link.active{background:rgba(29,107,243,.04)}
+.sb-link.active .sb-link-label{color:var(--text);font-weight:600}
+.sb-link.active .sb-link-icon svg{stroke:var(--blue)}
+.sb-link-icon{width:16px;height:16px;display:flex;align-items:center;justify-content:center}
+.sb-link-icon svg{stroke:var(--text-3);transition:stroke .15s}
+.sb-link-label{font-size:13px;font-weight:500;color:var(--text-2);transition:color .15s}
+.sb-link-badge{margin-left:auto;background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:100px;padding:1px 6px;min-width:16px;text-align:center}
+.sb-footer{padding:14px 20px;border-top:1px solid var(--border)}
+.sb-logout{font-size:12px;color:var(--text-3);cursor:pointer;display:flex;align-items:center;gap:6px;transition:color .15s}
+.sb-logout:hover{color:var(--red)}
+
+/* Main content */
+.main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 32px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.topbar-title{font-size:16px;font-weight:700;letter-spacing:-.02em}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.topbar-notif{position:relative;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface-2);transition:background .15s}
+.topbar-notif:hover{background:var(--surface-3)}
+.topbar-notif-badge{position:absolute;top:-3px;right:-3px;width:14px;height:14px;border-radius:50%;background:var(--red);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:#fff}
+.content-area{flex:1;padding:28px 32px;max-width:1200px;width:100%}
+
+/* ── MOBILE overrides ── */
+.mobile-topbar{display:none;position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;align-items:center;justify-content:space-between}
+.mobile-menu-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface-2);cursor:pointer}
+.mobile-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--surface);border-top:1px solid var(--border);display:none;padding:6px 0 calc(env(safe-area-inset-bottom)+6px)}
+.mnav-items{display:flex}
+.mnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0}
+.mnav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
+.mnav-icon svg{stroke:var(--text-3);transition:stroke .15s}
+.mnav-label{font-size:9px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.06em;transition:color .15s}
+.mnav-item.active .mnav-icon svg{stroke:var(--blue)}
+.mnav-item.active .mnav-label{color:var(--blue)}
+/* Sidebar overlay on mobile */
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%);width:260px}
+  .sidebar.open{transform:translateX(0)}
+  .sb-overlay.open{display:block}
+  .main{margin-left:0}
+  .topbar{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-nav{display:block}
+  .content-area{padding:16px 16px calc(env(safe-area-inset-bottom)+72px)}
+  .login-split{grid-template-columns:1fr;min-height:auto}
+  .login-left{display:none}
+  .login-right{padding:32px 24px;border-radius:0}
+  #screen-login{padding:0;align-items:stretch}
+  .login-split{border-radius:0;border:none;box-shadow:none;min-height:100vh}
+}
+
+/* ══════════════════════════════
+   SHARED COMPONENTS
+══════════════════════════════ */
+/* Grid */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:768px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr 1fr}.grid-4{grid-template-columns:1fr 1fr}}
+/* Cards */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.card-sm{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:12px}
+/* KPI */
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.kpi-val{font-size:26px;font-weight:800;letter-spacing:-.04em;font-family:'DM Mono',monospace;margin-bottom:3px}
+.kpi-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:3px}
+.kpi-sub{font-size:11px;font-weight:500}
+.kpi-up{color:var(--green)}.kpi-down{color:var(--red)}.kpi-neutral{color:var(--text-3)}
+/* Section heading */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;margin-top:24px}
+.sh:first-child{margin-top:0}
+.sh-title{font-size:13px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:.07em}
+.sh-action{font-size:12px;color:var(--blue);font-weight:600;cursor:pointer}
+.sh-action:hover{text-decoration:underline}
+/* Status chips */
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:100px;border:1px solid}
+.chip-pending{background:var(--amber-bg);border-color:#fde68a;color:var(--amber)}
+.chip-active{background:var(--blue-bg);border-color:#bfdbfe;color:var(--blue)}
+.chip-done{background:var(--green-bg);border-color:#bbf7d0;color:var(--green)}
+.chip-urgent{background:var(--red-bg);border-color:#fecaca;color:var(--red)}
+/* Divider */
+.divider{height:1px;background:var(--border);margin:16px 0}
+/* Empty state */
+.empty{text-align:center;padding:48px 24px}
+.empty-icon{width:44px;height:44px;border-radius:var(--r);background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.empty-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.empty-sub{font-size:13px;color:var(--text-2);line-height:1.6}
+/* Btn */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:'DM Sans',sans-serif;letter-spacing:-.01em}
+.btn-primary{background:var(--accent);color:#fff}.btn-primary:hover{background:#2d2d2b}
+.btn-blue{background:var(--blue);color:#fff}.btn-blue:hover{opacity:.9}
+.btn-ghost{background:transparent;color:var(--text-2);border:1.5px solid var(--border)}.btn-ghost:hover{background:var(--surface-2)}
+.btn-lg{padding:11px 20px;font-size:13px}
+/* List rows */
+.list-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.list-row:last-child{border-bottom:none}
+.list-row:hover{background:var(--surface-2);margin:0 -12px;padding:12px}
+/* Order card */
+.ord-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;cursor:pointer;transition:border-color .15s,box-shadow .15s;box-shadow:var(--shadow)}
+.ord-card:hover{border-color:var(--border-2);box-shadow:var(--shadow-md)}
+.ord-spec-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ord-spec-dot{display:flex;align-items:center;gap:6px}
+.ord-spec-dot span{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+.ord-address{font-size:14px;font-weight:600;margin-bottom:4px;line-height:1.3}
+.ord-meta{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-2)}
+.ord-meta-mono{font-family:'DM Mono',monospace;font-size:11px}
+.ord-problem{font-size:12px;color:var(--text-2);margin-top:8px;padding-top:8px;border-top:1px solid var(--border);line-height:1.4}
+/* Bar chart */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.bar-day{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);width:24px;text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:24px;background:var(--surface-2);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;transition:width 1s cubic-bezier(.25,1,.5,1)}
+.bar-fill-val{font-size:10px;font-family:'DM Mono',monospace;font-weight:600;color:#fff}
+/* Stars */
+.stars{display:flex;gap:1px}
+.star-on{color:var(--amber);font-size:13px}
+.star-off{color:var(--border-2);font-size:13px}
+/* Norm tag */
+.norm-tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+/* Anim */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeUp .35s cubic-bezier(.25,1,.5,1) both}
+.d1{animation-delay:.04s}.d2{animation-delay:.08s}.d3{animation-delay:.12s}.d4{animation-delay:.16s}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     LOGIN
+══════════════════════════════════════════════════════ -->
+<div id="screen-login">
+  <div class="login-split">
+    <div class="login-left">
+      <div class="login-left-logo">
+        <div class="login-left-mark"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+        <span class="login-left-name">Thruver SOP</span>
+      </div>
+      <div class="login-left-body">
+        <div class="login-left-title">La herramienta<br>del tecnico<br>profesional.</div>
+        <div class="login-left-desc">Ordenes del dia, protocolo de campo, ingresos y tu expediente — todo en un solo lugar.</div>
+        <div class="login-left-stats">
+          <div><div class="login-left-stat-val">340+</div><div class="login-left-stat-label">Tecnicos activos</div></div>
+          <div><div class="login-left-stat-val">12k</div><div class="login-left-stat-label">Servicios cerrados</div></div>
+          <div><div class="login-left-stat-val">4.8★</div><div class="login-left-stat-label">Calificacion media</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="login-right">
+      <div class="login-right-title">Acceder a Thruver SOP</div>
+      <div class="login-right-sub">Ingresa con tu ID de tecnico y contrasena asignada por Thruver.</div>
+      <div class="lfield"><label class="llabel">ID de Tecnico</label><input class="linput" id="login_id" type="text" placeholder="TEC-0042" autocomplete="username"></div>
+      <div class="lfield"><label class="llabel">Contrasena</label><input class="linput" id="login_pw" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="lbtn" onclick="doLogin()">Ingresar <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+      <div class="lerror" id="login_err">ID o contrasena incorrectos.</div>
+      <div class="lhint">¿Sin acceso? Contacta a tu dispatcher.<br><span style="opacity:.5">Demo: TEC-0042 / miguel2026</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     APP SHELL
+══════════════════════════════════════════════════════ -->
+<div id="app-shell">
+
+  <!-- Sidebar overlay (mobile) -->
+  <div class="sb-overlay" id="sb_overlay" onclick="closeSidebar()"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">
+        <div class="sb-mark"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+        <span class="sb-name">Thruver SOP</span>
+      </div>
+      <div class="sb-user">
+        <div class="sb-avatar" id="sb_avatar">—</div>
+        <div class="sb-user-info">
+          <div class="sb-user-name" id="sb_name">—</div>
+          <div class="sb-user-id" id="sb_id">—</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-section">Principal</div>
+      <div class="sb-link active" onclick="switchTab('home')" id="sblink-home">
+        <div class="sb-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+        <span class="sb-link-label">Inicio</span>
+      </div>
+      <div class="sb-link" onclick="switchTab('ordenes')" id="sblink-ordenes">
+        <div class="sb-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M3 7h18l-1 13H4L3 7z"/></svg></div>
+        <span class="sb-link-label">Ordenes</span>
+        <span class="sb-link-badge" id="sb_badge">2</span>
+      </div>
+      <div class="sb-link" onclick="switchTab('sop')" id="sblink-sop">
+        <div class="sb-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+        <span class="sb-link-label">SOP de campo</span>
+      </div>
+      <div class="sb-section">Finanzas</div>
+      <div class="sb-link" onclick="switchTab('ingresos')" id="sblink-ingresos">
+        <div class="sb-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <span class="sb-link-label">Ingresos</span>
+      </div>
+      <div class="sb-section">Cuenta</div>
+      <div class="sb-link" onclick="switchTab('perfil')" id="sblink-perfil">
+        <div class="sb-link-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <span class="sb-link-label">Mi perfil</span>
+      </div>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-logout" onclick="doLogout()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Cerrar sesion
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Desktop topbar -->
+    <header class="topbar">
+      <div class="topbar-title" id="topbar_title">Inicio</div>
+      <div class="topbar-right">
+        <div class="topbar-notif" onclick="showNotif()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <div class="topbar-notif-badge">2</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px;padding:5px 10px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--rs)">
+          <div class="sb-avatar" id="top_avatar" style="width:22px;height:22px;font-size:9px">—</div>
+          <span style="font-size:12px;font-weight:600" id="top_name">—</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile topbar -->
+    <header class="mobile-topbar">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="mobile-menu-btn" onclick="openSidebar()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:7px">
+          <div style="width:22px;height:22px;background:var(--accent);border-radius:5px;display:flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+          <span style="font-size:13px;font-weight:700" id="mobile_topbar_title">Inicio</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="position:relative;cursor:pointer" onclick="showNotif()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <div style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--red);border:1.5px solid var(--surface)"></div>
+        </div>
+        <div class="sb-avatar" id="mob_avatar" style="width:28px;height:28px;font-size:11px">—</div>
+      </div>
+    </header>
+
+    <!-- Tab panels -->
+    <div id="tab-home"     class="content-area" style="display:none"></div>
+    <div id="tab-ordenes"  class="content-area" style="display:none"></div>
+    <div id="tab-sop"      class="content-area" style="display:none"></div>
+    <div id="tab-ingresos" class="content-area" style="display:none"></div>
+    <div id="tab-perfil"   class="content-area" style="display:none"></div>
+  </div>
+
+  <!-- Mobile bottom nav -->
+  <nav class="mobile-nav">
+    <div class="mnav-items">
+      <div class="mnav-item active" onclick="switchTab('home')" id="mnav-home">
+        <div class="mnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+        <span class="mnav-label">Inicio</span>
+      </div>
+      <div class="mnav-item" onclick="switchTab('ordenes')" id="mnav-ordenes">
+        <div class="mnav-icon" style="position:relative"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M3 7h18l-1 13H4L3 7z"/></svg><div style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--red);border:1.5px solid var(--surface)"></div></div>
+        <span class="mnav-label">Ordenes</span>
+      </div>
+      <div class="mnav-item" onclick="switchTab('sop')" id="mnav-sop">
+        <div class="mnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <span class="mnav-label">SOP</span>
+      </div>
+      <div class="mnav-item" onclick="switchTab('ingresos')" id="mnav-ingresos">
+        <div class="mnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+        <span class="mnav-label">Ingresos</span>
+      </div>
+      <div class="mnav-item" onclick="switchTab('perfil')" id="mnav-perfil">
+        <div class="mnav-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <span class="mnav-label">Perfil</span>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════
+const USERS = {
+  'TEC-0042':{pw:'miguel2026',name:'Miguel Rodriguez',initials:'MR',specs:['HVAC','Electrico'],zona:'Culiacan centro y norte',banco:{banco:'BBVA Mexico',tipo:'CLABE',clabe:'012320001234567890',tarjeta:'4152 **** **** 8821',titular:'Miguel Rodriguez Perez',rfc:'ROPM901012AB3',saldo_disponible:8750,retirado_mes:2490},
+    tools:[{name:'Multimetro digital',ok:true},{name:'Pinza amperimetrica',ok:true},{name:'Manifold con manometros',ok:true},{name:'Termometro infrarrojo',ok:true},{name:'Detector de fugas',ok:false},{name:'Bomba de vacio',ok:true}]},
+  'TEC-0015':{pw:'carlos2026',name:'Carlos Mendoza',initials:'CM',specs:['Plomeria','Carpinteria'],zona:'Culiacan sur y Navolato',banco:{banco:'Banamex',tipo:'CLABE',clabe:'002320009876543210',tarjeta:'5256 **** **** 4490',titular:'Carlos Mendoza Torres',rfc:'METC850320CD5',saldo_disponible:3200,retirado_mes:1800},
+    tools:[{name:'Manometro de agua',ok:true},{name:'Llave stilson',ok:true},{name:'Destapador mecanico',ok:true},{name:'Soplete para cobre',ok:false},{name:'Detector de humedad',ok:false}]},
+};
+const ORDERS=[
+  {id:'HVAC-2026-04812',spec:'HVAC',color:'#0ea5e9',status:'done',address:'Calle Madero 1542, Centro',time:'09:00',problem:'No enfria desde hace 3 dias, ruido al encender',monto:680,score:92,tec:'TEC-0042'},
+  {id:'HVAC-2026-04813',spec:'HVAC',color:'#0ea5e9',status:'active',address:'Blvd. Zapata 890, Las Quintas',time:'11:30',problem:'Mantenimiento preventivo — 2 minisplits Samsung',monto:750,score:null,tec:'TEC-0042'},
+  {id:'ELE-2026-02341',spec:'Electrico',color:'#f59e0b',status:'pending',address:'Av. Obregon 234, Tierra Blanca',time:'14:00',problem:'Breaker principal dispara al conectar AC. Sin luz en cocina',monto:450,score:null,tec:'TEC-0042'},
+  {id:'HVAC-2026-04810',spec:'HVAC',color:'#0ea5e9',status:'done',address:'Privada Gardenias 45, Humaya',time:'Ayer 10:00',problem:'Fuga de refrigerante, presion baja critica',monto:920,score:88,tec:'TEC-0042'},
+  {id:'ELE-2026-02335',spec:'Electrico',color:'#f59e0b',status:'done',address:'Calle Insurgentes 780, Hidalgo',time:'Ayer 15:30',problem:'Corto circuito en tomas de sala',monto:340,score:95,tec:'TEC-0042'},
+];
+const SPECS={HVAC:{color:'#0ea5e9',sop:'hvac'},Electrico:{color:'#f59e0b',sop:'electrico'},Plomeria:{color:'#16a34a',sop:'plomeria'},Carpinteria:{color:'#c27803',sop:'carpinteria'},Pintura:{color:'#7c3aed',sop:'pintura'},Impermeabilizacion:{color:'#0d9488',sop:'impermeabilizacion'}};
+const TABS={home:'Inicio',ordenes:'Ordenes',sop:'SOP de campo',ingresos:'Ingresos',perfil:'Mi perfil'};
+
+let CU=null, curTab='home';
+
+// ═══════════════════════════════════════════════════════════════
+// LOGIN / LOGOUT
+// ═══════════════════════════════════════════════════════════════
+function doLogin(){
+  const id=document.getElementById('login_id').value.trim().toUpperCase();
+  const pw=document.getElementById('login_pw').value;
+  const u=USERS[id];
+  if(!u||u.pw!==pw){
+    const err=document.getElementById('login_err');
+    err.style.display='block';
+    ['login_id','login_pw'].forEach(i=>{const el=document.getElementById(i);el.style.borderColor='var(--red)';});
+    setTimeout(()=>{err.style.display='none';['login_id','login_pw'].forEach(i=>{document.getElementById(i).style.borderColor='';});},3000);
+    return;
+  }
+  CU={...u,id};
+  document.getElementById('screen-login').style.display='none';
+  document.getElementById('app-shell').style.display='block';
+  // Populate user identity
+  ['sb_avatar','top_avatar','mob_avatar'].forEach(i=>{const el=document.getElementById(i);if(el)el.textContent=CU.initials;});
+  ['sb_name','top_name'].forEach(i=>{const el=document.getElementById(i);if(el)el.textContent=CU.name;});
+  document.getElementById('sb_id').textContent=CU.id;
+  initApp();
+}
+function doLogout(){
+  CU=null;
+  document.getElementById('app-shell').style.display='none';
+  document.getElementById('screen-login').style.display='flex';
+  document.getElementById('login_id').value='';
+  document.getElementById('login_pw').value='';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SIDEBAR MOBILE
+// ═══════════════════════════════════════════════════════════════
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sb_overlay').classList.add('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb_overlay').classList.remove('open');}
+
+// ═══════════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════════════
+function switchTab(tab){
+  ['home','ordenes','sop','ingresos','perfil'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===tab?'block':'none';
+    const sbl=document.getElementById('sblink-'+t);
+    const mnl=document.getElementById('mnav-'+t);
+    if(sbl) sbl.className='sb-link'+(t===tab?' active':'');
+    if(mnl) mnl.className='mnav-item'+(t===tab?' active':'');
+  });
+  curTab=tab;
+  const title=TABS[tab]||tab;
+  document.getElementById('topbar_title').textContent=title;
+  document.getElementById('mobile_topbar_title').textContent=title;
+  closeSidebar();
+  document.getElementById('tab-'+tab).scrollTop=0;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════
+function initApp(){
+  renderHome();
+  renderOrdenes();
+  renderSOP();
+  renderIngresos();
+  renderPerfil();
+  switchTab('home');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// HOME
+// ═══════════════════════════════════════════════════════════════
+function renderHome(){
+  const h=new Date().getHours();
+  const gr=h<12?'Buenos dias,':h<19?'Buenas tardes,':'Buenas noches,';
+  const todayOrds=ORDERS.filter(o=>!o.time.startsWith('Ayer')&&o.tec===CU.id);
+  const done=todayOrds.filter(o=>o.status==='done').length;
+  const active=todayOrds.filter(o=>o.status==='active').length;
+  const pending=todayOrds.filter(o=>o.status==='pending').length;
+
+  document.getElementById('tab-home').innerHTML=`
+    <!-- Greeting -->
+    <div class="anim" style="margin-bottom:24px">
+      <div style="font-size:12px;color:var(--text-3);font-weight:500;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">${gr}</div>
+      <div style="font-size:24px;font-weight:800;letter-spacing:-.035em;margin-bottom:16px">${CU.name}</div>
+      <!-- Day card -->
+      <div class="card" style="display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:center;background:var(--accent);border-color:var(--accent);color:#fff">
+        <div style="position:relative;width:56px;height:56px">
+          <svg width="56" height="56" viewBox="0 0 56 56" style="transform:rotate(-90deg)">
+            <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="4"/>
+            <circle cx="28" cy="28" r="22" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="4"
+              stroke-dasharray="${Math.round((done/Math.max(todayOrds.length,1))*138)} 138" stroke-linecap="round"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:15px;font-weight:700">${todayOrds.length}</div>
+        </div>
+        <div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:3px">${todayOrds.length} ordenes hoy</div>
+          <div style="font-size:12px;opacity:.6;line-height:1.5">${done} completada${done!==1?'s':''} · ${active} en curso · ${pending} pendiente${pending!==1?'s':''}</div>
+          <div style="font-size:11px;opacity:.45;margin-top:2px">${CU.zona}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KPIs -->
+    <div class="sh anim d1"><span class="sh-title">Esta semana</span></div>
+    <div class="grid-4 anim d1" style="margin-bottom:24px">
+      <div class="kpi"><div class="kpi-label">Ingresos</div><div class="kpi-val">$2,840</div><div class="kpi-sub kpi-up">↑ 18% vs sem. anterior</div></div>
+      <div class="kpi"><div class="kpi-label">Servicios</div><div class="kpi-val">7</div><div class="kpi-sub kpi-neutral">4.8 ★ promedio</div></div>
+      <div class="kpi"><div class="kpi-label">Protocolo</div><div class="kpi-val">92%</div><div class="kpi-sub kpi-up">Pasos completados</div></div>
+      <div class="kpi"><div class="kpi-label">Retrabajos</div><div class="kpi-val">0</div><div class="kpi-sub kpi-up">Sin garantias activas</div></div>
+    </div>
+
+    <!-- Orders today -->
+    <div class="sh anim d2"><span class="sh-title">Ordenes de hoy</span><span class="sh-action" onclick="switchTab('ordenes')">Ver todas</span></div>
+    <div class="anim d2" style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">${todayOrds.map(o=>ordCardHTML(o)).join('')}</div>
+
+    <!-- Activity -->
+    <div class="sh anim d3"><span class="sh-title">Actividad reciente</span></div>
+    <div class="card anim d3">
+      ${[{dot:'var(--green)',title:'Orden cerrada · HVAC-2026-04812',sub:'Score 92 · Firma registrada · Reporte PDF generado',time:'09:20'},
+         {dot:'var(--blue)',title:'SOP iniciado · Blvd. Zapata 890',sub:'HVAC-2026-04813 · Paso 2 de 6 completado',time:'11:45'},
+         {dot:'var(--amber)',title:'Nueva orden asignada',sub:'ELE-2026-02341 · Av. Obregon 234 · 14:00 hrs',time:'10:12'}
+      ].map((a,i,arr)=>`
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:10px 0;${i<arr.length-1?'border-bottom:1px solid var(--border)':''}">
+          <div style="width:8px;height:8px;border-radius:50%;background:${a.dot};flex-shrink:0;margin-top:5px"></div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:500;margin-bottom:1px">${a.title}</div><div style="font-size:11px;color:var(--text-2)">${a.sub}</div></div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);flex-shrink:0">${a.time}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ORDENES
+// ═══════════════════════════════════════════════════════════════
+function renderOrdenes(filter){
+  filter=filter||'all';
+  let ords=ORDERS.filter(o=>o.tec===CU.id);
+  if(filter==='pending') ords=ords.filter(o=>o.status==='pending');
+  else if(filter==='active') ords=ords.filter(o=>o.status==='active');
+  else if(filter==='done') ords=ords.filter(o=>o.status==='done');
+
+  document.getElementById('tab-ordenes').innerHTML=`
+    <div class="sh"><span class="sh-title">Mis Ordenes</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-3)">${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</span></div>
+    <div style="display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap">
+      ${['all','pending','active','done'].map(f=>`<button class="btn${filter===f?' btn-primary':' btn-ghost'}" onclick="renderOrdenes('${f}')" style="font-size:11px">${{all:'Todas',pending:'Pendientes',active:'En curso',done:'Completadas'}[f]}</button>`).join('')}
+    </div>
+    ${ords.length
+      ? `<div style="display:flex;flex-direction:column;gap:8px">${ords.map(o=>ordCardHTML(o,true)).join('')}</div>`
+      : `<div class="empty"><div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M3 7h18l-1 13H4L3 7z"/></svg></div><div class="empty-title">Sin ordenes</div><div class="empty-sub">No hay ordenes con este filtro.</div></div>`}`;
+}
+
+function ordCardHTML(o, full){
+  const smap={done:'chip-done',active:'chip-active',pending:'chip-pending'};
+  const slbl={done:'Completada',active:'En curso',pending:'Pendiente'};
+  const sp=SPECS[o.spec]||{color:'#888'};
+  return `<div class="ord-card" onclick="openOrder('${o.id}')">
+    <div class="ord-spec-row">
+      <div class="ord-spec-dot"><div style="width:7px;height:7px;border-radius:50%;background:${sp.color}"></div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:${sp.color}">${o.spec}</span></div>
+      <span class="chip ${smap[o.status]}">${slbl[o.status]}</span>
+    </div>
+    <div class="ord-address">${o.address}</div>
+    <div class="ord-meta">
+      <span class="ord-meta-mono">${o.time}</span>
+      ${o.monto?`<span style="color:var(--green);font-weight:600">$${o.monto}</span>`:''}
+      ${o.score?`<span class="norm-tag">Score ${o.score}</span>`:''}
+    </div>
+    ${full&&o.problem?`<div class="ord-problem">${o.problem}</div>`:''}
+  </div>`;
+}
+
+function openOrder(id){
+  const o=ORDERS.find(x=>x.id===id);
+  if(!o) return;
+  const sp=SPECS[o.spec]||{color:'#888',sop:'hvac'};
+  const smap={done:'chip-done',active:'chip-active',pending:'chip-pending'};
+  const slbl={done:'Completada',active:'En curso',pending:'Pendiente'};
+  const sheet=document.createElement('div');
+  sheet.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:flex;align-items:flex-end;justify-content:center;animation:fadeUp .2s ease;padding:0';
+  sheet.innerHTML=`
+    <div style="background:var(--surface);border-radius:14px 14px 0 0;padding:20px;width:100%;max-width:640px;max-height:85vh;overflow-y:auto;box-shadow:0 -4px 24px rgba(0,0,0,.12)">
+      <div style="width:32px;height:4px;background:var(--border-2);border-radius:2px;margin:0 auto 18px"></div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:7px;height:7px;border-radius:50%;background:${sp.color}"></div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:${sp.color}">${o.spec}</span></div>
+        <span class="chip ${smap[o.status]}">${slbl[o.status]}</span>
+      </div>
+      <div style="font-size:18px;font-weight:800;letter-spacing:-.025em;margin-bottom:3px">${o.address}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);margin-bottom:14px">${o.id}</div>
+      <div class="card-sm" style="margin-bottom:14px;background:var(--surface-2)">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);margin-bottom:4px">Problema reportado</div>
+        <div style="font-size:13px;color:var(--text);line-height:1.55">${o.problem}</div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+        <div class="card-sm" style="text-align:center"><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600">${o.time}</div><div style="font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Horario</div></div>
+        <div class="card-sm" style="text-align:center"><div style="font-size:14px;font-weight:700;color:var(--green)">$${o.monto}</div><div style="font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Monto</div></div>
+        <div class="card-sm" style="text-align:center"><div style="font-size:14px;font-weight:600;color:${o.score?'var(--amber)':'var(--text-3)'}">${o.score||'—'}</div><div style="font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Score</div></div>
+      </div>
+      ${o.status!=='done'
+        ? `<button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:8px" onclick="launchSOP('${o.id}')">Abrir SOP para esta orden →</button>`
+        : `<div style="background:var(--green-bg);border:1px solid #bbf7d0;border-radius:var(--rs);padding:10px;text-align:center;font-size:13px;color:var(--green);font-weight:600;margin-bottom:8px">✓ Orden cerrada · Score ${o.score}</div>`}
+      <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('[style*=fixed]').remove()">Cerrar</button>
+    </div>`;
+  sheet.onclick=e=>{if(e.target===sheet)sheet.remove();};
+  document.body.appendChild(sheet);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SOP TAB
+// ═══════════════════════════════════════════════════════════════
+function renderSOP(){
+  const actives=ORDERS.filter(o=>o.status!=='done'&&o.tec===CU.id);
+  document.getElementById('tab-sop').innerHTML=`
+    <div class="sh"><span class="sh-title">Ordenes del dia — activas</span></div>
+    ${actives.length
+      ? actives.map(o=>{
+          const sp=SPECS[o.spec]||{color:'#888',sop:'hvac'};
+          return `<div class="card" style="margin-bottom:8px;cursor:pointer;transition:box-shadow .15s" onmouseenter="this.style.boxShadow='var(--shadow-md)'" onmouseleave="this.style.boxShadow='var(--shadow)'">
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+              <div style="flex:1">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><div style="width:7px;height:7px;border-radius:50%;background:${sp.color}"></div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:${sp.color}">${o.spec}</span><span class="chip chip-active" style="margin-left:4px">${o.status==='active'?'En curso':'Pendiente'}</span></div>
+                <div style="font-size:14px;font-weight:600;margin-bottom:3px">${o.address}</div>
+                <div style="font-size:12px;color:var(--text-2);line-height:1.4">${o.problem}</div>
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);margin-top:5px">${o.id} · ${o.time} hrs · <span style="color:var(--green)">$${o.monto}</span></div>
+              </div>
+              <button class="btn btn-primary btn-lg" onclick="launchSOP('${o.id}')">Abrir SOP →</button>
+            </div>
+          </div>`;}).join('')
+      : `<div class="empty"><div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="empty-title">Sin ordenes activas</div><div class="empty-sub">Todas las ordenes del dia estan completadas.</div></div>`}
+
+    <div class="sh" style="margin-top:24px"><span class="sh-title">Lanzar SOP manual</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      ${Object.entries(SPECS).map(([name,info])=>`
+        <div class="card-sm" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color .15s" onclick="launchSOPManual('${info.sop}','${name}')" onmouseenter="this.style.borderColor='${info.color}60'" onmouseleave="this.style.borderColor=''">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:7px;height:7px;border-radius:50%;background:${info.color};flex-shrink:0"></div>
+            <span style="font-size:13px;font-weight:500">${name}</span>
+            ${CU.specs.includes(name)?`<span class="norm-tag">Tu especialidad</span>`:''}
+          </div>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </div>`).join('')}
+    </div>`;
+}
+
+function launchSOP(ordId){
+  const o=ORDERS.find(x=>x.id===ordId);
+  if(!o) return;
+  const sp=SPECS[o.spec]||{sop:'hvac'};
+  document.querySelectorAll('[style*="position:fixed;inset"]').forEach(el=>el.remove());
+  window.open(`thruver-sop-universal.html?service=${sp.sop}&prop=${encodeURIComponent(o.address)}&tec=${CU.id}&problema=${encodeURIComponent(o.problem)}`, '_blank');
+}
+function launchSOPManual(sopKey){
+  window.open(`thruver-sop-universal.html?service=${sopKey}&tec=${CU.id}&prop=&problema=`, '_blank');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INGRESOS
+// ═══════════════════════════════════════════════════════════════
+function renderIngresos(){
+  const days=[{d:'Lun',v:680},{d:'Mar',v:920},{d:'Mie',v:340},{d:'Jue',v:0},{d:'Vie',v:750},{d:'Sab',v:150},{d:'Dom',v:0}];
+  const max=Math.max(...days.map(d=>d.v),1);
+  const b=CU.banco||{};
+  document.getElementById('tab-ingresos').innerHTML=`
+    <!-- Saldo disponible + Retirar -->
+    <div class="card anim" style="background:var(--accent);border-color:var(--accent);margin-bottom:12px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+        <div style="flex:1">
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:6px">Saldo disponible para retiro</div>
+          <div style="font-size:36px;font-weight:800;letter-spacing:-.05em;font-family:'DM Mono',monospace;color:#fff;margin-bottom:5px">$${b.saldo_disponible?.toLocaleString()||'0'}</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
+            <span style="color:rgba(255,255,255,.4)">Total mes: $11,240</span>
+            <span style="color:rgba(255,255,255,.25)">·</span>
+            <span style="color:rgba(255,255,255,.4)">Retirado: $${b.retirado_mes?.toLocaleString()||'0'}</span>
+          </div>
+        </div>
+        <button onclick="openRetiro()" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25);border-radius:var(--rs);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;padding:10px 16px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">
+          Retirar fondos →
+        </button>
+      </div>
+    </div>
+
+    <!-- Cuenta registrada -->
+    <div class="card-sm anim" style="margin-bottom:20px;display:flex;align-items:center;gap:10px;border-style:dashed;cursor:pointer" onclick="openCuentaBancaria()">
+      <div style="width:32px;height:32px;border-radius:8px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:12px;font-weight:600;color:var(--text)">${b.banco||'Sin cuenta registrada'}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3)">${b.clabe?b.clabe.replace(/(.{4})/g,'$1 ').trim().replace(/ (\d{4})$/,' ****'):'Agregar cuenta de transferencia'}</div>
+      </div>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </div>
+
+    <!-- Total del mes -->
+    <div class="sh anim d1"><span class="sh-title">Total del mes · Junio 2026</span><span style="font-size:14px;font-weight:800;font-family:'DM Mono',monospace;color:var(--green)">$11,240</span></div>
+
+    <!-- KPIs -->
+    <div class="grid-4 anim d1" style="margin-bottom:24px">
+      <div class="kpi"><div class="kpi-label">Cobrado esta semana</div><div class="kpi-val" style="color:var(--green)">$2,840</div><div class="kpi-sub kpi-neutral">7 servicios</div></div>
+      <div class="kpi"><div class="kpi-label">Pendiente de cobro</div><div class="kpi-val" style="color:var(--amber)">$650</div><div class="kpi-sub kpi-neutral">2 ordenes</div></div>
+      <div class="kpi"><div class="kpi-label">Promedio por servicio</div><div class="kpi-val">$578</div><div class="kpi-sub kpi-up">↑ 12% vs mes pasado</div></div>
+      <div class="kpi"><div class="kpi-label">Mejor dia</div><div class="kpi-val">$920</div><div class="kpi-sub kpi-neutral">Martes</div></div>
+    </div>
+
+    <!-- Chart -->
+    <div class="sh anim d1"><span class="sh-title">Esta semana por dia</span></div>
+    <div class="card anim d2" style="margin-bottom:24px">
+      ${days.map(d=>{
+        const pct = d.v ? Math.max(8, Math.round((d.v/max)*100)) : 0;
+        const inside = pct > 22;
+        return `<div class="bar-row">
+          <span class="bar-day">${d.d}</span>
+          <div class="bar-track" style="position:relative">
+            <div class="bar-fill" style="width:${pct?pct+'%':'4px'};background:${d.v?'var(--blue)':'var(--border)'}">
+              ${d.v && inside ? `<span class="bar-fill-val">$${d.v}</span>` : ''}
+            </div>
+            ${d.v && !inside ? `<span style="position:absolute;left:${pct+1}%;top:50%;transform:translateY(-50%);font-size:10px;font-family:'DM Mono',monospace;font-weight:600;color:var(--text-2)">$${d.v}</span>` : ''}
+          </div>
+        </div>`;}).join('')}
+    </div>
+
+    <!-- By specialty -->
+    <div class="sh anim d2"><span class="sh-title">Por especialidad · mes</span></div>
+    <div class="anim d3" style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px">
+      ${[{spec:'HVAC',val:7840,pct:70},{spec:'Electrico',val:2800,pct:25},{spec:'Plomeria',val:600,pct:5}].map(s=>`
+        <div class="card-sm" style="display:flex;align-items:center;gap:12px">
+          <div style="width:7px;height:7px;border-radius:50%;background:${SPECS[s.spec]?.color||'var(--blue)'};flex-shrink:0"></div>
+          <div style="flex:1">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:12px;font-weight:600">${s.spec}</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);font-weight:500">$${s.val.toLocaleString()}</span></div>
+            <div style="height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden"><div style="height:100%;width:${s.pct}%;background:${SPECS[s.spec]?.color||'var(--blue)'};border-radius:2px"></div></div>
+          </div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Recent -->
+    <div class="sh anim d3"><span class="sh-title">Ultimos cobros</span></div>
+    <div class="card anim d4">
+      ${ORDERS.filter(o=>o.status==='done'&&o.tec===CU.id).map((o,i,arr)=>`
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;${i<arr.length-1?'border-bottom:1px solid var(--border)':''}">
+          <div style="width:32px;height:32px;border-radius:8px;background:${SPECS[o.spec]?.color||'var(--blue)'}18;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <div style="width:7px;height:7px;border-radius:50%;background:${SPECS[o.spec]?.color||'var(--blue)'}"></div>
+          </div>
+          <div style="flex:1"><div style="font-size:13px;font-weight:500">${o.address.split(',')[0]}</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3)">${o.id} · ${o.time}</div></div>
+          <div style="font-size:15px;font-weight:700;color:var(--green)">$${o.monto}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PERFIL
+// ═══════════════════════════════════════════════════════════════
+function renderPerfil(){
+  const rating=4.8;
+  document.getElementById('tab-perfil').innerHTML=`
+    <!-- Header -->
+    <div class="card anim" style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+      <div style="width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex-shrink:0;border:2px solid var(--border-2)">${CU.initials}</div>
+      <div style="flex:1">
+        <div style="font-size:18px;font-weight:800;letter-spacing:-.025em;margin-bottom:2px">${CU.name}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);margin-bottom:4px">${CU.id}</div>
+        <div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:4px">${CU.specs.join(' · ')}</div>
+        <div style="display:flex;align-items:center;gap:2px">${[1,2,3,4,5].map(n=>`<span style="color:${n<=Math.round(rating)?'var(--amber)':'var(--border-2)'};font-size:13px">★</span>`).join('')}<span style="font-size:11px;color:var(--text-2);margin-left:5px">${rating} · 143 servicios</span></div>
+      </div>
+      <button class="btn btn-ghost" onclick="doLogout()">Salir</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="grid-4 anim d1" style="margin-bottom:24px">
+      <div class="kpi"><div class="kpi-label">Servicios</div><div class="kpi-val">143</div><div class="kpi-sub kpi-neutral">Historico total</div></div>
+      <div class="kpi"><div class="kpi-label">Rating</div><div class="kpi-val">4.8</div><div class="kpi-sub kpi-up">De 5.0 posible</div></div>
+      <div class="kpi"><div class="kpi-label">Protocolo</div><div class="kpi-val">98%</div><div class="kpi-sub kpi-up">Pasos completados</div></div>
+      <div class="kpi"><div class="kpi-label">Anos activo</div><div class="kpi-val">2</div><div class="kpi-sub kpi-neutral">Desde 2024</div></div>
+    </div>
+
+    <!-- Tools -->
+    <div class="sh anim d2"><span class="sh-title">Mis herramientas</span></div>
+    <div class="card anim d2" style="margin-bottom:20px">
+      ${(CU.tools||[]).map((t,i,arr)=>`
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 0;${i<arr.length-1?'border-bottom:1px solid var(--border)':''}">
+          <div style="width:7px;height:7px;border-radius:50%;flex-shrink:0;background:${t.ok?'var(--green)':'var(--border-2)'}"></div>
+          <span style="font-size:13px;font-weight:500;flex:1">${t.name}</span>
+          <span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:${t.ok?'var(--green)':'var(--text-3)'}">${t.ok?'Disponible':'Pendiente'}</span>
+        </div>`).join('')}
+    </div>
+
+    <!-- Zonas -->
+    <div class="sh anim d3"><span class="sh-title">Zonas de servicio</span></div>
+    <div class="anim d3" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:24px">
+      ${CU.zona.split(' y ').map(z=>`<span style="background:var(--surface);border:1px solid var(--border);border-radius:100px;padding:5px 12px;font-size:12px;font-weight:500;color:var(--text-2)">${z.trim()}</span>`).join('')}
+    </div>
+
+    <!-- Settings -->
+    <div class="sh anim d4"><span class="sh-title">Configuracion</span></div>
+    <div class="card anim d4">
+      ${[['Notificaciones','Activadas'],['Modo sin conexion','Activado'],['Idioma','Espanol'],['Version','Thruver SOP v1.0']].map((s,i,arr)=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:11px 0;${i<arr.length-1?'border-bottom:1px solid var(--border)':''}">
+          <span style="font-size:13px;color:var(--text-2)">${s[0]}</span>
+          <span class="norm-tag">${s[1]}</span>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RETIRO Y DATOS BANCARIOS
+// ═══════════════════════════════════════════════════════════════
+function openCuentaBancaria(){
+  const b=CU.banco||{};
+  const s=document.createElement('div');
+  s.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:flex;align-items:flex-end;justify-content:center;animation:fadeUp .2s ease';
+  s.innerHTML=`
+    <div style="background:var(--surface);border-radius:14px 14px 0 0;padding:20px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 -4px 24px rgba(0,0,0,.12)">
+      <div style="width:32px;height:4px;background:var(--border-2);border-radius:2px;margin:0 auto 20px"></div>
+      <div style="font-size:16px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px">Datos bancarios</div>
+      <div style="font-size:12px;color:var(--text-2);margin-bottom:20px">Cuenta registrada para recibir tus retiros de Thruver.</div>
+
+      <!-- Banco info -->
+      <div class="card-sm" style="margin-bottom:12px;background:var(--surface-2)">
+        ${[
+          ['Banco',b.banco||'—'],
+          ['Tipo de cuenta',b.tipo||'—'],
+          ['CLABE interbancaria',b.clabe||'—'],
+          ['Tarjeta asociada',b.tarjeta||'—'],
+          ['Titular',b.titular||'—'],
+          ['RFC',b.rfc||'—'],
+        ].map((row,i,arr)=>`
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;${i<arr.length-1?'border-bottom:1px solid var(--border)':''}">
+            <span style="font-size:11px;color:var(--text-3);font-weight:500">${row[0]}</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--text)">${row[1]}</span>
+          </div>`).join('')}
+      </div>
+
+      <div style="background:var(--amber-bg);border:1px solid #fde68a;border-radius:var(--rs);padding:10px 12px;font-size:12px;color:var(--amber);margin-bottom:16px;line-height:1.55">
+        Para modificar tus datos bancarios contacta a Thruver directamente. Los cambios requieren verificacion de identidad.
+      </div>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('[style*=fixed]').remove()">Cerrar</button>
+    </div>`;
+  s.onclick=e=>{if(e.target===s)s.remove();};
+  document.body.appendChild(s);
+}
+
+function openRetiro(){
+  const b=CU.banco||{};
+  const disponible=b.saldo_disponible||0;
+  const s=document.createElement('div');
+  s.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:500;display:flex;align-items:flex-end;justify-content:center;animation:fadeUp .2s ease';
+  s.innerHTML=`
+    <div style="background:var(--surface);border-radius:14px 14px 0 0;padding:20px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;box-shadow:0 -4px 24px rgba(0,0,0,.12)">
+      <div style="width:32px;height:4px;background:var(--border-2);border-radius:2px;margin:0 auto 20px"></div>
+      <div style="font-size:16px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px">Retirar fondos</div>
+      <div style="font-size:12px;color:var(--text-2);margin-bottom:20px">El dinero se transfiere a tu cuenta registrada en 1–2 dias habiles.</div>
+
+      <!-- Saldo -->
+      <div class="card" style="background:var(--accent);border-color:var(--accent);margin-bottom:16px;text-align:center">
+        <div style="font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">Disponible para retirar</div>
+        <div style="font-size:32px;font-weight:800;font-family:'DM Mono',monospace;color:#fff;letter-spacing:-.04em">$${disponible.toLocaleString()}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);margin-top:3px">MXN</div>
+      </div>
+
+      <!-- Monto -->
+      <div style="margin-bottom:14px">
+        <label style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-2);margin-bottom:6px;display:block">Monto a retirar</label>
+        <div style="position:relative">
+          <span style="position:absolute;left:12px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:16px;color:var(--text-3)">$</span>
+          <input type="number" id="retiro_monto" max="${disponible}" min="1" placeholder="0" style="width:100%;background:var(--surface-2);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Mono',monospace;font-size:22px;padding:11px 12px 11px 28px;outline:none;-webkit-appearance:none;appearance:none;transition:border-color .15s" oninput="validateRetiro(${disponible})" onfocus="this.style.borderColor='var(--blue)'">
+        </div>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          ${[25,50,75,100].map(p=>`<button onclick="document.getElementById('retiro_monto').value=Math.floor(${disponible}*${p/100});validateRetiro(${disponible})" style="flex:1;padding:6px 4px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--rs);font-size:11px;font-weight:600;color:var(--text-2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.borderColor='var(--blue-bg)'" onmouseout="this.style.borderColor=''">${p}%</button>`).join('')}
+        </div>
+        <div id="retiro_err" style="font-size:11px;color:var(--red);margin-top:5px;display:none"></div>
+      </div>
+
+      <!-- Destino -->
+      <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--rs);padding:11px 12px;margin-bottom:16px;display:flex;align-items:center;gap:10px">
+        <div style="width:28px;height:28px;border-radius:7px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:600">${b.banco||'Sin cuenta'} · ${b.tipo||''}</div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3)">${b.clabe?'CLABE: ...'+b.clabe.slice(-4):'Cuenta no registrada'} · ${b.titular||''}</div>
+        </div>
+      </div>
+
+      <!-- Nota -->
+      <div style="font-size:11px;color:var(--text-3);margin-bottom:16px;line-height:1.6;display:flex;gap:6px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        El retiro se acredita en 1–2 dias habiles. Sin comisiones — lo que ganaste es tuyo completo.
+      </div>
+
+      <button id="retiro_btn" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:8px" onclick="confirmarRetiro(${disponible})" disabled>Confirmar retiro</button>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('[style*=fixed]').remove()">Cancelar</button>
+    </div>`;
+  s.onclick=e=>{if(e.target===s)s.remove();};
+  document.body.appendChild(s);
+}
+
+function validateRetiro(disponible){
+  const inp=document.getElementById('retiro_monto');
+  const btn=document.getElementById('retiro_btn');
+  const err=document.getElementById('retiro_err');
+  const val=parseFloat(inp.value)||0;
+  if(val<=0){btn.disabled=true;err.style.display='none';inp.style.borderColor='';return;}
+  if(val>disponible){
+    btn.disabled=true;err.style.display='block';err.textContent='El monto supera tu saldo disponible.';
+    inp.style.borderColor='var(--red)';return;
+  }
+  btn.disabled=false;err.style.display='none';inp.style.borderColor='var(--green)';
+  // Show comision preview
+  const com=0;
+  const net=val;
+  btn.textContent=`Retirar $${val.toLocaleString()}${com?` (recibes $${net.toLocaleString()})`:''} →`;
+}
+
+function confirmarRetiro(disponible){
+  const val=parseFloat(document.getElementById('retiro_monto')?.value)||0;
+  if(!val||val>disponible) return;
+  const com=0;
+  const net=val;
+  // Close sheet
+  document.querySelectorAll('[style*="position:fixed;inset"]').forEach(el=>el.remove());
+  // Update local balance
+  if(CU.banco) CU.banco.saldo_disponible=disponible-val;
+  // Show success toast
+  const t=document.createElement('div');
+  t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;border-radius:var(--r);padding:13px 20px;font-size:13px;font-weight:700;z-index:600;box-shadow:0 4px 16px rgba(0,0,0,.15);white-space:nowrap;animation:fadeUp .25s ease;font-family:DM Sans,sans-serif';
+  t.innerHTML=`<span style="margin-right:8px">✓</span> Retiro de $${net.toLocaleString()} solicitado — 1–2 dias habiles`;
+  document.body.appendChild(t); setTimeout(()=>t.remove(),3500);
+  // Re-render ingresos with updated balance
+  renderIngresos();
+}
+
+function showNotif(){
+  const s=document.createElement('div');
+  s.style.cssText='position:fixed;top:64px;right:20px;width:280px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);box-shadow:var(--shadow-md);z-index:500;animation:fadeUp .2s ease;overflow:hidden';
+  s.innerHTML=`
+    <div style="padding:10px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);display:flex;justify-content:space-between"><span>Notificaciones</span><span style="cursor:pointer;color:var(--text-2)" onclick="this.closest('[style*=fixed]').remove()">✕</span></div>
+    <div style="padding:10px 14px;border-bottom:1px solid var(--border)"><div style="font-size:12px;font-weight:600;margin-bottom:2px">Nueva orden asignada</div><div style="font-size:11px;color:var(--text-2)">ELE-2026-02341 · Av. Obregon 234 · 14:00 hrs</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);margin-top:3px">Hace 1h 30min</div></div>
+    <div style="padding:10px 14px"><div style="font-size:12px;font-weight:600;margin-bottom:2px">Pago confirmado</div><div style="font-size:11px;color:var(--text-2)">$680 por HVAC-2026-04812 — Calle Madero</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);margin-top:3px">Hace 2h 10min</div></div>`;
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),5000);
+}
+</script>
+</body>
+</html>

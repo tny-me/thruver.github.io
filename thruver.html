@@ -1,0 +1,2653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thruver — Infraestructura para el mantenimiento y operación de propiedades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f2f3f5;
+  --bg2:#eaebee;
+  --bg3:#e2e4e8;
+  --surface:#ffffff;
+  --border:rgba(0,0,0,0.08);
+  --border2:rgba(0,0,0,0.14);
+  --border3:rgba(0,0,0,0.22);
+  --text:#0d0d0d;
+  --text2:#4a4a4a;
+  --text3:#888;
+  --text4:#bbb;
+  --accent:#c85a28;
+  --accent-light:rgba(200,90,40,0.1);
+  --accent-ring:rgba(200,90,40,0.24);
+  --green:#16a34a;
+  --green-bg:rgba(22,163,74,0.08);
+  --blue:#0077aa;
+  --blue-bg:rgba(0,119,170,0.08);
+  --red:#dc2626;
+  --amber:#d97706;
+  --nav-h:56px;
+  --r:10px;
+  --rs:6px;
+  --accent2:#f07340;
+  --grad-hero:linear-gradient(135deg, rgba(200,90,40,.06) 0%, transparent 60%);
+  --grad-dark:linear-gradient(135deg, #0d0d0d 0%, #1a0f08 100%);
+  --grad-accent:linear-gradient(135deg, #c85a28 0%, #e8834a 100%);
+  --grad-subtle:linear-gradient(180deg, rgba(200,90,40,.04) 0%, transparent 100%);
+}
+html{font-size:15px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── VERCEL-STYLE VERTICAL GRID LINES ─────────────────
+   Four lines run the full height of the page.
+   Outer pair: content boundaries at ±560px from center
+   Inner pair: column thirds at ±187px from center
+   All are fixed so they stay while scrolling, z-index 0.
+──────────────────────────────────────────────────────── */
+body::before{
+  content:'';
+  position:fixed;
+  top:0;left:0;right:0;bottom:0;
+  pointer-events:none;
+  z-index:0;
+  background-image:
+    linear-gradient(to right, rgba(0,0,0,0.055) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0,0,0,0.055) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0,0,0,0.055) 1px, transparent 1px),
+    linear-gradient(to right, rgba(0,0,0,0.055) 1px, transparent 1px);
+  background-position:
+    calc(50% - 560px) 0,
+    calc(50% - 187px) 0,
+    calc(50% + 187px) 0,
+    calc(50% + 560px) 0;
+  background-size: 1px 100%, 1px 100%, 1px 100%, 1px 100%;
+  background-repeat: no-repeat;
+}
+/* Ensure all sections sit above the grid lines */
+nav, section, footer, .hero{ position:relative; z-index:1; }
+a{color:inherit;text-decoration:none}
+
+/* ─── PRODUCTOS DROPDOWN ─── */
+.nav-productos-wrap{position:relative}
+.nav-productos-btn{font-size:13px;font-weight:500;color:var(--text2);padding:6px 11px;border-radius:6px;
+  transition:all .12s;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;
+  display:flex;align-items:center;gap:4px;letter-spacing:0}
+.nav-productos-btn:hover{color:var(--text);background:var(--bg3)}
+.nav-productos-btn svg{transition:transform .2s}
+.nav-productos-btn.open svg{transform:rotate(180deg)}
+.productos-panel{position:absolute;top:calc(100% + 8px);left:-12px;width:420px;
+  background:var(--surface);border:1px solid var(--border2);border-radius:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,0.12),0 2px 8px rgba(0,0,0,0.06);
+  padding:8px;z-index:500;opacity:0;transform:translateY(-6px);pointer-events:none;
+  transition:opacity .18s ease,transform .18s ease}
+.productos-panel.open{opacity:1;transform:translateY(0);pointer-events:all}
+.prod-card{display:block;padding:10px 12px;border-radius:7px;cursor:pointer;transition:background .12s;border:1px solid transparent;text-decoration:none}
+.prod-card:hover{background:var(--bg);border-color:var(--border)}
+.prod-card.disabled{cursor:default;opacity:.5}
+.prod-card.disabled:hover{background:transparent;border-color:transparent}
+.prod-card-name{font-size:14px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:2px;display:flex;align-items:center;gap:7px}
+.prod-card-desc{font-size:12px;color:var(--text3);line-height:1.5}
+.prod-divider{height:1px;background:var(--border);margin:6px 0}
+.prod-soon{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);background:var(--bg3);border-radius:3px;padding:1px 5px}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;height:var(--nav-h);z-index:300;
+  background:rgba(242,243,245,0.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border)}
+.nav-i{max-width:1120px;margin:0 auto;padding:0 40px;height:100%;
+  display:flex;align-items:center;justify-content:space-between}
+@media(max-width:640px){.nav-i{padding:0 20px}}
+.logo{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;letter-spacing:-.02em}
+.logo-mark{width:26px;height:26px;background:var(--text);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-links{display:flex;gap:2px;list-style:none}
+.nav-links a{font-size:13px;font-weight:500;color:var(--text2);padding:6px 11px;border-radius:6px;transition:all .12s}
+.nav-links a:hover{color:var(--text);background:var(--bg3)}
+@media(max-width:800px){.nav-links{display:none}}
+.nav-ctas{display:flex;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:8px 16px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:13px;
+  font-weight:600;cursor:pointer;border:none;transition:all .15s;letter-spacing:-.01em;white-space:nowrap}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border2)}
+.btn-ghost:hover{background:var(--bg3);color:var(--text)}
+.btn-black{background:var(--text);color:#fff}
+.btn-black:hover{background:#1f1f1f;transform:translateY(-1px)}
+.btn-accent{background:var(--accent);color:#fff;box-shadow:0 2px 10px rgba(200,90,40,.3)}
+.btn-accent:hover{opacity:.9;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1.5px solid var(--border2)}
+.btn-outline:hover{background:var(--bg3)}
+
+/* ─── LAYOUT ─── */
+.wrap{max-width:1120px;margin:0 auto;padding:0 40px}
+@media(max-width:640px){.wrap{padding:0 20px}}
+.section{padding:96px 0}
+.section-sm{padding:72px 0}
+.eyebrow{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--accent);display:flex;align-items:center;gap:7px}
+.eyebrow::before{content:'';width:18px;height:2px;background:var(--accent);border-radius:2px;flex-shrink:0}
+h2.sh{font-size:clamp(26px,3.8vw,44px);font-weight:800;letter-spacing:-.045em;line-height:1.06;color:var(--text)}
+p.sp{font-size:15px;color:var(--text2);line-height:1.75;max-width:500px}
+
+/* ─── REVEAL ─── */
+.rev{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.rev.on{opacity:1;transform:translateY(0)}
+.d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}
+
+/* ══════════════════════════════════
+   HERO — compact
+══════════════════════════════════ */
+.hero{padding:calc(var(--nav-h) + 64px) 0 80px;background:var(--bg);position:relative;overflow:hidden}
+.hero-grid{display:block}
+.hero-tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:18px;
+  background:var(--accent-light);border:1px solid var(--accent-ring);border-radius:100px;padding:4px 12px}
+.hero-tag-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-h1{font-size:clamp(36px,5.5vw,60px);font-weight:900;letter-spacing:-.055em;
+  line-height:.95;color:var(--text);margin-bottom:20px}
+.hero-h1 .acc{color:var(--accent)}
+.hero-sub{font-size:16px;color:var(--text2);line-height:1.72;max-width:440px;margin-bottom:28px}
+.hero-actions{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:36px}
+.hero-proof{display:flex;gap:28px;flex-wrap:wrap;border-top:1px solid var(--border);padding-top:24px}
+.hp-stat-val{font-family:'DM Mono',monospace;font-size:20px;font-weight:700;letter-spacing:-.03em;
+  line-height:1;color:var(--text);margin-bottom:3px}
+.hp-stat-val .acc{color:var(--accent)}
+.hp-stat-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;font-weight:500}
+
+/* Hero diagram — platform overview */
+.hero-diagram{position:relative}
+.hd-main{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.07)}
+.hd-header{padding:11px 14px;border-bottom:1px solid var(--border);background:var(--bg);
+  display:flex;align-items:center;justify-content:space-between}
+.hd-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)}
+.hd-live{display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--green)}
+.hd-live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:livePulse 2s ease infinite}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:.3}}
+.hd-body{padding:14px}
+.hd-sys-rows{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.hd-sys-row{display:flex;align-items:center;gap:8px}
+.hd-sys-name{font-size:12px;color:var(--text2);width:68px;flex-shrink:0;font-weight:500}
+.hd-sys-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.hd-sys-fill{height:100%;border-radius:2px}
+.hd-sys-val{font-family:'DM Mono',monospace;font-size:11px;font-weight:600;width:32px;text-align:right;flex-shrink:0}
+.hd-footer{padding:10px 14px;border-top:1px solid var(--border);background:var(--bg);
+  display:flex;align-items:center;justify-content:space-between}
+.hd-score-val{font-family:'DM Mono',monospace;font-size:22px;font-weight:700;color:var(--accent);line-height:1}
+.hd-score-lbl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+
+/* Floating labels */
+.hd-float{position:absolute;background:var(--surface);border:1px solid var(--border);border-radius:100px;
+  padding:5px 11px 5px 7px;display:flex;align-items:center;gap:5px;
+  box-shadow:0 3px 12px rgba(0,0,0,0.08);font-size:11px;font-weight:600;white-space:nowrap;z-index:2}
+.hd-float-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.hd-f1{top:-12px;right:16px;animation:fa 4s ease infinite}
+.hd-f2{bottom:16px;left:-10px;animation:fb 4s 1s ease infinite}
+@keyframes fa{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes fb{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+
+/* ══════════════════════════════════
+   PLATFORM DIAGRAM — Vercel style
+══════════════════════════════════ */
+.platform-section{padding:96px 0;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+
+.platform-intro{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:64px}
+@media(max-width:800px){.platform-intro{grid-template-columns:1fr;gap:24px}}
+
+/* The diagram */
+.plat-diagram{position:relative}
+
+/* Top row — 3 actors */
+.pd-actors{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:0}
+.pd-actor{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:16px;position:relative}
+.pd-actor-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;border:1px solid}
+.pd-actor-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:4px}
+.pd-actor-name{font-size:14px;font-weight:700;color:var(--text);margin-bottom:6px}
+.pd-actor-tools{display:flex;flex-direction:column;gap:3px}
+.pd-actor-tool{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:5px}
+.pd-actor-tool::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--text4);flex-shrink:0}
+
+/* Connection lines between actors and core */
+.pd-connectors{height:40px;position:relative;margin:0}
+.pd-conn-svg{width:100%;height:100%;overflow:visible}
+
+/* Core platform */
+.pd-core{background:var(--text);border-radius:var(--r);padding:18px 20px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0}
+.pd-core-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+  color:rgba(255,255,255,.35);flex-shrink:0}
+.pd-core-modules{display:flex;gap:6px;flex-wrap:wrap}
+.pd-core-mod{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);
+  border-radius:5px;padding:5px 10px;font-size:11px;font-weight:600;color:rgba(255,255,255,.7);
+  display:flex;align-items:center;gap:5px}
+.pd-core-mod .dot{width:4px;height:4px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+/* Bottom row — outputs */
+.pd-outputs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:0}
+.pd-output{background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);
+  padding:10px 12px;text-align:center}
+.pd-output-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--text);line-height:1;margin-bottom:3px}
+.pd-output-val .acc{color:var(--accent)}
+.pd-output-lbl{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em}
+
+/* ══════════════════════════════════
+   SOP SECTION
+══════════════════════════════════ */
+.sop-section{padding:96px 0;background:var(--bg)}
+.sop-grid{display:grid;grid-template-columns:480px 1fr;gap:64px;align-items:start;margin-top:52px}
+@media(max-width:1000px){.sop-grid{grid-template-columns:1fr;gap:40px}}
+
+/* SOP flow diagram */
+.sc-tab{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
+  padding:5px 11px;border-radius:100px;border:1.5px solid var(--border2);
+  background:var(--surface);color:var(--text3);cursor:pointer;
+  transition:all .15s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.sc-tab:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-light)}
+.sc-tab.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.sc-tab svg{flex-shrink:0}
+.sc-tab.active svg{stroke:#fff}
+.sop-pill{font-size:12px;font-weight:600;padding:6px 14px;border-radius:100px;
+  border:1.5px solid var(--border2);background:var(--surface);color:var(--text2);
+  cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.sop-pill:hover{border-color:var(--border3);color:var(--text);background:var(--bg3)}
+.sop-pill.active{background:var(--accent);border-color:var(--accent);color:#fff}
+.sop-flow{display:flex;flex-direction:column;gap:0}
+.sop-flow-step{display:flex;gap:0;position:relative}
+.sop-flow-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:36px}
+.sop-flow-num{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--border2);
+  background:var(--surface);display:flex;align-items:center;justify-content:center;
+  font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:var(--text2);flex-shrink:0;z-index:1}
+.sop-flow-step.active .sop-flow-num{background:var(--accent);border-color:var(--accent);color:#fff}
+.sop-flow-line{width:1px;flex:1;background:var(--border2);min-height:20px}
+.sop-flow-step:last-child .sop-flow-line{display:none}
+.sop-flow-content{padding:0 0 24px 14px;flex:1}
+.sop-flow-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;letter-spacing:-.01em}
+.sop-flow-text{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:6px}
+.sop-flow-tag{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:100px;border:1px solid}
+
+/* SOP Mockup */
+.sop-mock{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+  overflow:hidden;box-shadow:0 2px 20px rgba(0,0,0,.06)}
+.sop-mock-prog-bar{height:2px;background:var(--bg3)}
+.sop-mock-prog-fill{height:100%;background:var(--accent);transition:width .6s ease}
+.sop-mock-nav{padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg);
+  display:flex;align-items:center;justify-content:space-between}
+.sop-mock-brand{display:flex;align-items:center;gap:6px}
+.sop-mock-mark{width:18px;height:18px;background:var(--text);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sop-mock-name{font-size:12px;font-weight:700;color:var(--text)}
+.sop-mock-right{display:flex;align-items:center;gap:8px}
+.sop-mock-spec{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  background:var(--bg3);color:var(--text3);border-radius:3px;padding:2px 7px}
+.sop-mock-step{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)}
+.sop-mock-body{padding:14px}
+.sop-mock-eyebrow{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:3px}
+.sop-mock-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:2px}
+.sop-mock-desc{font-size:12px;color:var(--text3);margin-bottom:12px;line-height:1.5}
+.sop-field{background:var(--bg);border:1px solid var(--border);border-radius:var(--rs);padding:9px 11px;margin-bottom:7px}
+.sop-field-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);margin-bottom:5px}
+.sop-field-row{display:flex;align-items:center;gap:7px}
+.sop-field-num{font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--text);flex:1;line-height:1}
+.sop-field-unit{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);background:var(--bg3);border-radius:3px;padding:2px 6px}
+.sop-status-ok{font-size:10px;font-weight:700;color:var(--green);background:var(--green-bg);border:1px solid rgba(22,163,74,.2);border-radius:100px;padding:2px 8px;white-space:nowrap}
+.sop-status-err{font-size:10px;font-weight:700;color:var(--red);background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.2);border-radius:100px;padding:2px 8px;white-space:nowrap}
+.sop-alert{background:rgba(220,38,38,.05);border:1px solid rgba(220,38,38,.15);border-radius:var(--rs);padding:9px 11px;margin-bottom:7px}
+.sop-alert-title{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--red);margin-bottom:2px}
+.sop-alert-msg{font-size:11px;color:var(--text2);line-height:1.4}
+.sop-checklist{display:flex;flex-direction:column;gap:4px;margin-bottom:7px}
+.sop-check{display:flex;align-items:center;gap:7px;padding:6px 9px;border-radius:5px;border:1px solid;font-size:11px;font-weight:500}
+.sop-check.done{background:var(--green-bg);border-color:rgba(22,163,74,.18);color:var(--green)}
+.sop-check.pend{background:var(--bg);border-color:var(--border);color:var(--text3)}
+.sop-score{background:var(--text);border-radius:var(--rs);padding:11px 13px;display:flex;align-items:center;gap:10px}
+.sop-score-num{font-family:'DM Mono',monospace;font-size:24px;font-weight:700;color:#4ade80;line-height:1}
+.sop-score-title{font-size:12px;font-weight:700;color:#fff;margin-bottom:1px}
+.sop-score-sub{font-size:10px;color:rgba(255,255,255,.35)}
+
+/* ══════════════════════════════════
+   EXPEDIENTE
+══════════════════════════════════ */
+.exp-section{padding:96px 0;background:var(--surface);border-top:1px solid var(--border)}
+.exp-grid{display:grid;grid-template-columns:1fr 480px;gap:64px;align-items:center;margin-top:52px}
+@media(max-width:1000px){.exp-grid{grid-template-columns:1fr;gap:40px}}
+
+.exp-points{display:flex;flex-direction:column;gap:0;margin-top:24px}
+.exp-pt{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.exp-pt:last-child{border-bottom:none}
+.exp-pt-num{font-family:'DM Mono',monospace;font-size:11px;font-weight:600;color:var(--accent);flex-shrink:0;padding-top:2px;width:22px}
+.exp-pt-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px;letter-spacing:-.01em}
+.exp-pt-text{font-size:13px;color:var(--text2);line-height:1.6}
+
+/* Expediente mockup */
+.exp-mock{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.exp-mock-hd{padding:13px 16px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.exp-mock-folio{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);margin-bottom:3px}
+.exp-mock-addr{font-size:13px;font-weight:700;color:var(--text);letter-spacing:-.01em}
+.exp-score-big{font-family:'DM Mono',monospace;font-size:26px;font-weight:700;color:var(--accent);line-height:1;text-align:right}
+.exp-score-sub{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;text-align:right}
+.exp-sys-section{padding:12px 16px;border-bottom:1px solid var(--border)}
+.exp-section-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:9px}
+.exp-sys-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.exp-sys-row:last-child{margin-bottom:0}
+.exp-sys-name{font-size:12px;color:var(--text2);width:68px;flex-shrink:0;font-weight:500}
+.exp-sys-track{flex:1;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.exp-sys-fill{height:100%;border-radius:2px}
+.exp-sys-pct{font-family:'DM Mono',monospace;font-size:11px;font-weight:600;width:30px;text-align:right;flex-shrink:0}
+.exp-hist-section{padding:12px 16px}
+.exp-hist-row{display:flex;align-items:center;gap:7px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.exp-hist-row:last-child{border-bottom:none}
+.exp-hist-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.exp-hist-desc{flex:1;color:var(--text2)}
+.exp-hist-date{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);flex-shrink:0}
+.exp-hist-badge{font-size:9px;font-weight:700;padding:1px 6px;border-radius:100px;border:1px solid;flex-shrink:0}
+
+/* ══════════════════════════════════
+   DATA FLOW — how data moves
+══════════════════════════════════ */
+.flow-section{padding:96px 0;background:var(--bg);border-top:1px solid var(--border)}
+
+.flow-diagram{margin-top:56px;position:relative}
+.flow-nodes{display:grid;grid-template-columns:repeat(5,1fr);position:relative;z-index:1}
+@media(max-width:900px){.flow-nodes{grid-template-columns:1fr}}
+/* Dashed connector line — runs full width through circle centers */
+.flow-nodes::before{
+  content:'';
+  position:absolute;
+  top:27px; /* half of 56px circle */
+  left:calc(100% / 10); /* start at center of first node */
+  right:calc(100% / 10); /* end at center of last node */
+  height:0;
+  border-top:1.5px dashed rgba(0,0,0,0.15);
+  z-index:0;
+  pointer-events:none;
+}
+@media(max-width:900px){.flow-nodes::before{display:none}}
+
+.flow-node{display:flex;flex-direction:column;align-items:center;padding:0 8px;position:relative;z-index:1}
+.flow-node-circle{width:56px;height:56px;border-radius:50%;border:1.5px solid var(--border2);
+  background:var(--surface);display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:var(--text2);transition:all .2s;position:relative}
+.flow-node.active .flow-node-circle{background:var(--accent);border-color:var(--accent);color:#fff;
+  box-shadow:0 0 0 6px var(--accent-light)}
+.flow-node-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;text-align:center;letter-spacing:-.01em}
+.flow-node-text{font-size:11px;color:var(--text3);line-height:1.5;text-align:center}
+.flow-node-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:100px;border:1px solid;margin-top:8px}
+
+/* ══════════════════════════════════
+   PARTNER
+══════════════════════════════════ */
+.partner-section{padding:96px 0;background:var(--surface);border-top:1px solid var(--border)}
+.partner-grid{display:grid;grid-template-columns:1fr 400px;gap:64px;align-items:center;margin-top:52px}
+@media(max-width:900px){.partner-grid{grid-template-columns:1fr;gap:40px}}
+
+.partner-feats{display:flex;flex-direction:column;gap:8px;margin-top:24px}
+.partner-feat{display:flex;gap:11px;padding:13px 14px;border:1px solid var(--border);border-radius:var(--rs);background:var(--bg);transition:border-color .15s}
+.partner-feat:hover{border-color:var(--border2);background:var(--surface)}
+.partner-feat-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--accent-light);border:1px solid var(--accent-ring)}
+.partner-feat-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.partner-feat-text{font-size:12px;color:var(--text2);line-height:1.5}
+
+/* Partner mockup */
+.pm{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.pm-top{background:var(--surface);padding:10px 13px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between}
+.pm-brand{display:flex;align-items:center;gap:6px}
+.pm-mark{width:18px;height:18px;background:var(--text);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pm-name{font-size:12px;font-weight:700;color:var(--text)}
+.pm-tag{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  background:var(--accent-light);color:var(--accent);border:1px solid var(--accent-ring);border-radius:3px;padding:1px 6px}
+.pm-body{padding:12px}
+.pm-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.pm-kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:8px;text-align:center}
+.pm-kpi-val{font-family:'DM Mono',monospace;font-size:15px;font-weight:700;line-height:1;margin-bottom:2px}
+.pm-kpi-lbl{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em}
+.pm-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px}
+.pm-tech{display:flex;align-items:center;gap:6px;padding:6px 8px;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--rs);margin-bottom:4px}
+.pm-tav{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:800;color:#fff;flex-shrink:0}
+.pm-tname{font-size:11px;font-weight:600;color:var(--text);flex:1}
+.pm-tstatus{font-size:9px;font-weight:700;display:flex;align-items:center;gap:3px}
+.pm-sla-bar-wrap{margin-top:8px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:8px 10px}
+.pm-sla-top{display:flex;justify-content:space-between;font-size:9px;margin-bottom:5px}
+.pm-sla-track{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.pm-sla-fill{height:100%;background:var(--accent);border-radius:2px}
+
+/* ══════════════════════════════════
+   METRICS
+══════════════════════════════════ */
+.metrics-section{padding:72px 0;background:var(--bg2);border-top:1px solid var(--border)}
+.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid rgba(255,255,255,.08);border-radius:var(--r);overflow:hidden;background:rgba(255,255,255,.04)}
+@media(max-width:700px){.metrics-grid{grid-template-columns:1fr 1fr}}
+.metric-box{padding:28px 24px;border-right:1px solid rgba(255,255,255,.07)}
+.metric-box:last-child{border-right:none}
+.metric-val{font-family:'DM Mono',monospace;font-size:32px;font-weight:700;letter-spacing:-.05em;line-height:1;margin-bottom:5px;color:#fff}
+.metric-val .acc{color:var(--accent)}
+.metric-lbl{font-size:12px;color:rgba(255,255,255,.35)}
+.metric-trend{font-size:11px;font-weight:700;color:#4ade80;margin-top:4px}
+
+/* ══════════════════════════════════
+   CTA
+══════════════════════════════════ */
+.cta-section{padding:112px 0;background:var(--surface);border-top:1px solid var(--border);text-align:center}
+.cta-section h2{font-size:clamp(26px,3.8vw,46px);font-weight:800;letter-spacing:-.045em;line-height:1.06;
+  margin-bottom:14px;max-width:520px;margin-left:auto;margin-right:auto;color:var(--text)}
+.cta-section p{font-size:15px;color:var(--text2);max-width:440px;margin:0 auto 32px;line-height:1.7}
+.cta-btns{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.cta-note{font-size:12px;color:var(--text3);margin-top:14px}
+
+/* ══════════════════════════════════
+   FOOTER — dark only
+══════════════════════════════════ */
+footer{background:#0d0d0d;padding:56px 0 36px;border-top:1px solid rgba(255,255,255,.05)}
+.fi{max-width:1120px;margin:0 auto;padding:0 40px}
+@media(max-width:640px){.fi{padding:0 20px}}
+/* ── PRE-FOOTER CTA ── */
+.prefooter{padding:80px 0;background:var(--bg);border-top:1px solid var(--border);position:relative;overflow:hidden}
+.prefooter::before{content:'';position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:600px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(200,90,40,.06) 0%,transparent 70%);pointer-events:none}
+.prefooter-inner{display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px;align-items:start;position:relative;z-index:1}
+@media(max-width:900px){.prefooter-inner{grid-template-columns:1fr;gap:40px}}
+.prefooter-h{font-size:clamp(26px,3.5vw,40px);font-weight:900;letter-spacing:-.045em;line-height:1.05;color:var(--text);margin-bottom:12px}
+.prefooter-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:28px;max-width:360px}
+.prefooter-actions{display:flex;gap:8px;flex-wrap:wrap}
+.prefooter-col{padding-left:40px;border-left:1px solid var(--border)}
+@media(max-width:900px){.prefooter-col{padding-left:0;border-left:none;border-top:1px solid var(--border);padding-top:32px}}
+.prefooter-col-icon{width:36px;height:36px;border-radius:9px;background:var(--accent-light);border:1px solid var(--accent-ring);display:flex;align-items:center;justify-content:center;margin-bottom:14px}
+.prefooter-col-title{font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.02em;margin-bottom:6px}
+.prefooter-col-desc{font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px}
+.prefooter-col-link{font-size:13px;font-weight:700;color:var(--accent);display:inline-flex;align-items:center;gap:4px;transition:gap .15s}
+.prefooter-col-link:hover{gap:7px}
+/* ── FOOTER ── */
+footer{background:#0d0d0d;padding:64px 0 36px;border-top:1px solid rgba(200,90,40,.15)}
+.foot-top{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr 1fr;gap:32px;margin-bottom:52px}
+@media(max-width:1000px){.foot-top{grid-template-columns:1fr 1fr 1fr;gap:28px}}
+@media(max-width:640px){.foot-top{grid-template-columns:1fr 1fr;gap:24px}}
+@media(max-width:400px){.foot-top{grid-template-columns:1fr}}
+.foot-brand-name{font-size:14px;font-weight:700;color:#fff;letter-spacing:-.01em;margin-bottom:9px}
+.foot-brand-desc{font-size:12px;color:rgba(255,255,255,.28);line-height:1.7;max-width:200px;margin-bottom:16px}
+.foot-brand-tag{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--accent);background:rgba(200,90,40,.1);border:1px solid rgba(200,90,40,.2);border-radius:100px;padding:3px 9px}
+.foot-col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.26);margin-bottom:14px}
+.foot-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.foot-links a{font-size:12px;color:rgba(255,255,255,.38);transition:color .14s;display:flex;align-items:center;gap:5px}
+.foot-links a:hover{color:#fff}
+.foot-links .new{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;background:rgba(200,90,40,.15);color:var(--accent);border-radius:3px;padding:1px 5px;flex-shrink:0}
+.foot-divider{height:1px;background:rgba(255,255,255,.06);margin-bottom:28px}
+.foot-bottom{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.foot-copy{font-size:12px;color:rgba(255,255,255,.2)}
+.foot-legal{display:flex;gap:16px}
+.foot-legal a{font-size:12px;color:rgba(255,255,255,.22);transition:color .14s}
+.foot-legal a:hover{color:rgba(255,255,255,.6)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-i">
+    <a href="#" class="logo">
+      <div class="logo-mark"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6V12C4 15.31 7.58 19.5 12 21C16.42 19.5 20 15.31 20 12V6L12 2Z" fill="white" opacity="0.9"/></svg></div>
+      Thruver
+    </a>
+    <ul class="nav-links">
+      <li class="nav-productos-wrap">
+        <button class="nav-productos-btn" id="productos-btn" onclick="toggleProductos()">
+          Productos
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <div class="productos-panel" id="productos-panel">
+          <a class="prod-card" href="producto-fix.html">
+            <div class="prod-card-name">Repair</div>
+            <div class="prod-card-desc">Servicios y reparaciones profesionales.</div>
+          </a>
+          <div class="prod-divider"></div>
+          <a class="prod-card" href="producto-neat.html">
+            <div class="prod-card-name">Homa</div>
+            <div class="prod-card-desc">Operación doméstica estandarizada.</div>
+          </a>
+          <div class="prod-divider"></div>
+          <div class="prod-card disabled">
+            <div class="prod-card-name">Checkout <span class="prod-soon">Próximo</span></div>
+            <div class="prod-card-desc">Inspecciones periódicas de revisión y mantenimiento.</div>
+          </div>
+        </div>
+      </li>
+      <li><a href="#plataforma">Plataforma</a></li>
+      <li><a href="#sop">SOP</a></li>
+      <li><a href="#expediente">Expediente</a></li>
+      <li><a href="#partner">Partners</a></li>
+    </ul>
+    <div class="nav-ctas">
+      <button class="btn btn-ghost" onclick="openLogin()">Iniciar sesión</button>
+      <a href="#contacto" class="btn btn-black">Solicitar servicio</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════
+     HERO
+══════════════════════════════════ -->
+<section class="hero" style="padding:calc(var(--nav-h) + 72px) 0 96px;background:var(--bg);overflow:hidden;position:relative">
+  <!-- Stripe-style gradient orb behind headline -->
+  <div style="position:absolute;top:-60px;left:-80px;width:600px;height:600px;border-radius:50%;
+    background:radial-gradient(circle, rgba(200,90,40,.07) 0%, transparent 70%);pointer-events:none;z-index:0"></div>
+  <div style="position:absolute;bottom:-100px;right:10%;width:400px;height:400px;border-radius:50%;
+    background:radial-gradient(circle, rgba(200,90,40,.04) 0%, transparent 70%);pointer-events:none;z-index:0"></div>
+
+  <div class="wrap" style="position:relative;z-index:1">
+    <div style="display:grid;grid-template-columns:1fr 480px;gap:80px;align-items:center">
+
+      <!-- LEFT: Text -->
+      <div class="rev">
+        <div class="hero-tag">
+          <div class="hero-tag-dot"></div>
+          Operando en Culiacán, Sinaloa
+        </div>
+        <h1 class="hero-h1">
+          El sistema operativo<br>de tu <span class="acc">propiedad.</span>
+        </h1>
+        <p class="hero-sub" style="margin-bottom:32px">Thruver integra técnicos, datos y procesos para mantener, predecir y proteger el valor de cada propiedad.</p>
+        <div class="hero-actions" style="margin-bottom:44px">
+          <a href="#contacto" class="btn btn-accent btn-lg">Solicitar servicio
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="#partner" class="btn btn-outline btn-lg">Soy contratista</a>
+        </div>
+        <div class="hero-proof">
+          <div><div class="hp-stat-val">12,<span class="acc">400</span>+</div><div class="hp-stat-lbl">Propiedades</div></div>
+          <div><div class="hp-stat-val"><span class="acc">340</span>+</div><div class="hp-stat-lbl">Técnicos</div></div>
+          <div><div class="hp-stat-val">85<span class="acc">k</span>+</div><div class="hp-stat-lbl">Registros técnicos</div></div>
+          <div><div class="hp-stat-val">4.<span class="acc">8</span>★</div><div class="hp-stat-lbl">Calificación</div></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: 6-scenario interactive panel -->
+      <div class="rev d1">
+
+        <!-- Scenario tabs -->
+        <div style="display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap">
+          <button class="sc-tab active" data-sc="0" onclick="setScenario(0)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Expediente
+          </button>
+          <button class="sc-tab" data-sc="1" onclick="setScenario(1)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            Recordatorio
+          </button>
+          <button class="sc-tab" data-sc="2" onclick="setScenario(2)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+            Solicitud
+          </button>
+          <button class="sc-tab" data-sc="3" onclick="setScenario(3)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            Pago
+          </button>
+          <button class="sc-tab" data-sc="4" onclick="setScenario(4)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Historial
+          </button>
+          <button class="sc-tab" data-sc="5" onclick="setScenario(5)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            SOP
+          </button>
+          <button class="sc-tab" data-sc="6" onclick="setScenario(6)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            Score
+          </button>
+        </div>
+
+        <!-- Panel frame -->
+        <div id="sc-panel" style="background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,.1);min-height:340px;position:relative">
+          <div id="sc-content" style="transition:opacity .25s ease,transform .25s ease"></div>
+        </div>
+
+        <!-- Auto-progress bar -->
+        <div style="height:2px;background:var(--bg3);border-radius:2px;margin-top:8px;overflow:hidden">
+          <div id="sc-progress" style="height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width 4s linear"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     PLATFORM ARCHITECTURE
+══════════════════════════════════ -->
+<section class="platform-section" id="plataforma" style="background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent)"></div>
+    <div class="wrap">
+    <div class="platform-intro">
+      <div class="rev">
+        <div class="eyebrow">Arquitectura</div>
+        <h2 class="sh" style="margin:14px 0 0">Tres actores.<br>Un sistema integrado.</h2>
+      </div>
+      <div class="rev d1">
+        <p class="sp">Propietarios, técnicos y partners operan con herramientas distintas. Thruver integra los tres con el mismo núcleo de datos — procesos, mediciones y expediente permanente en un solo sistema.</p>
+      </div>
+    </div>
+
+    <div class="plat-diagram rev">
+      <!-- Actors row -->
+      <div class="pd-actors">
+        <div class="pd-actor">
+          <div class="pd-actor-icon" style="background:var(--blue-bg);border-color:rgba(0,119,170,.2)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div class="pd-actor-label">Actor 1</div>
+          <div class="pd-actor-name">Propietarios</div>
+          <div class="pd-actor-tools">
+            <div class="pd-actor-tool">Dashboard personal</div>
+            <div class="pd-actor-tool">Score del hogar</div>
+            <div class="pd-actor-tool">Solicitud de servicios</div>
+            <div class="pd-actor-tool">Alertas preventivas</div>
+          </div>
+        </div>
+        <div class="pd-actor">
+          <div class="pd-actor-icon" style="background:var(--accent-light);border-color:var(--accent-ring)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+          </div>
+          <div class="pd-actor-label">Actor 2</div>
+          <div class="pd-actor-name">Técnicos</div>
+          <div class="pd-actor-tools">
+            <div class="pd-actor-tool">SOP digital de campo</div>
+            <div class="pd-actor-tool">Mediciones en tiempo real</div>
+            <div class="pd-actor-tool">Órdenes del día</div>
+            <div class="pd-actor-tool">Dashboard de ingresos</div>
+          </div>
+        </div>
+        <div class="pd-actor">
+          <div class="pd-actor-icon" style="background:var(--green-bg);border-color:rgba(22,163,74,.2)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="pd-actor-label">Actor 3</div>
+          <div class="pd-actor-name">Partners</div>
+          <div class="pd-actor-tools">
+            <div class="pd-actor-tool">Panel de despacho</div>
+            <div class="pd-actor-tool">Gestión de flotilla</div>
+            <div class="pd-actor-tool">Ingresos consolidados</div>
+            <div class="pd-actor-tool">Métricas de equipo</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG connectors -->
+      <div style="height:44px;position:relative;margin:0">
+        <svg width="100%" height="44" viewBox="0 0 1040 44" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Left actor to core -->
+          <line x1="173" y1="0" x2="520" y2="44" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4 3"/>
+          <!-- Center actor to core -->
+          <line x1="520" y1="0" x2="520" y2="44" stroke="rgba(0,0,0,0.18)" stroke-width="1.5"/>
+          <!-- Right actor to core -->
+          <line x1="867" y1="0" x2="520" y2="44" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4 3"/>
+          <!-- Dots at top -->
+          <circle cx="173" cy="0" r="3" fill="var(--blue)"/>
+          <circle cx="520" cy="0" r="3" fill="var(--accent)"/>
+          <circle cx="867" cy="0" r="3" fill="var(--green)"/>
+          <!-- Dot at bottom -->
+          <circle cx="520" cy="44" r="4" fill="var(--accent)"/>
+        </svg>
+      </div>
+
+      <!-- Core platform -->
+      <div class="pd-core">
+        <div class="pd-core-label">Núcleo Thruver</div>
+        <div class="pd-core-modules">
+          <div class="pd-core-mod"><div class="dot"></div>Expediente permanente</div>
+          <div class="pd-core-mod"><div class="dot"></div>Score del hogar</div>
+          <div class="pd-core-mod"><div class="dot"></div>Asignación de órdenes</div>
+          <div class="pd-core-mod"><div class="dot"></div>Protocolo de campo (SOP)</div>
+          <div class="pd-core-mod"><div class="dot"></div>Bitácora de operaciones</div>
+          <div class="pd-core-mod"><div class="dot"></div>Gestión de partners</div>
+          <div class="pd-core-mod"><div class="dot"></div>Métricas de SLA</div>
+        </div>
+      </div>
+
+      <!-- SVG connectors bottom -->
+      <div style="height:44px;position:relative;margin:0">
+        <svg width="100%" height="44" viewBox="0 0 1040 44" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="520" cy="0" r="4" fill="var(--accent)"/>
+          <line x1="520" y1="0" x2="130" y2="44" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4 3"/>
+          <line x1="520" y1="0" x2="390" y2="44" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4 3"/>
+          <line x1="520" y1="0" x2="650" y2="44" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4 3"/>
+          <line x1="520" y1="0" x2="910" y2="44" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="4 3"/>
+          <circle cx="130" cy="44" r="3" fill="var(--green)"/>
+          <circle cx="390" cy="44" r="3" fill="var(--green)"/>
+          <circle cx="650" cy="44" r="3" fill="var(--green)"/>
+          <circle cx="910" cy="44" r="3" fill="var(--green)"/>
+        </svg>
+      </div>
+
+      <!-- Outputs -->
+      <div class="pd-outputs">
+        <div class="pd-output">
+          <div class="pd-output-val">12,<span class="acc">4k</span></div>
+          <div class="pd-output-lbl">Expedientes activos</div>
+        </div>
+        <div class="pd-output">
+          <div class="pd-output-val">85<span class="acc">k</span></div>
+          <div class="pd-output-lbl">Registros técnicos</div>
+        </div>
+        <div class="pd-output">
+          <div class="pd-output-val"><span class="acc">340</span>+</div>
+          <div class="pd-output-lbl">Técnicos en red</div>
+        </div>
+        <div class="pd-output">
+          <div class="pd-output-val">4.<span class="acc">8</span>★</div>
+          <div class="pd-output-lbl">Calificación media</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     SOP
+══════════════════════════════════ -->
+<section class="sop-section" id="sop" style="background:var(--bg);position:relative;overflow:hidden">
+  <div style="position:absolute;top:-80px;right:-60px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(0,119,170,.06) 0%,transparent 70%);pointer-events:none;z-index:0"></div>
+    <div class="wrap" style="position:relative;z-index:1">
+    <div class="rev">
+      <div class="eyebrow">SOP de campo</div>
+      <h2 class="sh" style="margin:14px 0 10px;max-width:560px">El protocolo que lleva<br>cada técnico al campo.</h2>
+      <p class="sp">Sin improvisación. El SOP guía al técnico paso a paso, calibra las mediciones contra norma y bloquea el avance si hay un riesgo real. Al cerrar la visita, genera el reporte técnico automáticamente.</p>
+    </div>
+
+    <!-- Specialty pills selector -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin:28px 0 40px" class="rev d1">
+      <button class="sop-pill active" id="pill-hvac" onclick="setSopSpec('hvac',this)">HVAC / Minisplit</button>
+      <button class="sop-pill" id="pill-electrico" onclick="setSopSpec('electrico',this)">Eléctrico</button>
+      <button class="sop-pill" id="pill-plomeria" onclick="setSopSpec('plomeria',this)">Plomería</button>
+      <button class="sop-pill" id="pill-carpinteria" onclick="setSopSpec('carpinteria',this)">Carpintería</button>
+      <button class="sop-pill" id="pill-pintura" onclick="setSopSpec('pintura',this)">Pintura</button>
+      <button class="sop-pill" id="pill-impermeabilizacion" onclick="setSopSpec('impermeabilizacion',this)">Impermeabilización</button>
+    </div>
+
+    <div class="sop-grid">
+      <!-- Steps change per specialty -->
+      <div class="sop-flow rev" id="sop-steps-panel"></div>
+
+      <!-- SOP Mockup -->
+      <div class="sop-mock rev d1">
+        <div class="sop-mock-prog-bar"><div class="sop-mock-prog-fill" id="sop-prog" style="width:40%"></div></div>
+        <div class="sop-mock-nav">
+          <div class="sop-mock-brand">
+            <div class="sop-mock-mark"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6V12C4 15.31 7.58 19.5 12 21C16.42 19.5 20 15.31 20 12V6L12 2Z" fill="white" opacity="0.9"/></svg></div>
+            <span class="sop-mock-name">Thruver · SOP</span>
+          </div>
+          <div class="sop-mock-right">
+            <span class="sop-mock-spec" id="sop-spec">HVAC</span>
+            <span class="sop-mock-step" id="sop-step">3 / 7</span>
+          </div>
+        </div>
+        <div class="sop-mock-body" id="sop-body"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     EXPEDIENTE
+══════════════════════════════════ -->
+<section class="exp-section" id="expediente" style="position:relative;overflow:hidden">
+  <div style="position:absolute;top:0;left:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(22,163,74,.05) 0%,transparent 70%);pointer-events:none;z-index:0"></div>
+    <div class="wrap" style="position:relative">
+    <!-- Large background number -->
+    <div style="position:absolute;top:-20px;right:-20px;font-family:'DM Mono',monospace;font-size:220px;font-weight:900;
+      color:rgba(200,90,40,.04);line-height:1;pointer-events:none;user-select:none;letter-spacing:-.05em;z-index:0">85k</div>
+    <div class="rev" style="position:relative;z-index:1">
+      <div class="eyebrow">Expediente permanente</div>
+      <h2 class="sh" style="margin:14px 0 10px;max-width:520px">El registro permanente<br>de tu propiedad.</h2>
+      <p class="sp">Cada servicio genera un reporte técnico que se acumula en el expediente. Con el tiempo construyes un historial real — mediciones, hallazgos y el score de salud de cada sistema de tu hogar.</p>
+    </div>
+    <div class="exp-grid">
+      <div>
+        <div class="exp-points rev">
+          <div class="exp-pt">
+            <div class="exp-pt-num">01</div>
+            <div><div class="exp-pt-title">Score de salud por sistema</div><div class="exp-pt-text">Eléctrico, plomería, HVAC, estructura y techo — cada uno con su indicador. Actualizado tras cada visita con mediciones reales del SOP.</div></div>
+          </div>
+          <div class="exp-pt">
+            <div class="exp-pt-num">02</div>
+            <div>
+              <div class="exp-pt-title">Historial inalterable por sistema</div>
+              <div class="exp-pt-text">Eléctrico, plomería, HVAC, estructura y techo — cada uno con su propio registro de visitas, mediciones y hallazgos. Un historial que no se pierde, no se olvida y no depende de que el técnico lo recuerde.</div>
+            </div>
+          </div>
+          <div class="exp-pt">
+            <div class="exp-pt-num">03</div>
+            <div><div class="exp-pt-title">Historial técnico inalterable</div><div class="exp-pt-text">Cada medición, hallazgo y recomendación queda registrado con folio, técnico, fecha y firma digital.</div></div>
+          </div>
+          <div class="exp-pt">
+            <div class="exp-pt-num">04</div>
+            <div><div class="exp-pt-title">Valor documentado del activo</div><div class="exp-pt-text">Un expediente técnico documentado aumenta el valor de la propiedad. La diferencia entre "bien mantenida" con datos y "bien mantenida" de palabra.</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="exp-mock rev d1">
+        <div class="exp-mock-hd">
+          <div>
+            <div class="exp-mock-folio">CLT-0001 · Av. Obregón 1420, Las Quintas</div>
+            <div class="exp-mock-addr">Expediente técnico permanente</div>
+          </div>
+          <div><div class="exp-score-big">89</div><div class="exp-score-sub">Score /100</div></div>
+        </div>
+        <div class="exp-sys-section">
+          <div class="exp-section-lbl">Estado por sistema</div>
+          <div class="exp-sys-row"><div class="exp-sys-name">Eléctrico</div><div class="exp-sys-track"><div class="exp-sys-fill" style="width:94%;background:var(--green)"></div></div><div class="exp-sys-pct" style="color:var(--green)">94%</div></div>
+          <div class="exp-sys-row"><div class="exp-sys-name">Plomería</div><div class="exp-sys-track"><div class="exp-sys-fill" style="width:88%;background:var(--green)"></div></div><div class="exp-sys-pct" style="color:var(--green)">88%</div></div>
+          <div class="exp-sys-row"><div class="exp-sys-name">HVAC</div><div class="exp-sys-track"><div class="exp-sys-fill" style="width:61%;background:var(--accent)"></div></div><div class="exp-sys-pct" style="color:var(--accent)">61%</div></div>
+          <div class="exp-sys-row"><div class="exp-sys-name">Estructura</div><div class="exp-sys-track"><div class="exp-sys-fill" style="width:97%;background:var(--green)"></div></div><div class="exp-sys-pct" style="color:var(--green)">97%</div></div>
+          <div class="exp-sys-row"><div class="exp-sys-name">Techo</div><div class="exp-sys-track"><div class="exp-sys-fill" style="width:82%;background:var(--green)"></div></div><div class="exp-sys-pct" style="color:var(--green)">82%</div></div>
+        </div>
+        <div class="exp-hist-section">
+          <div class="exp-section-lbl">Historial</div>
+          <div class="exp-hist-row"><div class="exp-hist-dot" style="background:var(--green)"></div><div class="exp-hist-desc">Revisión eléctrica · Carlos Mendoza</div><div class="exp-hist-date">12 Mar</div><span class="exp-hist-badge" style="background:var(--green-bg);border-color:rgba(22,163,74,.2);color:var(--green)">OK</span></div>
+          <div class="exp-hist-row"><div class="exp-hist-dot" style="background:var(--green)"></div><div class="exp-hist-desc">Plomería · Sofía Lizárraga</div><div class="exp-hist-date">28 Feb</div><span class="exp-hist-badge" style="background:var(--green-bg);border-color:rgba(22,163,74,.2);color:var(--green)">OK</span></div>
+          <div class="exp-hist-row"><div class="exp-hist-dot" style="background:var(--accent)"></div><div class="exp-hist-desc">HVAC · Mantenimiento programado</div><div class="exp-hist-date">5 Abr</div><span class="exp-hist-badge" style="background:var(--accent-light);border-color:var(--accent-ring);color:var(--accent)">Próximo</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     MANTENIMIENTO — tres modelos
+══════════════════════════════════ -->
+<section style="padding:96px 0;background:var(--surface);border-top:1px solid var(--border);position:relative;overflow:hidden">
+  <div style="position:absolute;top:-80px;right:-60px;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle,rgba(200,90,40,.06) 0%,transparent 70%);pointer-events:none;z-index:0"></div>
+  <div class="wrap" style="position:relative;z-index:1">
+
+    <!-- Intro -->
+    <div class="rev" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end;margin-bottom:56px">
+      <div>
+        <div class="eyebrow">Modelo operativo</div>
+        <h2 class="sh" style="margin:14px 0 0">Lo que el expediente<br>hace posible.</h2>
+      </div>
+      <p class="sp" style="align-self:end">Con el historial acumulado en el expediente, Thruver puede responder cuando algo falla, programar mantenimientos periódicos y anticipar fallas antes de que ocurran. Los tres modelos en una sola plataforma.</p>
+    </div>
+
+    <!-- Three model cards -->
+    <div class="rev d1" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:48px">
+
+      <!-- CORRECTIVO -->
+      <div style="background:var(--surface);padding:28px 24px">
+        <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--red);background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.18);border-radius:100px;padding:3px 10px;margin-bottom:16px">
+          <div style="width:5px;height:5px;border-radius:50%;background:var(--red)"></div>
+          Reactivo
+        </div>
+        <div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-.02em">Correctivo</div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px">El cliente solicita el servicio desde la plataforma y Thruver despacha al técnico correcto ese mismo día. Diagnóstico, reparación y reporte técnico en una sola visita. El expediente registra el fallo y actualiza el score del sistema afectado.</p>
+        <!-- Timeline -->
+        <div style="background:var(--bg);border-radius:8px;padding:12px;border:1px solid var(--border);margin-bottom:16px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:8px">Intervención tras el fallo</div>
+          <svg width="100%" viewBox="0 0 200 52" style="display:block;overflow:visible">
+            <line x1="0" y1="44" x2="200" y2="44" stroke="rgba(220,38,38,.25)" stroke-width="0.8" stroke-dasharray="3 3"/>
+            <path d="M0,6 C50,7 120,16 155,40 C162,44 165,45 172,46" fill="none" stroke="rgba(220,38,38,.5)" stroke-width="1.5"/>
+            <circle cx="155" cy="44" r="3.5" fill="rgba(220,38,38,.15)" stroke="#dc2626" stroke-width="1.2"/>
+            <line x1="170" y1="8" x2="170" y2="46" stroke="#dc2626" stroke-width="1" stroke-dasharray="2 2"/>
+            <circle cx="170" cy="46" r="4" fill="#dc2626"/>
+            <text style="font-size:7px;fill:rgba(220,38,38,.6)" x="2" y="40">límite</text>
+            <text style="font-size:7px;fill:#dc2626;font-weight:600" x="153" y="18">fallo</text>
+            <text style="font-size:7px;fill:#dc2626" x="160" y="28">técnico</text>
+            <line x1="0" y1="50" x2="200" y2="50" stroke="rgba(0,0,0,.06)" stroke-width="0.5"/>
+          </svg>
+        </div>
+        <!-- Value props -->
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Respuesta el mismo día
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Técnico certificado con SOP
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Reporte técnico al expediente
+          </div>
+        </div>
+      </div>
+
+      <!-- PREVENTIVO -->
+      <div style="background:var(--surface);padding:28px 24px">
+        <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--amber);background:rgba(217,119,6,.07);border:1px solid rgba(217,119,6,.2);border-radius:100px;padding:3px 10px;margin-bottom:16px">
+          <div style="width:5px;height:5px;border-radius:50%;background:var(--amber)"></div>
+          Programado
+        </div>
+        <div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-.02em">Preventivo</div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px">Thruver programa servicios periódicos basados en tiempo o uso acumulado del equipo. Limpieza de filtros, revisión de instalaciones, mantenimiento de temporada. Todo en el expediente, todo documentado. Tú solo autorizas.</p>
+        <!-- Timeline -->
+        <div style="background:var(--bg);border-radius:8px;padding:12px;border:1px solid var(--border);margin-bottom:16px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:8px">Intervenciones programadas</div>
+          <svg width="100%" viewBox="0 0 200 52" style="display:block;overflow:visible">
+            <line x1="0" y1="44" x2="200" y2="44" stroke="rgba(217,119,6,.2)" stroke-width="0.8" stroke-dasharray="3 3"/>
+            <path d="M0,6 C24,7 44,18 52,30" fill="none" stroke="rgba(217,119,6,.45)" stroke-width="1.2"/>
+            <path d="M60,10 C80,11 98,20 106,32" fill="none" stroke="rgba(217,119,6,.45)" stroke-width="1.2"/>
+            <path d="M114,12 C134,13 150,22 158,34" fill="none" stroke="rgba(217,119,6,.45)" stroke-width="1.2"/>
+            <line x1="58" y1="6" x2="58" y2="34" stroke="var(--amber)" stroke-width="1" stroke-dasharray="2 2" opacity=".8"/>
+            <circle cx="58" cy="30" r="3.5" fill="rgba(217,119,6,.15)" stroke="var(--amber)" stroke-width="1.2"/>
+            <line x1="112" y1="6" x2="112" y2="36" stroke="var(--amber)" stroke-width="1" stroke-dasharray="2 2" opacity=".8"/>
+            <circle cx="112" cy="32" r="3.5" fill="rgba(217,119,6,.15)" stroke="var(--amber)" stroke-width="1.2"/>
+            <text style="font-size:7px;fill:rgba(217,119,6,.7)" x="42" y="10">cada 6 meses</text>
+            <line x1="0" y1="50" x2="200" y2="50" stroke="rgba(0,0,0,.06)" stroke-width="0.5"/>
+          </svg>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Recordatorios automáticos
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Basado en uso real del equipo
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Historial de mantenimientos
+          </div>
+        </div>
+      </div>
+
+      <!-- PREDICTIVO -->
+      <div style="background:var(--surface);padding:28px 24px;border-left:3px solid var(--accent)">
+        <div style="position:relative">
+          <div style="display:inline-flex;align-items:center;gap:6px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--green);background:rgba(22,163,74,.07);border:1px solid rgba(22,163,74,.2);border-radius:100px;padding:3px 10px;margin-bottom:16px">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--green)"></div>
+            Basado en datos
+          </div>
+          <div style="position:absolute;top:0;right:0;font-size:9px;font-weight:700;color:var(--accent);background:var(--accent-light);border:1px solid var(--accent-ring);border-radius:3px;padding:2px 7px;text-transform:uppercase;letter-spacing:.07em">Exclusivo Thruver</div>
+        </div>
+        <div style="font-size:17px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-.02em">Predictivo</div>
+        <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:20px">El expediente acumula mediciones reales de cada visita. Cuando el patrón indica que un equipo se deteriora, el sistema alerta antes de que falle — sin sensores, solo con datos del SOP.</p>
+        <!-- Timeline -->
+        <div style="background:var(--bg);border-radius:8px;padding:12px;border:1px solid var(--accent-ring);margin-bottom:16px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:8px">Alerta antes del fallo</div>
+          <svg width="100%" viewBox="0 0 200 52" style="display:block;overflow:visible">
+            <line x1="0" y1="44" x2="200" y2="44" stroke="rgba(22,163,74,.2)" stroke-width="0.8" stroke-dasharray="3 3"/>
+            <path d="M0,6 C50,7 110,16 155,38 C163,42 168,44 178,46" fill="none" stroke="rgba(22,163,74,.35)" stroke-width="1.5"/>
+            <circle cx="24" cy="7" r="2" fill="var(--accent)" opacity=".5"/>
+            <circle cx="60" cy="9" r="2" fill="var(--accent)" opacity=".6"/>
+            <circle cx="96" cy="13" r="2" fill="var(--accent)" opacity=".75"/>
+            <circle cx="128" cy="21" r="2.5" fill="var(--accent)" opacity=".9"/>
+            <circle cx="150" cy="32" r="3" fill="var(--accent)"/>
+            <rect x="136" y="4" width="20" height="36" fill="rgba(200,90,40,.08)" rx="3"/>
+            <line x1="150" y1="6" x2="150" y2="34" stroke="var(--green)" stroke-width="1.2" stroke-dasharray="2 2"/>
+            <circle cx="150" cy="32" r="4" fill="var(--green)"/>
+            <text style="font-size:7px;fill:var(--green);font-weight:600" x="2" y="40">patrón detectado</text>
+            <line x1="0" y1="50" x2="200" y2="50" stroke="rgba(0,0,0,.06)" stroke-width="0.5"/>
+          </svg>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Solo actúas cuando los datos lo indican
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Sin sensores — el SOP genera los datos
+          </div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--text2)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Aplica a cualquier especialidad
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom dark strip — how data flows (pure HTML, no template literals) -->
+    <div class="rev d2" style="background:#0d0d0d;border-radius:var(--r);padding:28px 32px">
+      <div style="display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;margin-bottom:28px">
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:6px">El sistema integrado</div>
+          <div style="font-size:16px;font-weight:700;color:#fff;letter-spacing:-.02em">El SOP es el sensor. Cada visita genera el dato.</div>
+        </div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);background:rgba(200,90,40,.12);border:1px solid rgba(200,90,40,.25);border-radius:6px;padding:5px 12px;white-space:nowrap;flex-shrink:0">Sin hardware extra</div>
+      </div>
+
+      <!-- 5 steps — pure HTML, no JS template -->
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0;position:relative;margin-bottom:28px">
+        <div style="position:absolute;top:18px;left:10%;right:10%;height:1px;background:rgba(255,255,255,.08);z-index:0"></div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;padding:0 6px;position:relative;z-index:1">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(200,90,40,.15);border:1.5px solid rgba(200,90,40,.4);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:var(--accent)">01</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px;line-height:1.3">Visita técnica</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.35);text-align:center;line-height:1.4">El técnico ejecuta el SOP en tu propiedad</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;padding:0 6px;position:relative;z-index:1">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:rgba(255,255,255,.4)">02</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px;line-height:1.3">Dato registrado</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.35);text-align:center;line-height:1.4">Medición real: presión, voltaje, estado del componente</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;padding:0 6px;position:relative;z-index:1">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:rgba(255,255,255,.4)">03</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px;line-height:1.3">Expediente acumula</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.35);text-align:center;line-height:1.4">Cada visita suma un punto al historial del equipo</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;padding:0 6px;position:relative;z-index:1">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:rgba(255,255,255,.4)">04</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px;line-height:1.3">Patrón detectado</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.35);text-align:center;line-height:1.4">El historial revela la curva de deterioro del equipo</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;padding:0 6px;position:relative;z-index:1">
+          <div style="width:36px;height:36px;border-radius:50%;background:rgba(22,163,74,.12);border:1.5px solid rgba(22,163,74,.4);display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:#4ade80">05</div>
+          <div style="font-size:11px;font-weight:700;color:#fff;text-align:center;margin-bottom:4px;line-height:1.3">Alerta preventiva</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.35);text-align:center;line-height:1.4">El sistema sugiere mantenimiento antes de la falla</div>
+        </div>
+      </div>
+
+      <!-- Example data — 4 specialties -->
+      <div style="padding-top:20px;border-top:1px solid rgba(255,255,255,.07)">
+        <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25);margin-bottom:12px">Ejemplo — cualquier sistema, cualquier especialidad</div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+
+          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px">
+            <div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:6px">Plomería · Presión de red</div>
+            <div style="display:flex;gap:6px;align-items:baseline;margin-bottom:4px">
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">72</span>
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">68</span>
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--accent)">58</span>
+              <span style="font-size:9px;color:rgba(255,255,255,.25)">PSI</span>
+            </div>
+            <div style="font-size:10px;color:var(--accent)">Caída progresiva detectada</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px">
+            <div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:6px">Eléctrico · Voltaje N-T</div>
+            <div style="display:flex;gap:6px;align-items:baseline;margin-bottom:4px">
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">0.4</span>
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">0.9</span>
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--accent)">1.8</span>
+              <span style="font-size:9px;color:rgba(255,255,255,.25)">V</span>
+            </div>
+            <div style="font-size:10px;color:var(--accent)">Tierra deteriorándose</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px">
+            <div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:6px">HVAC · Presión refrigerante</div>
+            <div style="display:flex;gap:6px;align-items:baseline;margin-bottom:4px">
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">124</span>
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">116</span>
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--accent)">104</span>
+              <span style="font-size:9px;color:rgba(255,255,255,.25)">PSI</span>
+            </div>
+            <div style="font-size:10px;color:var(--accent)">Fuga gradual de gas</div>
+          </div>
+
+          <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 12px">
+            <div style="font-size:9px;color:rgba(255,255,255,.3);margin-bottom:6px">Techo · Humedad en losa</div>
+            <div style="display:flex;gap:6px;align-items:baseline;margin-bottom:4px">
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">12</span>
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:rgba(255,255,255,.7)">18</span>
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--accent)">31</span>
+              <span style="font-size:9px;color:rgba(255,255,255,.25)">%</span>
+            </div>
+            <div style="font-size:10px;color:var(--accent)">Filtración en desarrollo</div>
+          </div>
+
+        </div>
+        <p style="font-size:11px;color:rgba(255,255,255,.25);margin:10px 0 0;line-height:1.6">Tres mediciones por equipo son suficientes para revelar la dirección del deterioro. No se requiere hardware adicional — cada visita técnica con SOP es un punto de dato estructurado que alimenta el modelo.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     DATA FLOW
+══════════════════════════════════ -->
+<section class="flow-section" style="background:#fff;border-top:1px solid var(--border);position:relative;overflow:hidden">
+  <div style="position:absolute;bottom:-60px;left:10%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(22,163,74,.05) 0%,transparent 70%);pointer-events:none;z-index:0"></div>
+    <div class="wrap" style="position:relative;z-index:1">
+    <div class="rev">
+      <div class="eyebrow">Flujo operativo</div>
+      <h2 class="sh" style="margin:14px 0 10px">Del servicio al expediente.<br>Cinco pasos.</h2>
+      <p class="sp">Cada solicitud recorre el mismo camino: técnico verificado, protocolo de campo, reporte automático y expediente actualizado. Siempre el mismo estándar.</p>
+    </div>
+
+    <div class="flow-diagram">
+      <div class="flow-nodes rev d1">
+        <div class="flow-node">
+          <div class="flow-node-circle active">01</div>
+          <div class="flow-node-title">Cliente solicita</div>
+          <div class="flow-node-text">Describe el problema desde su dashboard.</div>
+          <div class="flow-node-badge" style="background:var(--blue-bg);border-color:rgba(0,119,170,.2);color:var(--blue)">Cliente</div>
+        </div>
+        <div class="flow-node">
+          <div class="flow-node-circle">02</div>
+          <div class="flow-node-title">Asignación</div>
+          <div class="flow-node-text">Técnico o partner asignado por especialidad y zona.</div>
+          <div class="flow-node-badge" style="background:var(--accent-light);border-color:var(--accent-ring);color:var(--accent)">Sistema</div>
+        </div>
+        <div class="flow-node">
+          <div class="flow-node-circle active">03</div>
+          <div class="flow-node-title">SOP en campo</div>
+          <div class="flow-node-text">Técnico mide, valida y documenta en tiempo real.</div>
+          <div class="flow-node-badge" style="background:var(--accent-light);border-color:var(--accent-ring);color:var(--accent)">Técnico</div>
+        </div>
+        <div class="flow-node">
+          <div class="flow-node-circle">04</div>
+          <div class="flow-node-title">Reporte generado</div>
+          <div class="flow-node-text">JSON técnico con mediciones reales al cerrar.</div>
+          <div class="flow-node-badge" style="background:var(--accent-light);border-color:var(--accent-ring);color:var(--accent)">Automático</div>
+        </div>
+        <div class="flow-node">
+          <div class="flow-node-circle">05</div>
+          <div class="flow-node-title">Expediente actualizado</div>
+          <div class="flow-node-text">Score recalculado. Historial crece. Valor documentado.</div>
+          <div class="flow-node-badge" style="background:var(--blue-bg);border-color:rgba(0,119,170,.2);color:var(--blue)">Propiedad</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     PARTNER
+══════════════════════════════════ -->
+<section class="partner-section" id="partner" style="position:relative;overflow:hidden">
+  <div style="position:absolute;bottom:-100px;right:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(200,90,40,.07) 0%,transparent 70%);pointer-events:none;z-index:0"></div>
+    <div class="wrap" style="position:relative;z-index:1">
+    <div class="partner-grid">
+      <div class="rev">
+        <div class="eyebrow">Programa Partner</div>
+        <h2 class="sh" style="margin:14px 0 10px">Tu equipo integrado<br>al sistema Thruver.</h2>
+        <p class="sp">Partners que suman su flotilla de técnicos a la red Thruver operan con el mismo proceso, los mismos datos y el mismo estándar de calidad — más demanda, menos fricción operativa.</p>
+        <div class="partner-feats">
+          <div class="partner-feat">
+            <div class="partner-feat-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+            <div><div class="partner-feat-title">Panel de operaciones completo</div><div class="partner-feat-text">Despacha órdenes, monitorea tu flotilla y consulta ingresos consolidados en tiempo real.</div></div>
+          </div>
+          <div class="partner-feat">
+            <div class="partner-feat-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div><div class="partner-feat-title">Control total de la flotilla</div><div class="partner-feat-text">Registra técnicos, consulta su historial y rating. Cada uno opera con el SOP de Thruver — la calidad queda documentada.</div></div>
+          </div>
+          <div class="partner-feat">
+            <div class="partner-feat-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+            <div><div class="partner-feat-title">Liquidación consolidada</div><div class="partner-feat-text">Thruver cobra al cliente. Tú retiras los ingresos de tu equipo completo desde el panel. Sin perseguir pagos.</div></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:24px;flex-wrap:wrap;align-items:center">
+          <a href="#" class="btn btn-black">Registrar mi empresa</a>
+          <span style="font-size:12px;color:var(--text3)">Gratuito · Respuesta en 48h</span>
+        </div>
+      </div>
+
+      <div class="rev d1">
+        <div class="pm">
+          <div class="pm-top">
+            <div class="pm-brand">
+              <div class="pm-mark"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6V12C4 15.31 7.58 19.5 12 21C16.42 19.5 20 15.31 20 12V6L12 2Z" fill="white" opacity="0.9"/></svg></div>
+              <span class="pm-name">Thruver</span>
+              <span class="pm-tag">Partner</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <div style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:livePulse 2s ease infinite"></div>
+              <span style="font-size:10px;font-weight:700;color:var(--green)">LIVE</span>
+            </div>
+          </div>
+          <div class="pm-body">
+            <div class="pm-kpis">
+              <div class="pm-kpi"><div class="pm-kpi-val" style="color:var(--accent)">5</div><div class="pm-kpi-lbl">Órdenes</div></div>
+              <div class="pm-kpi"><div class="pm-kpi-val" style="color:var(--green)">$4.8k</div><div class="pm-kpi-lbl">Ingresos</div></div>
+              <div class="pm-kpi"><div class="pm-kpi-val" style="color:var(--blue)">7</div><div class="pm-kpi-lbl">En línea</div></div>
+            </div>
+            <div class="pm-lbl">Flotilla activa</div>
+            <div class="pm-tech"><div class="pm-tav" style="background:#0ea5e9">MR</div><span class="pm-tname">Miguel Rodríguez</span><span class="pm-tstatus" style="color:var(--blue)"><div style="width:4px;height:4px;border-radius:50%;background:var(--blue)"></div>En servicio</span></div>
+            <div class="pm-tech"><div class="pm-tav" style="background:#0ea5e9">LF</div><span class="pm-tname">Lucía Flores</span><span class="pm-tstatus" style="color:var(--green)"><div style="width:4px;height:4px;border-radius:50%;background:var(--green)"></div>Disponible</span></div>
+            <div class="pm-tech"><div class="pm-tav" style="background:#16a34a">CM</div><span class="pm-tname">Carlos Mendoza</span><span class="pm-tstatus" style="color:var(--blue)"><div style="width:4px;height:4px;border-radius:50%;background:var(--blue)"></div>En servicio</span></div>
+            <div class="pm-sla-bar-wrap">
+              <div class="pm-sla-top"><span style="color:var(--text3)">Protocolo cumplido hoy</span><span style="font-weight:700;color:var(--accent)">94%</span></div>
+              <div class="pm-sla-track"><div class="pm-sla-fill" style="width:94%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS -->
+<!-- ══════════════════════════════════
+     CIUDAD — damero futurista
+══════════════════════════════════ -->
+<section style="padding:0;background:linear-gradient(160deg,#0d0d0d 0%,#0f0a08 60%,#0d0d0d 100%);border-top:1px solid rgba(255,255,255,.06);position:relative;overflow:hidden">
+
+  <!-- Header -->
+  <div style="padding:72px 40px 0;max-width:1120px;margin:0 auto;position:relative;z-index:2">
+    <div class="rev" style="display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:end">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;
+          color:var(--accent);display:flex;align-items:center;gap:7px;margin-bottom:14px">
+          <div style="width:18px;height:2px;background:var(--accent);border-radius:2px"></div>
+          Red operativa Thruver
+        </div>
+        <h2 style="font-size:clamp(26px,3.8vw,44px);font-weight:800;letter-spacing:-.045em;line-height:1.06;
+          color:#fff;margin-bottom:0">Cada propiedad,<br>conectada al sistema.</h2>
+      </div>
+      <p style="font-size:15px;color:rgba(255,255,255,.4);line-height:1.75;align-self:end;margin-bottom:4px">
+        Cada visita técnica genera un registro que fluye al expediente permanente. Los datos viajan por la red Thruver en tiempo real.
+      </p>
+    </div>
+  </div>
+
+  <!-- City grid canvas -->
+  <div style="position:relative;height:520px;margin-top:40px">
+    <canvas id="city-canvas" style="width:100%;height:100%;display:block"></canvas>
+
+    <!-- Overlay: legend + live stats -->
+    <div style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+      display:flex;gap:0;background:rgba(8,10,14,0.85);
+      border:1px solid rgba(255,255,255,.1);border-radius:8px;overflow:hidden;
+      backdrop-filter:blur(12px);white-space:nowrap;z-index:5">
+      <div style="padding:12px 20px;border-right:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:8px">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)"></div>
+        <span style="font-size:11px;color:rgba(255,255,255,.5)">Servicio activo</span>
+      </div>
+      <div style="padding:12px 20px;border-right:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:8px">
+        <div style="width:8px;height:8px;border-radius:50%;background:#22d3ee;box-shadow:0 0 8px #22d3ee"></div>
+        <span style="font-size:11px;color:rgba(255,255,255,.5)">Técnico en campo</span>
+      </div>
+      <div style="padding:12px 20px;border-right:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:8px">
+        <div style="width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px #4ade80"></div>
+        <span style="font-size:11px;color:rgba(255,255,255,.5)">Expediente generado</span>
+      </div>
+      <div style="padding:12px 20px;display:flex;align-items:center;gap:8px">
+        <div id="city-live-dot" style="width:6px;height:6px;border-radius:50%;background:#4ade80;animation:livePulse 2s ease infinite"></div>
+        <span style="font-size:11px;font-family:'DM Mono',monospace;font-weight:600;color:#4ade80" id="city-counter">12,400</span>
+        <span style="font-size:11px;color:rgba(255,255,255,.35)">expedientes activos</span>
+      </div>
+    </div>
+
+    <!-- Vignette edges -->
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 55%,#080a0e 100%);pointer-events:none;z-index:3"></div>
+    <div style="position:absolute;top:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,#080a0e,transparent);pointer-events:none;z-index:4"></div>
+  </div>
+</section>
+
+<section class="metrics-section" style="background:linear-gradient(160deg,#0d0d0d 0%,#1a0f08 50%,#0d0d0d 100%);border-top:1px solid rgba(200,90,40,.2);position:relative;overflow:hidden">
+  <div style="position:absolute;top:-60px;right:10%;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(200,90,40,.1) 0%,transparent 70%);pointer-events:none"></div>
+    <div class="wrap" style="position:relative;z-index:1">
+    <div class="metrics-grid rev">
+      <div class="metric-box"><div class="metric-val">12,<span class="acc">4k</span>+</div><div class="metric-lbl">Propiedades con expediente activo</div><div class="metric-trend">↑ 340 este mes</div></div>
+      <div class="metric-box"><div class="metric-val">85<span class="acc">k</span>+</div><div class="metric-lbl">Registros técnicos generados</div><div class="metric-trend">↑ 2,400 esta semana</div></div>
+      <div class="metric-box"><div class="metric-val"><span class="acc">340</span>+</div><div class="metric-lbl">Técnicos certificados en red</div><div class="metric-trend">↑ 18 autorizados este mes</div></div>
+      <div class="metric-box"><div class="metric-val">4.<span class="acc">8</span>★</div><div class="metric-lbl">Calificación promedio</div><div class="metric-trend">NPS 72 · Meta 70 ✓</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<!-- PAZ MENTAL SECTION -->
+<section style="padding:96px 0;background:#0d0d0d;position:relative;overflow:hidden">
+  <!-- Subtle grid overlay -->
+  <div style="position:absolute;inset:0;pointer-events:none;opacity:0.04;
+    background-image:linear-gradient(rgba(255,255,255,1) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,1) 1px,transparent 1px);
+    background-size:48px 48px"></div>
+
+  <div class="wrap" style="position:relative;z-index:1">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center">
+
+      <!-- Left: the message -->
+      <div class="rev">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);display:flex;align-items:center;gap:7px;margin-bottom:14px">
+          <div style="width:18px;height:2px;background:var(--accent);border-radius:2px"></div>
+          El resultado
+        </div>
+        <h2 style="font-size:clamp(30px,4.5vw,52px);font-weight:900;letter-spacing:-.05em;line-height:.96;color:#fff;margin-bottom:20px">
+          Tu propiedad<br>como sistema.<br><span style="color:var(--accent)">Integrado y activo.</span>
+        </h2>
+        <p style="font-size:16px;color:rgba(255,255,255,.45);line-height:1.78;max-width:460px;margin-bottom:36px">
+          Thruver integra técnicos, datos y procesos en un solo sistema que opera en segundo plano. Predice fallas, agenda mantenimiento y documenta cada intervención. Tú solo confirmas cuando el sistema lo necesita.
+        </p>
+
+        <!-- Three peace-of-mind pillars -->
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:flex-start;gap:14px;padding:16px;background:#0f1114;border:1px solid rgba(255,255,255,.08);border-radius:10px">
+            <div style="width:34px;height:34px;border-radius:8px;background:rgba(200,90,40,.12);border:1px solid rgba(200,90,40,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;letter-spacing:-.01em">Sin recordar fechas de mantenimiento</div>
+              <div style="font-size:13px;color:rgba(255,255,255,.4);line-height:1.6">El sistema sabe cuándo fue el último servicio y cuándo toca el siguiente. Te avisa cuando es el momento — no antes, no después.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px;padding:16px;background:#0f1114;border:1px solid rgba(255,255,255,.08);border-radius:10px">
+            <div style="width:34px;height:34px;border-radius:8px;background:rgba(200,90,40,.12);border:1px solid rgba(200,90,40,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;letter-spacing:-.01em">Sin emergencias sorpresa</div>
+              <div style="font-size:13px;color:rgba(255,255,255,.4);line-height:1.6">Con las mediciones históricas en el expediente, Thruver detecta los patrones de deterioro. Una falla que normalmente toma por sorpresa, aquí llega con semanas de anticipación.</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:14px;padding:16px;background:#0f1114;border:1px solid rgba(255,255,255,.08);border-radius:10px">
+            <div style="width:34px;height:34px;border-radius:8px;background:rgba(200,90,40,.12);border:1px solid rgba(200,90,40,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;letter-spacing:-.01em">Sin buscar quién te resuelva</div>
+              <div style="font-size:13px;color:rgba(255,255,255,.4);line-height:1.6">Red verificada de técnicos y partners listos. Cuando el sistema detecta que algo necesita atención, ya sabe quién puede resolverlo en tu zona.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: notification mockup -->
+      <div class="rev d1">
+        <div style="display:flex;flex-direction:column;gap:10px">
+
+          <!-- Notification card 1 — predictive -->
+          <div style="background:#0f1114;border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px">
+            <div style="width:36px;height:36px;border-radius:9px;background:rgba(200,90,40,.15);border:1px solid rgba(200,90,40,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                <div style="font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.07em">Alerta predictiva · HVAC</div>
+                <div style="font-size:10px;color:rgba(255,255,255,.25);font-family:'DM Mono',monospace">Hace 2h</div>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:3px">Tu minisplit cumplirá 1,200 horas de uso en 3 semanas</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.5">Basado en el historial de operación registrado. Recomendamos mantenimiento preventivo antes de la temporada de calor.</div>
+              <button style="margin-top:10px;background:var(--accent);border:none;border-radius:6px;padding:6px 14px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif">Agendar mantenimiento →</button>
+            </div>
+          </div>
+
+          <!-- Notification card 2 — scheduled -->
+          <div style="background:#0f1114;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px">
+            <div style="width:36px;height:36px;border-radius:9px;background:rgba(22,163,74,.12);border:1px solid rgba(22,163,74,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                <div style="font-size:11px;font-weight:700;color:#4ade80;text-transform:uppercase;letter-spacing:.07em">Servicio completado · Eléctrico</div>
+                <div style="font-size:10px;color:rgba(255,255,255,.25);font-family:'DM Mono',monospace">Ayer</div>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:3px">Score eléctrico actualizado: 71% → 94%</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4);line-height:1.5">Carlos Mendoza completó la revisión. Reporte técnico disponible en tu expediente.</div>
+            </div>
+          </div>
+
+          <!-- Notification card 3 — reminder -->
+          <div style="background:#0f1114;border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:16px 18px;display:flex;align-items:flex-start;gap:12px">
+            <div style="width:36px;height:36px;border-radius:9px;background:rgba(29,107,243,.1);border:1px solid rgba(29,107,243,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                <div style="font-size:11px;font-weight:700;color:#60a5fa;text-transform:uppercase;letter-spacing:.07em">Recordatorio programado</div>
+                <div style="font-size:10px;color:rgba(255,255,255,.25);font-family:'DM Mono',monospace">5 Abr</div>
+              </div>
+              <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:3px">Mantenimiento de plomería — revisión semestral</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.4)">Agendado automáticamente basado en el historial de tu propiedad.</div>
+            </div>
+          </div>
+
+          <!-- Score summary -->
+          <div style="background:#110e0c;border:1px solid rgba(200,90,40,.22);border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+            <div>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.35);margin-bottom:4px">Tu hogar este mes</div>
+              <div style="font-size:13px;color:rgba(255,255,255,.6)">2 servicios completados · 0 emergencias · 1 alerta preventiva atendida</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'DM Mono',monospace;font-size:28px;font-weight:700;color:var(--accent);line-height:1">89</div>
+              <div style="font-size:10px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.07em">Score del hogar</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="cta-section" id="contacto" style="background:var(--bg);border-top:1px solid var(--border);position:relative;overflow:hidden">
+  <div class="wrap">
+    <div class="rev">
+      <!-- Stripe-style large bg text -->
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+        font-family:'DM Sans',sans-serif;font-size:clamp(80px,15vw,200px);font-weight:900;
+        color:rgba(200,90,40,.04);white-space:nowrap;pointer-events:none;letter-spacing:-.05em;z-index:0;line-height:1">
+        THRUVER
+      </div>
+      <div style="position:relative;z-index:1">
+      <div class="eyebrow" style="justify-content:center;margin-bottom:18px">Empieza hoy</div>
+      <h2>Tu propiedad,<br>operada con precisión.</h2>
+      <p>Solicita tu primer servicio. Thruver despacha el técnico correcto, documenta la visita y empieza a construir el expediente permanente de tu propiedad.</p>
+      <div class="cta-btns">
+        <a href="#" class="btn btn-accent" style="padding:12px 24px;font-size:15px;border-radius:8px">Solicitar mi primer servicio <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+        <a href="#partner" class="btn btn-outline" style="padding:12px 24px;font-size:15px;border-radius:8px">Soy contratista →</a>
+      </div>
+      </div><div class="cta-note">Cobertura activa en Culiacán, Sinaloa · Respuesta el mismo día en zonas seleccionadas</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<!-- PRE-FOOTER CTA — Stripe style -->
+<section class="prefooter">
+  <div class="wrap">
+    <div class="prefooter-inner">
+
+      <!-- Left: CTA principal -->
+      <div class="rev">
+        <h2 class="prefooter-h">¿Listo para operar<br>tu propiedad con<br><span class="acc">precisión?</span></h2>
+        <p class="prefooter-sub">Solicita tu primer servicio hoy. Thruver despacha el técnico correcto, documenta la visita y empieza a construir el expediente permanente de tu propiedad.</p>
+        <div class="prefooter-actions">
+          <a href="producto-fix.html" class="btn btn-accent btn-lg">
+            Solicitar servicio
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="thruver_-_partner.html" class="btn btn-outline btn-lg">Soy contratista</a>
+        </div>
+      </div>
+
+      <!-- Col 2: Para propietarios -->
+      <div class="prefooter-col rev d1">
+        <div class="prefooter-col-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <div class="prefooter-col-title">Para propietarios</div>
+        <div class="prefooter-col-desc">Servicios técnicos, limpieza profesional y el expediente permanente de tu hogar. Todo desde una sola plataforma.</div>
+        <a href="producto-fix.html" class="prefooter-col-link">
+          Ver Repair
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+      <!-- Col 3: Para operadores -->
+      <div class="prefooter-col rev d2">
+        <div class="prefooter-col-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="prefooter-col-title">Para operadores</div>
+        <div class="prefooter-col-desc">Técnicos y contratistas que quieren operar con protocolo, más trabajo bien pagado y la infraestructura de una plataforma profesional.</div>
+        <a href="landing-registro-tecnico.html" class="prefooter-col-link">
+          Unirme como técnico
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+
+    <!-- Top: 5-column index -->
+    <div class="foot-top">
+
+      <!-- Brand -->
+      <div>
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
+          <div style="width:22px;height:22px;background:rgba(255,255,255,.07);border-radius:5px;display:flex;align-items:center;justify-content:center">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6V12C4 15.31 7.58 19.5 12 21C16.42 19.5 20 15.31 20 12V6L12 2Z" fill="white" opacity="0.7"/></svg>
+          </div>
+          <div class="foot-brand-name">Thruver</div>
+        </div>
+        <div class="foot-brand-desc">El sistema operativo de tu propiedad. Técnicos, datos y procesos integrados en una sola plataforma.</div>
+        <div class="foot-brand-tag">
+          <div style="width:4px;height:4px;border-radius:50%;background:var(--accent)"></div>
+          Culiacán, Sinaloa
+        </div>
+      </div>
+
+      <!-- Col 1: Para tu hogar -->
+      <div>
+        <div class="foot-col-title">Para tu hogar</div>
+        <ul class="foot-links">
+          <li><a href="producto-fix.html">Repair</a></li>
+          <li><a href="producto-neat.html">Homa</a></li>
+          <li><a href="#">Mantenimiento <span class="new">Próximo</span></a></li>
+          <li><a href="#">Prevención <span class="new">Próximo</span></a></li>
+          <li><a href="#">Predicción <span class="new">Próximo</span></a></li>
+          <li><a href="#">Reporte técnico <span class="new">Próximo</span></a></li>
+          <li><a href="#">Expediente digital <span class="new">Próximo</span></a></li>
+        </ul>
+      </div>
+
+      <!-- Col 2: La plataforma -->
+      <div>
+        <div class="foot-col-title">La plataforma</div>
+        <ul class="foot-links">
+          <li><a href="#">SOP de campo</a></li>
+          <li><a href="#">Expediente digital <span class="new">Próximo</span></a></li>
+          <li><a href="#">Reporte técnico <span class="new">Próximo</span></a></li>
+          <li><a href="#">Predicción <span class="new">Próximo</span></a></li>
+          <li><a href="dashboard-usuario.html">Dashboard propietario</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Operadores -->
+      <div>
+        <div class="foot-col-title">Operadores</div>
+        <ul class="foot-links">
+          <li><a href="thruver_-_partner.html">Soy contratista</a></li>
+          <li><a href="landing-registro-tecnico.html">Soy técnico</a></li>
+          <li><a href="#">Registro partner</a></li>
+          <li><a href="#">Registro técnico</a></li>
+          <li><a href="dashboard-tecnico.html">Dashboard técnico</a></li>
+          <li><a href="dashboard-partner.html">Dashboard partner</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Empresa -->
+      <div>
+        <div class="foot-col-title">Empresa</div>
+        <ul class="foot-links">
+          <li><a href="#">Acerca de Thruver</a></li>
+          <li><a href="#">Contacto</a></li>
+          <li><a href="#">Privacidad</a></li>
+          <li><a href="#">Términos de uso</a></li>
+          <li><a href="https://tn-y.me" target="_blank">tn-y.me</a></li>
+        </ul>
+        <div style="margin-top:20px">
+          <div class="foot-col-title">Acceso</div>
+          <ul class="foot-links">
+            <li><a href="#" onclick="openLogin();return false;">Iniciar sesión →</a></li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Divider -->
+    <div class="foot-divider"></div>
+
+    <!-- Bottom -->
+    <div class="foot-bottom">
+      <div class="foot-copy">© 2026 Thruver · Culiacán, Sinaloa, México</div>
+      <div class="foot-legal">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="https://tn-y.me" target="_blank">tn-y.me</a>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+// PRODUCTOS DROPDOWN
+function toggleProductos() {
+  const btn = document.getElementById('productos-btn');
+  const panel = document.getElementById('productos-panel');
+  const isOpen = panel.classList.contains('open');
+  if (isOpen) { panel.classList.remove('open'); btn.classList.remove('open'); }
+  else { panel.classList.add('open'); btn.classList.add('open'); }
+}
+document.addEventListener('click', e => {
+  const wrap = e.target.closest('.nav-productos-wrap');
+  if (!wrap) {
+    document.getElementById('productos-panel')?.classList.remove('open');
+    document.getElementById('productos-btn')?.classList.remove('open');
+  }
+});
+document.addEventListener('scroll', () => {
+  document.getElementById('productos-panel')?.classList.remove('open');
+  document.getElementById('productos-btn')?.classList.remove('open');
+}, { passive: true });
+
+// SOP MULTI-SPECIALTY
+const SOP_SPECS = {
+  hvac: {
+    label: 'HVAC / Minisplit',
+    steps: [
+      { num:'01', title:'Datos de la placa', text:'El técnico ingresa marca, modelo, voltaje nominal y refrigerante. El SOP recalibra automáticamente todos los rangos de medición.', tag:'Calibración automática', tagColor:'var(--blue)' },
+      { num:'02', title:'Seguridad eléctrica', text:'Mide voltaje de línea y Neutro-Tierra antes de encender. Si N-T supera 2V, el SOP bloquea el avance y emite alerta.', tag:'Protección al cliente', tagColor:'var(--red)' },
+      { num:'03', title:'Diagnóstico de refrigerante', text:'Presión de succión y descarga comparadas contra rangos calculados para el refrigerante y temperatura ambiente del día.', tag:'NOM · ASHRAE', tagColor:'var(--accent)' },
+      { num:'04', title:'Protocolo de limpieza', text:'Checklist: filtros, serpentín evaporador, condensador y drenaje. Cada paso confirmado antes de continuar.', tag:'SOP paso a paso', tagColor:'var(--green)' },
+    ],
+    mockSteps: [
+      { prog:28, step:'2/7', eyebrow:'Paso 2 — Seguridad eléctrica', title:'Voltaje de alimentación', desc:'Equipo APAGADO. Medir antes de encender.',
+        html:`<div class="sop-field"><div class="sop-field-lbl">Voltaje L1 · Rango: 220–240V</div><div class="sop-field-row"><div class="sop-field-num">229</div><div class="sop-field-unit">V</div><span class="sop-status-ok">✓ Óptimo</span></div></div>` },
+      { prog:44, step:'3/7', eyebrow:'Paso 3 — Seguridad eléctrica', title:'Voltaje Neutro – Tierra', desc:'Rango aceptable: 0 – 2V.',
+        html:`<div class="sop-alert"><div class="sop-alert-title">⚡ Paso bloqueado</div><div class="sop-alert-msg">N-T de 3.8V — riesgo de daño a tarjeta. Revisar tierra física.</div></div><div class="sop-field"><div class="sop-field-lbl">Voltaje N-T</div><div class="sop-field-row"><div class="sop-field-num">3.8</div><div class="sop-field-unit">V</div><span class="sop-status-err">✗ Fuera de norma</span></div></div>` },
+      { prog:68, step:'5/7', eyebrow:'Paso 5 — Refrigerante', title:'Presión de succión R-32', desc:'Manifold conectado. Equipo encendido 15 min.',
+        html:`<div class="sop-field"><div class="sop-field-lbl">Presión baja R-32 · 100–130 PSI</div><div class="sop-field-row"><div class="sop-field-num">112</div><div class="sop-field-unit">PSI</div><span class="sop-status-ok">✓ Dentro de rango</span></div></div>` },
+      { prog:92, step:'7/7', eyebrow:'Paso 7 — Cierre', title:'Reporte generado', desc:'JSON al expediente.',
+        html:`<div class="sop-score"><div class="sop-score-num">92</div><div><div class="sop-score-title">Sistema en buen estado</div><div class="sop-score-sub">6 puntos · 1 hallazgo corregido</div></div></div>` },
+    ]
+  },
+  electrico: {
+    label: 'Eléctrico',
+    steps: [
+      { num:'01', title:'Verificación de EPP obligatorio', text:'Guantes dieléctricos clase 0, lentes y herramienta con aislamiento. El SOP bloquea si el técnico no confirma el equipo de protección.', tag:'Seguridad primero', tagColor:'var(--red)' },
+      { num:'02', title:'Voltaje y Neutro-Tierra en tablero', text:'Multímetro en los bornes. 127V ±5% para instalaciones CFE México. N-T menor a 2V. Cualquier anomalía genera alerta antes de continuar.', tag:'Norma CFE México', tagColor:'var(--blue)' },
+      { num:'03', title:'Diagnóstico del circuito', text:'Continuidad, carga del circuito y estado de breakers. El SOP identifica si hay sobrecarga, corto o conexión suelta según los valores medidos.', tag:'NOM-001-SEDE', tagColor:'var(--accent)' },
+      { num:'04', title:'Verificación final y reporte', text:'Voltaje en el punto intervenido, circuito funcionando y continuidad de tierra verificada. Reporte al expediente con todos los valores registrados.', tag:'Expediente permanente', tagColor:'var(--green)' },
+    ],
+    mockSteps: [
+      { prog:20, step:'1/5', eyebrow:'Paso 1 — EPP', title:'Verificación de equipo de protección', desc:'Sin EPP el SOP bloquea el avance.',
+        html:`<div class="sop-checklist">${['Guantes dieléctricos clase 0','Lentes de protección','Herramienta aislada 1000V'].map(i=>`<div class="sop-check done"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>${i}</div>`).join('')}</div>` },
+      { prog:55, step:'3/5', eyebrow:'Paso 3 — Tablero', title:'Voltaje y N-T', desc:'Multímetro en los bornes.',
+        html:`<div class="sop-field" style="margin-bottom:7px"><div class="sop-field-lbl">Voltaje tablero · CFE 127V</div><div class="sop-field-row"><div class="sop-field-num">127</div><div class="sop-field-unit">V</div><span class="sop-status-ok">✓ Nominal</span></div></div><div class="sop-field"><div class="sop-field-lbl">Voltaje N-T</div><div class="sop-field-row"><div class="sop-field-num">0.6</div><div class="sop-field-unit">V</div><span class="sop-status-ok">✓ Sano</span></div></div>` },
+      { prog:88, step:'5/5', eyebrow:'Paso 5 — Cierre', title:'Reporte generado', desc:'JSON al expediente.',
+        html:`<div class="sop-score"><div class="sop-score-num">88</div><div><div class="sop-score-title">Instalación en orden</div><div class="sop-score-sub">5 puntos · Conexión corregida</div></div></div>` },
+    ]
+  },
+  plomeria: {
+    label: 'Plomería',
+    steps: [
+      { num:'01', title:'Presión de red', text:'Manómetro en la entrada. Rango óptimo: 30-80 PSI. Si supera 80 PSI el SOP recomienda reductor de presión para proteger la instalación.', tag:'Norma hidráulica', tagColor:'var(--blue)' },
+      { num:'02', title:'Prueba de hermeticidad', text:'Cierre de llaves 10 minutos. Si hay variación mayor a 2 PSI, el SOP confirma fuga activa y bloquea continuar sin resolver.', tag:'Detección de fugas', tagColor:'var(--red)' },
+      { num:'03', title:'Diagnóstico de drenaje', text:'Verificación de pendientes, destapes y revisión de sifones. El SOP guía los pasos según si la falla es en la red de abasto o drenaje.', tag:'SOP adaptado', tagColor:'var(--accent)' },
+      { num:'04', title:'Reporte al expediente', text:'Presiones medidas, diagnóstico de la red y hallazgos documentados. El expediente actualiza el score de plomería de la propiedad.', tag:'Expediente permanente', tagColor:'var(--green)' },
+    ],
+    mockSteps: [
+      { prog:35, step:'2/4', eyebrow:'Paso 2 — Hermeticidad', title:'Prueba de variación de presión', desc:'10 minutos con llaves cerradas.',
+        html:`<div class="sop-alert"><div class="sop-alert-title">⚡ Fuga confirmada</div><div class="sop-alert-msg">Variación de 7.5 PSI. Localizar fuga antes de continuar.</div></div><div class="sop-field"><div class="sop-field-lbl">Variación presión</div><div class="sop-field-row"><div class="sop-field-num">7.5</div><div class="sop-field-unit">PSI</div><span class="sop-status-err">✗ Fuga detectada</span></div></div>` },
+      { prog:80, step:'4/4', eyebrow:'Paso 4 — Cierre', title:'Reporte generado', desc:'JSON al expediente.',
+        html:`<div class="sop-score"><div class="sop-score-num">79</div><div><div class="sop-score-title">Fuga resuelta</div><div class="sop-score-sub">Red hermétic al cierre · Monitorear presión</div></div></div>` },
+    ]
+  },
+  carpinteria: {
+    label: 'Carpintería',
+    steps: [
+      { num:'01', title:'Verificación de herramientas y EPP', text:'El SOP confirma herramientas declaradas: taladro, sierra, nivel láser, lijadora. Sin herramientas básicas, no puede iniciar el servicio.', tag:'Herramientas certificadas', tagColor:'var(--accent)' },
+      { num:'02', title:'Medición y diagnóstico', text:'Nivel láser para verificar alineaciones. Medidas exactas del espacio antes de cortar. El SOP guarda las dimensiones para el reporte.', tag:'Precisión documentada', tagColor:'var(--blue)' },
+      { num:'03', title:'Protocolo de instalación', text:'Checklist de fijación, nivelación y acabados. Cada elemento instalado se confirma en el SOP antes de avanzar al siguiente.', tag:'SOP paso a paso', tagColor:'var(--accent)' },
+      { num:'04', title:'Registro de trabajo realizado', text:'Materiales usados, dimensiones finales y evidencia fotográfica. El reporte queda en el expediente de la propiedad.', tag:'Expediente permanente', tagColor:'var(--green)' },
+    ],
+    mockSteps: [
+      { prog:40, step:'2/4', eyebrow:'Paso 2 — Medición', title:'Verificación de nivel y dimensiones', desc:'Nivel láser en el espacio de instalación.',
+        html:`<div class="sop-checklist"><div class="sop-check done"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Nivel verificado — variación 0.2mm</div><div class="sop-check done"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Dimensiones registradas: 2.40 × 0.60m</div><div class="sop-check pend">Cortes de MDF pendientes</div></div>` },
+      { prog:85, step:'4/4', eyebrow:'Paso 4 — Cierre', title:'Reporte generado', desc:'JSON al expediente.',
+        html:`<div class="sop-score"><div class="sop-score-num">96</div><div><div class="sop-score-title">Trabajo completado</div><div class="sop-score-sub">Closet instalado · Nivelación perfecta</div></div></div>` },
+    ]
+  },
+  pintura: {
+    label: 'Pintura',
+    steps: [
+      { num:'01', title:'Preparación de superficie', text:'El SOP evalúa el estado del sustrato: grietas, humedad, pintura anterior. Sin una preparación correcta no se puede garantizar la durabilidad.', tag:'El 80% del resultado', tagColor:'var(--accent)' },
+      { num:'02', title:'Aplicación de producto', text:'Tipo de pintura, dilución y número de manos documentados. El SOP indica los tiempos de secado entre capas según el producto y temperatura.', tag:'Protocolo de aplicación', tagColor:'var(--blue)' },
+      { num:'03', title:'Verificación de cobertura', text:'Revisión visual y de espesor de capa. El técnico confirma cada área antes de cerrar la visita para garantizar cobertura uniforme.', tag:'Control de calidad', tagColor:'var(--accent)' },
+      { num:'04', title:'Reporte al expediente', text:'Producto usado, superficie cubierta y estado previo documentado. El expediente guarda el historial de acabados de la propiedad.', tag:'Historial de acabados', tagColor:'var(--green)' },
+    ],
+    mockSteps: [
+      { prog:30, step:'1/4', eyebrow:'Paso 1 — Superficie', title:'Diagnóstico del sustrato', desc:'Evaluación antes de iniciar.',
+        html:`<div class="sop-checklist"><div class="sop-check done"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Sin humedad activa</div><div class="sop-check done"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Grietas menores — resanadas</div><div class="sop-check done"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Lija aplicada — superficie lista</div></div>` },
+      { prog:88, step:'4/4', eyebrow:'Paso 4 — Cierre', title:'Reporte generado', desc:'JSON al expediente.',
+        html:`<div class="sop-score"><div class="sop-score-num">94</div><div><div class="sop-score-title">Acabado completado</div><div class="sop-score-sub">38m² · 2 manos · Latex Premium</div></div></div>` },
+    ]
+  },
+  impermeabilizacion: {
+    label: 'Impermeabilización',
+    steps: [
+      { num:'01', title:'Evaluación de la azotea', text:'El SOP documenta el estado de la membrana existente, grietas, fisuras y puntos de filtración. Evidencia fotográfica antes de iniciar.', tag:'Diagnóstico previo', tagColor:'var(--accent)' },
+      { num:'02', title:'Preparación de EPP de altura', text:'Cuerda, arnés y andamio confirmados antes de subir. El SOP bloquea si no se confirma el equipo de seguridad para trabajo en altura.', tag:'Seguridad en altura', tagColor:'var(--red)' },
+      { num:'03', title:'Protocolo de aplicación', text:'Limado, sello de grietas, primera membrana, segunda membrana. Cada capa con su tiempo de curado antes de continuar.', tag:'Capas documentadas', tagColor:'var(--blue)' },
+      { num:'04', title:'Prueba de estanqueidad', text:'Verificación con agua tras 24 horas. El reporte documenta el sistema aplicado, metros cubiertos y garantía del trabajo.', tag:'Garantía documentada', tagColor:'var(--green)' },
+    ],
+    mockSteps: [
+      { prog:25, step:'1/4', eyebrow:'Paso 1 — Diagnóstico', title:'Estado de la azotea', desc:'Evaluación previa al trabajo.',
+        html:`<div class="sop-checklist"><div class="sop-check done"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>Arnés y cuerda verificados</div><div class="sop-check done"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>3 grietas documentadas</div><div class="sop-check pend">Membrana existente: desgastada</div></div>` },
+      { prog:90, step:'4/4', eyebrow:'Paso 4 — Cierre', title:'Reporte generado', desc:'JSON al expediente.',
+        html:`<div class="sop-score"><div class="sop-score-num">95</div><div><div class="sop-score-title">Impermeabilización completada</div><div class="sop-score-sub">62m² · Garantía 5 años</div></div></div>` },
+    ]
+  }
+};
+
+let currentSpec = 'hvac';
+let mockIdx = 0;
+let mockInterval = null;
+
+function setSopSpec(spec, btn) {
+  currentSpec = spec;
+  document.querySelectorAll('.sop-pill').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  mockIdx = 0;
+  renderSopSteps();
+  renderSopMock();
+  clearInterval(mockInterval);
+  mockInterval = setInterval(cycleSopMock, 3400);
+}
+
+function renderSopSteps() {
+  const d = SOP_SPECS[currentSpec];
+  const panel = document.getElementById('sop-steps-panel');
+  if (!panel) return;
+  panel.innerHTML = d.steps.map((s, i) => `
+    <div class="sop-flow-step ${i===0?'active':''}">
+      <div class="sop-flow-left"><div class="sop-flow-num">${s.num}</div>${i<d.steps.length-1?'<div class="sop-flow-line"></div>':''}</div>
+      <div class="sop-flow-content">
+        <div class="sop-flow-title">${s.title}</div>
+        <div class="sop-flow-text">${s.text}</div>
+        <div class="sop-flow-tag" style="background:${s.tagColor}18;border-color:${s.tagColor}40;color:${s.tagColor}">${s.tag}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function cycleSopMock() {
+  const steps = SOP_SPECS[currentSpec].mockSteps;
+  mockIdx = (mockIdx + 1) % steps.length;
+  renderSopMock();
+}
+
+function renderSopMock() {
+  const steps = SOP_SPECS[currentSpec].mockSteps;
+  const s = steps[mockIdx];
+  const label = SOP_SPECS[currentSpec].label;
+  const p = document.getElementById('sop-prog');
+  const spec = document.getElementById('sop-spec');
+  const step = document.getElementById('sop-step');
+  const body = document.getElementById('sop-body');
+  if (!p||!spec||!body) return;
+  p.style.width = s.prog + '%';
+  spec.textContent = label;
+  step.textContent = s.step;
+  body.innerHTML = `<div class="sop-mock-eyebrow">${s.eyebrow}</div><div class="sop-mock-title">${s.title}</div><div class="sop-mock-desc">${s.desc}</div>${s.html}`;
+}
+
+// Init SOP
+renderSopSteps();
+renderSopMock();
+mockInterval = setInterval(cycleSopMock, 3400);
+
+// SCROLL REVEAL
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target)}});
+},{threshold:0.1,rootMargin:'0px 0px -24px 0px'});
+document.querySelectorAll('.rev').forEach(el=>obs.observe(el));
+
+// SOP ANIMATION
+
+
+// ══════════════════════════════════════════════
+// CITY GRID — futuristic damero con flujo completo
+// ══════════════════════════════════════════════
+(function initCityGrid() {
+  const canvas = document.getElementById('city-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  const COLS = 22, ROWS = 14, PAD = 3;
+  const HUB_COL = 11, HUB_ROW = 6;
+  let W, H, cW, cH;
+
+  const C = {
+    bg:       '#080a0e',
+    street:   'rgba(255,255,255,0.04)',
+    street2:  'rgba(255,255,255,0.08)',
+    inactive: 'rgba(255,255,255,0.025)',
+    border:   'rgba(255,255,255,0.06)',
+    active:   '#c85a28',   // orange  — service requested
+    tech:     '#22d3ee',   // cyan    — tech assigned
+    exp:      '#4ade80',   // green   — expediente stored
+    hub:      '#c85a28',
+  };
+
+  // ── BLOCKS ──────────────────────────────────
+  const blocks = [];
+  function initBlocks() {
+    blocks.length = 0;
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        if (c === HUB_COL && r === HUB_ROW) { blocks.push({col:c,row:r,status:'hub',glow:1,glowT:1,glowS:0}); continue; }
+        const rnd = Math.random();
+        let status = 'inactive';
+        if (rnd < 0.14) status = 'exp';
+        else if (rnd < 0.22) status = 'active';
+        else if (rnd < 0.27) status = 'tech';
+        blocks.push({ col:c, row:r, status, glow:0,
+          glowT: status !== 'inactive' ? 0.55 + Math.random()*0.35 : 0.06 + Math.random()*0.1,
+          glowS: 0.006 + Math.random()*0.01 });
+      }
+    }
+  }
+
+  // ── SIGNALS ─────────────────────────────────
+  const signals = [];
+
+  // ── STORED RECORDS in hub — the structured data ──
+  const storedRecords = [];   // { x, y, alpha, size, color, age }
+  const MAX_RECORDS = 14;
+
+  // ── TRANSFORM BURSTS — visual when signal hits hub ──
+  const bursts = [];  // { x, y, color, t, maxT }
+
+  // ── PULSE RINGS ─────────────────────────────
+  const pulseRings = [];
+
+  // ─────────────────────────────────────────────
+  // SPAWN — 3 signal types running simultaneously
+  // ─────────────────────────────────────────────
+  function hubXY() {
+    return { x:(HUB_COL+0.5)*cW, y:(HUB_ROW+0.5)*cH };
+  }
+
+  // TYPE A: House → Thruver   (circle, orange)
+  function spawnIncoming() {
+    const active = blocks.filter(b => b.status === 'active' || b.status === 'exp');
+    if (!active.length) return;
+    const src = active[Math.floor(Math.random()*active.length)];
+    const sx = (src.col+0.5)*cW, sy = (src.row+0.5)*cH;
+    const {x:hx, y:hy} = hubXY();
+    // L-shaped street path
+    signals.push({
+      type:'incoming',
+      x:sx, y:sy,
+      path:[ {x:sx,y:sy}, {x:hx,y:sy}, {x:hx,y:hy} ],
+      pIdx:1,
+      speed: 0.006+Math.random()*0.004,
+      color: C.active,
+      shape:'circle',  // circles traveling in
+      size: 3.2,
+      trail:[], done:false,
+      srcBlock: src
+    });
+  }
+
+  // TYPE B: Thruver → House   (square, cyan, dispatch)
+  function spawnOutgoing() {
+    const techs = blocks.filter(b => b.status === 'tech');
+    if (!techs.length) return;
+    const dst = techs[Math.floor(Math.random()*techs.length)];
+    const dx = (dst.col+0.5)*cW, dy = (dst.row+0.5)*cH;
+    const {x:hx, y:hy} = hubXY();
+    signals.push({
+      type:'outgoing',
+      x:hx, y:hy,
+      path:[ {x:hx,y:hy}, {x:dx,y:hy}, {x:dx,y:dy} ],
+      pIdx:1,
+      speed: 0.007+Math.random()*0.004,
+      color: C.tech,
+      shape:'square',  // squares going out = structured orders
+      size: 3.2,
+      trail:[], done:false,
+      dstBlock: dst
+    });
+  }
+
+  // TYPE C: Return data → Thruver (diamond, green)
+  function spawnReturn() {
+    const techs = blocks.filter(b => b.status === 'tech');
+    if (!techs.length) return;
+    const src = techs[Math.floor(Math.random()*techs.length)];
+    const sx = (src.col+0.5)*cW, sy = (src.row+0.5)*cH;
+    const {x:hx, y:hy} = hubXY();
+    signals.push({
+      type:'return',
+      x:sx, y:sy,
+      path:[ {x:sx,y:sy}, {x:sx,y:hy}, {x:hx,y:hy} ],
+      pIdx:1,
+      speed: 0.006+Math.random()*0.003,
+      color: C.exp,
+      shape:'diamond',  // diamond = report data coming back
+      size: 3.5,
+      trail:[], done:false,
+      srcBlock: src
+    });
+  }
+
+  // ─────────────────────────────────────────────
+  // DRAW SHAPES
+  // ─────────────────────────────────────────────
+  function drawShape(x, y, shape, size, color, alpha) {
+    ctx.save();
+    ctx.globalAlpha = alpha;
+
+    // Glow
+    ctx.shadowColor = color;
+    ctx.shadowBlur = size * 4;
+
+    if (shape === 'circle') {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI*2);
+      ctx.fill();
+      // White core
+      ctx.fillStyle = 'rgba(255,255,255,0.75)';
+      ctx.beginPath();
+      ctx.arc(x, y, size*0.38, 0, Math.PI*2);
+      ctx.fill();
+
+    } else if (shape === 'square') {
+      const s = size * 1.4;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.rect(x-s, y-s, s*2, s*2);
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.beginPath();
+      ctx.rect(x-s*0.4, y-s*0.4, s*0.8, s*0.8);
+      ctx.fill();
+
+    } else if (shape === 'diamond') {
+      const s = size * 1.5;
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(x,   y-s);
+      ctx.lineTo(x+s, y  );
+      ctx.lineTo(x,   y+s);
+      ctx.lineTo(x-s, y  );
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,0.65)';
+      ctx.beginPath();
+      ctx.moveTo(x,     y-s*0.38);
+      ctx.lineTo(x+s*0.38, y   );
+      ctx.lineTo(x,     y+s*0.38);
+      ctx.lineTo(x-s*0.38, y   );
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  // ─────────────────────────────────────────────
+  // WHEN SIGNAL ARRIVES AT HUB — transform + store
+  // ─────────────────────────────────────────────
+  function onArriveHub(sig) {
+    const {x:hx, y:hy} = hubXY();
+
+    // Burst animation
+    bursts.push({ x:hx, y:hy, color:sig.color, t:0, maxT:28 });
+
+    // Store as a small structured record
+    if (storedRecords.length >= MAX_RECORDS) storedRecords.shift();
+    // Position in a grid pattern inside hub area
+    const idx = storedRecords.length;
+    const cols = 4;
+    const offX = ((idx % cols) - 1.5) * (cW*0.28);
+    const offY = (Math.floor(idx / cols) - 0.8) * (cH*0.3);
+    storedRecords.push({
+      x: hx + offX,
+      y: hy + offY,
+      alpha: 0,
+      targetAlpha: 0.85,
+      size: Math.max(1.8, cW*0.07),
+      color: sig.color,
+      shape: 'square',   // everything stored becomes a square — "structured"
+      age: 0
+    });
+
+    // Pulse ring
+    pulseRings.push({ x:hx, y:hy, radius:cW*0.5, alpha:0.5, speed:1.8, color:sig.color });
+  }
+
+  // WHEN SIGNAL ARRIVES AT HOUSE
+  function onArriveHouse(sig) {
+    if (sig.type === 'outgoing' && sig.dstBlock) {
+      // Burst at house
+      const dx = (sig.dstBlock.col+0.5)*cW;
+      const dy = (sig.dstBlock.row+0.5)*cH;
+      bursts.push({ x:dx, y:dy, color:C.tech, t:0, maxT:22 });
+      // House gets brighter momentarily
+      sig.dstBlock.glowT = 1;
+      setTimeout(() => { if (sig.dstBlock) sig.dstBlock.glowT = 0.6; }, 600);
+    } else if (sig.type === 'return' && sig.srcBlock) {
+      // House becomes expediente
+      const b = blocks.find(bl => bl.col===sig.srcBlock.col && bl.row===sig.srcBlock.row);
+      if (b) { b.status='exp'; b.glowT=0.75; }
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // RESIZE
+  // ─────────────────────────────────────────────
+  function resize() {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    W = rect.width;
+    H = canvas.parentElement.offsetHeight;
+    canvas.width  = W * window.devicePixelRatio;
+    canvas.height = H * window.devicePixelRatio;
+    canvas.style.width  = W+'px';
+    canvas.style.height = H+'px';
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    cW = W/COLS; cH = H/ROWS;
+    initBlocks();
+  }
+
+  // ─────────────────────────────────────────────
+  // DRAW
+  // ─────────────────────────────────────────────
+  function draw() {
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = C.bg;
+    ctx.fillRect(0,0,W,H);
+
+    // Streets
+    for (let c=0;c<=COLS;c++) {
+      const x=c*cW, major=c%4===0;
+      ctx.strokeStyle = major?C.street2:C.street;
+      ctx.lineWidth   = major?1.2:0.7;
+      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke();
+    }
+    for (let r=0;r<=ROWS;r++) {
+      const y=r*cH, major=r%3===0;
+      ctx.strokeStyle = major?C.street2:C.street;
+      ctx.lineWidth   = major?1.2:0.7;
+      ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke();
+    }
+
+    // Blocks
+    blocks.forEach(b => {
+      if (b.status==='hub') return;
+      if (b.glow < b.glowT) b.glow = Math.min(b.glow+b.glowS, b.glowT);
+      else if (b.glow > b.glowT) b.glow = Math.max(b.glow-b.glowS, b.glowT);
+
+      const x=b.col*cW+PAD, y=b.row*cH+PAD, bw=cW-PAD*2, bh=cH-PAD*2;
+      const color = b.status==='active'?C.active : b.status==='tech'?C.tech :
+                    b.status==='exp'?C.exp : null;
+
+      if (color) {
+        ctx.save();
+        ctx.shadowColor = color; ctx.shadowBlur = cW*0.5;
+        ctx.globalAlpha = b.glow*0.18; ctx.fillStyle=color; ctx.fillRect(x,y,bw,bh);
+        ctx.shadowBlur=0;
+        ctx.globalAlpha = b.glow*0.55; ctx.strokeStyle=color; ctx.lineWidth=0.8;
+        ctx.strokeRect(x+0.5,y+0.5,bw-1,bh-1);
+        ctx.globalAlpha = b.glow*0.07; ctx.fillStyle='#fff';
+        ctx.fillRect(x+3,y+3,bw-6,bh-6);
+        ctx.restore();
+      } else {
+        ctx.globalAlpha = b.glow; ctx.fillStyle=C.inactive; ctx.fillRect(x,y,bw,bh);
+        ctx.strokeStyle=C.border; ctx.lineWidth=0.5; ctx.strokeRect(x+0.5,y+0.5,bw-1,bh-1);
+        ctx.globalAlpha=1;
+      }
+    });
+
+    // Pulse rings
+    for (let i=pulseRings.length-1;i>=0;i--) {
+      const r=pulseRings[i];
+      r.radius+=r.speed; r.alpha-=0.009;
+      if (r.alpha<=0) { pulseRings.splice(i,1); continue; }
+      ctx.save();
+      ctx.globalAlpha=r.alpha; ctx.strokeStyle=r.color||C.hub;
+      ctx.lineWidth=1; ctx.shadowColor=r.color||C.hub; ctx.shadowBlur=6;
+      ctx.beginPath(); ctx.arc(r.x,r.y,r.radius,0,Math.PI*2); ctx.stroke();
+      ctx.restore();
+    }
+
+    // Hub node
+    const hx=(HUB_COL+0.5)*cW, hy=(HUB_ROW+0.5)*cH;
+    // Ambient glow
+    const g=ctx.createRadialGradient(hx,hy,0,hx,hy,cW*3);
+    g.addColorStop(0,'rgba(200,90,40,0.2)'); g.addColorStop(1,'rgba(200,90,40,0)');
+    ctx.fillStyle=g; ctx.fillRect(hx-cW*3,hy-cH*3,cW*6,cH*6);
+
+    // Hub block
+    const hbx=HUB_COL*cW+PAD, hby=HUB_ROW*cH+PAD, hbw=cW-PAD*2, hbh=cH-PAD*2;
+    ctx.save();
+    ctx.shadowColor=C.active; ctx.shadowBlur=18;
+    ctx.fillStyle='#0d0d0d'; ctx.fillRect(hbx,hby,hbw,hbh);
+    ctx.strokeStyle=C.active; ctx.lineWidth=1.5;
+    ctx.strokeRect(hbx+0.5,hby+0.5,hbw-1,hbh-1);
+    ctx.restore();
+
+    // Stored records inside hub
+    storedRecords.forEach(rec => {
+      rec.age++;
+      if (rec.alpha < rec.targetAlpha) rec.alpha = Math.min(rec.alpha+0.04, rec.targetAlpha);
+      ctx.save();
+      ctx.globalAlpha = rec.alpha;
+      ctx.shadowColor = rec.color; ctx.shadowBlur = 5;
+      ctx.fillStyle = rec.color;
+      const s = rec.size;
+      ctx.fillRect(rec.x-s, rec.y-s, s*2, s*2);
+      // inner white dot
+      ctx.fillStyle='rgba(255,255,255,0.7)';
+      ctx.fillRect(rec.x-s*0.35, rec.y-s*0.35, s*0.7, s*0.7);
+      ctx.restore();
+    });
+
+    // Hub text ON TOP of records
+    ctx.save();
+    ctx.font = `800 ${Math.max(8,cW*0.24)}px DM Sans, sans-serif`;
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.shadowColor = 'rgba(0,0,0,0.9)'; ctx.shadowBlur = 8;
+    ctx.fillText('THRUVER', hx, hy);
+    ctx.restore();
+
+    // Burst animations
+    for (let i=bursts.length-1;i>=0;i--) {
+      const b=bursts[i]; b.t++;
+      if (b.t>b.maxT) { bursts.splice(i,1); continue; }
+      const progress=b.t/b.maxT;
+      // Expanding ring that fades
+      ctx.save();
+      ctx.globalAlpha=(1-progress)*0.7;
+      ctx.strokeStyle=b.color; ctx.lineWidth=1.5;
+      ctx.shadowColor=b.color; ctx.shadowBlur=10;
+      const r=progress*cW*1.8;
+      ctx.beginPath(); ctx.arc(b.x,b.y,r,0,Math.PI*2); ctx.stroke();
+      // Transform particle: morphs from circle to square
+      // At start: circle. At end: square outline.
+      if (progress<0.5) {
+        ctx.globalAlpha=(1-progress*2)*0.9;
+        ctx.fillStyle=b.color;
+        ctx.beginPath(); ctx.arc(b.x,b.y,cW*0.18*(1-progress),0,Math.PI*2); ctx.fill();
+      } else {
+        // Square appears
+        const sp=(progress-0.5)*2;
+        ctx.globalAlpha=sp*0.6;
+        ctx.strokeStyle=b.color; ctx.lineWidth=1.2;
+        const ss=cW*0.14*sp;
+        ctx.strokeRect(b.x-ss,b.y-ss,ss*2,ss*2);
+      }
+      ctx.restore();
+    }
+
+    // Signals
+    for (let i=signals.length-1;i>=0;i--) {
+      const sig=signals[i];
+      if (sig.done) { signals.splice(i,1); continue; }
+
+      const target=sig.path[sig.pIdx];
+      const dx=target.x-sig.x, dy=target.y-sig.y;
+      const dist=Math.sqrt(dx*dx+dy*dy);
+
+      if (dist<2) {
+        sig.pIdx++;
+        if (sig.pIdx>=sig.path.length) {
+          sig.done=true;
+          // On arrival
+          const isHub=(sig.type==='incoming'||sig.type==='return');
+          if (isHub) onArriveHub(sig);
+          else onArriveHouse(sig);
+          continue;
+        }
+      } else {
+        const step=Math.min(dist, sig.speed*Math.max(cW,cH)*5);
+        sig.x+=(dx/dist)*step; sig.y+=(dy/dist)*step;
+      }
+
+      // Trail
+      sig.trail.push({x:sig.x,y:sig.y});
+      if (sig.trail.length>16) sig.trail.shift();
+      sig.trail.forEach((pt,ti) => {
+        const a=(ti/sig.trail.length)*0.4;
+        const rs=sig.size*(ti/sig.trail.length)*0.55;
+        ctx.save();
+        ctx.globalAlpha=a; ctx.fillStyle=sig.color;
+        ctx.shadowColor=sig.color; ctx.shadowBlur=rs*3;
+        ctx.beginPath(); ctx.arc(pt.x,pt.y,Math.max(0.3,rs),0,Math.PI*2); ctx.fill();
+        ctx.restore();
+      });
+
+      drawShape(sig.x, sig.y, sig.shape, sig.size, sig.color, 1.0);
+    }
+  }
+
+  // ─────────────────────────────────────────────
+  // TIMERS
+  // ─────────────────────────────────────────────
+  let lastIn=0, lastOut=0, lastRet=0, lastPulse=0;
+
+  function animate(ts) {
+    draw();
+    if (ts-lastIn  > 1800) { spawnIncoming(); lastIn=ts; }
+    if (ts-lastOut > 2400) { spawnOutgoing(); lastOut=ts; }
+    if (ts-lastRet > 3200) { spawnReturn();   lastRet=ts; }
+    if (ts-lastPulse>3800) {
+      const {x:hx,y:hy}=hubXY();
+      pulseRings.push({x:hx,y:hy,radius:cW*0.6,alpha:0.4,speed:1.6,color:C.hub});
+      lastPulse=ts;
+    }
+    requestAnimationFrame(animate);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  requestAnimationFrame(animate);
+})();
+
+
+// ══════════════════════════════════════════════
+// INTERACTIVE SCENARIO PANEL
+// ══════════════════════════════════════════════
+(function() {
+
+  // ── SCENARIO RENDERERS ──
+  const SCENARIOS = [
+
+    // 0 — Técnico terminó trabajo y registró expediente
+    function() { return `
+      <div style="padding:0;height:100%">
+        <div style="background:#0d0d0d;padding:12px 16px;display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 6px #4ade80"></div>
+            <span style="font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.08em">Thruver SOP · Cierre de visita</span>
+          </div>
+          <span style="font-family:'DM Mono',monospace;font-size:10px;color:rgba(255,255,255,.3)">HVAC-2026-04813</span>
+        </div>
+        <div style="padding:16px">
+          <div style="background:#0d0d0d;border-radius:10px;padding:14px;display:flex;align-items:center;gap:14px;margin-bottom:12px">
+            <div style="position:relative;width:60px;height:60px;flex-shrink:0">
+              <svg width="60" height="60" viewBox="0 0 60 60" style="transform:rotate(-90deg)">
+                <circle cx="30" cy="30" r="24" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="4"/>
+                <circle cx="30" cy="30" r="24" fill="none" stroke="#4ade80" stroke-width="4"
+                  stroke-dasharray="150.8" stroke-dashoffset="12" stroke-linecap="round"
+                  style="animation:scDraw 1.2s ease forwards;stroke-dashoffset:150.8">
+                  <animate attributeName="stroke-dashoffset" from="150.8" to="12" dur="1.2s" fill="freeze" calcMode="spline" keySplines="0.4 0 0.2 1"/>
+                </circle>
+              </svg>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:16px;font-weight:700;color:#4ade80">92</div>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">Trabajo completado</div>
+              <div style="font-size:11px;color:rgba(255,255,255,.4);line-height:1.5">Sistema HVAC revisado. 6 puntos evaluados.<br>1 hallazgo documentado. JSON al expediente.</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px">
+            ${[['Técnico','Miguel Rodríguez'],['Duración','135 min'],['Especialidad','HVAC'],['Folio','VT-2026-0847']].map(([l,v])=>`
+            <div style="background:var(--bg);border:1px solid var(--border);border-radius:7px;padding:8px 10px">
+              <div style="font-size:9px;color:var(--text3);margin-bottom:2px;text-transform:uppercase;letter-spacing:.07em">${l}</div>
+              <div style="font-size:12px;font-weight:700;color:var(--text)">${v}</div>
+            </div>`).join('')}
+          </div>
+          <div style="background:rgba(74,222,128,.07);border:1px solid rgba(74,222,128,.2);border-radius:7px;padding:10px 12px;display:flex;align-items:center;gap:8px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span style="font-size:12px;font-weight:600;color:#16a34a">Expediente CLT-0001 actualizado · Score HVAC 61% → 92%</span>
+          </div>
+        </div>
+      </div>`; },
+
+    // 1 — Recordatorio de mantenimiento
+    function() { return `
+      <div>
+        <div style="background:linear-gradient(135deg,rgba(200,90,40,.08),rgba(200,90,40,.02));padding:16px;border-bottom:1px solid var(--border)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div style="width:30px;height:30px;border-radius:8px;background:rgba(200,90,40,.12);border:1px solid rgba(200,90,40,.25);display:flex;align-items:center;justify-content:center">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </div>
+            <div>
+              <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.07em">Alerta predictiva · Sistema HVAC</div>
+              <div style="font-size:10px;color:var(--text3)">Basada en historial de uso registrado</div>
+            </div>
+          </div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px">Tu minisplit cumplirá 1,200 horas de uso en 18 días</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6">Thruver detectó el patrón en el expediente. Recomendamos mantenimiento preventivo antes de la temporada de calor.</div>
+        </div>
+        <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text)">Horas de uso acumuladas</div>
+              <div style="font-size:10px;color:var(--text3)">Registradas en el expediente</div>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:700;color:var(--accent)">1,182<span style="font-size:11px;color:var(--text3)">h</span></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px">
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--text)">Último mantenimiento</div>
+              <div style="font-size:10px;color:var(--text3)">Miguel Rodríguez · TEC-042</div>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--text3)">Hace 8 meses</div>
+          </div>
+          <button style="background:var(--accent);border:none;border-radius:8px;padding:11px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:6px">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Agendar mantenimiento preventivo
+          </button>
+        </div>
+      </div>`; },
+
+    // 2 — Cliente solicitando servicio
+    function() { return `
+      <div>
+        <div style="padding:14px 16px;border-bottom:1px solid var(--border);background:var(--bg)">
+          <div style="font-size:14px;font-weight:800;letter-spacing:-.02em;color:var(--text);margin-bottom:2px">Nueva solicitud</div>
+          <div style="font-size:11px;color:var(--text3)">Completa los datos para agendar tu servicio</div>
+        </div>
+        <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px">
+          <div>
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px">Tipo de servicio</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px">
+              ${[
+                {n:'Eléctrico', sel:true,  icon:'<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>'},
+                {n:'Plomería',  sel:false, icon:'<path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/>'},
+                {n:'HVAC',      sel:false, icon:'<path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/>'},
+              ].map(({n,sel,icon})=>`
+              <div style="padding:9px 6px;border:1.5px solid ${sel?'var(--accent)':'var(--border)'};border-radius:8px;text-align:center;cursor:pointer;background:${sel?'rgba(200,90,40,.07)':'#fff'};transition:all .15s">
+                <div style="display:flex;justify-content:center;margin-bottom:5px">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${sel?'var(--accent)':'var(--text3)'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon}</svg>
+                </div>
+                <div style="font-size:11px;font-weight:700;color:${sel?'var(--accent)':'var(--text3)'}">${n}</div>
+              </div>`).join('')}
+            </div>
+          </div>
+          <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px">
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:4px">Problema</div>
+            <div style="font-size:12px;color:var(--text2)">Interruptor de sala que falla al encender...</div>
+          </div>
+          <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between">
+            <div>
+              <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:2px">Fecha preferida</div>
+              <div style="font-size:13px;font-weight:700;color:var(--text)">Mañana, 23 Mar · Mañana</div>
+            </div>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div style="background:var(--accent);border-radius:8px;padding:11px;text-align:center;font-size:13px;font-weight:700;color:#fff;cursor:pointer">
+            Confirmar solicitud →
+          </div>
+        </div>
+      </div>`; },
+
+    // 3 — Cliente pagando en línea
+    function() { return `
+      <div>
+        <div style="padding:14px 16px;border-bottom:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:13px;font-weight:700;color:var(--text)">Resumen de pago</div>
+          <div style="display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--green)">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Pago seguro
+          </div>
+        </div>
+        <div style="padding:14px 16px">
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:12px;margin-bottom:12px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border)">
+              <div style="width:36px;height:36px;border-radius:8px;background:rgba(200,90,40,.1);border:1px solid rgba(200,90,40,.2);display:flex;align-items:center;justify-content:center">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </div>
+              <div><div style="font-size:13px;font-weight:700;color:var(--text)">Revisión eléctrica completa</div><div style="font-size:11px;color:var(--text3)">Carlos Mendoza · 12 Mar 2026 · 135 min</div></div>
+            </div>
+            ${[['Diagnóstico y mano de obra','$850'],['Materiales (fusibles x3)','$120']].map(([l,v])=>`
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px">
+              <span style="color:var(--text2)">${l}</span>
+              <span style="font-family:'DM Mono',monospace;font-weight:600;color:var(--text)">${v}</span>
+            </div>`).join('')}
+            <div style="border-top:1px solid var(--border);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between">
+              <span style="font-size:13px;font-weight:700;color:var(--text)">Total</span>
+              <span style="font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--accent)">$970</span>
+            </div>
+          </div>
+          <div style="background:var(--bg);border:1.5px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:10px;display:flex;align-items:center;gap:8px">
+            <svg width="20" height="14" viewBox="0 0 28 18" fill="none"><rect width="28" height="18" rx="3" fill="#1a1f36"/><rect x="0" y="6" width="28" height="5" fill="#fff" opacity=".12"/><rect x="18" y="11" width="7" height="4" rx="1" fill="#f0c040"/></svg>
+            <span style="font-size:12px;color:var(--text2)">•••• •••• •••• 4821</span>
+          </div>
+          <button style="background:linear-gradient(135deg,#c85a28,#e8834a);border:none;border-radius:8px;padding:12px;font-size:14px;font-weight:700;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;box-shadow:0 4px 14px rgba(200,90,40,.35)">
+            Pagar $970
+          </button>
+        </div>
+      </div>`; },
+
+    // 4 — Cliente revisando historial
+    function() { return `
+      <div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:13px;font-weight:700;color:var(--text)">Historial de servicios</div>
+          <div style="font-size:10px;font-weight:600;color:var(--accent)">CLT-0001</div>
+        </div>
+        <div style="padding:10px 14px;border-bottom:1px solid var(--border);background:rgba(200,90,40,.04)">
+          <div style="display:flex;align-items:center;gap:16px">
+            ${[['4','Servicios'],['89','Score'],['$18.4k','Invertido']].map(([v,l])=>`
+            <div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:700;color:var(--accent);line-height:1">${v}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-top:2px">${l}</div></div>`).join('')}
+          </div>
+        </div>
+        <div style="padding:0">
+          ${[
+            {dot:'var(--accent)',name:'Mantenimiento HVAC',date:'5 Abr 2026',tec:'Miguel Torres',score:'92',pending:true},
+            {dot:'var(--green)',name:'Revisión eléctrica',date:'12 Mar 2026',tec:'Carlos Mendoza',score:'94',pending:false},
+            {dot:'var(--green)',name:'Servicio de plomería',date:'28 Feb 2026',tec:'Sofía Lizárraga',score:'88',pending:false},
+          ].map((r,i)=>`
+          <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);${i===0?'background:rgba(200,90,40,.04)':''}">
+            <div style="width:6px;height:6px;border-radius:50%;background:${r.dot};flex-shrink:0"></div>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:12px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.name}</div>
+              <div style="font-size:10px;color:var(--text3)">${r.tec}</div>
+            </div>
+            <div style="text-align:right;flex-shrink:0">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">${r.date}</div>
+              <div style="font-size:10px;font-weight:700;color:${r.pending?'var(--accent)':'var(--green)'}">
+                ${r.pending ? 'Programado' : 'Score '+r.score}
+              </div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>`; },
+
+    // 5 — Técnico siguiendo SOP
+    function() { return `
+      <div>
+        <div style="height:2px;background:var(--bg3)"><div style="height:100%;background:linear-gradient(90deg,var(--accent),#e8834a);width:57%;transition:width .6s ease"></div></div>
+        <div style="padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:7px">
+            <div style="width:18px;height:18px;background:var(--text);border-radius:4px;display:flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6V12C4 15.31 7.58 19.5 12 21C16.42 19.5 20 15.31 20 12V6L12 2Z" fill="white" opacity="0.9"/></svg></div>
+            <span style="font-size:11px;font-weight:700;color:var(--text)">Thruver · SOP</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px">
+            <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;background:rgba(200,90,40,.1);color:var(--accent);border:1px solid rgba(200,90,40,.2);border-radius:3px;padding:2px 6px">HVAC</span>
+            <span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">4 / 7</span>
+          </div>
+        </div>
+        <div style="padding:14px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:3px">Paso 4 — Diagnóstico de refrigerante</div>
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px">Presión de succión R-32</div>
+          <div style="font-size:11px;color:var(--text3);margin-bottom:12px">Manifold conectado. Equipo encendido 15 min. Rango normal: 100–130 PSI.</div>
+          <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px">
+            <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px">Presión baja medida</div>
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="font-family:'DM Mono',monospace;font-size:28px;font-weight:700;color:var(--text);flex:1;line-height:1">112</div>
+              <div style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text3);background:var(--bg3);border-radius:3px;padding:3px 7px">PSI</div>
+              <span style="font-size:10px;font-weight:700;color:var(--green);background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.2);border-radius:100px;padding:3px 9px">✓ Dentro de rango</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:7px">
+            <button style="flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:7px;padding:9px;font-size:12px;font-weight:600;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif">← Anterior</button>
+            <button style="flex:2;background:var(--accent);border:none;border-radius:7px;padding:9px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:'DM Sans',sans-serif">Confirmar y continuar →</button>
+          </div>
+        </div>
+      </div>`; },
+
+    // 6 — Recordatorio de mantenimiento + score del hogar
+    function() { return `
+      <div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:13px;font-weight:700;color:var(--text)">Score del hogar</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:10px;font-weight:700;color:var(--green)">
+            <div style="width:5px;height:5px;border-radius:50%;background:var(--green);animation:livePulse 2s ease infinite"></div>LIVE
+          </div>
+        </div>
+        <!-- Score + bars -->
+        <div style="padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;border-bottom:1px solid var(--border)">
+          <div style="display:flex;flex-direction:column;gap:7px">
+            ${[['Eléctrico',94,'var(--green)'],['Plomería',88,'var(--green)'],['HVAC',61,'var(--accent)'],['Estructura',97,'var(--green)'],['Techo',82,'var(--green)']].map(([n,v,c])=>`
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:11px;color:var(--text2);width:64px;flex-shrink:0;font-weight:500">${n}</span>
+              <div style="flex:1;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden">
+                <div style="height:100%;width:${v}%;background:${c};border-radius:2px"></div>
+              </div>
+              <span style="font-family:'DM Mono',monospace;font-size:10px;font-weight:700;color:${c};width:28px;text-align:right">${v}%</span>
+            </div>`).join('')}
+          </div>
+          <div style="text-align:center">
+            <div style="position:relative;width:64px;height:64px">
+              <svg width="64" height="64" viewBox="0 0 64 64" style="transform:rotate(-90deg)">
+                <circle cx="32" cy="32" r="26" fill="none" stroke="var(--bg3)" stroke-width="5"/>
+                <circle cx="32" cy="32" r="26" fill="none" stroke="var(--accent)" stroke-width="5"
+                  stroke-dasharray="163.4" stroke-dashoffset="18" stroke-linecap="round"/>
+              </svg>
+              <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:15px;font-weight:700;color:var(--accent)">89</div>
+            </div>
+            <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-top:3px">Score</div>
+          </div>
+        </div>
+        <!-- Recordatorio de mantenimiento abajo -->
+        <div style="padding:12px 16px">
+          <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);margin-bottom:8px">Recordatorio programado</div>
+          <div style="background:rgba(200,90,40,.05);border:1px solid rgba(200,90,40,.18);border-radius:9px;padding:12px;display:flex;align-items:flex-start;gap:10px">
+            <div style="width:28px;height:28px;border-radius:7px;background:rgba(200,90,40,.12);border:1px solid rgba(200,90,40,.25);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div style="flex:1">
+              <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px">Mantenimiento HVAC · Programado 5 Abr</div>
+              <div style="font-size:11px;color:var(--text2);line-height:1.5">Basado en 1,182h de uso registradas. Miguel Torres asignado · TEC-031</div>
+              <div style="margin-top:8px;display:flex;gap:6px">
+                <div style="font-size:10px;font-weight:700;background:rgba(200,90,40,.1);color:var(--accent);border:1px solid rgba(200,90,40,.2);border-radius:100px;padding:2px 9px">HVAC</div>
+                <div style="font-size:10px;font-weight:700;background:var(--green-bg);color:var(--green);border:1px solid rgba(22,163,74,.2);border-radius:100px;padding:2px 9px">Preventivo</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>`; },
+
+  ];
+
+  let current = 0;
+  let autoTimer = null;
+  let progTimer = null;
+
+  function setScenario(idx, fromAuto) {
+    current = idx;
+    // Update tabs
+    document.querySelectorAll('.sc-tab').forEach((t,i) => {
+      t.classList.toggle('active', i === idx);
+    });
+    // Fade out/in content
+    const panel = document.getElementById('sc-content');
+    if (!panel) return;
+    panel.style.opacity = '0';
+    panel.style.transform = 'translateY(6px)';
+    setTimeout(() => {
+      panel.innerHTML = SCENARIOS[idx]();
+      panel.style.opacity = '1';
+      panel.style.transform = 'translateY(0)';
+    }, 200);
+    // Reset progress bar
+    resetProgress();
+  }
+
+  function resetProgress() {
+    const bar = document.getElementById('sc-progress');
+    if (!bar) return;
+    bar.style.transition = 'none';
+    bar.style.width = '0%';
+    clearTimeout(progTimer);
+    // Start after a tick
+    progTimer = setTimeout(() => {
+      bar.style.transition = 'width 4s linear';
+      bar.style.width = '100%';
+    }, 50);
+  }
+
+  function autoAdvance() {
+    current = (current + 1) % SCENARIOS.length;
+    setScenario(current, true);
+  }
+
+  // Init
+  window.setScenario = setScenario;
+  setScenario(0);
+  // Auto-cycle every 4.2s
+  setInterval(autoAdvance, 4200);
+
+})();
+
+// SMOOTH SCROLL
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}
+  });
+});
+</script>
+<!-- LOGIN MODAL -->
+<div id="login-overlay" onclick="closeLogin()" style="position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:500;display:none;align-items:center;justify-content:center;padding:20px">
+  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:14px;padding:36px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.18);position:relative">
+
+    <!-- Close -->
+    <button onclick="closeLogin()" style="position:absolute;top:16px;right:16px;width:28px;height:28px;border-radius:50%;border:1px solid var(--border2);background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:16px;line-height:1">×</button>
+
+    <!-- Logo -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:24px">
+      <div style="width:28px;height:28px;background:var(--text);border-radius:7px;display:flex;align-items:center;justify-content:center">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 6V12C4 15.31 7.58 19.5 12 21C16.42 19.5 20 15.31 20 12V6L12 2Z" fill="white" opacity="0.9"/></svg>
+      </div>
+      <span style="font-size:15px;font-weight:700;color:var(--text);letter-spacing:-.02em">Thruver</span>
+    </div>
+
+    <div style="font-size:20px;font-weight:800;color:var(--text);letter-spacing:-.04em;margin-bottom:6px">Iniciar sesión</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:24px">Si eres propietario, accede para ver el historial de tu propiedad, consultar tu expediente técnico y solicitar nuevos servicios desde tu dashboard.</div>
+
+    <!-- Form -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div>
+        <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);display:block;margin-bottom:6px">Correo electrónico</label>
+        <input id="login-email" type="email" placeholder="tu@correo.com"
+          style="width:100%;padding:11px 13px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;color:var(--text);background:var(--bg);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s;-webkit-appearance:none"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border2)'">
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <label style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text3)">Contraseña</label>
+          <a href="#" style="font-size:11px;color:var(--accent);font-weight:600">¿Olvidaste tu contraseña?</a>
+        </div>
+        <input id="login-pass" type="password" placeholder="••••••••"
+          style="width:100%;padding:11px 13px;border:1.5px solid var(--border2);border-radius:8px;font-size:14px;color:var(--text);background:var(--bg);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s;-webkit-appearance:none"
+          onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border2)'"
+          onkeydown="if(event.key==='Enter')submitLogin()">
+      </div>
+
+      <!-- Error message -->
+      <div id="login-error" style="display:none;font-size:12px;color:var(--red);background:var(--red-bg);border:1px solid rgba(220,38,38,.2);border-radius:6px;padding:8px 12px"></div>
+
+      <!-- Submit -->
+      <button onclick="submitLogin()" style="background:var(--accent);color:#fff;border:none;border-radius:8px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;box-shadow:0 3px 12px rgba(200,90,40,.3);transition:all .15s;margin-top:4px">
+        Entrar
+      </button>
+    </div>
+
+    <!-- Divider -->
+    <div style="display:flex;align-items:center;gap:10px;margin:20px 0">
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+      <span style="font-size:12px;color:var(--text3)">¿Eres técnico o partner?</span>
+      <div style="flex:1;height:1px;background:var(--border)"></div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <a href="landing-registro-tecnico.html" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border:1.5px solid var(--border2);border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);transition:all .15s;text-align:center" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94z"/></svg>
+        Soy técnico
+      </a>
+      <a href="thruver_-_partner.html" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;border:1.5px solid var(--border2);border-radius:8px;font-size:12px;font-weight:600;color:var(--text2);transition:all .15s;text-align:center" onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)'">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Soy partner
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function openLogin() {
+  const el = document.getElementById('login-overlay');
+  el.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => document.getElementById('login-email').focus(), 100);
+}
+function closeLogin() {
+  document.getElementById('login-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+function submitLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-pass').value;
+  const err   = document.getElementById('login-error');
+  if (!email || !pass) {
+    err.textContent = 'Completa ambos campos para continuar.';
+    err.style.display = 'block'; return;
+  }
+  if (!email.includes('@')) {
+    err.textContent = 'Ingresa un correo válido.';
+    err.style.display = 'block'; return;
+  }
+  err.style.display = 'none';
+  // Demo: redirect to dashboard
+  window.location.href = 'dashboard-usuario.html';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLogin(); });
+</script>
+
+</body>
+</html>

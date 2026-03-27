@@ -1,0 +1,1342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thruver — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f2f3f5;--bg-2:#eaebee;--bg-3:#e2e4e8;
+  --border:rgba(0,0,0,0.08);--border-2:rgba(0,0,0,0.14);
+  --text:#0d0d0d;--text-2:#555;--text-3:#999;
+  --accent:#f5a623;--accent-2:#d4880a;
+  --success:#16a34a;--success-bg:rgba(22,163,74,0.08);
+  --warn:#d97706;--warn-bg:rgba(217,119,6,0.08);
+  --danger:#dc2626;--info:#0284c7;
+  --sidebar-w:240px;--radius:12px;--radius-sm:8px;
+}
+html,body{height:100%;font-family:'Geist',-apple-system,sans-serif;font-size:14px;line-height:1.6;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* LAYOUT */
+.layout{display:flex;min-height:100vh}
+.main{flex:1;margin-left:var(--sidebar-w);padding:32px;max-width:calc(100vw - var(--sidebar-w));transition:margin-left 0.28s ease,max-width 0.28s ease}
+.layout.sb-hidden .main{margin-left:0;max-width:100vw}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:#0d0d0d;border-right:1px solid rgba(255,255,255,0.07);display:flex;flex-direction:column;z-index:50;padding:20px 12px;transition:transform 0.28s ease}
+.layout.sb-hidden .sidebar{transform:translateX(-100%)}
+
+/* Toggle pill button — sits on the right edge of the sidebar */
+.sb-toggle{position:fixed;bottom:24px;left:calc(var(--sidebar-w) - 14px);z-index:100;width:28px;height:28px;background:#1a1a1a;border:1px solid rgba(255,255,255,0.14);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:left 0.28s ease,background 0.15s,transform 0.28s ease}
+.sb-toggle:hover{background:#2a2a2a;border-color:rgba(255,255,255,0.28)}
+.layout.sb-hidden .sb-toggle{left:10px;transform:rotate(180deg)}
+.sb-logo{display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:28px;text-decoration:none}
+.sb-logo-icon{width:32px;height:32px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-logo-text{font-size:16px;font-weight:600;letter-spacing:-0.02em;color:#fff}
+.sb-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.25);padding:0 12px;margin:16px 0 6px}
+.sb-nav{list-style:none;display:flex;flex-direction:column;gap:2px}
+.sb-link{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);font-size:13px;font-weight:500;color:rgba(255,255,255,0.45);text-decoration:none;transition:all 0.15s;cursor:pointer;border:none;background:none;width:100%;text-align:left}
+.sb-link:hover{color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.06)}
+.sb-link.active{color:#fff;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.12)}
+.sb-footer{margin-top:auto;padding:12px;border-top:1px solid rgba(255,255,255,0.07)}
+.sb-user{display:flex;align-items:center;gap:10px}
+.sb-avatar{width:32px;height:32px;border-radius:50%;background:rgba(245,166,35,0.2);border:1px solid rgba(245,166,35,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#f5a623;flex-shrink:0}
+.sb-uname{font-size:12px;font-weight:600;color:#fff}
+.sb-uplan{font-size:10px;color:rgba(255,255,255,0.35)}
+
+/* PAGES */
+.page{display:none}.page.active{display:block}
+.page-header{margin-bottom:28px;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.page-title{font-size:22px;font-weight:700;letter-spacing:-0.03em}
+.page-sub{font-size:13px;color:var(--text-2);margin-top:4px}
+
+/* CARDS */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.card-dark{background:#0d0d0d;border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius);padding:20px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:600;color:var(--text)}
+.card-title-white{font-size:13px;font-weight:600;color:#fff}
+.card-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3)}
+
+/* METRICS */
+.metric-grid{display:grid;gap:12px;margin-bottom:24px}
+.metric-grid-4{grid-template-columns:repeat(4,1fr)}
+.metric-grid-3{grid-template-columns:repeat(3,1fr)}
+.metric-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px}
+.metric-label{font-size:11px;color:var(--text-3);font-weight:500;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px}
+.metric-value{font-size:28px;font-weight:700;letter-spacing:-0.04em;color:var(--text);line-height:1}
+.metric-sub{font-size:12px;color:var(--text-3);margin-top:4px}
+.c-up{color:var(--success)!important}.c-warn{color:var(--warn)!important}.c-white{color:#fff!important}
+
+/* SCORE RING */
+.score-wrap{display:flex;align-items:center;gap:20px}
+.score-ring{position:relative;width:88px;height:88px;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.ring-track{fill:none;stroke:var(--bg-3);stroke-width:6}
+.ring-fill{fill:none;stroke-width:6;stroke-linecap:round;transition:stroke-dashoffset 1.5s ease}
+.ring-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;letter-spacing:-0.03em}
+
+/* BAR */
+.sys-bar{margin-bottom:12px}
+.sys-bar-hd{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px}
+.bar-track{height:5px;background:var(--bg-3);border-radius:100px;overflow:hidden}
+.bar-fill{height:100%;border-radius:100px;transition:width 1s ease}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border)}
+.tl-item:last-child{border-bottom:none}
+.tl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.tl-title{font-size:13px;font-weight:600;color:var(--text)}
+.tl-meta{font-size:11px;color:var(--text-3);margin-top:2px;display:flex;gap:8px;align-items:center}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:100px;font-size:10px;font-weight:600}
+.b-ok{background:var(--success-bg);color:var(--success)}
+.b-warn{background:var(--warn-bg);color:var(--warn)}
+.b-info{background:rgba(2,132,199,0.08);color:var(--info)}
+.b-neutral{background:var(--bg-3);color:var(--text-2)}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 16px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;font-family:'Geist',sans-serif;cursor:pointer;border:none;transition:all 0.15s;text-decoration:none;white-space:nowrap}
+.btn-primary{background:#0d0d0d;color:#fff}.btn-primary:hover{background:#2a2a2a;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border-2)}.btn-outline:hover{background:var(--bg-3)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-lg{padding:12px 24px;font-size:14px}
+.btn-block{width:100%;justify-content:center}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.grid-auto{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-3);padding:0 16px 10px;text-align:left;border-bottom:1px solid var(--border)}
+td{padding:13px 16px;border-bottom:1px solid var(--border);color:var(--text-2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg)}
+
+/* FORM */
+.form-group{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.form-label{font-size:12px;font-weight:600;color:var(--text-2)}
+.form-input,.form-select,.form-textarea{background:var(--bg);border:1px solid var(--border-2);border-radius:var(--radius-sm);padding:10px 14px;color:var(--text);font-size:13px;font-family:'Geist',sans-serif;outline:none;transition:border-color 0.15s;width:100%;appearance:none}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:#0d0d0d}
+.form-textarea{resize:vertical;min-height:90px}
+
+/* REPORT ROWS */
+.rpt-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+.rpt-row:last-child{border-bottom:none}
+.rpt-lbl{color:var(--text-3)}
+.rpt-val{font-weight:600}
+.val-ok{color:var(--success)}.val-warn{color:var(--warn)}
+
+/* PREVENTION */
+.prev-item{display:flex;gap:10px;padding:10px;border-radius:var(--radius-sm);margin-bottom:8px;align-items:flex-start}
+.prev-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.prev-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;margin-bottom:2px}
+.prev-text{font-size:12px;line-height:1.5}
+.prev-time{font-size:10px;margin-top:2px;font-family:'Geist Mono',monospace;opacity:0.65}
+.prev-warn{background:rgba(245,166,35,0.08);border:1px solid rgba(245,166,35,0.2)}
+.prev-danger{background:rgba(220,38,38,0.07);border:1px solid rgba(220,38,38,0.15)}
+.prev-info{background:rgba(2,132,199,0.07);border:1px solid rgba(2,132,199,0.15)}
+
+/* TECH CARD */
+.tech-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;flex-direction:column;gap:14px;transition:all 0.2s}
+.tech-card:hover{border-color:var(--border-2);box-shadow:0 4px 16px rgba(0,0,0,0.06)}
+.tech-av{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;border:2px solid;flex-shrink:0}
+.tech-name{font-size:15px;font-weight:700;letter-spacing:-0.02em}
+.tech-spec{font-size:12px;color:var(--text-3);margin-top:2px}
+.tech-cert{font-size:10px;padding:2px 8px;border-radius:100px;background:var(--bg-3);color:var(--text-2);font-weight:500}
+
+/* SERVICE TYPE BUTTONS */
+.svc-type-btn{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid var(--border-2);background:#fff;cursor:pointer;font-size:12px;font-weight:600;color:var(--text-2);transition:all 0.15s;font-family:'Geist',sans-serif;text-align:left}
+.svc-type-btn.selected{border-width:1.5px}
+
+/* URGENCY BUTTONS */
+.urg-btn{flex:1;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--border-2);background:#fff;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'Geist',sans-serif}
+.urg-btn.selected{background:#0d0d0d;border-color:#0d0d0d}
+.urg-label{font-size:12px;font-weight:700;margin-bottom:2px}
+.urg-desc{font-size:10px;line-height:1.4;color:var(--text-3)}
+.urg-btn.selected .urg-label{color:#fff}
+.urg-btn.selected .urg-desc{color:rgba(255,255,255,0.45)}
+
+/* VERTICAL LINES */
+body::after{content:'';display:none}
+
+/* SUCCESS STATE */
+.success-state{display:none;text-align:center;padding:48px 24px;max-width:480px;margin:0 auto}
+.success-icon{width:56px;height:56px;border-radius:50%;background:rgba(22,163,74,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+
+/* MONO */
+.mono{font-family:'Geist Mono',monospace;font-size:12px}
+
+/* REPORT DETAIL */
+.report-detail{display:none}.report-detail.active{display:block}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bg-3);border-radius:3px}
+
+/* ANIMATIONS */
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page.active{animation:fadeIn 0.25s ease}
+</style>
+</head>
+<body>
+<div class="layout" id="layout">
+
+<!-- SIDEBAR TOGGLE BUTTON -->
+<button class="sb-toggle" onclick="toggleSidebar()" title="Ocultar menú">
+  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="15 18 9 12 15 6"/>
+  </svg>
+</button>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <a class="sb-logo" href="#">
+    <div class="sb-logo-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </div>
+    <span class="sb-logo-text">thruver</span>
+  </a>
+  <p class="sb-label">Principal</p>
+  <ul class="sb-nav">
+    <li><button class="sb-link active" onclick="goTo('dashboard')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Dashboard
+    </button></li>
+    <li><button class="sb-link" onclick="goTo('historial')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+      Historial
+    </button></li>
+    <li><button class="sb-link" onclick="goTo('solicitar')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Nuevo servicio
+    </button></li>
+    <li><button class="sb-link" onclick="goTo('reportes')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Bitácora preventiva
+    </button></li>
+    <li><button class="sb-link" onclick="goTo('tecnicos')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      Mis técnicos
+    </button></li>
+  </ul>
+  <div class="sb-footer">
+    <div class="sb-user">
+      <div class="sb-avatar">CI</div>
+      <div>
+        <div class="sb-uname">Carlos Inzunza</div>
+        <div class="sb-uplan">Plan Hogar Plus</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ═══════════════ DASHBOARD ═══════════════ -->
+<div id="page-dashboard" class="page active">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Bienvenido, Carlos 👋</h1>
+      <p class="page-sub">Av. Álvaro Obregón 1420, Col. Las Quintas, Culiacán, Sinaloa</p>
+    </div>
+  </div>
+
+  <div class="metric-grid metric-grid-4">
+    <div class="metric-card">
+      <div class="metric-label">Score del hogar</div>
+      <div class="metric-value c-up">89<span style="font-size:16px;color:var(--text-3)">/100</span></div>
+      <div class="metric-sub c-up">↑ 4 pts este mes</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Servicios totales</div>
+      <div class="metric-value">18</div>
+      <div class="metric-sub">desde Mar 2023</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Plan activo</div>
+      <div class="metric-value" style="font-size:18px;padding-top:4px">Hogar Plus</div>
+      <div class="metric-sub">Garantía 90 días</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Próximo servicio</div>
+      <div class="metric-value" style="font-size:16px;padding-top:4px">HVAC</div>
+      <div class="metric-sub">5 de abril 2026</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:20px">
+    <!-- Score card -->
+    <div class="card">
+      <div class="card-header"><span class="card-title">Score de salud</span></div>
+      <div class="score-wrap">
+        <div class="score-ring">
+          <svg viewBox="0 0 88 88" width="88" height="88">
+            <circle class="ring-track" cx="44" cy="44" r="38"/>
+            <circle class="ring-fill" cx="44" cy="44" r="38" id="scoreCircle"
+              style="stroke:#16a34a;stroke-dasharray:238.76;stroke-dashoffset:26.26"/>
+          </svg>
+          <div class="ring-num" style="color:#16a34a">89</div>
+        </div>
+        <div>
+          <div style="font-size:15px;font-weight:700;margin-bottom:4px">Excelente estado</div>
+          <div style="font-size:12px;color:var(--text-3);line-height:1.6">Tu hogar está siendo monitoreado en 5 sistemas activos.</div>
+        </div>
+      </div>
+      <div style="margin-top:20px">
+        <div class="sys-bar">
+          <div class="sys-bar-hd"><span style="color:var(--text-2);font-weight:500;font-size:12px">Eléctrico</span><span style="font-weight:700;color:#16a34a;font-family:'Geist Mono';font-size:11px">94%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:94%;background:#16a34a"></div></div>
+        </div>
+        <div class="sys-bar">
+          <div class="sys-bar-hd"><span style="color:var(--text-2);font-weight:500;font-size:12px">Plomería</span><span style="font-weight:700;color:#16a34a;font-family:'Geist Mono';font-size:11px">88%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:88%;background:#16a34a"></div></div>
+        </div>
+        <div class="sys-bar">
+          <div class="sys-bar-hd"><span style="color:var(--text-2);font-weight:500;font-size:12px">HVAC</span><span style="font-weight:700;color:#d97706;font-family:'Geist Mono';font-size:11px">61%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:61%;background:#d97706"></div></div>
+        </div>
+        <div class="sys-bar">
+          <div class="sys-bar-hd"><span style="color:var(--text-2);font-weight:500;font-size:12px">Estructura</span><span style="font-weight:700;color:#16a34a;font-family:'Geist Mono';font-size:11px">97%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:97%;background:#16a34a"></div></div>
+        </div>
+        <div class="sys-bar" style="margin-bottom:0">
+          <div class="sys-bar-hd"><span style="color:var(--text-2);font-weight:500;font-size:12px">Techo</span><span style="font-weight:700;color:#16a34a;font-family:'Geist Mono';font-size:11px">82%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="width:82%;background:#16a34a"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:16px">
+      <!-- Next service dark card -->
+      <div class="card-dark">
+        <div class="card-header">
+          <span class="card-title-white">Próximo mantenimiento</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div style="font-size:17px;font-weight:700;color:#fff;letter-spacing:-0.02em;margin-bottom:6px">Mantenimiento HVAC</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.45);margin-bottom:14px">Domingo, 5 de abril de 2026</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:28px;height:28px;border-radius:50%;background:rgba(245,166,35,0.15);border:1px solid rgba(245,166,35,0.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#f5a623">MT</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.5)">Miguel Torres · Asignado por Thruver</div>
+        </div>
+        <div style="margin-top:14px"><span style="font-size:11px;background:rgba(22,163,74,0.15);color:#4ade80;padding:3px 10px;border-radius:100px;font-weight:600">● Confirmado</span></div>
+      </div>
+
+      <!-- Recent activity -->
+      <div class="card" style="flex:1">
+        <div class="card-header">
+          <span class="card-title">Actividad reciente</span>
+        </div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot" style="background:#f5a623"></div>
+            <div>
+              <div class="tl-title">Revisión sistema eléctrico</div>
+              <div class="tl-meta"><span class="mono">12 Mar</span><span class="badge b-ok">Completado</span></div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:#00c2ff"></div>
+            <div>
+              <div class="tl-title">Servicio de plomería</div>
+              <div class="tl-meta"><span class="mono">28 Feb</span><span class="badge b-ok">Completado</span></div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:#a78bfa"></div>
+            <div>
+              <div class="tl-title">Limpieza profunda</div>
+              <div class="tl-meta"><span class="mono">10 Feb</span><span class="badge b-ok">Completado</span></div>
+            </div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot" style="background:#4ade80"></div>
+            <div>
+              <div class="tl-title">Mantenimiento HVAC</div>
+              <div class="tl-meta"><span class="mono">5 Abr</span><span class="badge b-info">Programado</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ HISTORIAL ═══════════════ -->
+<div id="page-historial" class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Historial de servicios</h1>
+      <p class="page-sub">Registro completo de todos los servicios realizados en tu hogar</p>
+    </div>
+    <button class="btn btn-primary" onclick="goTo('solicitar')">+ Solicitar servicio</button>
+  </div>
+
+  <div class="metric-grid metric-grid-3">
+    <div class="metric-card"><div class="metric-label">Total realizados</div><div class="metric-value">4</div><div class="metric-sub">servicios completados</div></div>
+    <div class="metric-card"><div class="metric-label">Programados</div><div class="metric-value c-warn">1</div><div class="metric-sub">próximamente</div></div>
+    <div class="metric-card"><div class="metric-label">Horas de servicio</div><div class="metric-value">9h</div><div class="metric-sub">540 minutos totales</div></div>
+  </div>
+
+  <div class="card" style="padding:0">
+    <div style="padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+      <span class="card-title">Todos los servicios</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>Servicio</th><th>Categoría</th><th>Fecha</th><th>Técnico</th><th>Duración</th><th>Costo</th><th>Estado</th><th>Reporte</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:#f5a623;flex-shrink:0"></div><span style="font-weight:600;color:var(--text)">Revisión eléctrica</span></div></td>
+            <td>Eléctrico</td><td class="mono">12 Mar 2026</td><td>Carlos Mendoza</td><td class="mono">135 min</td>
+            <td class="mono" style="font-weight:600;color:var(--success)">Incluido</td>
+            <td><span class="badge b-ok">Completado</span></td>
+            <td><button class="btn btn-outline btn-sm" onclick="openDrawer_rpt('rpt-001')">Ver reporte</button></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:#00c2ff;flex-shrink:0"></div><span style="font-weight:600;color:var(--text)">Servicio de plomería</span></div></td>
+            <td>Plomería</td><td class="mono">28 Feb 2026</td><td>Sofía Lizárraga</td><td class="mono">90 min</td>
+            <td class="mono" style="font-weight:600;color:var(--success)">Incluido</td>
+            <td><span class="badge b-ok">Completado</span></td>
+            <td><button class="btn btn-outline btn-sm" onclick="openDrawer_rpt('rpt-002')">Ver reporte</button></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:#a78bfa;flex-shrink:0"></div><span style="font-weight:600;color:var(--text)">Limpieza profunda</span></div></td>
+            <td>Limpieza</td><td class="mono">10 Feb 2026</td><td>Ana Ramírez</td><td class="mono">240 min</td>
+            <td class="mono" style="font-weight:600;color:var(--success)">Incluido</td>
+            <td><span class="badge b-ok">Completado</span></td>
+            <td><span style="color:var(--text-3);font-size:12px">—</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0"></div><span style="font-weight:600;color:var(--text)">Inspección de techo</span></div></td>
+            <td>Estructura</td><td class="mono">20 Ene 2026</td><td>Miguel Torres</td><td class="mono">75 min</td>
+            <td class="mono" style="font-weight:600;color:var(--success)">Incluido</td>
+            <td><span class="badge b-ok">Completado</span></td>
+            <td><span style="color:var(--text-3);font-size:12px">—</span></td>
+          </tr>
+          <tr>
+            <td><div style="display:flex;align-items:center;gap:8px"><div style="width:8px;height:8px;border-radius:50%;background:#4ade80;flex-shrink:0"></div><span style="font-weight:600;color:var(--text)">Mantenimiento HVAC</span></div></td>
+            <td>HVAC</td><td class="mono">5 Abr 2026</td><td>Miguel Torres</td><td class="mono">—</td>
+            <td class="mono" style="color:var(--text-3)">Pendiente</td>
+            <td><span class="badge b-info">Programado</span></td>
+            <td><span style="color:var(--text-3);font-size:12px">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SOLICITAR ═══════════════ -->
+<div id="page-solicitar" class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Solicitar servicio</h1>
+      <p class="page-sub">Thruver seleccionará y asignará al técnico certificado más adecuado para tu hogar</p>
+    </div>
+  </div>
+
+  <!-- Success state -->
+  <div class="success-state" id="successState">
+    <div class="success-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+    </div>
+    <div style="font-size:18px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px">Solicitud recibida</div>
+    <div style="font-size:13px;color:var(--text-2);margin-bottom:6px">Tu solicitud fue enviada exitosamente.</div>
+    <div style="font-size:12px;color:var(--text-3);margin-bottom:28px">Thruver asignará al técnico más adecuado. Recibirás confirmación en los próximos minutos.</div>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="btn btn-primary" onclick="resetForm()">Nueva solicitud</button>
+      <button class="btn btn-outline" onclick="goTo('historial')">Ver historial</button>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div id="requestForm" style="display:grid;grid-template-columns:1fr 340px;gap:20px;align-items:start">
+    <div>
+      <!-- Service type -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><span class="card-title">Tipo de servicio</span></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px" id="serviceTypeGrid"></div>
+      </div>
+
+      <!-- Description -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><span class="card-title">Describe el problema</span></div>
+        <div class="form-group" style="margin-bottom:0">
+          <textarea class="form-textarea" id="reqDescription" placeholder="Ej. El interruptor del cuarto principal parpadea al encender las luces..."></textarea>
+        </div>
+      </div>
+
+      <!-- Urgency -->
+      <div class="card" style="margin-bottom:16px">
+        <div class="card-header"><span class="card-title">Urgencia</span></div>
+        <div style="display:flex;gap:8px">
+          <button class="urg-btn" data-urg="low" onclick="setUrgency(this)">
+            <div class="urg-label">Baja</div><div class="urg-desc">Sin prisa, en los próximos 30 días</div>
+          </button>
+          <button class="urg-btn selected" data-urg="medium" onclick="setUrgency(this)">
+            <div class="urg-label">Media</div><div class="urg-desc">Esta semana si es posible</div>
+          </button>
+          <button class="urg-btn" data-urg="high" onclick="setUrgency(this)">
+            <div class="urg-label">Alta</div><div class="urg-desc">Lo antes posible, urgente</div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Date & time -->
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-header"><span class="card-title">Fecha y horario preferido</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Fecha</label>
+            <input type="date" class="form-input" id="reqDate">
+          </div>
+          <div class="form-group" style="margin-bottom:0">
+            <label class="form-label">Horario</label>
+            <select class="form-select" id="reqTime">
+              <option>9:00 AM – 11:00 AM</option>
+              <option>11:00 AM – 1:00 PM</option>
+              <option>2:00 PM – 4:00 PM</option>
+              <option>4:00 PM – 6:00 PM</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-block" onclick="submitRequest()">Solicitar técnico →</button>
+    </div>
+
+    <!-- Info panel -->
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <div class="card-dark">
+        <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:12px">¿Cómo funciona?</div>
+        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start">
+          <div style="width:22px;height:22px;border-radius:50%;background:rgba(245,166,35,0.2);border:1px solid rgba(245,166,35,0.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#f5a623;flex-shrink:0">1</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5">Envías tu solicitud con el problema</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start">
+          <div style="width:22px;height:22px;border-radius:50%;background:rgba(0,194,255,0.2);border:1px solid rgba(0,194,255,0.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#00c2ff;flex-shrink:0">2</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5">Thruver asigna al técnico ideal</div>
+        </div>
+        <div style="display:flex;gap:10px;margin-bottom:12px;align-items:flex-start">
+          <div style="width:22px;height:22px;border-radius:50%;background:rgba(74,222,128,0.2);border:1px solid rgba(74,222,128,0.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#4ade80;flex-shrink:0">3</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5">El técnico llega en el horario acordado</div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <div style="width:22px;height:22px;border-radius:50%;background:rgba(167,139,250,0.2);border:1px solid rgba(167,139,250,0.3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#a78bfa;flex-shrink:0">4</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.55);line-height:1.5">Recibes tu reporte técnico detallado</div>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:8px">Garantía Thruver</div>
+        <div style="font-size:12px;color:var(--text-2);line-height:1.6">Todos los servicios incluyen <strong>90 días de garantía</strong>. Si algo falla después de la visita, el técnico regresa sin costo.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ BITÁCORA PREVENTIVA ═══════════════ -->
+<div id="page-reportes" class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Bitácora preventiva</h1>
+      <p class="page-sub">Registro cronológico de todas las visitas técnicas de tu hogar</p>
+    </div>
+    <button class="btn btn-primary" onclick="goTo('solicitar')">+ Programar visita</button>
+  </div>
+
+  <!-- Stats strip -->
+  <div class="metric-grid metric-grid-3" style="margin-bottom:28px">
+    <div class="metric-card">
+      <div class="metric-label">Visitas registradas</div>
+      <div class="metric-value">3</div>
+      <div class="metric-sub">desde Feb 2026</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Puntos inspeccionados</div>
+      <div class="metric-value">19</div>
+      <div class="metric-sub">en todas las visitas</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Pendientes de atención</div>
+      <div class="metric-value c-warn">2</div>
+      <div class="metric-sub">recomendaciones activas</div>
+    </div>
+  </div>
+
+  <!-- Timeline bitacora -->
+  <div style="position:relative">
+
+    <!-- vertical spine -->
+    <div style="position:absolute;left:19px;top:24px;bottom:0;width:2px;background:linear-gradient(to bottom,var(--border-2),var(--border));border-radius:2px;z-index:0"></div>
+
+    <!-- ─── ENTRADA 1 ─── -->
+    <div style="position:relative;margin-bottom:16px">
+      <div style="display:flex;gap:16px;align-items:flex-start">
+        <!-- dot -->
+        <div style="width:40px;height:40px;border-radius:50%;background:#f5a62322;border:2px solid #f5a623;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;position:relative">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2.2" stroke-linecap="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        </div>
+        <!-- card -->
+        <div class="card bk-card" id="bk-v001" style="flex:1;cursor:pointer" onclick="toggleBk('v001')">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px;flex:1;min-width:0">
+              <div>
+                <div style="font-size:10px;font-family:'Geist Mono';color:var(--text-3);margin-bottom:2px">BP-001 · 12 Mar 2026</div>
+                <div style="font-size:15px;font-weight:700;letter-spacing:-0.02em;color:var(--text)">Revisión eléctrica general</div>
+                <div style="font-size:12px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:6px">
+                  <span style="font-family:'Geist Mono'">Carlos Mendoza</span> · 135 min
+                </div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
+              <div style="text-align:right">
+                <div style="font-size:22px;font-weight:700;color:#16a34a;letter-spacing:-0.03em;line-height:1">94</div>
+                <div style="font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em">score</div>
+              </div>
+              <div style="display:flex;gap:4px;flex-wrap:wrap;max-width:200px">
+                <span class="badge b-ok">✓ Panel</span>
+                <span class="badge b-ok">✓ Voltaje</span>
+                <span class="badge b-warn">⚠ Circuito</span>
+              </div>
+              <svg id="arr-v001" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round" style="transition:transform 0.25s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <!-- expanded body -->
+          <div id="bkbody-v001" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+            <div id="bkbodycontent-v001"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── ENTRADA 2 ─── -->
+    <div style="position:relative;margin-bottom:16px">
+      <div style="display:flex;gap:16px;align-items:flex-start">
+        <div style="width:40px;height:40px;border-radius:50%;background:#00c2ff22;border:2px solid #00c2ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;position:relative">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00c2ff" stroke-width="2.2" stroke-linecap="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        </div>
+        <div class="card bk-card" id="bk-v002" style="flex:1;cursor:pointer" onclick="toggleBk('v002')">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10px;font-family:'Geist Mono';color:var(--text-3);margin-bottom:2px">BP-002 · 28 Feb 2026</div>
+              <div style="font-size:15px;font-weight:700;letter-spacing:-0.02em;color:var(--text)">Servicio de plomería</div>
+              <div style="font-size:12px;color:var(--text-3);margin-top:3px"><span style="font-family:'Geist Mono'">Sofía Lizárraga</span> · 90 min</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
+              <div style="text-align:right">
+                <div style="font-size:22px;font-weight:700;color:#16a34a;letter-spacing:-0.03em;line-height:1">88</div>
+                <div style="font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em">score</div>
+              </div>
+              <div style="display:flex;gap:4px;flex-wrap:wrap;max-width:200px">
+                <span class="badge b-ok">✓ Sin fugas</span>
+                <span class="badge b-ok">✓ Presión</span>
+                <span class="badge b-warn">⚠ Calentador</span>
+              </div>
+              <svg id="arr-v002" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round" style="transition:transform 0.25s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div id="bkbody-v002" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+            <div id="bkbodycontent-v002"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── ENTRADA 3 ─── -->
+    <div style="position:relative;margin-bottom:16px">
+      <div style="display:flex;gap:16px;align-items:flex-start">
+        <div style="width:40px;height:40px;border-radius:50%;background:#a78bfa22;border:2px solid #a78bfa;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;position:relative">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2.2" stroke-linecap="round"><path d="M13 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+        </div>
+        <div class="card bk-card" id="bk-v003" style="flex:1;cursor:pointer" onclick="toggleBk('v003')">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="flex:1;min-width:0">
+              <div style="font-size:10px;font-family:'Geist Mono';color:var(--text-3);margin-bottom:2px">BP-003 · 10 Feb 2026</div>
+              <div style="font-size:15px;font-weight:700;letter-spacing:-0.02em;color:var(--text)">Limpieza profunda</div>
+              <div style="font-size:12px;color:var(--text-3);margin-top:3px"><span style="font-family:'Geist Mono'">Ana Ramírez</span> · 240 min</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
+              <div style="text-align:right">
+                <div style="font-size:22px;font-weight:700;color:#16a34a;letter-spacing:-0.03em;line-height:1">100</div>
+                <div style="font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em">score</div>
+              </div>
+              <div style="display:flex;gap:4px;flex-wrap:wrap;max-width:200px">
+                <span class="badge b-ok">✓ Cocina</span>
+                <span class="badge b-ok">✓ Baños</span>
+                <span class="badge b-ok">✓ Recámaras</span>
+              </div>
+              <svg id="arr-v003" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round" style="transition:transform 0.25s;flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+          </div>
+          <div id="bkbody-v003" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+            <div id="bkbodycontent-v003"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── PRÓXIMA (programada) ─── -->
+    <div style="position:relative;margin-bottom:4px;opacity:0.6">
+      <div style="display:flex;gap:16px;align-items:flex-start">
+        <div style="width:40px;height:40px;border-radius:50%;background:var(--bg-3);border:2px dashed var(--border-2);display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1;position:relative">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="card" style="flex:1;border-style:dashed;display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div>
+            <div style="font-size:10px;font-family:'Geist Mono';color:var(--text-3);margin-bottom:2px">PRÓXIMA · 5 Abr 2026</div>
+            <div style="font-size:15px;font-weight:700;letter-spacing:-0.02em;color:var(--text)">Mantenimiento HVAC</div>
+            <div style="font-size:12px;color:var(--text-3);margin-top:3px">Miguel Torres · confirmado por Thruver</div>
+          </div>
+          <span class="badge b-info">Programado</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══════════════ TÉCNICOS ═══════════════ -->
+<div id="page-tecnicos" class="page">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Mis técnicos</h1>
+      <p class="page-sub">Técnicos certificados asignados a tu hogar por Thruver</p>
+    </div>
+  </div>
+
+  <div class="metric-grid metric-grid-3">
+    <div class="metric-card"><div class="metric-label">Técnicos asignados</div><div class="metric-value">4</div><div class="metric-sub">todos verificados</div></div>
+    <div class="metric-card"><div class="metric-label">Disponibles ahora</div><div class="metric-value c-up">3</div><div class="metric-sub">para nueva solicitud</div></div>
+    <div class="metric-card"><div class="metric-label">Calificación promedio</div><div class="metric-value">4.9<span style="font-size:14px;color:var(--text-3)">★</span></div><div class="metric-sub">sobre 5.0</div></div>
+  </div>
+
+  <div class="grid-auto" style="margin-bottom:20px">
+    <!-- Tech 1 -->
+    <div class="tech-card">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="tech-av" style="background:rgba(245,166,35,0.12);border-color:rgba(245,166,35,0.3);color:#f5a623">CM</div>
+        <div style="flex:1"><div class="tech-name">Carlos Mendoza</div><div class="tech-spec">Electricidad residencial</div></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#16a34a;flex-shrink:0" title="Disponible"></div>
+      </div>
+      <div style="display:flex;gap:16px;font-size:12px">
+        <div style="display:flex;align-items:center;gap:4px"><span style="color:#f5a623">★</span><span style="font-weight:700">5.0</span><span style="color:var(--text-3)">calificación</span></div>
+        <div style="display:flex;align-items:center;gap:4px;color:var(--text-3)">✓ 142 servicios</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px"><span class="tech-cert">✓ NOM-001-SEDE</span><span class="tech-cert">✓ IMSS verificado</span></div>
+      <div style="font-size:11px;color:var(--text-3);border-top:1px solid var(--border);padding-top:12px">Último servicio: 12 de marzo de 2026</div>
+      <button class="btn btn-primary btn-sm btn-block" onclick="goTo('solicitar')">Solicitar este técnico</button>
+    </div>
+
+    <!-- Tech 2 -->
+    <div class="tech-card">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="tech-av" style="background:rgba(0,194,255,0.12);border-color:rgba(0,194,255,0.3);color:#00c2ff">SL</div>
+        <div style="flex:1"><div class="tech-name">Sofía Lizárraga</div><div class="tech-spec">Plomería y tuberías</div></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#16a34a;flex-shrink:0"></div>
+      </div>
+      <div style="display:flex;gap:16px;font-size:12px">
+        <div style="display:flex;align-items:center;gap:4px"><span style="color:#f5a623">★</span><span style="font-weight:700">4.9</span><span style="color:var(--text-3)">calificación</span></div>
+        <div style="display:flex;align-items:center;gap:4px;color:var(--text-3)">✓ 98 servicios</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px"><span class="tech-cert">✓ Certificada CNA</span></div>
+      <div style="font-size:11px;color:var(--text-3);border-top:1px solid var(--border);padding-top:12px">Último servicio: 28 de febrero de 2026</div>
+      <button class="btn btn-primary btn-sm btn-block" onclick="goTo('solicitar')">Solicitar este técnico</button>
+    </div>
+
+    <!-- Tech 3 -->
+    <div class="tech-card">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="tech-av" style="background:rgba(74,222,128,0.12);border-color:rgba(74,222,128,0.3);color:#4ade80">MT</div>
+        <div style="flex:1"><div class="tech-name">Miguel Torres</div><div class="tech-spec">HVAC y climatización</div></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#16a34a;flex-shrink:0"></div>
+      </div>
+      <div style="display:flex;gap:16px;font-size:12px">
+        <div style="display:flex;align-items:center;gap:4px"><span style="color:#f5a623">★</span><span style="font-weight:700">4.8</span><span style="color:var(--text-3)">calificación</span></div>
+        <div style="display:flex;align-items:center;gap:4px;color:var(--text-3)">✓ 210 servicios</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px"><span class="tech-cert">✓ ASHRAE</span><span class="tech-cert">✓ IMSS verificado</span></div>
+      <div style="font-size:11px;color:var(--text-3);border-top:1px solid var(--border);padding-top:12px">Último servicio: 20 de enero de 2026</div>
+      <button class="btn btn-primary btn-sm btn-block" onclick="goTo('solicitar')">Solicitar este técnico</button>
+    </div>
+
+    <!-- Tech 4 -->
+    <div class="tech-card">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div class="tech-av" style="background:rgba(167,139,250,0.12);border-color:rgba(167,139,250,0.3);color:#a78bfa">AR</div>
+        <div style="flex:1"><div class="tech-name">Ana Ramírez</div><div class="tech-spec">Limpieza profesional</div></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#d1d5db;flex-shrink:0" title="No disponible"></div>
+      </div>
+      <div style="display:flex;gap:16px;font-size:12px">
+        <div style="display:flex;align-items:center;gap:4px"><span style="color:#f5a623">★</span><span style="font-weight:700">5.0</span><span style="color:var(--text-3)">calificación</span></div>
+        <div style="display:flex;align-items:center;gap:4px;color:var(--text-3)">✓ 76 servicios</div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px"><span class="tech-cert">✓ Verificada Thruver</span></div>
+      <div style="font-size:11px;color:var(--text-3);border-top:1px solid var(--border);padding-top:12px">Último servicio: 10 de febrero de 2026</div>
+      <button class="btn btn-outline btn-sm btn-block" disabled style="opacity:0.5;cursor:not-allowed">No disponible</button>
+    </div>
+  </div>
+
+  <!-- Trust note -->
+  <div class="card-dark" style="display:flex;align-items:center;gap:16px">
+    <div style="width:40px;height:40px;border-radius:50%;background:rgba(245,166,35,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    </div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:2px">Thruver selecciona al técnico por ti</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6">Al solicitar un servicio, Thruver analiza disponibilidad, especialidad, calificación y ubicación para asignarte al mejor técnico certificado.</div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+/* ── DATA ── */
+const SERVICE_TYPES = [
+  {id:'electrical',label:'Revisión eléctrica',color:'#f5a623'},
+  {id:'plumbing',label:'Plomería',color:'#00c2ff'},
+  {id:'hvac',label:'Mantenimiento HVAC',color:'#4ade80'},
+  {id:'cleaning',label:'Limpieza profunda',color:'#a78bfa'},
+  {id:'carpentry',label:'Carpintería',color:'#fb923c'},
+  {id:'painting',label:'Pintura interior',color:'#f472b6'},
+  {id:'inspection',label:'Inspección general',color:'#38bdf8'},
+  {id:'roof',label:'Inspección de techo',color:'#4ade80'},
+  {id:'gardening',label:'Jardinería',color:'#86efac'},
+  {id:'pest',label:'Control de plagas',color:'#fbbf24'},
+];
+
+const REPORTS = {
+  'rpt-001': {
+    code:'RT-2892', title:'Revisión eléctrica general',
+    date:'12 de marzo de 2026', technician:'Carlos Mendoza', duration:135,
+    score:94, scoreColor:'#16a34a',
+    findings:[
+      {label:'Panel principal',value:'Sin anomalías',status:'ok'},
+      {label:'Voltaje línea 1',value:'127V — Normal',status:'ok'},
+      {label:'Toma a tierra',value:'Correcta',status:'ok'},
+      {label:'Circuito cocina',value:'Revisar en 6 meses',status:'warn'},
+      {label:'Garantía activa',value:'90 días',status:'ok'},
+    ],
+    prevention:[
+      {level:'warn',text:'Revisar toma de tierra en área de lavandería antes de Sep 2026.',timeline:'6 meses'},
+      {level:'info',text:'Limpieza de tablero recomendada anualmente.',timeline:'12 meses'},
+    ],
+  },
+  'rpt-002': {
+    code:'RT-2891', title:'Servicio de plomería',
+    date:'28 de febrero de 2026', technician:'Sofía Lizárraga', duration:90,
+    score:88, scoreColor:'#16a34a',
+    findings:[
+      {label:'Tuberías principales',value:'Sin fugas',status:'ok'},
+      {label:'Presión del agua',value:'38 PSI — Normal',status:'ok'},
+      {label:'Calentador',value:'Vida útil: 3 años',status:'warn'},
+      {label:'Garantía activa',value:'90 días',status:'ok'},
+    ],
+    prevention:[
+      {level:'warn',text:'Calentador con 14 años — revisar en próximos 12 meses.',timeline:'12 meses'},
+    ],
+  },
+};
+
+/* ── SIDEBAR TOGGLE ── */
+function toggleSidebar() {
+  document.getElementById('layout').classList.toggle('sb-hidden');
+}
+
+/* ── NAVIGATION ── */
+let currentPage = 'dashboard';
+function goTo(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sb-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  document.querySelectorAll('.sb-link').forEach(l => {
+    if (l.getAttribute('onclick') && l.getAttribute('onclick').includes("'" + id + "'")) l.classList.add('active');
+  });
+  currentPage = id;
+  if (id === 'reportes') { hideReport(); }
+  window.scrollTo(0,0);
+}
+
+/* ── SERVICE TYPE GRID ── */
+let selectedType = '';
+function buildServiceTypes() {
+  const grid = document.getElementById('serviceTypeGrid');
+  grid.innerHTML = SERVICE_TYPES.map(t => `
+    <button class="svc-type-btn" id="stype-${t.id}" onclick="selectType('${t.id}')" style="--c:${t.color}">
+      <div style="width:6px;height:6px;border-radius:50%;background:${t.color};flex-shrink:0"></div>
+      ${t.label}
+    </button>
+  `).join('');
+}
+function selectType(id) {
+  selectedType = id;
+  const t = SERVICE_TYPES.find(x => x.id === id);
+  document.querySelectorAll('.svc-type-btn').forEach(b => {
+    b.style.borderColor = 'var(--border-2)';
+    b.style.background  = '#fff';
+    b.style.color       = 'var(--text-2)';
+    b.style.borderWidth = '1px';
+  });
+  const btn = document.getElementById('stype-' + id);
+  if (btn && t) {
+    btn.style.borderColor  = t.color;
+    btn.style.background   = t.color + '12';
+    btn.style.color        = t.color;
+    btn.style.borderWidth  = '1.5px';
+  }
+}
+
+/* ── URGENCY ── */
+function setUrgency(btn) {
+  document.querySelectorAll('.urg-btn').forEach(b => {
+    b.classList.remove('selected');
+    b.style.background = '#fff';
+    b.style.borderColor = 'var(--border-2)';
+    b.querySelector('.urg-label').style.color = 'var(--text)';
+    b.querySelector('.urg-desc').style.color = 'var(--text-3)';
+  });
+  btn.classList.add('selected');
+  const urg = btn.dataset.urg;
+  const colors = { low: '#6b7280', medium: '#d97706', high: '#dc2626' };
+  const bgs    = { low: 'rgba(107,114,128,0.08)', medium: 'rgba(217,119,6,0.08)', high: 'rgba(220,38,38,0.07)' };
+  const borders= { low: 'rgba(107,114,128,0.35)', medium: 'rgba(217,119,6,0.4)', high: 'rgba(220,38,38,0.35)' };
+  btn.style.background   = bgs[urg];
+  btn.style.borderColor  = borders[urg];
+  btn.querySelector('.urg-label').style.color = colors[urg];
+  btn.querySelector('.urg-desc').style.color  = colors[urg];
+  btn.style.borderWidth = '1.5px';
+}
+// init medium selected on load
+document.addEventListener('DOMContentLoaded', () => {
+  const med = document.querySelector('.urg-btn[data-urg="medium"]');
+  if (med) setUrgency(med);
+});
+
+/* ── SUBMIT ── */
+function submitRequest() {
+  const desc = document.getElementById('reqDescription').value.trim();
+  if (!selectedType || !desc) { alert('Por favor selecciona un tipo de servicio y describe el problema.'); return; }
+  document.getElementById('requestForm').style.display = 'none';
+  document.getElementById('successState').style.display = 'block';
+}
+function resetForm() {
+  selectedType = '';
+  document.getElementById('reqDescription').value = '';
+  document.getElementById('reqDate').value = '';
+  document.querySelectorAll('.urg-btn').forEach((b,i) => b.classList.toggle('selected', i===1));
+  buildServiceTypes();
+  document.getElementById('requestForm').style.display = 'grid';
+  document.getElementById('successState').style.display = 'none';
+}
+
+/* ── REPORTS ── */
+function showReport(id) {
+  const rpt = REPORTS[id]; if (!rpt) return;
+  const circ = 2 * Math.PI * 38;
+  const offset = circ - (circ * rpt.score / 100);
+
+  const prevIcons = {
+    warn:`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2.2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+    info:`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  };
+  const prevCls  = {warn:'prev-warn',  info:'prev-info'};
+  const prevCol  = {warn:['rgba(245,166,35,0.15)','#d4880a','#92600a'], info:['rgba(2,132,199,0.15)','#0284c7','#0284c7']};
+  const prevLbl  = {warn:'Atención', info:'Rutinario'};
+  const initials = rpt.technician.split(' ').map(n=>n[0]).join('');
+
+  document.getElementById('reportDetailContent').innerHTML = `
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+      <div>
+        <div style="font-size:11px;font-family:'Geist Mono';color:var(--text-3);margin-bottom:4px">${rpt.code}</div>
+        <h1 class="page-title">${rpt.title}</h1>
+        <p class="page-sub">${rpt.date} · Técnico: ${rpt.technician} · ${rpt.duration} min</p>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-outline btn-sm">↓ Descargar PDF</button>
+        <button class="btn btn-primary btn-sm" onclick="goTo('solicitar')">📅 Programar siguiente</button>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card-dark">
+          <div class="card-header"><span class="card-title-white">Score del sistema</span><span class="badge b-ok">✓ Completado</span></div>
+          <div class="score-wrap">
+            <div class="score-ring">
+              <svg viewBox="0 0 88 88" width="88" height="88">
+                <circle class="ring-track" cx="44" cy="44" r="38" style="stroke:rgba(255,255,255,0.08)"/>
+                <circle class="ring-fill" cx="44" cy="44" r="38" style="stroke:${rpt.scoreColor};stroke-dasharray:${circ};stroke-dashoffset:${offset}"/>
+              </svg>
+              <div class="ring-num" style="color:${rpt.scoreColor}">${rpt.score}</div>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px">${rpt.score>=85?'Sistema en excelente estado':'Requiere atención'}</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6">${rpt.findings.length} puntos inspeccionados · ${rpt.prevention.length} recomendación(es)</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Resumen del reporte</span><span style="font-size:11px;font-family:'Geist Mono';color:var(--text-3)">${rpt.code}</span></div>
+          ${rpt.findings.map(f=>`
+            <div class="rpt-row">
+              <span class="rpt-lbl">${f.label}</span>
+              <span class="rpt-val ${f.status==='ok'?'val-ok':f.status==='warn'?'val-warn':''}">${f.status==='ok'?'✓ ':f.status==='warn'?'⚠ ':''}${f.value}</span>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <div class="card-header" style="margin-bottom:14px"><span class="card-title">Prevención recomendada</span></div>
+          ${rpt.prevention.map(p=>`
+            <div class="prev-item ${prevCls[p.level]||'prev-info'}">
+              <div class="prev-icon" style="background:${(prevCol[p.level]||prevCol.info)[0]}">${prevIcons[p.level]||prevIcons.info}</div>
+              <div>
+                <div class="prev-title" style="color:${(prevCol[p.level]||prevCol.info)[1]}">${prevLbl[p.level]||'Nota'}</div>
+                <div class="prev-text" style="color:${(prevCol[p.level]||prevCol.info)[2]}">${p.text}</div>
+                <div class="prev-time">Plazo recomendado: ${p.timeline}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+        <div class="card">
+          <div class="card-label" style="margin-bottom:12px">Técnico asignado por Thruver</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:44px;height:44px;border-radius:50%;background:rgba(245,166,35,0.12);border:1px solid rgba(245,166,35,0.25);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#f5a623">${initials}</div>
+            <div>
+              <div style="font-weight:700;font-size:14px">${rpt.technician}</div>
+              <div style="font-size:12px;color:var(--text-3)">Técnico certificado · ${rpt.duration} min de servicio</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('reportList').style.display = 'none';
+  document.getElementById('reportDetail').classList.add('active');
+}
+
+function hideReport() {
+  document.getElementById('reportList').style.display = 'block';
+  document.getElementById('reportDetail').classList.remove('active');
+}
+
+/* ── INIT ── */
+buildServiceTypes();
+document.getElementById('reqDate').min = new Date().toISOString().split('T')[0];
+document.getElementById('reqDate').value = '2026-03-22';
+</script>
+
+<!-- ═══════════ DRAWER OVERLAY + PANEL ═══════════ -->
+<div id="drawerOverlay" onclick="closeDrawer()" style="position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:500;opacity:0;pointer-events:none;transition:opacity 0.28s ease"></div>
+<div id="sideDrawer" style="position:fixed;top:0;right:0;bottom:0;width:min(560px,92vw);background:#fff;box-shadow:-8px 0 40px rgba(0,0,0,0.12);z-index:501;transform:translateX(100%);transition:transform 0.32s cubic-bezier(0.16,1,0.3,1);display:flex;flex-direction:column;overflow:hidden">
+  <div id="drawerInner" style="display:flex;flex-direction:column;height:100%"></div>
+</div>
+
+<style>
+.visit-card:hover{border-color:var(--border-2);box-shadow:0 4px 16px rgba(0,0,0,0.07);transform:translateY(-2px)}
+.bk-card:hover{border-color:var(--border-2);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+.bk-card.expanded{border-color:var(--border-2)}
+.drawer-open #drawerOverlay{opacity:1!important;pointer-events:auto!important}
+.drawer-open #sideDrawer{transform:translateX(0)!important}
+.chk-ok{width:20px;height:20px;border-radius:6px;background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chk-warn{width:20px;height:20px;border-radius:6px;background:rgba(217,119,6,0.1);border:1px solid rgba(217,119,6,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+</style>
+
+<script>
+/* ═══════════════ BITÁCORA TOGGLE ═══════════════ */
+function renderBkBody(id) {
+  const v = VISITS[id];
+  if (!v) return '';
+  const circ = 2 * Math.PI * 38;
+  const offset = circ - (circ * v.score / 100);
+  const checkIcon = ok => ok
+    ? `<div style="width:22px;height:22px;border-radius:6px;background:rgba(22,163,74,0.1);border:1px solid rgba(22,163,74,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>`
+    : `<div style="width:22px;height:22px;border-radius:6px;background:rgba(217,119,6,0.1);border:1px solid rgba(217,119,6,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="3" stroke-linecap="round"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>`;
+
+  return `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+
+      <!-- LEFT: score + checklist -->
+      <div>
+        <!-- Score row -->
+        <div style="display:flex;align-items:center;gap:14px;background:#0d0d0d;border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px">
+          <div style="position:relative;width:60px;height:60px;flex-shrink:0">
+            <svg viewBox="0 0 88 88" width="60" height="60" style="transform:rotate(-90deg)">
+              <circle fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6" cx="44" cy="44" r="38"/>
+              <circle fill="none" stroke="${v.scoreColor}" stroke-width="6" stroke-linecap="round" cx="44" cy="44" r="38"
+                style="stroke-dasharray:${circ};stroke-dashoffset:${offset}"/>
+            </svg>
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:${v.scoreColor}">${v.score}</div>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:3px">${v.score===100?'Visita perfecta':v.score>=85?'Excelente estado':'Requiere atención'}</div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.45);line-height:1.5">${v.summary}</div>
+          </div>
+        </div>
+
+        <!-- Checklist -->
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-3);margin-bottom:10px">Puntos inspeccionados</div>
+        ${v.checklist.map(c=>`
+          <div style="display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)">
+            ${checkIcon(c.ok)}
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--text)">${c.label}</div>
+              <div style="font-size:11px;color:var(--text-3);margin-top:1px;line-height:1.5">${c.note}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- RIGHT: materials + prevention + CTA -->
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <!-- Materials -->
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-3);margin-bottom:10px">Materiales utilizados</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            ${v.materials.map(m=>`<span style="font-size:11px;padding:4px 10px;border-radius:100px;background:var(--bg-3);color:var(--text-2);font-weight:500">${m}</span>`).join('')}
+          </div>
+        </div>
+
+        <!-- Prevention -->
+        <div>
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.09em;color:var(--text-3);margin-bottom:10px">Recomendaciones</div>
+          ${v.prevention.length > 0 ? v.prevention.map(p=>`
+            <div style="display:flex;gap:10px;padding:10px;border-radius:var(--radius-sm);margin-bottom:8px;background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.18);align-items:flex-start">
+              <div style="width:24px;height:24px;border-radius:6px;background:rgba(245,166,35,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <div>
+                <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#d4880a;margin-bottom:2px">${p.when}</div>
+                <div style="font-size:12px;color:#92600a;line-height:1.5">${p.text}</div>
+              </div>
+            </div>
+          `).join('') : `
+            <div style="display:flex;align-items:center;gap:8px;padding:10px;border-radius:var(--radius-sm);background:rgba(22,163,74,0.07);border:1px solid rgba(22,163,74,0.18)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span style="font-size:12px;color:var(--success);font-weight:500">Sin observaciones. Todo en perfecto estado.</span>
+            </div>
+          `}
+        </div>
+
+        <!-- CTA -->
+        <div style="display:flex;gap:8px;padding-top:8px;border-top:1px solid var(--border);margin-top:auto">
+          <button class="btn btn-outline btn-sm">↓ Descargar PDF</button>
+          <button class="btn btn-primary btn-sm" onclick="goTo('solicitar')">Programar siguiente →</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleBk(id) {
+  const body    = document.getElementById('bkbody-' + id);
+  const content = document.getElementById('bkbodycontent-' + id);
+  const arrow   = document.getElementById('arr-' + id);
+  const card    = document.getElementById('bk-' + id);
+  const isOpen  = body.style.display !== 'none';
+
+  body.style.display    = isOpen ? 'none' : 'block';
+  arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+  card.classList.toggle('expanded', !isOpen);
+
+  if (!isOpen && !content.innerHTML) {
+    content.innerHTML = renderBkBody(id);
+  }
+}
+const VISITS = {
+  v001: {
+    code:'VT-001', title:'Revisión eléctrica general',
+    date:'12 de marzo de 2026', tech:'Carlos Mendoza', techInitials:'CM', techColor:'#f5a623',
+    duration:'135 min', score:94, scoreColor:'#16a34a',
+    summary:'Inspección completa del sistema eléctrico residencial. Se verificaron todos los circuitos, tablero principal, instalaciones y tomas de corriente. El sistema opera dentro de los parámetros normativos NOM-001-SEDE.',
+    checklist:[
+      {ok:true,  label:'Tablero principal', note:'Sin anomalías. Interruptores en buen estado. Sin señales de recalentamiento.'},
+      {ok:true,  label:'Voltaje línea 1',   note:'127V — dentro del rango normal (110-130V).'},
+      {ok:true,  label:'Voltaje línea 2',   note:'126V — dentro del rango normal.'},
+      {ok:true,  label:'Toma a tierra',     note:'Correcta. Resistencia medida: 4.2 Ω (recomendado < 5 Ω).'},
+      {ok:false, label:'Circuito cocina',   note:'Fusible de 15A con señales de desgaste. Reemplazar en los próximos 6 meses para evitar sobrecargas.'},
+      {ok:true,  label:'Contactos sala',    note:'Todos funcionando. Sin signos de arco eléctrico.'},
+      {ok:true,  label:'Contactos recámaras', note:'Verificados 8 contactos — todos en condición óptima.'},
+      {ok:true,  label:'Instalación normativa', note:'Cumple con NOM-001-SEDE-2012.'},
+    ],
+    materials:['Multímetro digital Fluke 117','Probador de circuitos','Limpieza de tablero (incluida)'],
+    prevention:[
+      {level:'warn', text:'Reemplazar fusible del circuito de cocina. Vida útil estimada: 6 meses restantes.', when:'Antes de Sep 2026'},
+      {level:'info', text:'Revisión anual de instalaciones recomendada para mantener certificación NOM.', when:'Mar 2027'},
+    ],
+    guarantee:'90 días',
+  },
+  v002: {
+    code:'VT-002', title:'Servicio de plomería',
+    date:'28 de febrero de 2026', tech:'Sofía Lizárraga', techInitials:'SL', techColor:'#00c2ff',
+    duration:'90 min', score:88, scoreColor:'#16a34a',
+    summary:'Inspección y mantenimiento del sistema hidráulico de la vivienda. Se revisaron tuberías principales, llaves de paso, calentador, presión del agua y drenajes. Sin fugas activas detectadas.',
+    checklist:[
+      {ok:true,  label:'Tuberías principales',  note:'Sin fugas. Presión constante en toda la red.'},
+      {ok:true,  label:'Presión del agua',       note:'38 PSI — rango recomendado (30-80 PSI).'},
+      {ok:true,  label:'Llaves de paso',         note:'3 llaves de paso revisadas — todas operativas y sin corrosión.'},
+      {ok:true,  label:'Regaderas',              note:'Flujo normal. Sin calcificación significativa.'},
+      {ok:false, label:'Calentador de paso',     note:'14 años de antigüedad. Eficiencia reducida. Reemplazo recomendado en los próximos 12 meses.'},
+      {ok:true,  label:'Drenajes cocina/baños',  note:'Flujo libre. Sin obstrucciones detectadas.'},
+      {ok:true,  label:'Llave jardín exterior',  note:'Sin fugas. Cierre hermético.'},
+    ],
+    materials:['Manómetro de presión','Cinta teflón (aplicada)','Limpieza de regaderas (incluida)'],
+    prevention:[
+      {level:'warn', text:'Calentador con 14 años de uso — planificar reemplazo preventivo.', when:'Antes de Feb 2027'},
+      {level:'info', text:'Revisión semestral de presión recomendada.', when:'Ago 2026'},
+    ],
+    guarantee:'90 días',
+  },
+  v003: {
+    code:'VT-003', title:'Limpieza profunda',
+    date:'10 de febrero de 2026', tech:'Ana Ramírez', techInitials:'AR', techColor:'#a78bfa',
+    duration:'240 min', score:100, scoreColor:'#16a34a',
+    summary:'Limpieza profunda integral de la vivienda. Se cubrieron todas las áreas con productos certificados. Resultado: excelente. Sin observaciones ni pendientes.',
+    checklist:[
+      {ok:true, label:'Cocina completa',          note:'Superficies, electrodomésticos, campana, alacenas interiores y exteriores.'},
+      {ok:true, label:'Baño principal',            note:'Sanitario, tina, regadera, azulejos, espejos y pisos desinfectados.'},
+      {ok:true, label:'Baño secundario',           note:'Sanitario, lavabo, regadera, pisos y paredes desinfectados.'},
+      {ok:true, label:'Sala y comedor',            note:'Muebles, pisos, ventanas, cortinas y zócalos.'},
+      {ok:true, label:'Recámara principal',        note:'Muebles, clóset exterior, cama, ventanas y pisos.'},
+      {ok:true, label:'Recámara 2',                note:'Muebles, escritorio, ventanas y pisos.'},
+      {ok:true, label:'Pasillos y escaleras',      note:'Barandales, paredes y pisos.'},
+      {ok:true, label:'Patio / área de lavandería',note:'Pisos, drenaje y área de lavado.'},
+    ],
+    materials:['Desinfectante multiusos certificado','Limpiador para vidrios','Desengrasante industrial','Microfibras y equipos de limpieza'],
+    prevention:[],
+    guarantee:'Satisfacción garantizada',
+  },
+};
+
+/* ═══════════════ DRAWER FUNCTIONS ═══════════════ */
+function openDrawer(id) {
+  const v = VISITS[id]; if (!v) return;
+  const circ = 2 * Math.PI * 38;
+  const offset = circ - (circ * v.score / 100);
+
+  const checkIcon = (ok) => ok
+    ? `<div class="chk-ok"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>`
+    : `<div class="chk-warn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="3" stroke-linecap="round"><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>`;
+
+  document.getElementById('drawerInner').innerHTML = `
+    <!-- Header -->
+    <div style="padding:20px 24px 16px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-shrink:0">
+      <div>
+        <div style="font-size:10px;font-family:'Geist Mono';color:var(--text-3);margin-bottom:3px">${v.code}</div>
+        <div style="font-size:17px;font-weight:700;letter-spacing:-0.02em;color:var(--text)">${v.title}</div>
+        <div style="font-size:12px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:6px">
+          <div style="width:20px;height:20px;border-radius:50%;background:${v.techColor}22;border:1px solid ${v.techColor}44;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:${v.techColor}">${v.techInitials}</div>
+          ${v.tech} · ${v.date} · ${v.duration}
+        </div>
+      </div>
+      <button onclick="closeDrawer()" style="width:30px;height:30px;border-radius:50%;background:var(--bg-3);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Scrollable body -->
+    <div style="overflow-y:auto;flex:1;padding:24px">
+
+      <!-- Score -->
+      <div style="background:#0d0d0d;border-radius:var(--radius);padding:18px 20px;display:flex;align-items:center;gap:18px;margin-bottom:20px">
+        <div style="position:relative;width:72px;height:72px;flex-shrink:0">
+          <svg viewBox="0 0 88 88" width="72" height="72" style="transform:rotate(-90deg)">
+            <circle fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="6" cx="44" cy="44" r="38"/>
+            <circle fill="none" stroke="${v.scoreColor}" stroke-width="6" stroke-linecap="round" cx="44" cy="44" r="38"
+              style="stroke-dasharray:${circ};stroke-dashoffset:${offset};transition:stroke-dashoffset 1s ease"/>
+          </svg>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:${v.scoreColor}">${v.score}</div>
+        </div>
+        <div>
+          <div style="font-size:14px;font-weight:700;color:#fff;margin-bottom:4px">${v.score === 100 ? 'Visita perfecta' : v.score >= 85 ? 'Excelente estado' : 'Requiere atención'}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.45);line-height:1.6">${v.summary}</div>
+        </div>
+      </div>
+
+      <!-- Checklist -->
+      <div style="margin-bottom:20px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:12px">Puntos inspeccionados</div>
+        ${v.checklist.map(c => `
+          <div style="display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)">
+            ${checkIcon(c.ok)}
+            <div>
+              <div style="font-size:13px;font-weight:600;color:var(--text)">${c.label}</div>
+              <div style="font-size:12px;color:var(--text-3);margin-top:2px;line-height:1.5">${c.note}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <!-- Materials -->
+      <div style="margin-bottom:20px">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:10px">Materiales y herramientas utilizadas</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${v.materials.map(m => `<span style="font-size:11px;padding:4px 10px;border-radius:100px;background:var(--bg-3);color:var(--text-2);font-weight:500">${m}</span>`).join('')}
+        </div>
+      </div>
+
+      <!-- Prevention -->
+      ${v.prevention.length > 0 ? `
+        <div style="margin-bottom:20px">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:10px">Recomendaciones preventivas</div>
+          ${v.prevention.map(p => `
+            <div style="display:flex;gap:10px;padding:10px;border-radius:var(--radius-sm);margin-bottom:8px;background:rgba(245,166,35,0.07);border:1px solid rgba(245,166,35,0.18);align-items:flex-start">
+              <div style="width:26px;height:26px;border-radius:7px;background:rgba(245,166,35,0.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <div>
+                <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:#d4880a;margin-bottom:2px">Prevención · ${p.when}</div>
+                <div style="font-size:12px;color:#92600a;line-height:1.5">${p.text}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      ` : `
+        <div style="padding:12px;background:var(--success-bg);border:1px solid rgba(22,163,74,0.2);border-radius:var(--radius-sm);display:flex;align-items:center;gap:8px;margin-bottom:20px">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span style="font-size:12px;color:var(--success);font-weight:500">Sin observaciones. Todo en perfecto estado.</span>
+        </div>
+      `}
+
+      <!-- Footer -->
+      <div style="border-top:1px solid var(--border);padding-top:16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+        <div style="font-size:12px;color:var(--text-3)">Garantía: <strong style="color:var(--text)">${v.guarantee}</strong></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-outline btn-sm">↓ Descargar PDF</button>
+          <button class="btn btn-primary btn-sm" onclick="closeDrawer();goTo('solicitar')">Programar siguiente</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.classList.add('drawer-open');
+}
+
+function closeDrawer() {
+  document.body.classList.remove('drawer-open');
+}
+
+/* ── ALSO OPEN DRAWER FROM HISTORIAL ── */
+function openDrawer_rpt(rptId) {
+  const map = {'rpt-001':'v001','rpt-002':'v002'};
+  openDrawer(map[rptId] || 'v001');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thruver · Bitácora Técnica v2</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --black:#1a1a1a; --dark:#ffffff; --dark-2:#f4f5f7; --dark-3:#e8eaed;
+  --border:rgba(0,0,0,0.09); --border-2:rgba(0,0,0,0.18);
+  --text:#1a1a1a; --text-2:#555; --text-3:#aaa;
+  --accent:#d4880a; --accent-dim:rgba(212,136,10,0.1);
+  --green:#15803d; --green-dim:rgba(21,128,61,0.1);
+  --red:#dc2626; --red-dim:rgba(220,38,38,0.08);
+  --blue:#0077aa; --blue-dim:rgba(0,119,170,0.1);
+  --amber:#b45309; --amber-dim:rgba(180,83,9,0.1);
+  --canvas:#e8eaed;
+  --sidebar:#1e1e1e;
+  --sidebar-text:#e0e0e0;
+  --sidebar-text-2:#888;
+  --sidebar-text-3:#555;
+  --sidebar-border:rgba(255,255,255,0.08);
+  --radius:10px; --radius-sm:6px;
+}
+html { scroll-behavior:smooth; }
+body { background:var(--canvas); color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; line-height:1.6; min-height:100vh; }
+
+.shell { display:grid; grid-template-columns:260px 1fr; min-height:100vh; }
+
+/* Sidebar — dark, timeline style */
+.sidebar { background:var(--sidebar); border-right:1px solid var(--sidebar-border); padding:24px 0; position:sticky; top:0; height:100vh; overflow-y:auto; display:flex; flex-direction:column; }
+.sidebar-brand { display:flex; align-items:center; gap:10px; padding:0 20px 24px; border-bottom:1px solid var(--sidebar-border); margin-bottom:8px; }
+.sidebar-brand svg { width:20px; height:20px; }
+.sidebar-brand-name { font-size:15px; font-weight:700; letter-spacing:-0.02em; color:var(--sidebar-text); }
+.sidebar-brand-sub { font-size:10px; color:var(--sidebar-text-3); text-transform:uppercase; letter-spacing:0.1em; }
+.nav-section-label { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--sidebar-text-3); padding:12px 20px 4px; }
+
+/* Timeline wrapper */
+.timeline { padding:0 0 0 20px; position:relative; flex:1; }
+.timeline-line { position:absolute; left:32px; top:0; bottom:0; width:1px; background:rgba(255,255,255,0.07); }
+
+.nav-item { display:flex; align-items:flex-start; gap:10px; padding:7px 16px 7px 0; cursor:pointer; transition:all 0.15s; position:relative; }
+.nav-item:hover .nav-label { color:var(--sidebar-text); }
+.nav-item.active .nav-label { color:#f5a623; }
+.nav-item.done .nav-label { color:var(--sidebar-text-2); }
+
+/* Timeline dot */
+.nav-dot {
+  width:12px; height:12px; border-radius:50%;
+  background:var(--sidebar); border:2px solid var(--sidebar-text-3);
+  flex-shrink:0; transition:all 0.25s; margin-top:2px; z-index:1; position:relative;
+}
+.nav-item.active .nav-dot { background:#f5a623; border-color:#f5a623; box-shadow:0 0 0 3px rgba(245,166,35,0.2); }
+.nav-item.done .nav-dot { background:#16a34a; border-color:#16a34a; }
+.nav-item.done .nav-dot::after { content:'✓'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:7px; color:#fff; font-weight:700; }
+
+.nav-label { font-size:12px; font-weight:500; color:var(--sidebar-text-2); transition:color 0.15s; line-height:1.4; }
+.nav-num { font-size:9px; color:var(--sidebar-text-3); font-family:'DM Mono',monospace; margin-left:auto; margin-top:3px; }
+.sidebar-progress { padding:20px; border-top:1px solid var(--sidebar-border); }
+.progress-label { font-size:11px; color:var(--sidebar-text-2); margin-bottom:8px; display:flex; justify-content:space-between; }
+.progress-bar { height:3px; background:rgba(255,255,255,0.08); border-radius:2px; overflow:hidden; }
+.progress-fill { height:100%; background:linear-gradient(90deg,#f5a623,#f0c060); border-radius:2px; transition:width 0.4s ease; }
+
+/* Main */
+.main { overflow-x:hidden; }
+.top-bar { background:#fff; border-bottom:1px solid var(--border); padding:14px 32px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:10; box-shadow:0 1px 3px rgba(0,0,0,0.06); }
+.top-bar-info { display:flex; align-items:center; gap:16px; }
+.top-bar-folio { font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); background:var(--accent-dim); padding:3px 10px; border-radius:100px; border:1px solid rgba(212,136,10,0.2); }
+.top-bar-date { font-size:12px; color:var(--text-2); }
+.top-bar-actions { display:flex; gap:10px; }
+
+/* Buttons */
+.btn { display:inline-flex; align-items:center; gap:6px; padding:8px 16px; border-radius:var(--radius-sm); font-size:13px; font-weight:500; cursor:pointer; border:none; transition:all 0.15s; font-family:'DM Sans',sans-serif; }
+.btn-ghost { background:transparent; color:var(--text-2); border:1px solid var(--border); }
+.btn-ghost:hover { background:var(--dark-2); color:var(--text); }
+.btn-primary { background:#1a1a1a; color:#fff; font-weight:600; }
+.btn-primary:hover { background:#333; }
+.btn-sm { padding:5px 12px; font-size:12px; }
+
+/* Sections */
+.section { display:none; padding:32px; max-width:880px; }
+.section.active { display:block; }
+.section-header { margin-bottom:28px; }
+.section-tag { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--accent); margin-bottom:6px; }
+.section-title { font-size:22px; font-weight:700; letter-spacing:-0.03em; margin-bottom:8px; color:#1a1a1a; }
+.section-desc { font-size:13px; color:var(--text-2); line-height:1.6; max-width:560px; }
+
+/* Cards */
+.card { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.card-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.09em; color:var(--text-2); margin-bottom:16px; display:flex; align-items:center; gap:8px; }
+
+/* Norm badge */
+.norm-badge { display:inline-flex; align-items:center; gap:4px; background:#e8f4fd; border:1px solid #bdd9ef; border-radius:100px; padding:2px 8px; font-size:9px; font-weight:600; color:#0077aa; font-family:'DM Mono',monospace; margin-left:auto; }
+
+/* Fields */
+.field-grid { display:grid; gap:14px; }
+.field-grid-2 { grid-template-columns:1fr 1fr; }
+.field-grid-3 { grid-template-columns:1fr 1fr 1fr; }
+.field { display:flex; flex-direction:column; gap:5px; }
+label.field-label { font-size:11px; font-weight:600; color:var(--text-2); text-transform:uppercase; letter-spacing:0.07em; }
+label.field-label .req { color:var(--accent); margin-left:2px; }
+.field-note { font-size:10px; color:var(--text-3); margin-top:2px; font-style:italic; }
+
+input, select, textarea { background:#f8f9fb; border:1px solid #dde1e7; border-radius:var(--radius-sm); color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:9px 12px; width:100%; transition:border-color 0.15s; outline:none; appearance:none; -webkit-appearance:none; }
+input:focus, select:focus, textarea:focus { border-color:var(--accent); background:#fff; box-shadow:0 0 0 3px rgba(212,136,10,0.1); }
+input::placeholder { color:#bbb; }
+select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23999' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 10px center; padding-right:32px; cursor:pointer; }
+textarea { resize:vertical; min-height:72px; }
+
+/* Scale */
+.scale-group { display:flex; gap:6px; }
+.scale-btn { flex:1; padding:8px 4px; border:1px solid #dde1e7; border-radius:var(--radius-sm); background:#f8f9fb; color:#aaa; font-size:12px; font-weight:600; cursor:pointer; text-align:center; transition:all 0.15s; font-family:'DM Sans',sans-serif; }
+.scale-btn:hover { border-color:#bbb; color:#666; background:#fff; }
+.scale-btn.s1 { background:#fff0f0; border-color:#dc2626; color:#dc2626; }
+.scale-btn.s2 { background:#fff4ec; border-color:#ea580c; color:#ea580c; }
+.scale-btn.s3 { background:#fffbeb; border-color:#b45309; color:#b45309; }
+.scale-btn.s4 { background:#f0fdf4; border-color:#15803d; color:#15803d; }
+.scale-btn.s5 { background:#dcfce7; border-color:#15803d; color:#15803d; }
+.scale-labels { display:flex; justify-content:space-between; font-size:9px; color:var(--text-3); margin-top:3px; padding:0 2px; }
+
+/* Checkboxes — fixed implementation */
+.check-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.check-item { display:flex; align-items:flex-start; gap:8px; padding:9px 12px; border:1px solid #dde1e7; border-radius:var(--radius-sm); cursor:pointer; transition:all 0.15s; user-select:none; background:#f8f9fb; }
+.check-item:hover { border-color:#bbb; background:#fff; }
+.check-item.checked { border-color:var(--accent); background:#fff8ec; }
+.check-box { width:16px; height:16px; min-width:16px; border:1.5px solid #bbb; border-radius:4px; display:flex; align-items:center; justify-content:center; transition:all 0.15s; margin-top:1px; background:#fff; }
+.check-item.checked .check-box { background:#d4880a; border-color:#d4880a; }
+.check-mark { display:none; }
+.check-item.checked .check-mark { display:block; }
+.check-text { font-size:12px; line-height:1.4; color:var(--text); }
+
+/* Info boxes */
+.info-box { background:#eff8ff; border:1px solid #bdd9ef; border-radius:var(--radius-sm); padding:10px 14px; font-size:12px; color:#0077aa; margin-bottom:16px; display:flex; gap:8px; align-items:flex-start; }
+.warn-box { background:#fffbeb; border:1px solid #fcd34d; border-radius:var(--radius-sm); padding:10px 14px; font-size:12px; color:#92400e; margin-bottom:16px; display:flex; gap:8px; align-items:flex-start; }
+
+/* Priority */
+.priority-group { display:flex; gap:8px; }
+.priority-btn { flex:1; padding:10px; border:1px solid #dde1e7; border-radius:var(--radius-sm); background:#f8f9fb; color:var(--text-2); font-size:12px; font-weight:600; cursor:pointer; text-align:center; transition:all 0.15s; font-family:'DM Sans',sans-serif; line-height:1.5; }
+.priority-btn.sel-urgente { border-color:#dc2626; background:#fff0f0; color:#dc2626; }
+.priority-btn.sel-media { border-color:#d4880a; background:#fff8ec; color:#d4880a; }
+.priority-btn.sel-preventivo { border-color:#15803d; background:#f0fdf4; color:#15803d; }
+
+/* Nav */
+.section-nav { display:flex; align-items:center; justify-content:space-between; padding:24px 32px; border-top:1px solid var(--border); margin-top:8px; }
+.section-nav-info { font-size:12px; color:var(--text-3); }
+.divider { height:1px; background:var(--border); margin:20px 0; }
+
+/* Summary */
+.score-preview { background:#fff; border:1px solid var(--border); border-radius:var(--radius); padding:20px; margin-bottom:16px; box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.score-big { font-size:64px; font-weight:700; letter-spacing:-0.05em; line-height:1; font-family:'DM Mono',monospace; }
+.score-bars { margin-top:20px; display:flex; flex-direction:column; gap:10px; }
+.score-row { display:flex; flex-direction:column; gap:4px; }
+.score-row-header { display:flex; justify-content:space-between; font-size:11px; }
+.score-row-name { color:var(--text-2); }
+.score-row-val { font-family:'DM Mono',monospace; font-weight:500; }
+.score-bar-track { height:4px; background:#e8eaed; border-radius:2px; overflow:hidden; }
+.score-bar-fill { height:100%; border-radius:2px; transition:width 0.5s ease; }
+.findings-list { display:flex; flex-direction:column; gap:8px; }
+.finding-item { display:flex; align-items:flex-start; gap:10px; padding:12px 14px; border-radius:var(--radius-sm); border:1px solid; font-size:12px; line-height:1.5; }
+.finding-item.urgente { background:#fff5f5; border-color:#fecaca; color:#991b1b; }
+.finding-item.alerta { background:#fffbeb; border-color:#fde68a; color:#92400e; }
+.finding-item.ok { background:#f0fdf4; border-color:#bbf7d0; color:#166534; }
+.finding-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+.finding-item.urgente .finding-dot { background:var(--red); }
+.finding-item.alerta .finding-dot { background:#b45309; }
+.finding-item.ok .finding-dot { background:#15803d; }
+.finding-ref { font-size:9px; font-family:'DM Mono',monospace; opacity:0.6; margin-left:auto; white-space:nowrap; padding-left:8px; }
+
+/* Ref note */
+.ref-note { font-size:10px; color:var(--text-3); font-family:'DM Mono',monospace; margin-top:4px; }
+
+/* ── Field validation states ── */
+.field-wrap { position:relative; }
+.field-wrap input,
+.field-wrap select { padding-right:36px; }
+
+.val-icon {
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  width:16px;
+  height:16px;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  flex-shrink:0;
+  pointer-events:none;
+}
+.val-icon.show { display:flex; }
+.val-icon.ok   { background:#dcfce7; }
+.val-icon.warn { background:#fef3c7; }
+.val-icon.err  { background:#fee2e2; }
+
+/* border states */
+.field-wrap.state-ok   input,
+.field-wrap.state-ok   select { border-color:#15803d !important; background:#f0fdf4 !important; }
+.field-wrap.state-warn input,
+.field-wrap.state-warn select { border-color:#d97706 !important; background:#fffbeb !important; }
+.field-wrap.state-err  input,
+.field-wrap.state-err  select { border-color:#dc2626 !important; background:#fff5f5 !important; }
+
+/* inline validation message */
+.val-msg {
+  display:none;
+  font-size:10px;
+  font-weight:600;
+  margin-top:4px;
+  padding:4px 8px;
+  border-radius:4px;
+  align-items:center;
+  gap:5px;
+}
+.val-msg.show { display:flex; }
+.val-msg.ok   { color:#166534; background:#dcfce7; }
+.val-msg.warn { color:#92400e; background:#fef3c7; }
+.val-msg.err  { color:#991b1b; background:#fee2e2; }
+</style>
+</head>
+<body>
+<div class="shell">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    <div><div class="sidebar-brand-name">Thruver</div><div class="sidebar-brand-sub">Bitácora Técnica</div></div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-line"></div>
+
+    <div class="nav-section-label">Información base</div>
+    <div class="nav-item active" onclick="goTo(0)"><div class="nav-dot"></div><span class="nav-label">Datos de la visita</span><span class="nav-num">01</span></div>
+
+    <div class="nav-section-label">Sistemas técnicos</div>
+    <div class="nav-item" onclick="goTo(1)"><div class="nav-dot"></div><span class="nav-label">Sistema eléctrico</span><span class="nav-num">02</span></div>
+    <div class="nav-item" onclick="goTo(2)"><div class="nav-dot"></div><span class="nav-label">Plomería e hidráulica</span><span class="nav-num">03</span></div>
+    <div class="nav-item" onclick="goTo(3)"><div class="nav-dot"></div><span class="nav-label">HVAC y climatización</span><span class="nav-num">04</span></div>
+    <div class="nav-item" onclick="goTo(4)"><div class="nav-dot"></div><span class="nav-label">Estructura y techos</span><span class="nav-num">05</span></div>
+
+    <div class="nav-section-label">Acabados y exterior</div>
+    <div class="nav-item" onclick="goTo(5)"><div class="nav-dot"></div><span class="nav-label">Acabados interiores</span><span class="nav-num">06</span></div>
+    <div class="nav-item" onclick="goTo(6)"><div class="nav-dot"></div><span class="nav-label">Electrodomésticos</span><span class="nav-num">07</span></div>
+    <div class="nav-item" onclick="goTo(7)"><div class="nav-dot"></div><span class="nav-label">Exterior y seguridad</span><span class="nav-num">08</span></div>
+
+    <div class="nav-section-label">Cierre</div>
+    <div class="nav-item" onclick="goTo(8)"><div class="nav-dot"></div><span class="nav-label">Resumen y score</span><span class="nav-num">09</span></div>
+  </div>
+  <div class="sidebar-progress">
+    <div class="progress-label"><span>Progreso</span><span id="progressPct">0%</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="top-bar">
+    <div class="top-bar-info">
+      <div class="top-bar-folio" id="folioDisplay">BT-···</div>
+      <div class="top-bar-date" id="dateDisplay">—</div>
+    </div>
+    <div class="top-bar-actions">
+      <button class="btn btn-ghost btn-sm" onclick="saveDraft()">Guardar borrador</button>
+      <button class="btn btn-primary btn-sm" onclick="goTo(8)">Ver resumen →</button>
+    </div>
+  </div>
+
+  <!-- S0 DATOS DE LA VISITA -->
+  <div class="section active" id="s0">
+    <div class="section-header">
+      <div class="section-tag">01 · Inicio</div>
+      <div class="section-title">Datos de la visita</div>
+      <div class="section-desc">Identificación del registro. Estos campos son el ancla del expediente permanente de la propiedad — sin ellos no existe la trazabilidad.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Identificación del servicio</div>
+      <div class="field-grid field-grid-3">
+        <div class="field"><label class="field-label">Folio de servicio <span class="req">*</span></label><input type="text" id="folio" placeholder="BT-2026-0001" oninput="updateFolio(this.value)"></div>
+        <div class="field"><label class="field-label">Fecha de la visita <span class="req">*</span></label><input type="date" id="fecha"></div>
+        <div class="field"><label class="field-label">Hora de inicio</label><input type="time" id="horaInicio"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Propiedad</div>
+      <div class="field-grid field-grid-2">
+        <div class="field"><label class="field-label">ID de propiedad <span class="req">*</span></label><input type="text" id="propId" placeholder="PROP-00123"></div>
+        <div class="field"><label class="field-label">Dirección completa</label><input type="text" id="propDir" placeholder="Calle, número, colonia"></div>
+        <div class="field"><label class="field-label">Ciudad / Municipio</label><input type="text" id="propCiudad" placeholder="Culiacán"></div>
+        <div class="field"><label class="field-label">Tipo de propiedad <span class="req">*</span></label>
+          <select id="propTipo"><option value="">Selecciona</option><option>Casa habitación</option><option>Departamento</option><option>Casa en condominio</option><option>Residencia</option><option>Propiedad comercial / mixta</option></select></div>
+        <div class="field"><label class="field-label">Antigüedad aproximada <span class="req">*</span></label>
+          <select id="propAntiguedad"><option value="">Selecciona</option><option>Menos de 5 años</option><option>5 – 10 años</option><option>11 – 20 años</option><option>21 – 30 años</option><option>Más de 30 años</option><option>Desconocida</option></select>
+          <span class="field-note">Dato clave para el modelo predictivo — la antigüedad es el mejor predictor de riesgo eléctrico y estructural</span></div>
+        <div class="field"><label class="field-label">Metros cuadrados aprox.</label>
+          <select id="propM2"><option value="">Selecciona</option><option>Menos de 60 m²</option><option>60 – 120 m²</option><option>121 – 200 m²</option><option>201 – 350 m²</option><option>Más de 350 m²</option></select></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Técnico y servicio</div>
+      <div class="field-grid field-grid-3">
+        <div class="field"><label class="field-label">ID del técnico <span class="req">*</span></label><input type="text" id="tecId" placeholder="TEC-0042"></div>
+        <div class="field"><label class="field-label">Nombre del técnico</label><input type="text" id="tecNombre" placeholder="Nombre completo"></div>
+        <div class="field"><label class="field-label">Especialidad</label>
+          <select id="tecEspec"><option value="">Selecciona</option><option>Electricidad</option><option>Plomería</option><option>HVAC</option><option>Carpintería / Estructura</option><option>Inspección general</option></select></div>
+        <div class="field"><label class="field-label">Tipo de servicio <span class="req">*</span></label>
+          <select id="tipoSvc"><option value="">Selecciona</option><option>Inspección general preventiva</option><option>Reparación correctiva</option><option>Mantenimiento programado</option><option>Diagnóstico técnico</option><option>Servicio de emergencia</option></select></div>
+        <div class="field"><label class="field-label">¿Primera visita?</label>
+          <select id="primeraVisita"><option value="">Selecciona</option><option>Sí — primera visita</option><option>No — propiedad con historial</option></select></div>
+        <div class="field"><label class="field-label">Duración total (min)</label><input type="number" id="duracion" placeholder="90" min="15" max="600"></div>
+      </div>
+    </div>
+    <div class="section-nav"><div class="section-nav-info">Sección 1 de 9</div><button class="btn btn-primary" onclick="goTo(1)">Sistema eléctrico →</button></div>
+  </div>
+
+  <!-- S1 ELÉCTRICO -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <div class="section-tag">02 · Sistemas técnicos</div>
+      <div class="section-title">Sistema eléctrico</div>
+      <div class="section-desc">El sistema con mayor correlación predictiva para riesgos de incendio y falla eléctrica. Cada medición aquí es un datapoint que Thruver usa para anticipar intervenciones futuras.</div>
+    </div>
+
+    <div class="info-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0077aa" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Escala 1–5: <strong>1 = Crítico / requiere acción urgente</strong> · 2 = Deficiente · 3 = Regular / monitorear · 4 = Bueno · <strong>5 = Excelente / sin observaciones</strong>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Tablero principal de distribución <span class="norm-badge">NOM-001-SEDE-2012 · Art. 408</span></div>
+      <div class="field-grid field-grid-3" style="margin-bottom:14px">
+        <div class="field"><label class="field-label">Marca del tablero</label>
+          <select id="tableroMarca"><option value="">Selecciona</option><option>Siemens</option><option>Square D / Schneider</option><option>General Electric</option><option>Cutler-Hammer / Eaton</option><option>Legrand</option><option>Otra marca certificada</option><option>Sin certificación / sin marca</option></select></div>
+        <div class="field"><label class="field-label">Edad estimada <span class="req">*</span></label>
+          <select id="tableroEdad"><option value="">Selecciona</option><option>Menos de 5 años</option><option>5 – 10 años</option><option>11 – 20 años</option><option>Más de 20 años</option><option>Desconocida</option></select>
+          <span class="field-note">Tableros de más de 20 años tienen riesgo elevado de falla según práctica técnica</span></div>
+        <div class="field"><label class="field-label">Tipo de instalación</label>
+          <select id="tableroTipo"><option value="">Selecciona</option><option>Monofásico 120V</option><option>Bifásico 120/240V</option><option>Trifásico</option></select>
+          <span class="field-note">Tensiones normalizadas: 120V, 120/240V — NOM-001-SEDE-2012 Art. 220</span></div>
+      </div>
+      <div class="field"><label class="field-label">Estado general del tablero <span class="req">*</span></label>
+        <div class="scale-group" id="tableroEstado">
+          <button class="scale-btn" onclick="setScale('tableroEstado',1)">1</button><button class="scale-btn" onclick="setScale('tableroEstado',2)">2</button><button class="scale-btn" onclick="setScale('tableroEstado',3)">3</button><button class="scale-btn" onclick="setScale('tableroEstado',4)">4</button><button class="scale-btn" onclick="setScale('tableroEstado',5)">5</button>
+        </div>
+        <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div>
+        <span class="field-note">Evaluar: acceso libre, tapa completa, sin manchas de quemado, interruptores correctamente rotulados, sin cables sueltos</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Mediciones eléctricas (con multímetro) <span class="norm-badge">NOM-001-SEDE-2012 · Art. 210, 250</span></div>
+      <div class="field-grid field-grid-3">
+        <div class="field"><label class="field-label">Voltaje línea 1 (V) <span class="req">*</span></label>
+          <div class="field-wrap">
+            <input type="number" id="voltaje1" placeholder="127" min="90" max="160" oninput="validateVoltaje('voltaje1','vmsg1')">
+            <div class="val-icon" id="vicon1"></div>
+          </div>
+          <div class="val-msg" id="vmsg1"></div>
+          <span class="field-note">Estándar CFE México: 127V nominal. Óptimo: 120–134V (±5%). Aceptable: 114–119V o 135–140V. Crítico: menos de 114V o más de 140V — NOM-001-SEDE-2012</span></div>
+        <div class="field"><label class="field-label">Voltaje línea 2 (V)</label>
+          <div class="field-wrap">
+            <input type="number" id="voltaje2" placeholder="127" min="90" max="280" oninput="validateVoltaje2('voltaje2','vmsg2')">
+            <div class="val-icon" id="vicon2"></div>
+          </div>
+          <div class="val-msg" id="vmsg2"></div>
+          <span class="field-note">En bifásico debe estar cerca de 240V. NOM-001-SEDE-2012 establece 120/240V como tensiones normalizadas</span></div>
+        <div class="field"><label class="field-label">Sistema de tierra física <span class="req">*</span></label>
+          <select id="tierraFisica"><option value="">Selecciona</option><option>Varilla de tierra instalada y funcional</option><option>Varilla presente — resistencia fuera de norma</option><option>Tierra solo en tablero — sin varilla</option><option>Ausente — sin sistema de tierra</option><option>No verificable</option></select></div>
+        <div class="field"><label class="field-label">Resistencia de tierra (Ω)</label>
+          <div class="field-wrap">
+            <input type="number" id="tierraOhm" placeholder="8.5" step="0.1" min="0" oninput="validateTierra('tierraOhm','tmsg')">
+            <div class="val-icon" id="ticon"></div>
+          </div>
+          <div class="val-msg" id="tmsg"></div>
+          <span class="field-note">Límite máximo: 25 Ω según NOM-001-SEDE-2012 Art. 250-56. Ideal: menos de 10 Ω. Medir con telurómetro</span></div>
+        <div class="field"><label class="field-label">Voltaje Neutro–Tierra (V)</label>
+          <div class="field-wrap">
+            <input type="number" id="neutroTierra" placeholder="0.5" step="0.1" min="0" max="50" oninput="validateNeutroTierra('neutroTierra','ntmsg')">
+            <div class="val-icon" id="nticon"></div>
+          </div>
+          <div class="val-msg" id="ntmsg"></div>
+          <span class="field-note">Causa #1 de quema de tarjetas en minisplits. Óptimo: menos de 1V. Más de 2V indica ruido eléctrico o tierra física deficiente — permite vender corrección preventiva</span></div>
+        <div class="field"><label class="field-label">Tipo de cableado <span class="req">*</span></label>
+          <select id="tipoCableado"><option value="">Selecciona</option><option>Cobre THW / THHW (correcto)</option><option>Cobre con aislamiento deteriorado</option><option>Aluminio (riesgo en empalmes)</option><option>Mixto cobre/aluminio</option><option>No identificado</option></select>
+          <span class="field-note">NOM-001-SEDE-2012: conductores deben ser de cobre salvo especificación. Aluminio requiere terminales especiales</span></div>
+        <div class="field"><label class="field-label">Calibre predominante</label>
+          <select id="calibre"><option value="">Selecciona</option><option>12 AWG (20A máx.)</option><option>10 AWG (30A máx.)</option><option>8 AWG (40A máx.)</option><option>6 AWG (55A máx.)</option><option>Mixto / No identificado</option></select>
+          <span class="field-note">El breaker NUNCA debe tener mayor amperaje que la capacidad del calibre del cable que protege — riesgo crítico de incendio</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Circuitos y contactos <span class="norm-badge">NOM-001-SEDE-2012 · Art. 210, 406</span></div>
+      <div class="field-grid field-grid-2" style="margin-bottom:14px">
+        <div class="field"><label class="field-label">Número de circuitos en tablero</label><input type="number" id="numCircuitos" placeholder="12" min="1" max="60"></div>
+        <div class="field"><label class="field-label">Contactos / tomacorrientes revisados</label><input type="number" id="contactosRevisados" placeholder="18" min="0"></div>
+        <div class="field"><label class="field-label">Estado de circuitos (breakers) <span class="req">*</span></label>
+          <div class="scale-group" id="circuitosEstado">
+            <button class="scale-btn" onclick="setScale('circuitosEstado',1)">1</button><button class="scale-btn" onclick="setScale('circuitosEstado',2)">2</button><button class="scale-btn" onclick="setScale('circuitosEstado',3)">3</button><button class="scale-btn" onclick="setScale('circuitosEstado',4)">4</button><button class="scale-btn" onclick="setScale('circuitosEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div>
+          <span class="field-note">Evaluar: breakers operables, correctamente dimensionados, sin sobrecargas, identificados por área</span></div>
+        <div class="field"><label class="field-label">Estado de contactos eléctricos <span class="req">*</span></label>
+          <div class="scale-group" id="contactosEstado">
+            <button class="scale-btn" onclick="setScale('contactosEstado',1)">1</button><button class="scale-btn" onclick="setScale('contactosEstado',2)">2</button><button class="scale-btn" onclick="setScale('contactosEstado',3)">3</button><button class="scale-btn" onclick="setScale('contactosEstado',4)">4</button><button class="scale-btn" onclick="setScale('contactosEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div>
+          <span class="field-note">Verificar polaridad, presencia de tierra, ajuste mecánico, sin señales de calentamiento</span></div>
+      </div>
+      <div class="field"><label class="field-label">Cumplimiento básico NOM-001-SEDE-2012</label>
+        <select id="nomElec"><option value="">Selecciona</option><option>Cumple — instalación conforme a norma</option><option>Cumple parcialmente — hay no conformidades menores</option><option>No cumple — requiere intervención</option><option>No evaluado en esta visita</option></select>
+        <span class="field-note">Evaluación de referencia técnica. No sustituye dictamen oficial de UVIE autorizada por la Secretaría de Energía</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Hallazgos eléctricos observados <span class="norm-badge">NOM-001-SEDE-2012</span></div>
+      <div class="check-grid">
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Cableado expuesto o sin protección (canalización)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Interruptores dañados, atascados o sin rotulación</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Señales de sobrecalentamiento (manchas negras, olor)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Contactos sin polaridad o sin terminal de tierra</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Empalmes sin caja de conexiones (NOM Art. 314)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Breaker sobredimensionado para el calibre del cable</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Humedad o agua dentro del tablero</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Resistencia de tierra mayor a 25 Ω (fuera de NOM)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Materiales sin certificación NOM en uso</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Sin hallazgos relevantes en esta visita</span></div>
+      </div>
+      <div class="divider"></div>
+      <div class="field"><label class="field-label">Último mantenimiento eléctrico conocido</label>
+        <select id="ultimoMantElec"><option value="">Selecciona</option><option>Menos de 1 año</option><option>1 – 2 años</option><option>3 – 5 años</option><option>Más de 5 años</option><option>Nunca / Desconocido</option></select>
+        <span class="field-note">NOM-001-SEDE-2012 recomienda verificación mínimo cada 5 años o tras modificaciones significativas</span></div>
+    </div>
+    <div class="section-nav"><button class="btn btn-ghost" onclick="goTo(0)">← Atrás</button><button class="btn btn-primary" onclick="goTo(2)">Plomería →</button></div>
+  </div>
+
+  <!-- S2 PLOMERÍA -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <div class="section-tag">03 · Sistemas técnicos</div>
+      <div class="section-title">Plomería e hidráulica</div>
+      <div class="section-desc">Sistema de agua potable, drenaje, calentador y cisterna. La edad del calentador y la dureza del agua local son los factores predictivos más importantes en este sistema.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Tuberías y presión de agua <span class="norm-badge">NOM-013-CNA-2000 · CONAGUA</span></div>
+      <div class="field-grid field-grid-3" style="margin-bottom:14px">
+        <div class="field"><label class="field-label">Material de tuberías interiores <span class="req">*</span></label>
+          <select id="materialTuberias"><option value="">Selecciona</option><option>Cobre (más durable, antiincrustante)</option><option>Galvanizado (riesgo de corrosión en agua dura)</option><option>CPVC / PVC (buena resistencia química)</option><option>Polietileno PE (flexible, resistente)</option><option>Mixto cobre/galvanizado</option><option>No identificado</option></select>
+          <span class="field-note">Galvanizado en zonas de agua dura (como Sinaloa) tiene vida útil reducida — predice fugas en 5–10 años</span></div>
+        <div class="field"><label class="field-label">Presión del agua <span class="req">*</span></label>
+          <div class="field-wrap">
+            <select id="presionAgua" onchange="validateSelect('presionAgua','presionmsg',{warn:['Alta — más de 60 PSI (riesgo de daño a instalaciones)','Baja — 15–35 PSI (mínimo aceptable CONAGUA: ~21 PSI)'],err:['Muy baja — menos de 15 PSI (insuficiente)','Variable / intermitente']},{warn:'Presión fuera del rango óptimo. Puede dañar instalaciones o afectar el servicio.',err:'Presión crítica. Insuficiente para operación normal del hogar.'})"><option value="">Selecciona</option><option>Alta — más de 60 PSI (riesgo de daño a instalaciones)</option><option>Normal — 35–60 PSI (rango óptimo CONAGUA)</option><option>Baja — 15–35 PSI (mínimo aceptable CONAGUA: ~21 PSI)</option><option>Muy baja — menos de 15 PSI (insuficiente)</option><option>Variable / intermitente</option><option>Sin medición</option></select>
+            <div class="val-icon" id="presionicon"></div>
+          </div>
+          <div class="val-msg" id="presionmsg"></div>
+          <span class="field-note">CONAGUA establece mínimo 1.5 kg/cm² (~21 PSI) para suministro habitacional. Presión mayor a 80 PSI daña instalaciones</span></div>
+        <div class="field"><label class="field-label">Calidad del agua de la zona <span class="req">*</span></label>
+          <select id="calidadAgua"><option value="">Selecciona</option><option>Agua dura — depósitos de cal visibles en grifos/calentador</option><option>Agua normal — sin depósitos significativos</option><option>Con sistema de suavizado instalado</option><option>Con filtros instalados</option><option>No evaluado</option></select>
+          <span class="field-note">Culiacán tiene agua moderadamente dura. El agua dura acelera el deterioro del calentador y reduce vida útil de tuberías de galvanizado</span></div>
+      </div>
+      <div class="field"><label class="field-label">Estado general de tuberías visibles <span class="req">*</span></label>
+        <div class="scale-group" id="tuberiasEstado">
+          <button class="scale-btn" onclick="setScale('tuberiasEstado',1)">1</button><button class="scale-btn" onclick="setScale('tuberiasEstado',2)">2</button><button class="scale-btn" onclick="setScale('tuberiasEstado',3)">3</button><button class="scale-btn" onclick="setScale('tuberiasEstado',4)">4</button><button class="scale-btn" onclick="setScale('tuberiasEstado',5)">5</button>
+        </div>
+        <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div>
+        <span class="field-note">Evaluar: ausencia de corrosión, sellos en buen estado, sin manchas de humedad en muros adyacentes, sin ruido en tuberías</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Calentador de agua <span class="norm-badge">NOM-003-ENER-2011 · NOM-011-SESH-2012</span></div>
+      <div class="warn-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#92400e" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        El campo de edad del calentador es el dato predictivo más valioso en plomería. La vida útil promedio de un boiler de gas es <strong>10–15 años</strong> con mantenimiento (NOM-003-ENER-2011). En zonas de agua dura, puede reducirse a 7–10 años.
+      </div>
+      <div class="field-grid field-grid-3" style="margin-bottom:14px">
+        <div class="field"><label class="field-label">Tipo de calentador <span class="req">*</span></label>
+          <select id="calentadorTipo"><option value="">Selecciona</option><option>Gas LP — boiler de depósito</option><option>Gas LP — calentador de paso (instantáneo)</option><option>Gas natural — boiler de depósito</option><option>Gas natural — calentador de paso</option><option>Eléctrico</option><option>Solar (NOM-027-ENER/SCFI-2018)</option><option>Solar con respaldo de gas</option><option>Sin calentador</option></select></div>
+        <div class="field"><label class="field-label">Marca del calentador</label>
+          <input type="text" id="calentadorMarca" placeholder="Ej: Calorex, Rheem, Bosch, Cinsa...">
+          <span class="field-note">Dato clave para correlacionar marcas con frecuencia de fallas</span></div>
+        <div class="field"><label class="field-label">Modelo / Número de serie</label>
+          <input type="text" id="calentadorModelo" placeholder="Ej: ACI-11, GN-80L..."></div>
+        <div class="field"><label class="field-label">Capacidad del depósito</label>
+          <select id="calentadorCap"><option value="">No aplica / Paso</option><option>Menos de 40 litros (1–2 personas)</option><option>40–60 litros (2–3 personas)</option><option>80–120 litros (3–5 personas)</option><option>Más de 120 litros (6+ personas)</option></select></div>
+        <div class="field"><label class="field-label">Edad estimada del calentador <span class="req">*</span></label>
+        <div class="field"><label class="field-label">Edad estimada del calentador <span class="req">*</span></label>
+          <div class="field-wrap">
+            <select id="calentadorEdad" onchange="validateSelect('calentadorEdad','cedmsg',{warn:['7 – 10 años (vigilar en agua dura)','11 – 15 años (alta probabilidad de falla)'],err:['Más de 15 años (reemplazo urgente recomendado)']},{warn:'Monitorear condición. En agua dura la falla puede ser más temprana.',err:'Vida útil superada. Alta probabilidad de falla inminente — se recomienda reemplazo.'})"><option value="">Selecciona</option><option>Menos de 3 años</option><option>3 – 6 años</option><option>7 – 10 años (vigilar en agua dura)</option><option>11 – 15 años (alta probabilidad de falla)</option><option>Más de 15 años (reemplazo urgente recomendado)</option><option>Desconocida</option></select>
+            <div class="val-icon" id="cedicon"></div>
+          </div>
+          <div class="val-msg" id="cedmsg"></div>
+          <span class="field-note">Vida útil promedio: 10–15 años (NOM-003-ENER-2011). Con agua dura: 7–10 años</span></div>
+      </div>
+      <div class="field"><label class="field-label">Estado del calentador <span class="req">*</span></label>
+        <div class="scale-group" id="calentadorEstado">
+          <button class="scale-btn" onclick="setScale('calentadorEstado',1)">1</button><button class="scale-btn" onclick="setScale('calentadorEstado',2)">2</button><button class="scale-btn" onclick="setScale('calentadorEstado',3)">3</button><button class="scale-btn" onclick="setScale('calentadorEstado',4)">4</button><button class="scale-btn" onclick="setScale('calentadorEstado',5)">5</button>
+        </div>
+        <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div>
+        <span class="field-note">Evaluar: ausencia de fugas, llama estable de color azul, piloto funcional, válvula de seguridad operativa, sin depósitos de cal visibles en conexiones</span></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Cisterna, tinaco y drenaje</div>
+      <div class="field-grid field-grid-2">
+        <div class="field"><label class="field-label">Estado de tinaco / cisterna</label>
+          <div class="scale-group" id="tinacoEstado">
+            <button class="scale-btn" onclick="setScale('tinacoEstado',1)">1</button><button class="scale-btn" onclick="setScale('tinacoEstado',2)">2</button><button class="scale-btn" onclick="setScale('tinacoEstado',3)">3</button><button class="scale-btn" onclick="setScale('tinacoEstado',4)">4</button><button class="scale-btn" onclick="setScale('tinacoEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div>
+          <span class="field-note">Evaluar: tapa completa, sin grietas, sin sedimento visible, flotador funcional</span></div>
+        <div class="field"><label class="field-label">Último lavado del tinaco / cisterna <span class="req">*</span></label>
+          <select id="ultimoLavado"><option value="">Selecciona</option><option>Menos de 6 meses (correcto)</option><option>6 – 12 meses (aceptable)</option><option>1 – 2 años (requiere atención)</option><option>Más de 2 años (riesgo sanitario)</option><option>Nunca / Desconocido (riesgo alto)</option></select>
+          <span class="field-note">COFEPRIS recomienda lavado de tinaco cada 6 meses. En clima cálido como Culiacán, la proliferación bacteriana es más rápida</span></div>
+        <div class="field"><label class="field-label">Estado de drenajes</label>
+          <select id="drenajes"><option value="">Selecciona</option><option>Sin obstrucciones — flujo normal en todos los puntos</option><option>Flujo lento en algún punto — requiere atención</option><option>Obstrucción parcial — riesgo de fuga</option><option>Obstrucción total — fuera de servicio</option></select></div>
+        <div class="field"><label class="field-label">Bomba de agua / hidroneumático</label>
+          <select id="bombaAgua"><option value="">No aplica / Sin bomba</option><option>Funcional — buen estado</option><option>Funcional — con ruido anormal (cavitación)</option><option>Falla intermitente</option><option>Fuera de servicio</option></select></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Hallazgos de plomería observados</div>
+      <div class="check-grid">
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Fugas activas detectadas (goteo o chorro)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Manchas de humedad activa en muros o techos</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Corrosión o sarro severo en tuberías visibles</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Llaves o registros con fuga en su empaque</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Depósitos de cal severos (agua dura) en calentador</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Válvula de seguridad del calentador dañada o ausente</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Flama del boiler amarilla o irregular (combustión incompleta)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Sin hallazgos relevantes en esta visita</span></div>
+      </div>
+    </div>
+    <div class="section-nav"><button class="btn btn-ghost" onclick="goTo(1)">← Atrás</button><button class="btn btn-primary" onclick="goTo(3)">HVAC →</button></div>
+  </div>
+
+  <!-- S3 HVAC -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <div class="section-tag">04 · Sistemas técnicos</div>
+      <div class="section-title">HVAC y climatización</div>
+      <div class="section-desc">En climas cálidos como Culiacán (temperatura promedio de verano: 38–42°C), el HVAC es el sistema con mayor carga de uso y mayor riesgo de falla estacional. El mantenimiento preventivo antes del verano es crítico.</div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Equipos de aire acondicionado <span class="norm-badge">NOM-011-ENER-2025</span></div>
+      <div class="field-grid field-grid-3" style="margin-bottom:14px">
+        <div class="field"><label class="field-label">Número de equipos instalados <span class="req">*</span></label><input type="number" id="numAires" placeholder="3" min="0" max="20"></div>
+        <div class="field"><label class="field-label">Tipo predominante</label>
+          <select id="tipoAires"><option value="">Selecciona</option><option>Mini split inverter (más eficiente)</option><option>Mini split velocidad fija</option><option>Ventana</option><option>Central con ductos</option><option>Cassette</option><option>Mixto</option><option>Sin aire acondicionado</option></select></div>
+        <div class="field"><label class="field-label">Marca(s) predominante(s)</label>
+          <input type="text" id="airesMarca" placeholder="Ej: Mirage, Carrier, LG, Trane, Midea...">
+          <span class="field-note">Registrar marca permite identificar patrones de falla por fabricante</span></div>
+        <div class="field"><label class="field-label">Edad promedio de equipos <span class="req">*</span></label>
+          <div class="field-wrap">
+            <select id="edadAires" onchange="validateSelect('edadAires','edadairesmsg',{warn:['9 – 12 años (evaluar reemplazo)'],err:['Más de 12 años (alta probabilidad de falla)']},{warn:'Equipos próximos al final de vida útil. Evaluar reemplazo preventivo.',err:'Equipos fuera de vida útil recomendada. Riesgo alto de falla en temporada de calor.'})"><option value="">Selecciona</option><option>Menos de 3 años</option><option>3 – 5 años</option><option>6 – 8 años</option><option>9 – 12 años (evaluar reemplazo)</option><option>Más de 12 años (alta probabilidad de falla)</option><option>Mixto</option></select>
+            <div class="val-icon" id="edadairesicon"></div>
+          </div>
+          <div class="val-msg" id="edadairesmsg"></div>
+          <span class="field-note">Vida útil promedio mini split: 12–15 años con mantenimiento anual. Sin mantenimiento: 7–10 años</span></div>
+      </div>
+      <div class="field-grid field-grid-2">
+        <div class="field"><label class="field-label">Estado general de equipos <span class="req">*</span></label>
+          <div class="scale-group" id="airesEstado">
+            <button class="scale-btn" onclick="setScale('airesEstado',1)">1</button><button class="scale-btn" onclick="setScale('airesEstado',2)">2</button><button class="scale-btn" onclick="setScale('airesEstado',3)">3</button><button class="scale-btn" onclick="setScale('airesEstado',4)">4</button><button class="scale-btn" onclick="setScale('airesEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Estado de compresores <span class="req">*</span></label>
+          <div class="scale-group" id="compresorEstado">
+            <button class="scale-btn" onclick="setScale('compresorEstado',1)">1</button><button class="scale-btn" onclick="setScale('compresorEstado',2)">2</button><button class="scale-btn" onclick="setScale('compresorEstado',3)">3</button><button class="scale-btn" onclick="setScale('compresorEstado',4)">4</button><button class="scale-btn" onclick="setScale('compresorEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div>
+          <span class="field-note">El compresor es el componente más caro — su falla representa el 60–70% del costo de reemplazo total del equipo</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Mantenimiento y refrigerante <span class="norm-badge">NOM-011-ENER-2025 · ASHRAE 15</span></div>
+      <div class="field-grid field-grid-3">
+        <div class="field"><label class="field-label">Último cambio / limpieza de filtros <span class="req">*</span></label>
+          <div class="field-wrap">
+            <select id="ultimoFiltros" onchange="validateSelect('ultimoFiltros','filtmsg',{warn:['7 – 12 meses (filtros sucios reducen eficiencia)'],err:['Más de 12 meses (reducción de rendimiento hasta 40%)','Nunca / Desconocido']},{warn:'Filtros con más de 6 meses. Rendimiento reducido — limpiar pronto.',err:'Filtros sucios. Reducción de eficiencia hasta 40% y riesgo para el compresor.'})"><option value="">Selecciona</option><option>Menos de 3 meses (correcto)</option><option>3 – 6 meses (aceptable)</option><option>7 – 12 meses (filtros sucios reducen eficiencia)</option><option>Más de 12 meses (reducción de rendimiento hasta 40%)</option><option>Nunca / Desconocido</option></select>
+            <div class="val-icon" id="filticon"></div>
+          </div>
+          <div class="val-msg" id="filtmsg"></div>
+          <span class="field-note">Recomendación técnica: limpiar filtros cada 3 meses en Culiacán (polvo + calor extremo). Filtros sucios aumentan consumo eléctrico y acortan vida del compresor</span></div>
+        <div class="field"><label class="field-label">Nivel de refrigerante <span class="req">*</span></label>
+          <div class="field-wrap">
+            <select id="refrigerante" onchange="validateSelect('refrigerante','refmsg',{warn:['Bajo — requiere recarga'],err:['Fuga detectada (aceite o escarcha visible)']},{warn:'Nivel bajo. Programar recarga con técnico certificado.',err:'Fuga activa. Requiere atención inmediata — daña el compresor si no se atiende.'})"><option value="">Selecciona</option><option>Normal — sin pérdida detectada</option><option>Bajo — requiere recarga</option><option>Fuga detectada (aceite o escarcha visible)</option><option>No medido en esta visita</option></select>
+            <div class="val-icon" id="reficon"></div>
+          </div>
+          <div class="val-msg" id="refmsg"></div>
+          <span class="field-note">La verificación de refrigerante requiere manómetros y debe realizarla un técnico certificado (ASHRAE 15). Una fuga no atendida daña el compresor en 1–3 temporadas</span></div>
+        <div class="field"><label class="field-label">Estado de serpentines / evaporadores</label>
+          <div class="scale-group" id="evaporadorEstado" style="margin-top:6px">
+            <button class="scale-btn" onclick="setScale('evaporadorEstado',1)">1</button><button class="scale-btn" onclick="setScale('evaporadorEstado',2)">2</button><button class="scale-btn" onclick="setScale('evaporadorEstado',3)">3</button><button class="scale-btn" onclick="setScale('evaporadorEstado',4)">4</button><button class="scale-btn" onclick="setScale('evaporadorEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div>
+          <span class="field-note">Serpentines sucios o con corrosión reducen la transferencia de calor — el sistema trabaja más y consume más energía</span></div>
+        <div class="field"><label class="field-label">Último mantenimiento profesional completo</label>
+          <select id="ultimoMantAire"><option value="">Selecciona</option><option>Menos de 6 meses</option><option>6 – 12 meses</option><option>1 – 2 años</option><option>Más de 2 años</option><option>Nunca / Desconocido</option></select>
+          <span class="field-note">Recomendación: mantenimiento profesional anual antes de temporada de calor (abril en Culiacán)</span></div>
+        <div class="field"><label class="field-label">Drenaje de condensado</label>
+          <select id="condensado"><option value="">Selecciona</option><option>Limpio y funcional</option><option>Con acumulación — goteo leve</option><option>Obstruido — goteo severo</option><option>No verificado</option></select></div>
+        <div class="field"><label class="field-label">Ventiladores (unidad interior y exterior)</label>
+          <select id="ventiladores"><option value="">Selecciona</option><option>Funcionales — sin ruido anormal</option><option>Funcionales — con vibración o ruido</option><option>Falla en uno o más equipos</option></select></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Hallazgos HVAC observados</div>
+      <div class="check-grid">
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Ruido anormal o vibración en compresor</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Goteo excesivo en unidad interior (drenaje obstruido)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Condensadora con polvo crítico (aletas obstruidas)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Equipo no alcanza temperatura programada</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Escarcha en tubería de cobre (señal de fuga de refrigerante)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Corrosión en unidad exterior (exposición a intemperie)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Malos olores al operar (bacterias o moho en filtros)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Sin hallazgos relevantes en esta visita</span></div>
+      </div>
+    </div>
+    <div class="section-nav"><button class="btn btn-ghost" onclick="goTo(2)">← Atrás</button><button class="btn btn-primary" onclick="goTo(4)">Estructura →</button></div>
+  </div>
+
+  <!-- S4 ESTRUCTURA -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <div class="section-tag">05 · Sistemas técnicos</div>
+      <div class="section-title">Estructura y techos</div>
+      <div class="section-desc">La envolvente estructural. Grietas, filtraciones y el estado del impermeabilizante son los indicadores de largo plazo más importantes para el expediente técnico de la propiedad.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Muros y cimentación</div>
+      <div class="field-grid field-grid-3" style="margin-bottom:14px">
+        <div class="field"><label class="field-label">Tipo de construcción <span class="req">*</span></label>
+          <select id="tipoConstruccion"><option value="">Selecciona</option><option>Concreto armado / block</option><option>Tabique rojo recocido</option><option>Tabicón</option><option>Adobe</option><option>Mixto</option></select></div>
+        <div class="field"><label class="field-label">Estado de muros interiores <span class="req">*</span></label>
+          <div class="scale-group" id="murosEstado" style="margin-top:6px">
+            <button class="scale-btn" onclick="setScale('murosEstado',1)">1</button><button class="scale-btn" onclick="setScale('murosEstado',2)">2</button><button class="scale-btn" onclick="setScale('murosEstado',3)">3</button><button class="scale-btn" onclick="setScale('murosEstado',4)">4</button><button class="scale-btn" onclick="setScale('murosEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Estado de muros exteriores</label>
+          <div class="scale-group" id="murosExtEstado" style="margin-top:6px">
+            <button class="scale-btn" onclick="setScale('murosExtEstado',1)">1</button><button class="scale-btn" onclick="setScale('murosExtEstado',2)">2</button><button class="scale-btn" onclick="setScale('murosExtEstado',3)">3</button><button class="scale-btn" onclick="setScale('murosExtEstado',4)">4</button><button class="scale-btn" onclick="setScale('murosExtEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+      </div>
+      <div class="field-grid field-grid-2">
+        <div class="field"><label class="field-label">Grietas detectadas <span class="req">*</span></label>
+          <div class="field-wrap">
+            <select id="grietas" onchange="validateSelect('grietas','grietmsg',{warn:['Grietas medias (0.3–3mm — monitorear)'],err:['Grietas profundas (más de 3mm — atención)','Grietas con desplazamiento — requiere evaluación estructural urgente']},{warn:'Grietas de tamaño medio. Monitorear progresión en próximas visitas.',err:'Grietas críticas detectadas. Se requiere evaluación estructural especializada.'})"><option value="">Selecciona</option><option>Sin grietas</option><option>Grietas capilares (hasta 0.3mm — superficiales)</option><option>Grietas medias (0.3–3mm — monitorear)</option><option>Grietas profundas (más de 3mm — atención)</option><option>Grietas con desplazamiento — requiere evaluación estructural urgente</option></select>
+            <div class="val-icon" id="grieticon"></div>
+          </div>
+          <div class="val-msg" id="grietmsg"></div>
+          <span class="field-note">Grietas capilares en repellado son normales. Grietas mayores a 3mm o con desplazamiento pueden indicar asentamiento o problema estructural</span></div>
+        <div class="field"><label class="field-label">Filtraciones de agua en muros</label>
+          <select id="filtraciones"><option value="">Selecciona</option><option>Sin filtraciones</option><option>Manchas de humedad — filtraciones pasadas (secas)</option><option>Filtraciones activas — humedad presente</option><option>Eflorescencia (salitre) — humedad crónica</option><option>Moho o hongos visibles</option></select></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Techo y losa</div>
+      <div class="field-grid field-grid-3">
+        <div class="field"><label class="field-label">Tipo de techo <span class="req">*</span></label>
+          <select id="tipoTecho"><option value="">Selecciona</option><option>Losa de concreto plana</option><option>Losa con teja de barro</option><option>Losa con teja sintética</option><option>Lámina metálica</option><option>Lámina asfáltica</option><option>Mixto</option></select></div>
+        <div class="field"><label class="field-label">Estado del techo <span class="req">*</span></label>
+          <div class="scale-group" id="techoEstado" style="margin-top:6px">
+            <button class="scale-btn" onclick="setScale('techoEstado',1)">1</button><button class="scale-btn" onclick="setScale('techoEstado',2)">2</button><button class="scale-btn" onclick="setScale('techoEstado',3)">3</button><button class="scale-btn" onclick="setScale('techoEstado',4)">4</button><button class="scale-btn" onclick="setScale('techoEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Impermeabilizante (losa) <span class="req">*</span></label>
+          <div class="field-wrap">
+            <select id="impermeabilizante" onchange="validateSelect('impermeabilizante','impermsg',{warn:['5 – 7 años (revisar en próxima visita)'],err:['Más de 7 años — requiere renovación urgente','Sin impermeabilizante aplicado']},{warn:'Impermeabilizante próximo a vencer. Planificar renovación.',err:'Impermeabilizante vencido o ausente. Renovar antes de temporada de lluvias.'})"><option value="">Selecciona</option><option>Reciente — menos de 2 años</option><option>2 – 4 años (bueno)</option><option>5 – 7 años (revisar en próxima visita)</option><option>Más de 7 años — requiere renovación urgente</option><option>Sin impermeabilizante aplicado</option><option>No aplica (teja, lámina)</option></select>
+            <div class="val-icon" id="impericon"></div>
+          </div>
+          <div class="val-msg" id="impermsg"></div>
+          <span class="field-note">Vida útil promedio del impermeabilizante asfáltico: 3–5 años. Elastomérico: 5–8 años. En Culiacán, el calor extremo reduce estos plazos</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Hallazgos estructurales observados</div>
+      <div class="check-grid">
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Hundimientos o desniveles visibles en pisos</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Filtración activa por techo durante o post lluvia</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Hongos o moho en muros o techo</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Grietas con desplazamiento (escalonadas o diagonales)</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Daños por plaga — termitas, roedores, comején</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Impermeabilizante visiblemente deteriorado o burbujeado</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Vigas o columnas con daño visible o acero expuesto</span></div>
+        <div class="check-item" onclick="toggleCheck(this)"><div class="check-box"><svg class="check-mark" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><span class="check-text">Sin hallazgos relevantes en esta visita</span></div>
+      </div>
+    </div>
+    <div class="section-nav"><button class="btn btn-ghost" onclick="goTo(3)">← Atrás</button><button class="btn btn-primary" onclick="goTo(5)">Acabados →</button></div>
+  </div>
+
+  <!-- S5 ACABADOS -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <div class="section-tag">06 · Acabados</div>
+      <div class="section-title">Acabados interiores</div>
+      <div class="section-desc">Pisos, pintura, ventanas y puertas. Estos datos alimentan el score estético de la propiedad y las recomendaciones de Thruver Neat.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Pisos y pintura</div>
+      <div class="field-grid field-grid-3">
+        <div class="field"><label class="field-label">Material de piso predominante</label>
+          <select id="tipoPiso"><option value="">Selecciona</option><option>Porcelanato</option><option>Mosaico / azulejo</option><option>Madera sólida</option><option>Madera laminada</option><option>Concreto pulido / microcemento</option><option>Mixto</option></select></div>
+        <div class="field"><label class="field-label">Estado de pisos <span class="req">*</span></label>
+          <div class="scale-group" id="pisosEstado" style="margin-top:6px">
+            <button class="scale-btn" onclick="setScale('pisosEstado',1)">1</button><button class="scale-btn" onclick="setScale('pisosEstado',2)">2</button><button class="scale-btn" onclick="setScale('pisosEstado',3)">3</button><button class="scale-btn" onclick="setScale('pisosEstado',4)">4</button><button class="scale-btn" onclick="setScale('pisosEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Estado de pintura interior</label>
+          <div class="scale-group" id="pinturaEstado" style="margin-top:6px">
+            <button class="scale-btn" onclick="setScale('pinturaEstado',1)">1</button><button class="scale-btn" onclick="setScale('pinturaEstado',2)">2</button><button class="scale-btn" onclick="setScale('pinturaEstado',3)">3</button><button class="scale-btn" onclick="setScale('pinturaEstado',4)">4</button><button class="scale-btn" onclick="setScale('pinturaEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Ventanas y puertas</div>
+      <div class="field-grid field-grid-2">
+        <div class="field"><label class="field-label">Material de ventanas</label>
+          <select id="materialVentanas"><option value="">Selecciona</option><option>Aluminio</option><option>PVC</option><option>Madera</option><option>Herrería / vidrio templado</option><option>Mixto</option></select></div>
+        <div class="field"><label class="field-label">Estado de ventanas <span class="req">*</span></label>
+          <div class="scale-group" id="ventanasEstado" style="margin-top:6px">
+            <button class="scale-btn" onclick="setScale('ventanasEstado',1)">1</button><button class="scale-btn" onclick="setScale('ventanasEstado',2)">2</button><button class="scale-btn" onclick="setScale('ventanasEstado',3)">3</button><button class="scale-btn" onclick="setScale('ventanasEstado',4)">4</button><button class="scale-btn" onclick="setScale('ventanasEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Sellos y empaques de ventanas</label>
+          <select id="sellosVentanas"><option value="">Selecciona</option><option>En buen estado — sin filtraciones de aire</option><option>Desgastados — filtra aire o polvo</option><option>Dañados — requieren cambio</option><option>Sin sellos instalados</option></select></div>
+        <div class="field"><label class="field-label">Estado de puertas y cerraduras</label>
+          <div class="scale-group" id="puertasEstado" style="margin-top:6px">
+            <button class="scale-btn" onclick="setScale('puertasEstado',1)">1</button><button class="scale-btn" onclick="setScale('puertasEstado',2)">2</button><button class="scale-btn" onclick="setScale('puertasEstado',3)">3</button><button class="scale-btn" onclick="setScale('puertasEstado',4)">4</button><button class="scale-btn" onclick="setScale('puertasEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+      </div>
+    </div>
+    <div class="section-nav"><button class="btn btn-ghost" onclick="goTo(4)">← Atrás</button><button class="btn btn-primary" onclick="goTo(6)">Electrodomésticos →</button></div>
+  </div>
+
+  <!-- S6 ELECTRODOMÉSTICOS -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <div class="section-tag">07 · Equipos</div>
+      <div class="section-title">Electrodomésticos</div>
+      <div class="section-desc">Registrar la edad de cada equipo permite a Thruver anticipar el ciclo de reemplazo y programar mantenimientos preventivos antes de la falla.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Cocina <span class="norm-badge">NOM-022-SCFI-1993</span></div>
+      <div class="field-grid field-grid-2">
+        <div class="field"><label class="field-label">Estufa — marca</label>
+          <input type="text" id="estufaMarca" placeholder="Ej: Mabe, Acros, IEM, Magefesa..."></div>
+        <div class="field"><label class="field-label">Estufa — tipo de combustible</label>
+          <select id="estufaTipo"><option value="">Selecciona</option><option>Gas LP</option><option>Gas natural</option><option>Eléctrica</option><option>Inducción</option><option>Sin estufa</option></select></div>
+        <div class="field"><label class="field-label">Estufa — edad estimada</label>
+          <select id="estufaEdad"><option value="">Selecciona</option><option>Menos de 3 años</option><option>3 – 6 años</option><option>7 – 10 años</option><option>Más de 10 años</option><option>Desconocida</option></select>
+          <span class="field-note">Vida útil promedio estufa de gas: 15 años con mantenimiento básico</span></div>
+        <div class="field"><label class="field-label">Estufa — estado</label>
+          <div class="scale-group" id="estufaEstado">
+            <button class="scale-btn" onclick="setScale('estufaEstado',1)">1</button><button class="scale-btn" onclick="setScale('estufaEstado',2)">2</button><button class="scale-btn" onclick="setScale('estufaEstado',3)">3</button><button class="scale-btn" onclick="setScale('estufaEstado',4)">4</button><button class="scale-btn" onclick="setScale('estufaEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Refrigerador — marca</label>
+          <input type="text" id="refriMarca" placeholder="Ej: Mabe, Samsung, LG, Whirlpool..."></div>
+        <div class="field"><label class="field-label">Refrigerador — edad estimada</label>
+          <select id="refriEdad"><option value="">Selecciona</option><option>Menos de 3 años</option><option>3 – 6 años</option><option>7 – 10 años</option><option>11 – 15 años</option><option>Más de 15 años</option><option>Desconocida</option></select>
+          <span class="field-note">Vida útil promedio refrigerador: 10–15 años (NOM-015-ENER). Más de 15 años: consumo energético elevado — posible reemplazo por eficiencia</span></div>
+        <div class="field"><label class="field-label">Refrigerador — estado</label>
+          <div class="scale-group" id="refriEstado">
+            <button class="scale-btn" onclick="setScale('refriEstado',1)">1</button><button class="scale-btn" onclick="setScale('refriEstado',2)">2</button><button class="scale-btn" onclick="setScale('refriEstado',3)">3</button><button class="scale-btn" onclick="setScale('refriEstado',4)">4</button><button class="scale-btn" onclick="setScale('refriEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Campana / extractor de cocina</label>
+          <select id="campana"><option value="">Selecciona</option><option>Funcional con ducto exterior</option><option>Funcional sin ducto (recircula)</option><option>No funcional</option><option>No instalado</option></select></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Lavandería y gas <span class="norm-badge">NOM-002-SECRE-2010</span></div>
+      <div class="field-grid field-grid-2">
+        <div class="field"><label class="field-label">Lavadora — marca</label>
+          <input type="text" id="lavadoraMarca" placeholder="Ej: Mabe, Whirlpool, LG, Samsung..."></div>
+        <div class="field"><label class="field-label">Lavadora — edad estimada</label>
+          <select id="lavadoraEdad"><option value="">Selecciona</option><option>Menos de 3 años</option><option>3 – 6 años</option><option>7 – 10 años</option><option>Más de 10 años</option><option>No instalada</option><option>Desconocida</option></select>
+          <span class="field-note">Vida útil promedio lavadora: 10–14 años (NOM-005-ENER)</span></div>
+        <div class="field"><label class="field-label">Lavadora — estado</label>
+          <div class="scale-group" id="lavadoraEstado">
+            <button class="scale-btn" onclick="setScale('lavadoraEstado',1)">1</button><button class="scale-btn" onclick="setScale('lavadoraEstado',2)">2</button><button class="scale-btn" onclick="setScale('lavadoraEstado',3)">3</button><button class="scale-btn" onclick="setScale('lavadoraEstado',4)">4</button><button class="scale-btn" onclick="setScale('lavadoraEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Instalación de gas</label>
+          <select id="gasInstalacion"><option value="">Selecciona</option><option>Gas LP — tanque estacionario</option><option>Gas LP — cilindros portátiles</option><option>Gas natural por red</option><option>Sin gas</option></select></div>
+        <div class="field"><label class="field-label">Estado de instalación de gas</label>
+          <div class="scale-group" id="gasEstado">
+            <button class="scale-btn" onclick="setScale('gasEstado',1)">1</button><button class="scale-btn" onclick="setScale('gasEstado',2)">2</button><button class="scale-btn" onclick="setScale('gasEstado',3)">3</button><button class="scale-btn" onclick="setScale('gasEstado',4)">4</button><button class="scale-btn" onclick="setScale('gasEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div>
+          <span class="field-note">Verificar: mangueras sin grietas, válvulas de paso funcionales, sin olor a gas, regulador en buen estado. NOM-002-SECRE-2010</span></div>
+      </div>
+    </div>
+    <div class="section-nav"><button class="btn btn-ghost" onclick="goTo(5)">← Atrás</button><button class="btn btn-primary" onclick="goTo(7)">Exterior →</button></div>
+  </div>
+
+  <!-- S7 EXTERIOR Y SEGURIDAD -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <div class="section-tag">08 · Exterior y cierre</div>
+      <div class="section-title">Exterior, seguridad y notas finales</div>
+      <div class="section-desc">Fachada, áreas exteriores y dispositivos básicos de seguridad. Registra también las observaciones del técnico y la prioridad de seguimiento recomendada.</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Exterior de la propiedad</div>
+      <div class="field-grid field-grid-2">
+        <div class="field"><label class="field-label">Estado de fachada</label>
+          <div class="scale-group" id="fachadaEstado">
+            <button class="scale-btn" onclick="setScale('fachadaEstado',1)">1</button><button class="scale-btn" onclick="setScale('fachadaEstado',2)">2</button><button class="scale-btn" onclick="setScale('fachadaEstado',3)">3</button><button class="scale-btn" onclick="setScale('fachadaEstado',4)">4</button><button class="scale-btn" onclick="setScale('fachadaEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Estado de bardas y muros perimetrales</label>
+          <div class="scale-group" id="bardaEstado">
+            <button class="scale-btn" onclick="setScale('bardaEstado',1)">1</button><button class="scale-btn" onclick="setScale('bardaEstado',2)">2</button><button class="scale-btn" onclick="setScale('bardaEstado',3)">3</button><button class="scale-btn" onclick="setScale('bardaEstado',4)">4</button><button class="scale-btn" onclick="setScale('bardaEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Área exterior / jardín</label>
+          <div class="scale-group" id="jardinEstado">
+            <button class="scale-btn" onclick="setScale('jardinEstado',1)">1</button><button class="scale-btn" onclick="setScale('jardinEstado',2)">2</button><button class="scale-btn" onclick="setScale('jardinEstado',3)">3</button><button class="scale-btn" onclick="setScale('jardinEstado',4)">4</button><button class="scale-btn" onclick="setScale('jardinEstado',5)">5</button>
+          </div>
+          <div class="scale-labels"><span>Crítico</span><span>Excelente</span></div></div>
+        <div class="field"><label class="field-label">Estado de bajadas pluviales</label>
+          <select id="bajadas"><option value="">Selecciona</option><option>Limpias y funcionales</option><option>Con acumulación — riesgo de obstrucción</option><option>Obstruidas — riesgo de daño por lluvia</option><option>Sin bajadas / no aplica</option></select></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Seguridad básica</div>
+      <div class="field-grid field-grid-3">
+        <div class="field"><label class="field-label">Detector de humo <span class="req">*</span></label>
+          <select id="detectorHumo"><option value="">Selecciona</option><option>Presente y funcional (batería activa)</option><option>Presente — batería agotada / no funciona</option><option>Ausente — se recomienda instalar</option></select>
+          <span class="field-note">Recomendación: un detector por planta y uno en cada dormitorio</span></div>
+        <div class="field"><label class="field-label">Detector de gas <span class="req">*</span></label>
+          <select id="detectorGas"><option value="">Selecciona</option><option>Presente y funcional</option><option>Presente — batería agotada / no funciona</option><option>Ausente — se recomienda en cocina y cuarto de boiler</option><option>No aplica — sin gas</option></select></div>
+        <div class="field"><label class="field-label">Extinguidor</label>
+          <select id="extinguidor"><option value="">Selecciona</option><option>Presente y vigente (etiqueta al día)</option><option>Presente pero vencido</option><option>Ausente</option></select>
+          <span class="field-note">Mínimo un extinguidor tipo ABC por nivel. Revisión anual obligatoria</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Observaciones y cierre</div>
+      <div class="field" style="margin-bottom:14px"><label class="field-label">Notas adicionales del técnico</label>
+        <textarea id="notasFinales" placeholder="Ej: No se tuvo acceso al cuarto de servicio. El tablero principal no tiene identificados los circuitos. Se recomienda hacer prueba de resistencia de tierra en próxima visita..."></textarea></div>
+      <div class="divider"></div>
+      <div class="field" style="margin-bottom:14px"><label class="field-label">Prioridad de seguimiento recomendada <span class="req">*</span></label>
+        <div class="priority-group">
+          <button class="priority-btn" onclick="setPriority('urgente',this)">🔴 Urgente<br><span style="font-size:10px;font-weight:400">Acción en 7 días</span></button>
+          <button class="priority-btn" onclick="setPriority('media',this)">🟡 Media<br><span style="font-size:10px;font-weight:400">Próximo mes</span></button>
+          <button class="priority-btn" onclick="setPriority('preventivo',this)">🟢 Preventivo<br><span style="font-size:10px;font-weight:400">Próximo trimestre</span></button>
+        </div></div>
+      <div class="field"><label class="field-label">Próxima visita recomendada</label>
+        <select id="proximaVisita"><option value="">Selecciona</option><option>1 semana</option><option>2 semanas</option><option>1 mes</option><option>3 meses</option><option>6 meses</option><option>1 año</option></select></div>
+    </div>
+    <div class="section-nav"><button class="btn btn-ghost" onclick="goTo(6)">← Atrás</button><button class="btn btn-primary" onclick="goTo(8)">Ver resumen →</button></div>
+  </div>
+
+  <!-- S8 RESUMEN -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <div class="section-tag">09 · Cierre</div>
+      <div class="section-title">Resumen y score</div>
+      <div class="section-desc">Score y hallazgos calculados automáticamente. Este es el registro que queda en el expediente permanente de la propiedad.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 260px;gap:16px;margin-bottom:16px">
+      <div class="score-preview">
+        <div style="display:flex;align-items:flex-end;gap:16px;margin-bottom:16px">
+          <div><div class="score-big" id="scoreBig" style="color:var(--accent)">—</div><div style="font-size:12px;color:var(--text-2);margin-top:4px" id="scoreLabel">Completa las escalas para calcular</div></div>
+          <div style="flex:1"><div style="font-size:12px;color:#888;line-height:1.5" id="scoreDesc"></div></div>
+        </div>
+        <div class="score-bars" id="scoreBars"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04)"><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:6px">Folio</div><div style="font-size:13px;font-weight:600;font-family:'DM Mono',monospace" id="summFolio">—</div></div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04)"><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:6px">Prioridad</div><div style="font-size:13px;font-weight:600" id="summPrioridad">—</div></div>
+        <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:14px;box-shadow:0 1px 3px rgba(0,0,0,0.04)"><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:6px">Próxima visita</div><div style="font-size:13px;font-weight:600" id="summProxima">—</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Hallazgos automáticos con referencia normativa</div>
+      <div class="findings-list" id="findingsList"><div style="font-size:12px;color:var(--text-3);padding:12px;text-align:center">Completa las secciones anteriores para ver los hallazgos automáticos...</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Exportar y enviar</div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" onclick="exportJSON()" style="flex:1;justify-content:center">↓ Exportar JSON</button>
+        <button class="btn btn-primary" onclick="finalizarBitacora()" style="flex:1;justify-content:center">Firmar y enviar al expediente →</button>
+      </div>
+    </div>
+    <div class="section-nav"><button class="btn btn-ghost" onclick="goTo(7)">← Atrás</button><div class="section-nav-info">Bitácora lista para enviar</div></div>
+  </div>
+
+</main>
+</div>
+
+<script>
+// State
+let currentSection = 0;
+const scales = {};
+let priority = null;
+
+// Init
+window.onload = () => {
+  const now = new Date();
+  document.getElementById('fecha').value = now.toISOString().split('T')[0];
+  document.getElementById('horaInicio').value = now.toTimeString().slice(0,5);
+  const folio = 'BT-' + now.getFullYear() + '-' + String(Math.floor(Math.random()*9000)+1000);
+  document.getElementById('folio').value = folio;
+  document.getElementById('folioDisplay').textContent = folio;
+  document.getElementById('dateDisplay').textContent = now.toLocaleDateString('es-MX', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+};
+
+// Navigation
+function goTo(n) {
+  document.querySelectorAll('.section').forEach((s,i) => s.classList.toggle('active', i===n));
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach((item,i) => { item.classList.remove('active'); if(i<n) item.classList.add('done'); if(i===n) item.classList.add('active'); });
+  currentSection = n;
+  const pct = Math.round((n/(navItems.length-1))*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.querySelector('.main').scrollTo(0,0);
+  if(n===8) buildSummary();
+}
+
+// Scale buttons
+function setScale(id, val) {
+  scales[id] = val;
+  const g = document.getElementById(id);
+  if(!g) return;
+  g.querySelectorAll('.scale-btn').forEach((btn,i) => { btn.className='scale-btn'; if(i+1===val) btn.classList.add('s'+val); });
+}
+
+// Checkbox toggle — fixed: pure class toggle, no native checkbox involved
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+}
+
+// Folio
+function updateFolio(v) { document.getElementById('folioDisplay').textContent = v||'BT-···'; }
+
+// Priority
+function setPriority(type, el) {
+  priority = type;
+  document.querySelectorAll('.priority-btn').forEach(b => { b.className='priority-btn'; });
+  el.classList.add('sel-'+type);
+}
+
+// Score calc
+function calcScore() {
+  const systems = [
+    { name:'Eléctrico', keys:['tableroEstado','circuitosEstado','contactosEstado'], color:'#f5a623' },
+    { name:'Plomería', keys:['tuberiasEstado','calentadorEstado','tinacoEstado'], color:'#0099cc' },
+    { name:'HVAC', keys:['airesEstado','compresorEstado','evaporadorEstado'], color:'#4ade80' },
+    { name:'Estructura', keys:['murosEstado','techoEstado','murosExtEstado'], color:'#a78bfa' },
+    { name:'Acabados', keys:['pisosEstado','ventanasEstado','puertasEstado'], color:'#fb923c' },
+    { name:'Electrodomésticos', keys:['estufaEstado','refriEstado','lavadoraEstado'], color:'#f472b6' },
+  ];
+  const ss = systems.map(sys => {
+    const vals = sys.keys.map(k=>scales[k]).filter(v=>v!==undefined);
+    const avg = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : null;
+    return {...sys, score:avg};
+  });
+  const valid = ss.filter(s=>s.score!==null);
+  const overall = valid.length ? Math.round((valid.reduce((a,s)=>a+s.score,0)/valid.length)*20) : null;
+  return {overall, systemScores:ss};
+}
+
+// Findings with normative references
+function generateFindings() {
+  const f = [];
+  // Electrical
+  if(scales['tableroEstado']<=2) f.push({type:'urgente', text:'Tablero eléctrico en estado crítico. Requiere intervención inmediata.', ref:'NOM-001-SEDE-2012 Art. 408'});
+  const tablEdad = document.getElementById('tableroEdad')?.value;
+  if(tablEdad==='Más de 20 años') f.push({type:'alerta', text:'Tablero con más de 20 años de antigüedad. Evaluar reemplazo preventivo.', ref:'NOM-001-SEDE-2012'});
+  const tierra = document.getElementById('tierraFisica')?.value;
+  if(tierra==='Ausente — sin sistema de tierra') f.push({type:'urgente', text:'Sin sistema de tierra física. Riesgo eléctrico para personas y equipos.', ref:'NOM-001-SEDE-2012 Art. 250'});
+  const tierraOhm = parseFloat(document.getElementById('tierraOhm')?.value||0);
+  if(tierraOhm>25 && tierraOhm>0) f.push({type:'urgente', text:`Resistencia de tierra: ${tierraOhm}Ω — excede el límite máximo de 25Ω.`, ref:'NOM-001-SEDE-2012 Art. 250-56'});
+  if(scales['circuitosEstado']===3) f.push({type:'alerta', text:'Circuitos en estado regular. Monitorear en próxima visita.', ref:'NOM-001-SEDE-2012'});
+  const nomElec = document.getElementById('nomElec')?.value;
+  if(nomElec==='No cumple — requiere intervención') f.push({type:'urgente', text:'Instalación eléctrica no cumple con criterios básicos de NOM-001-SEDE-2012.', ref:'NOM-001-SEDE-2012'});
+  const ultimoMantElec = document.getElementById('ultimoMantElec')?.value;
+  if(ultimoMantElec==='Más de 5 años'||ultimoMantElec==='Nunca / Desconocido') f.push({type:'alerta', text:'Sin mantenimiento eléctrico registrado en más de 5 años.', ref:'NOM-001-SEDE-2012 (revisión periódica c/5 años)'});
+
+  // Plumbing
+  const calEdad = document.getElementById('calentadorEdad')?.value;
+  if(calEdad==='Más de 15 años (reemplazo urgente recomendado)') f.push({type:'urgente', text:'Calentador con más de 15 años de vida útil. Reemplazo urgente recomendado.', ref:'NOM-003-ENER-2011 (vida útil promedio: 10–15 años)'});
+  if(calEdad==='11 – 15 años (alta probabilidad de falla)') f.push({type:'alerta', text:'Calentador en zona de alta probabilidad de falla (11–15 años). Programar revisión especializada.', ref:'NOM-003-ENER-2011'});
+  if(scales['calentadorEstado']<=2) f.push({type:'urgente', text:'Calentador de agua en estado crítico. Riesgo de falla inminente o riesgo por gas.', ref:'NOM-003-ENER-2011 · NOM-011-SESH-2012'});
+  const lavado = document.getElementById('ultimoLavado')?.value;
+  if(lavado==='Más de 2 años (riesgo sanitario)'||lavado==='Nunca / Desconocido (riesgo alto)') f.push({type:'alerta', text:'Tinaco/cisterna sin lavado reciente. Riesgo sanitario por proliferación bacteriana.', ref:'COFEPRIS (recomendación: cada 6 meses)'});
+  const presion = document.getElementById('presionAgua')?.value;
+  if(presion==='Alta — más de 60 PSI (riesgo de daño a instalaciones)') f.push({type:'alerta', text:'Presión de agua excesiva. Puede dañar llaves, conexiones y calentador a largo plazo.', ref:'CONAGUA (rango óptimo: 35–60 PSI)'});
+
+  // HVAC
+  if(scales['compresorEstado']<=2) f.push({type:'urgente', text:'Compresor de A/C en estado crítico. Alto riesgo de falla en temporada de calor.', ref:'NOM-011-ENER-2025'});
+  const filtros = document.getElementById('ultimoFiltros')?.value;
+  if(filtros==='Más de 12 meses (reducción de rendimiento hasta 40%)'||filtros==='Nunca / Desconocido') f.push({type:'alerta', text:'Filtros de A/C sin cambio en más de 12 meses. Reducción de eficiencia hasta 40% y riesgo de daño al compresor.', ref:'Práctica técnica ASHRAE / NOM-011-ENER-2025'});
+  const refrig = document.getElementById('refrigerante')?.value;
+  if(refrig==='Fuga detectada (aceite o escarcha visible)') f.push({type:'urgente', text:'Fuga de refrigerante detectada. Requiere atención técnica inmediata — daña compresor si no se atiende.', ref:'ASHRAE 15 · NOM-011-ENER-2025'});
+  if(refrig==='Bajo — requiere recarga') f.push({type:'alerta', text:'Nivel de refrigerante bajo. Programar recarga con técnico certificado.', ref:'ASHRAE 15'});
+  const edadAires = document.getElementById('edadAires')?.value;
+  if(edadAires==='Más de 12 años (alta probabilidad de falla)') f.push({type:'alerta', text:'Equipos de A/C con más de 12 años. Evaluar reemplazo para evitar falla en temporada de calor.', ref:'NOM-011-ENER-2025 (vida útil: 12–15 años)'});
+
+  // Structure
+  const grietas = document.getElementById('grietas')?.value;
+  if(grietas==='Grietas con desplazamiento — requiere evaluación estructural urgente') f.push({type:'urgente', text:'Grietas con desplazamiento detectadas. Se requiere evaluación estructural especializada.', ref:'Práctica técnica — requiere perito estructural'});
+  if(grietas==='Grietas profundas (más de 3mm — atención)') f.push({type:'alerta', text:'Grietas profundas (>3mm) detectadas. Monitorear progresión y evaluar causa.', ref:'Práctica técnica de inspección estructural'});
+  if(scales['techoEstado']<=2) f.push({type:'urgente', text:'Techo en estado crítico. Riesgo de filtración o colapso parcial.', ref:'Práctica técnica'});
+  const imper = document.getElementById('impermeabilizante')?.value;
+  if(imper==='Más de 7 años — requiere renovación urgente') f.push({type:'urgente', text:'Impermeabilizante con más de 7 años. Renovar antes de temporada de lluvias para evitar filtraciones.', ref:'Vida útil: asfáltico 3–5 años, elastomérico 5–8 años'});
+
+  // Security
+  const humo = document.getElementById('detectorHumo')?.value;
+  if(humo==='Ausente — se recomienda instalar') f.push({type:'alerta', text:'Sin detector de humo instalado. Se recomienda instalar al menos uno por planta.', ref:'Práctica de seguridad habitacional'});
+  const gas2 = document.getElementById('detectorGas')?.value;
+  if(gas2==='Ausente — se recomienda en cocina y cuarto de boiler') f.push({type:'alerta', text:'Sin detector de gas instalado. Se recomienda en cocina y cuarto de boiler.', ref:'NOM-002-SECRE-2010'});
+
+  // Positives
+  const {overall} = calcScore();
+  if(overall&&overall>=85) f.push({type:'ok', text:'Score general excelente. Propiedad en muy buen estado. Continuar con mantenimiento preventivo programado.', ref:'Score Thruver'});
+  else if(overall&&overall>=70) f.push({type:'ok', text:'Propiedad en buen estado general. Sin hallazgos críticos en los sistemas principales.', ref:'Score Thruver'});
+
+  return f;
+}
+
+function buildSummary() {
+  const {overall, systemScores} = calcScore();
+  const scoreBig = document.getElementById('scoreBig');
+  const scoreLabel = document.getElementById('scoreLabel');
+  const scoreDesc = document.getElementById('scoreDesc');
+  if(overall!==null) {
+    scoreBig.textContent = overall;
+    scoreBig.style.color = overall>=80?'var(--green)':overall>=60?'var(--accent)':'var(--red)';
+    const lbl = overall>=90?'Excelente estado':overall>=75?'Buen estado general':overall>=60?'Estado regular — atención recomendada':'Estado crítico — intervención urgente';
+    scoreLabel.textContent = lbl;
+    scoreDesc.textContent = 'Score calculado a partir de '+systemScores.filter(s=>s.score!==null).length+' sistemas evaluados.';
+  } else {
+    scoreBig.textContent='—'; scoreLabel.textContent='Completa las escalas para calcular'; scoreDesc.textContent='';
+  }
+  const barsEl = document.getElementById('scoreBars');
+  barsEl.innerHTML = systemScores.map(s => {
+    if(s.score===null) return '';
+    const pct = Math.round(s.score*20);
+    const col = pct>=80?'#16a34a':pct>=60?'#f5a623':'#dc2626';
+    return `<div class="score-row"><div class="score-row-header"><span class="score-row-name">${s.name}</span><span class="score-row-val" style="color:${col}">${pct}</span></div><div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%;background:${col}"></div></div></div>`;
+  }).join('');
+
+  document.getElementById('summFolio').textContent = document.getElementById('folio').value||'—';
+  document.getElementById('summPrioridad').textContent = priority ? priority.charAt(0).toUpperCase()+priority.slice(1) : '—';
+  document.getElementById('summProxima').textContent = document.getElementById('proximaVisita')?.value||'—';
+
+  const findings = generateFindings();
+  const fl = document.getElementById('findingsList');
+  fl.innerHTML = findings.length ? findings.map(f => `
+    <div class="finding-item ${f.type}">
+      <div class="finding-dot"></div>
+      <span style="flex:1">${f.text}</span>
+      ${f.ref?`<span class="finding-ref">${f.ref}</span>`:''}
+    </div>`).join('') : '<div style="font-size:12px;color:var(--text-3);padding:12px;text-align:center">Completa más campos para ver hallazgos automáticos...</div>';
+}
+
+function exportJSON() {
+  const {overall, systemScores} = calcScore();
+  const data = {
+    meta:{ folio:document.getElementById('folio').value, fecha:document.getElementById('fecha').value, hora:document.getElementById('horaInicio').value, tecnico_id:document.getElementById('tecId').value, tecnico_nombre:document.getElementById('tecNombre').value, propiedad_id:document.getElementById('propId').value, tipo_servicio:document.getElementById('tipoSvc').value },
+    propiedad:{ tipo:document.getElementById('propTipo').value, antiguedad:document.getElementById('propAntiguedad').value, metros:document.getElementById('propM2').value, ciudad:document.getElementById('propCiudad').value },
+    normas_referencia:['NOM-001-SEDE-2012','NOM-003-ENER-2011','NOM-011-ENER-2025','NOM-011-SESH-2012','NOM-002-SECRE-2010','NOM-013-CNA-2000','ASHRAE-15'],
+    scores:{ overall:overall, sistemas:systemScores.reduce((acc,s)=>{acc[s.name]=s.score?Math.round(s.score*20):null;return acc;},{}) },
+    escalas:scales,
+    prioridad:priority,
+    proxima_visita:document.getElementById('proximaVisita')?.value,
+    hallazgos:generateFindings().map(f=>({tipo:f.type,descripcion:f.text,referencia:f.ref})),
+    notas:document.getElementById('notasFinales').value,
+    generated_at:new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href=url; a.download=(data.meta.folio||'bitacora')+'.json'; a.click();
+}
+
+function saveDraft() {
+  const t = document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;right:24px;background:#fff;border:1px solid #dde1e7;border-radius:8px;padding:10px 16px;font-size:12px;color:#333;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.1)';
+  t.textContent='✓ Borrador guardado localmente'; document.body.appendChild(t); setTimeout(()=>t.remove(),2500);
+}
+
+function finalizarBitacora() {
+  const t = document.createElement('div');
+  t.style.cssText='position:fixed;bottom:24px;right:24px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:14px 18px;font-size:13px;color:#166534;z-index:9999;max-width:280px;line-height:1.5;box-shadow:0 4px 12px rgba(0,0,0,0.1)';
+  t.innerHTML='<strong>✓ Bitácora enviada al expediente</strong><br><span style="font-size:11px;color:#999">Registro permanente actualizado.</span>';
+  document.body.appendChild(t); setTimeout(()=>t.remove(),3500);
+}
+
+// ── Validation system ──
+const ICONS = {
+  ok:   `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  warn: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  err:  `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#991b1b" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+};
+
+function applyState(inputId, iconId, msgId, state, message) {
+  const el = document.getElementById(inputId);
+  const wrap = el?.closest('.field-wrap');
+  const icon = iconId ? document.getElementById(iconId) : wrap?.querySelector('.val-icon');
+  const msg  = document.getElementById(msgId);
+  if (wrap) wrap.className = 'field-wrap' + (state ? ' state-' + state : '');
+  if (icon) { icon.className = 'val-icon' + (state ? ' show ' + state : ''); icon.innerHTML = state ? ICONS[state] : ''; }
+  if (msg)  { msg.className = 'val-msg' + (state ? ' show ' + state : ''); msg.innerHTML = state ? (ICONS[state] + '<span>' + message + '</span>') : ''; }
+}
+
+function validateVoltaje(inputId, msgId) {
+  const v = parseFloat(document.getElementById(inputId)?.value);
+  // Detectar icono correcto según qué línea es
+  const iconId = inputId === 'voltaje1' ? 'vicon1' : 'vicon2';
+  if (!v) { applyState(inputId, iconId, msgId, null, ''); return; }
+  // NOM-001-SEDE-2012 — CFE México: 127V nominal
+  // Óptimo ±5%: 120–134V | Aceptable ±10%: 114–119V o 135–140V | Crítico: <114V o >140V
+  if (v >= 120 && v <= 134) {
+    applyState(inputId, iconId, msgId, 'ok',   `${v}V — voltaje óptimo (NOM-001-SEDE-2012 · 127V nominal CFE).`);
+  } else if ((v >= 114 && v < 120) || (v > 134 && v <= 140)) {
+    applyState(inputId, iconId, msgId, 'warn', `${v}V — rango aceptable. Monitorear eficiencia del sistema.`);
+  } else {
+    applyState(inputId, iconId, msgId, 'err',  `${v}V — valor crítico. Riesgo de daño inmediato en compresores y tarjetas electrónicas.`);
+  }
+}
+
+function validateVoltaje2(inputId, msgId) {
+  const v = parseFloat(document.getElementById(inputId)?.value);
+  if (!v) { applyState(inputId, 'vicon2', msgId, null, ''); return; }
+  // Bifásico: 240–254V óptimo | Monofásico: misma lógica 127V
+  if ((v >= 240 && v <= 254) || (v >= 120 && v <= 134)) {
+    applyState(inputId, 'vicon2', msgId, 'ok',   `${v}V — dentro del rango esperado.`);
+  } else if ((v >= 228 && v < 240) || (v > 254 && v <= 260) || (v >= 114 && v < 120) || (v > 134 && v <= 140)) {
+    applyState(inputId, 'vicon2', msgId, 'warn', `${v}V — fuera del rango óptimo. Verificar tipo de instalación.`);
+  } else {
+    applyState(inputId, 'vicon2', msgId, 'err',  `${v}V — valor crítico. Verificar conexión de inmediato.`);
+  }
+}
+
+function validateTierra(inputId, msgId) {
+  const v = parseFloat(document.getElementById(inputId)?.value);
+  if (!v) { applyState(inputId, 'ticon', msgId, null, ''); return; }
+  if (v <= 10)       applyState(inputId, 'ticon', msgId, 'ok',   `${v} Ω — excelente. Bien por debajo del límite de 25 Ω.`);
+  else if (v <= 25)  applyState(inputId, 'ticon', msgId, 'warn', `${v} Ω — dentro del límite pero elevado. Considerar mejora del electrodo.`);
+  else               applyState(inputId, 'ticon', msgId, 'err',  `${v} Ω — excede el límite máximo de 25 Ω (NOM-001-SEDE-2012 Art. 250-56). Corrección obligatoria.`);
+}
+
+function validateNeutroTierra(inputId, msgId) {
+  const v = parseFloat(document.getElementById(inputId)?.value);
+  if (!v && v !== 0) { applyState(inputId, 'nticon', msgId, null, ''); return; }
+  if (v < 1) {
+    applyState(inputId, 'nticon', msgId, 'ok',   `${v}V — excelente. Sin ruido eléctrico detectable.`);
+  } else if (v >= 1 && v <= 2) {
+    applyState(inputId, 'nticon', msgId, 'warn', `${v}V — ruido eléctrico leve. Monitorear y verificar calidad de la tierra física.`);
+  } else {
+    applyState(inputId, 'nticon', msgId, 'err',  `${v}V — ruido crítico. Causa directa de quema de tarjetas en minisplits y equipos electrónicos. Corrección urgente de tierra física.`);
+  }
+}
+
+function validateSelect(inputId, msgId, rules, messages) {
+  const val = document.getElementById(inputId)?.value || '';
+  if (!val) { applyState(inputId, null, msgId, null, ''); return; }
+  if (rules.err?.includes(val))        applyState(inputId, null, msgId, 'err',  messages.err);
+  else if (rules.warn?.includes(val))  applyState(inputId, null, msgId, 'warn', messages.warn);
+  else                                 applyState(inputId, null, msgId, null,   '');
+}
+</script>
+</body>
+</html>

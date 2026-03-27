@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#f2f3f7">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Thruver Partner</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  /* Navy + light canvas theme */
+  --bg:#f2f3f7; --surface:#1a2540; --surface2:#1e2d4f; --surface3:#233460;
+  --border:rgba(255,255,255,.08); --border2:rgba(255,255,255,.16);
+  --text:#f0f2f8; --text2:#8fa3c8; --text3:#4d6490;
+  --accent:#f0f2f8;
+  --gold:#d4a017; --gold-dim:rgba(212,160,23,.15); --gold-glow:rgba(212,160,23,.3);
+  --blue:#4f8ef7; --blue-dim:rgba(79,142,247,.15);
+  --green:#22c55e; --green-dim:rgba(34,197,94,.12);
+  --red:#ef4444; --red-dim:rgba(239,68,68,.12);
+  --amber:#f59e0b; --amber-dim:rgba(245,158,11,.12);
+  --r:10px; --rs:6px;
+  --shadow:0 2px 8px rgba(0,0,0,.18),0 0 0 1px rgba(255,255,255,.05);
+  --shadow-lg:0 8px 32px rgba(0,0,0,.25),0 0 0 1px rgba(255,255,255,.07);
+  --sidebar-w:228px;
+}
+html{font-size:14px;-webkit-text-size-adjust:100%}
+body{background:#f2f3f7;color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.55;min-height:100vh;overflow-x:hidden}
+
+/* ══ LOGIN ══════════════════════════════════════════════════ */
+#screen-login{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:#f2f3f7;position:relative;overflow:hidden}
+#screen-login::before{content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:700px;height:700px;background:radial-gradient(circle,rgba(26,37,64,.08) 0%,transparent 60%);pointer-events:none}
+.login-card{background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:40px;width:100%;max-width:400px;box-shadow:0 16px 48px rgba(26,37,64,.25);position:relative;z-index:1}
+.lc-logo{display:flex;align-items:center;gap:9px;margin-bottom:36px}
+.lc-mark{width:34px;height:34px;background:var(--gold);border-radius:9px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 24px var(--gold-glow)}
+.lc-name{font-size:15px;font-weight:700;letter-spacing:-.02em}
+.lc-pill{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:var(--gold-dim);color:var(--gold);border:1px solid rgba(212,160,23,.3);border-radius:4px;padding:2px 7px}
+.lc-title{font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.lc-sub{font-size:13px;color:var(--text2);margin-bottom:28px;line-height:1.6}
+.lf{margin-bottom:14px}
+.ll{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text2);margin-bottom:6px;display:block}
+.li{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;padding:11px 14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.li:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+.li::placeholder{color:var(--text3)}
+.lbtn{width:100%;background:var(--gold);color:#000;font-size:13px;font-weight:800;padding:12px;border-radius:var(--rs);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;letter-spacing:-.01em;margin-top:8px;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;box-shadow:0 4px 14px var(--gold-glow)}
+.lbtn:hover{opacity:.9;transform:translateY(-1px)}
+.lerr{background:var(--red-dim);border:1px solid rgba(239,68,68,.2);border-radius:var(--rs);padding:8px 12px;font-size:12px;color:#fca5a5;margin-top:8px;display:none}
+.lhint{font-size:11px;color:var(--text3);margin-top:14px;line-height:1.6;text-align:center}
+
+/* ══ APP SHELL ══════════════════════════════════════════════ */
+#app-shell{display:none;min-height:100vh}
+
+/* Sidebar */
+.sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:var(--surface);border-right:1px solid rgba(255,255,255,.06);display:flex;flex-direction:column;z-index:100;transition:width .25s cubic-bezier(.25,1,.5,1),transform .25s cubic-bezier(.25,1,.5,1)}
+.sidebar.collapsed{width:52px}
+.sidebar.collapsed .sb-top{padding:14px 12px}
+.sidebar.collapsed .sb-brand span,.sidebar.collapsed .sb-pill,.sidebar.collapsed .sb-partner-name,.sidebar.collapsed .sb-partner-id,.sidebar.collapsed .sb-partner-badge,.sidebar.collapsed .sb-section,.sidebar.collapsed .sbl-lbl,.sidebar.collapsed .sbl-badge,.sidebar.collapsed .sbl-new,.sidebar.collapsed .sb-perf,.sidebar.collapsed .sb-logout span{display:none!important}
+.sidebar.collapsed .sb-partner{padding:6px;justify-content:center}
+.sidebar.collapsed .sbl{padding:8px 0;justify-content:center}
+.sidebar.collapsed .sbl-icon{width:28px;height:28px;justify-content:center;margin:0 auto}
+.sidebar.collapsed .sb-name{display:none}
+.sidebar.collapsed .sb-logo{justify-content:center;margin-bottom:10px}
+.sidebar.collapsed + .main,.sidebar.collapsed ~ .main{margin-left:52px}
+.sb-collapse-btn{position:absolute;top:50%;right:-12px;transform:translateY(-50%);width:22px;height:22px;border-radius:50%;background:var(--surface2);border:1.5px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:110;transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.3)}
+.sb-collapse-btn:hover{background:var(--gold);border-color:var(--gold)}
+.sb-collapse-btn svg{transition:transform .25s}
+.sidebar.collapsed .sb-collapse-btn svg{transform:rotate(180deg)}
+.sb-top{padding:18px 20px 16px;border-bottom:1px solid var(--border)}
+.sb-brand{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.sb-mark{width:26px;height:26px;background:var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px var(--gold-glow)}
+.sb-name{font-size:13px;font-weight:700;letter-spacing:-.01em}
+.sb-pill{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;background:var(--gold-dim);color:var(--gold);border:1px solid rgba(212,160,23,.25);border-radius:3px;padding:2px 6px}
+.sb-partner{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px}
+.sb-av{width:30px;height:30px;border-radius:50%;background:var(--gold);color:#000;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 2px 8px var(--gold-glow)}
+.sb-partner-name{font-size:12px;font-weight:600;letter-spacing:-.01em}
+.sb-partner-id{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3)}
+.sb-partner-badge{font-size:9px;font-weight:700;color:var(--gold);margin-top:1px}
+.sb-nav{padding:8px 0;flex:1;overflow-y:auto}
+.sb-section{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--text3);padding:10px 20px 3px}
+.sbl{display:flex;align-items:center;gap:9px;padding:8px 16px 8px 20px;cursor:pointer;position:relative;transition:background .1s;user-select:none;border-radius:0}
+.sbl::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;transition:background .2s}
+.sbl:hover{background:rgba(255,255,255,.03)}
+.sbl.active::before{background:var(--gold)}
+.sbl.active{background:var(--gold-dim)}
+.sbl.active .sbl-lbl{color:var(--text);font-weight:600}
+.sbl.active .sbl-icon svg{stroke:var(--gold)}
+.sbl-icon{width:15px;height:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sbl-icon svg{stroke:var(--text3);transition:stroke .15s}
+.sbl-lbl{font-size:12px;font-weight:500;color:var(--text2);transition:color .15s}
+.sbl-badge{margin-left:auto;background:var(--red);color:#fff;font-size:8px;font-weight:800;border-radius:100px;padding:1px 5px;min-width:14px;text-align:center}
+.sbl-new{margin-left:auto;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;background:var(--gold-dim);color:var(--gold);border-radius:3px;padding:1px 5px}
+.sb-footer{padding:14px 20px;border-top:1px solid var(--border)}
+.sb-perf{background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 12px;margin-bottom:12px}
+.sb-perf-title{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);margin-bottom:6px}
+.sb-perf-bar{height:3px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;margin-bottom:4px}
+.sb-perf-fill{height:100%;border-radius:2px;background:var(--green);transition:width .5s ease}
+.sb-perf-val{font-size:10px;color:var(--text2);display:flex;justify-content:space-between}
+.sb-logout{font-size:11px;color:var(--text3);cursor:pointer;display:flex;align-items:center;gap:5px;transition:color .15s}
+.sb-logout:hover{color:var(--red)}
+
+/* Main */
+.main{margin-left:var(--sidebar-w);min-height:100vh;display:flex;flex-direction:column;background:#f2f3f7;transition:margin-left .25s cubic-bezier(.25,1,.5,1)}
+.topbar{background:#fff;border-bottom:1px solid #e0e4ed;padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}
+.tb-left{display:flex;align-items:center;gap:10px}
+.tb-title{font-size:15px;font-weight:700;letter-spacing:-.02em}
+.tb-sub{font-size:11px;color:var(--text3);font-family:'DM Mono',monospace}
+.tb-right{display:flex;align-items:center;gap:8px}
+.tb-btn{width:32px;height:32px;border-radius:var(--rs);background:#f2f3f7;border:1px solid #e0e4ed;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s;position:relative}
+.tb-btn:hover{background:#e4e8f0}
+.tb-notif-dot{position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--red);border:2px solid var(--surface)}
+.content{flex:1;padding:24px 28px 40px;background:#f2f3f7}
+
+/* Mobile */
+.mob-topbar{display:none;position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #e0e4ed;padding:10px 16px;align-items:center;justify-content:space-between}
+.mob-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:#fff;border-top:1px solid #e0e4ed;display:none;padding:6px 0 calc(env(safe-area-inset-bottom)+6px)}
+.mnav-items{display:flex}
+.mni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0}
+.mni svg{stroke:#4d6490;transition:stroke .15s}
+.mni-lbl{font-size:9px;font-weight:700;color:#4d6490;text-transform:uppercase;letter-spacing:.06em;transition:color .15s}
+.mni.active svg{stroke:var(--gold)}
+.mni.active .mni-lbl{color:var(--gold)}
+.sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:99;backdrop-filter:blur(4px)}
+
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);width:270px}.sidebar.open{transform:translateX(0)}
+  .sb-overlay.open{display:block}
+  .main{margin-left:0}.topbar{display:none}
+  .mob-topbar{display:flex}.mob-nav{display:block}
+  .content{padding:16px 16px calc(env(safe-area-inset-bottom)+72px)}
+  .g2,.g3,.g4{grid-template-columns:1fr 1fr!important}
+}
+
+/* ══ COMPONENTS ══════════════════════════════════════════════ */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.card-light{background:#ffffff;border:1px solid #e0e4ed;border-radius:var(--r);padding:16px;box-shadow:0 1px 4px rgba(26,37,64,.07)}
+.card-sm-light{background:#ffffff;border:1px solid #e0e4ed;border-radius:var(--rs);padding:12px}
+.kpi-light{background:#ffffff;border:1px solid #e0e4ed;border-radius:var(--r);padding:16px;box-shadow:0 1px 4px rgba(26,37,64,.07);position:relative;overflow:hidden}
+.kpi-light::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:transparent;transition:background .3s}
+.kpi-light:hover::before{background:var(--gold)}
+.kpi-light .kpi-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6b7a99;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.kpi-light .kpi-val{font-family:'DM Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-.03em;margin-bottom:3px;color:#1a2540}
+.kpi-light .kpi-sub{font-size:11px;font-weight:500}
+.card-sm{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:12px}
+.card-dark{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);padding:16px}
+/* KPI */
+.kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:transparent;transition:background .3s}
+.kpi:hover::before{background:var(--gold)}
+.kpi-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.kpi-val{font-family:'DM Mono',monospace;font-size:26px;font-weight:700;letter-spacing:-.03em;margin-bottom:3px}
+.kpi-sub{font-size:11px;font-weight:500}
+.kpi-spark{width:60px;height:28px;margin-top:6px}
+.up{color:var(--green)}.down{color:var(--red)}.neutral{color:var(--text3)}.gold{color:var(--gold)}
+/* Section header */
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;margin-top:24px}
+.sh:first-child{margin-top:0}
+.sh-t{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;gap:8px}
+.sh-line{width:20px;height:1px;background:var(--border)}
+.sh-a{font-size:12px;color:var(--gold);font-weight:600;cursor:pointer;transition:opacity .15s}
+.sh-a:hover{opacity:.75}
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:5px;padding:7px 14px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all .15s;font-family:'DM Sans',sans-serif;letter-spacing:-.01em}
+.btn-gold{background:var(--gold);color:#000;box-shadow:0 2px 8px var(--gold-glow)}.btn-gold:hover{opacity:.9}
+.btn-primary{background:var(--text);color:var(--bg)}.btn-primary:hover{opacity:.85}
+.btn-ghost{background:transparent;color:var(--text2);border:1px solid var(--border)}.btn-ghost:hover{background:var(--surface2);color:var(--text)}
+.btn-lg{padding:10px 20px;font-size:13px}
+.btn-icon{width:32px;height:32px;border-radius:var(--rs);background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s}.btn-icon:hover{background:var(--surface3)}
+/* Chips */
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:2px 7px;border-radius:100px;border:1px solid}
+.chip-pending{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:var(--amber)}
+.chip-active{background:var(--blue-dim);border-color:rgba(59,130,246,.3);color:var(--blue)}
+.chip-done{background:var(--green-dim);border-color:rgba(34,197,94,.3);color:var(--green)}
+.chip-urgent{background:var(--red-dim);border-color:rgba(239,68,68,.3);color:var(--red)}
+.chip-gold{background:var(--gold-dim);border-color:rgba(212,160,23,.3);color:var(--gold)}
+/* Tags */
+.tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+/* Divider */
+.div{height:1px;background:var(--border);margin:14px 0}
+/* Empty */
+.empty{text-align:center;padding:40px 20px}
+.empty-icon{width:44px;height:44px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+.empty-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.empty-sub{font-size:12px;color:var(--text2);line-height:1.6}
+/* Form fields */
+.fg{display:grid;gap:12px}
+.fg2{grid-template-columns:1fr 1fr}
+.fg3{grid-template-columns:1fr 1fr 1fr}
+.fblock{display:flex;flex-direction:column;gap:5px}
+.flabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text2)}
+.req{display:inline-block;width:4px;height:4px;border-radius:50%;background:var(--gold);margin-left:3px;vertical-align:middle}
+.finput{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;outline:none;transition:border-color .15s;-webkit-appearance:none}
+.finput:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+.finput::placeholder{color:var(--text3)}
+select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%23444440' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:30px;cursor:pointer}
+textarea.finput{resize:none;min-height:64px}
+/* Animations */
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.anim{animation:slideUp .35s cubic-bezier(.25,1,.5,1) both}
+.d1{animation-delay:.04s}.d2{animation-delay:.08s}.d3{animation-delay:.12s}.d4{animation-delay:.18s}.d5{animation-delay:.24s}
+/* Score ring */
+.score-ring{position:relative;display:inline-flex}
+.score-ring svg{transform:rotate(-90deg)}
+.score-ring-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-weight:700}
+/* Trend sparkline */
+.sparkline{display:flex;align-items:flex-end;gap:2px;height:28px}
+.spark-bar{flex:1;border-radius:2px 2px 0 0;background:rgba(212,160,23,.3);transition:background .2s}
+.spark-bar:last-child{background:var(--gold)}
+/* Activity timeline */
+.tl-item{display:flex;gap:12px;padding:10px 0;position:relative}
+.tl-item::after{content:'';position:absolute;left:15px;top:30px;bottom:-10px;width:1px;background:var(--border)}
+.tl-item:last-child::after{display:none}
+.tl-dot{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+.tl-body{flex:1;padding-top:3px}
+.tl-title{font-size:13px;font-weight:500;margin-bottom:2px;line-height:1.35}
+.tl-sub{font-size:11px;color:var(--text2);line-height:1.4}
+.tl-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);flex-shrink:0;padding-top:5px}
+/* Kanban */
+.kanban{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;align-items:start}
+@media(max-width:900px){.kanban{grid-template-columns:1fr}}
+.kan-col{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden}
+.kan-header{padding:12px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.kan-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;display:flex;align-items:center;gap:6px}
+.kan-count{font-size:10px;font-weight:700;font-family:'DM Mono',monospace;background:var(--surface3);border-radius:100px;padding:1px 7px}
+.kan-body{padding:10px;display:flex;flex-direction:column;gap:7px}
+.kan-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:12px;cursor:pointer;transition:border-color .15s}
+.kan-card:hover{border-color:var(--border2)}
+.kan-card.urgent{border-left:3px solid var(--red)}
+.kan-card.unassigned{border-left:3px solid var(--amber)}
+.kan-spec{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.kan-address{font-size:12px;font-weight:600;margin-bottom:3px;line-height:1.3}
+.kan-meta{font-size:10px;color:var(--text2);display:flex;align-items:center;gap:6px}
+.kan-tec{display:flex;align-items:center;gap:4px;margin-top:6px;padding-top:6px;border-top:1px solid var(--border);font-size:10px;color:var(--text2)}
+/* Tech grid */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.tech-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden}
+.tech-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.tech-card:hover{border-color:var(--border2);box-shadow:var(--shadow-lg)}
+.tech-card.activo::before{background:var(--green)}
+.tech-card.inactivo::before{background:var(--text3)}
+.tech-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;margin-bottom:10px}
+.tech-name{font-size:13px;font-weight:700;margin-bottom:2px;letter-spacing:-.01em}
+.tech-meta{font-size:10px;color:var(--text2);display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.tech-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.tech-stat{background:var(--surface2);border-radius:5px;padding:6px;text-align:center}
+.tech-stat-val{font-family:'DM Mono',monospace;font-size:13px;font-weight:600;margin-bottom:1px}
+.tech-stat-lbl{font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em}
+/* Bar chart */
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:7px}
+.bar-lbl{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);width:26px;text-align:right;flex-shrink:0}
+.bar-track{flex:1;height:22px;background:var(--surface2);border-radius:4px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:7px;transition:width 1.2s cubic-bezier(.25,1,.5,1)}
+.bar-val{font-size:9px;font-family:'DM Mono',monospace;font-weight:600;color:rgba(0,0,0,.7)}
+/* Log */
+.log-row{display:grid;grid-template-columns:110px 1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid #e0e4ed;align-items:start;font-size:12px}
+.log-row:last-child{border-bottom:none}
+.log-time{font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);padding-top:1px}
+.log-msg{color:var(--text2);line-height:1.4}
+.log-actor{font-size:10px;font-weight:600;color:var(--text3);text-align:right}
+/* Access log */
+.acc-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border)}
+.acc-row:last-child{border-bottom:none}
+/* Rating stars */
+.stars{display:flex;gap:1px}
+.star-on{color:var(--gold);font-size:12px}
+.star-off{color:var(--text3);font-size:12px}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     LOGIN
+══════════════════════════════════════════════════════ -->
+<div id="screen-login">
+  <div class="login-card">
+    <div class="lc-logo">
+      <div class="lc-mark"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+      <span class="lc-name">Thruver</span>
+      <span class="lc-pill">Partner</span>
+    </div>
+    <div class="lc-title">Panel de operaciones</div>
+    <div class="lc-sub">Accede con tu ID de Partner y contraseña asignada por Thruver.</div>
+    <div class="lf"><label class="ll">ID de Partner</label><input class="li" id="l_id" type="text" placeholder="PRT-0012" autocomplete="username"></div>
+    <div class="lf"><label class="ll">Contraseña</label><input class="li" id="l_pw" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+    <button class="lbtn" onclick="doLogin()">Acceder al panel <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <div class="lerr" id="l_err">Credenciales incorrectas. Verifica tu ID y contraseña.</div>
+    <div class="lhint">¿Problemas de acceso? Contacta a tu ejecutivo Thruver.<br><span style="opacity:.3">Demo: PRT-0012 / gustavo2026</span></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     APP
+══════════════════════════════════════════════════════ -->
+<div id="app-shell">
+  <div class="sb-overlay" id="sb_overlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-top" style="position:relative">
+      <div class="sb-collapse-btn" onclick="toggleSidebar()" title="Colapsar sidebar">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+      </div>
+      <div class="sb-brand">
+        <div class="sb-mark"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+        <span class="sb-name">Thruver</span>
+        <span class="sb-pill">Partner</span>
+      </div>
+      <div class="sb-partner" style="display:flex;align-items:center;gap:9px">
+        <div class="sb-av" id="sb_av">GR</div>
+        <div>
+          <div class="sb-partner-name" id="sb_nm">Gustavo Ramirez</div>
+          <div class="sb-partner-id" id="sb_id">PRT-0012</div>
+          <div class="sb-partner-badge">● Partner Activo</div>
+        </div>
+      </div>
+    </div>
+
+    <nav class="sb-nav">
+      <div class="sb-section">Principal</div>
+      <div class="sbl active" onclick="go('home')" id="sl-home"><div class="sbl-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><span class="sbl-lbl">Inicio</span></div>
+      <div class="sbl" onclick="go('despacho')" id="sl-despacho"><div class="sbl-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><span class="sbl-lbl">Centro de despacho</span><span class="sbl-badge" id="sb_badge">3</span></div>
+      <div class="sb-section">Equipo</div>
+      <div class="sbl" onclick="go('tecnicos')" id="sl-tecnicos"><div class="sbl-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><span class="sbl-lbl">Mi flotilla</span></div>
+      <div class="sbl" onclick="go('rendimiento')" id="sl-rendimiento"><div class="sbl-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><span class="sbl-lbl">Rendimiento</span></div>
+      <div class="sb-section">Finanzas</div>
+      <div class="sbl" onclick="go('ingresos')" id="sl-ingresos"><div class="sbl-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><span class="sbl-lbl">Ingresos</span></div>
+      <div class="sb-section">Registro</div>
+      <div class="sbl" onclick="go('bitacora')" id="sl-bitacora"><div class="sbl-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div><span class="sbl-lbl">Bitácora</span></div>
+      <div class="sbl" onclick="go('acceso')" id="sl-acceso"><div class="sbl-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><span class="sbl-lbl">Log de acceso</span></div>
+    </nav>
+
+    <div class="sb-footer">
+      <!-- Performance mini widget -->
+      <div class="sb-perf">
+        <div class="sb-perf-title">Rendimiento del equipo</div>
+        <div class="sb-perf-bar"><div class="sb-perf-fill" id="sb_perf_fill" style="width:87%"></div></div>
+        <div class="sb-perf-val"><span>Protocolo cumplido</span><span style="color:var(--green)">87%</span></div>
+      </div>
+      <div class="sb-logout" onclick="doLogout()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Cerrar sesión
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <header class="topbar">
+      <div class="tb-left">
+        <div class="tb-title" id="topbar_t" style="color:#1a2540">Inicio</div>
+        <div class="tb-sub" id="topbar_sub" style="color:#4d6490"></div>
+      </div>
+      <div class="tb-right">
+        <div class="tb-btn" onclick="showNotif()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4d6490" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg><div class="tb-notif-dot"></div></div>
+        <div style="display:flex;align-items:center;gap:7px;padding:5px 10px;background:#f2f3f7;border:1px solid #e0e4ed;border-radius:var(--rs);cursor:pointer">
+          <div class="sb-av" id="top_av" style="width:22px;height:22px;font-size:9px">GR</div>
+          <span style="font-size:12px;font-weight:600;color:#1a2540" id="top_nm">Gustavo R.</span>
+          <div style="width:6px;height:6px;border-radius:50%;background:var(--green)"></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile topbar -->
+    <header class="mob-topbar">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="tb-btn" onclick="openSidebar()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1a2540" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        <span style="font-size:13px;font-weight:700;color:#1a2540" id="mob_t">Inicio</span>
+      </div>
+      <div class="sb-av" id="mob_av" style="width:28px;height:28px;font-size:11px">GR</div>
+    </header>
+
+    <!-- Tab panels -->
+    <div id="tab-home"        class="content" style="display:none"></div>
+    <div id="tab-despacho"    class="content" style="display:none"></div>
+    <div id="tab-tecnicos"    class="content" style="display:none"></div>
+    <div id="tab-rendimiento" class="content" style="display:none"></div>
+    <div id="tab-ingresos"    class="content" style="display:none"></div>
+    <div id="tab-bitacora"    class="content" style="display:none"></div>
+    <div id="tab-acceso"      class="content" style="display:none"></div>
+  </div>
+
+  <!-- Mobile nav -->
+  <nav class="mob-nav"><div class="mnav-items">
+    <div class="mni active" onclick="go('home')" id="mn-home"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg><span class="mni-lbl">Inicio</span></div>
+    <div class="mni" onclick="go('despacho')" id="mn-despacho"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg><span class="mni-lbl">Despacho</span></div>
+    <div class="mni" onclick="go('tecnicos')" id="mn-tecnicos"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span class="mni-lbl">Flotilla</span></div>
+    <div class="mni" onclick="go('ingresos')" id="mn-ingresos"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg><span class="mni-lbl">Ingresos</span></div>
+    <div class="mni" onclick="go('bitacora')" id="mn-bitacora"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span class="mni-lbl">Bitácora</span></div>
+  </div></nav>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════
+const PARTNERS={'PRT-0012':{pw:'gustavo2026',name:'Gustavo Ramirez',initials:'GR',empresa:'Servicios Técnicos Ramirez',ciudad:'Culiacán, Sinaloa',specs:['HVAC','Electrico','Plomeria'],banco:{banco:'BBVA México',clabe:'012320001234567890',titular:'Gustavo Ramirez López',saldo:12840,retirado:3200}}};
+
+const TECNICOS=[
+  {id:'TEC-042',nombre:'Miguel Rodríguez',tel:'667 100 0001',spec:'HVAC',status:'activo',ordenes:143,rating:4.9,score:94,eficiencia:98,herramientas:['Multímetro','Pinza amperimétrica','Manifold','Termómetro IR','Bomba de vacío'],ingreso_mes:4200,ingreso_semana:1200,servicios_semana:5,
+    historial:[
+      {id:'HVAC-2026-04813',fecha:'Hoy 11:30',address:'Blvd. Zapata 890, Las Quintas',spec:'HVAC',monto:750,status:'active',score:null,problema:'Mantenimiento preventivo 2 minisplits Samsung'},
+      {id:'HVAC-2026-04810',fecha:'Ayer 09:00',address:'Insurgentes 780, Hidalgo',spec:'HVAC',monto:920,status:'done',score:92,problema:'Ruido al encender, sin frío'},
+      {id:'HVAC-2026-04801',fecha:'Lun 10:00',address:'Av. Constitución 340, Centro',spec:'HVAC',monto:680,status:'done',score:96,problema:'Fuga de refrigerante R-410A'},
+      {id:'HVAC-2026-04790',fecha:'Vie 09:30',address:'Fracc. Humaya, Privada 8',spec:'HVAC',monto:850,status:'done',score:89,problema:'Instalación minisplit 18k BTU'},
+      {id:'HVAC-2026-04782',fecha:'Jue 14:00',address:'Calle Morelos 1200, Centro',spec:'HVAC',monto:430,status:'done',score:94,problema:'Limpieza y mantenimiento preventivo'},
+      {id:'HVAC-2026-04771',fecha:'Mié 11:00',address:'Colinas del Sol, Manzana 2',spec:'HVAC',monto:760,status:'done',score:91,problema:'Carga de refrigerante y revisión eléctrica'},
+    ]
+  },
+  {id:'TEC-043',nombre:'Carlos Mendoza',tel:'667 100 0002',spec:'Electrico',status:'activo',ordenes:98,rating:4.7,score:91,eficiencia:94,herramientas:['Multímetro','Pinza amperimétrica','Guantes dieléctricos'],ingreso_mes:3100,ingreso_semana:850,servicios_semana:4,
+    historial:[
+      {id:'ELE-2026-02335',fecha:'Ayer 15:30',address:'Calle Juárez 390, Centro',spec:'Electrico',monto:340,status:'done',score:95,problema:'Corto circuito en tomas de sala'},
+      {id:'ELE-2026-02320',fecha:'Lun 13:00',address:'Av. Obregón 890, Tierra Blanca',spec:'Electrico',monto:520,status:'done',score:88,problema:'Instalación de tablero eléctrico'},
+      {id:'ELE-2026-02308',fecha:'Vie 10:30',address:'Privada Gardenias 12, Humaya',spec:'Electrico',monto:290,status:'done',score:93,problema:'Revisión y cambio de contactos'},
+      {id:'ELE-2026-02295',fecha:'Jue 09:00',address:'Blvd. Zapata 450, Las Quintas',spec:'Electrico',monto:700,status:'done',score:87,problema:'Instalación de sistema de iluminación LED'},
+    ]
+  },
+  {id:'TEC-044',nombre:'Jorge López',tel:'667 100 0003',spec:'Plomeria',status:'activo',ordenes:67,rating:4.8,score:88,eficiencia:91,herramientas:['Manómetro','Llave stilson','Destapador mecánico'],ingreso_mes:2800,ingreso_semana:700,servicios_semana:3,
+    historial:[
+      {id:'PLOM-2026-01234',fecha:'Hoy 10:00',address:'Privada Gardenias 45, Humaya',spec:'Plomeria',monto:580,status:'active',score:null,problema:'Fuga detrás de la pared del baño'},
+      {id:'PLOM-2026-01220',fecha:'Lun 09:00',address:'Calle Madero 780, Centro',spec:'Plomeria',monto:420,status:'done',score:91,problema:'Destapado de drenaje principal'},
+      {id:'PLOM-2026-01208',fecha:'Vie 14:00',address:'Residencial del Valle, Manz 5',spec:'Plomeria',monto:890,status:'done',score:85,problema:'Cambio de tubería de cobre 15m'},
+      {id:'PLOM-2026-01195',fecha:'Jue 11:00',address:'Av. Constitución 120',spec:'Plomeria',monto:350,status:'done',score:90,problema:'Reparación de llave de paso y medidor'},
+    ]
+  },
+  {id:'TEC-045',nombre:'Ana García',tel:'667 100 0004',spec:'HVAC',status:'activo',ordenes:55,rating:4.6,score:86,eficiencia:89,herramientas:['Multímetro','Manifold','Termómetro IR'],ingreso_mes:2400,ingreso_semana:640,servicios_semana:3,historial:[]},
+  {id:'TEC-046',nombre:'Pedro Sánchez',tel:'667 100 0005',spec:'Electrico',status:'activo',ordenes:40,rating:4.5,score:82,eficiencia:85,herramientas:['Multímetro','Pinza amperimétrica'],ingreso_mes:1900,ingreso_semana:480,servicios_semana:2,historial:[]},
+  {id:'TEC-047',nombre:'Laura Torres',tel:'667 100 0006',spec:'Plomeria',status:'inactivo',ordenes:12,rating:4.3,score:78,eficiencia:80,herramientas:['Manómetro','Llave stilson'],ingreso_mes:0,ingreso_semana:0,servicios_semana:0,historial:[]},
+  {id:'TEC-048',nombre:'José Ruiz',tel:'667 100 0007',spec:'HVAC',status:'activo',ordenes:28,rating:4.7,score:89,eficiencia:92,herramientas:['Multímetro','Manifold'],ingreso_mes:1600,ingreso_semana:400,servicios_semana:2,historial:[]},
+  {id:'TEC-049',nombre:'Sofía Reyes',tel:'667 100 0008',spec:'Carpinteria',status:'activo',ordenes:19,rating:4.8,score:85,eficiencia:88,herramientas:['Taladro','Nivel láser','Sierra'],ingreso_mes:1200,ingreso_semana:280,servicios_semana:2,historial:[]},
+];
+
+const SPECS={HVAC:{color:'#0ea5e9'},Electrico:{color:'#f59e0b'},Plomeria:{color:'#16a34a'},Carpinteria:{color:'#c27803'},Pintura:{color:'#7c3aed'},Impermeabilizacion:{color:'#0d9488'}};
+const SPECS_LIST=['HVAC / Minisplit','Electrico','Plomeria','Carpinteria','Pintura','Impermeabilizacion'];
+
+const ORDENES=[
+  {id:'HVAC-2026-04812',spec:'HVAC',status:'pending',address:'Calle Madero 1542, Centro',time:'09:00',problem:'No enfría desde hace 3 días, hace ruido al encender',monto:680,tecnico:null,urgente:true,cliente:'Roberto Espinoza',clienteTel:'667 200 1001',zona:'Centro',notas:'Departamento piso 3, llamar antes de llegar'},
+  {id:'HVAC-2026-04813',spec:'HVAC',status:'active',address:'Blvd. Zapata 890, Las Quintas',time:'11:30',problem:'Mantenimiento preventivo — 2 minisplits Samsung',monto:750,tecnico:'TEC-042',cliente:'Marisol Guerrero',clienteTel:'667 200 1002',zona:'Las Quintas',notas:'2 equipos Samsung Wind-Free 12k y 18k BTU'},
+  {id:'ELE-2026-02341',spec:'Electrico',status:'pending',address:'Av. Obregón 234, Tierra Blanca',time:'14:00',problem:'Breaker dispara al conectar AC. Sin luz en cocina',monto:450,tecnico:null,cliente:'Fernando Leyva',clienteTel:'667 200 1003',zona:'Tierra Blanca',notas:'Casa habitación, tablero en cuarto de lavado'},
+  {id:'PLOM-2026-01234',spec:'Plomeria',status:'active',address:'Privada Gardenias 45, Humaya',time:'10:00',problem:'Fuga detrás de la pared del baño',monto:580,tecnico:'TEC-044',cliente:'Diana Palomino',clienteTel:'667 200 1004',zona:'Humaya',notas:'Pared del baño principal, posible tubería de cobre'},
+  {id:'HVAC-2026-04814',spec:'HVAC',status:'pending',address:'Residencial del Valle, Manzana 3',time:'16:30',problem:'Instalación de minisplit nuevo 24k BTU',monto:1200,tecnico:null,cliente:'Andrés Valenzuela',clienteTel:'667 200 1005',zona:'Del Valle',notas:'Equipo ya en sitio, cliente espera instalación'},
+  {id:'HVAC-2026-04810',spec:'HVAC',status:'done',address:'Insurgentes 780, Hidalgo',time:'Ayer 09:00',problem:'Ruido al encender, sin frío',monto:920,tecnico:'TEC-042',score:92,cliente:'Patricia Morales',clienteTel:'667 200 1006',zona:'Hidalgo',notas:''},
+  {id:'ELE-2026-02335',spec:'Electrico',status:'done',address:'Calle Juárez 390, Centro',time:'Ayer 15:30',problem:'Corto circuito en tomas de sala',monto:340,tecnico:'TEC-043',score:95,cliente:'Jesús Amarillas',clienteTel:'667 200 1007',zona:'Centro',notas:''},
+];
+
+const LOG=[
+  {time:'Hoy 11:32',dot:'var(--blue)',msg:'Orden HVAC-04813 asignada a Miguel Rodríguez',actor:'Partner'},
+  {time:'Hoy 10:15',dot:'var(--green)',msg:'Orden PLOM-01234 asignada a Jorge López',actor:'Partner'},
+  {time:'Hoy 09:48',dot:'var(--text3)',msg:'Sesión iniciada — Culiacán, Sinaloa · Chrome macOS',actor:'Sistema'},
+  {time:'Ayer 16:02',dot:'var(--green)',msg:'Servicio ELE-02335 cerrado por Carlos Mendoza · Score 95',actor:'Técnico'},
+  {time:'Ayer 14:30',dot:'var(--gold)',msg:'Retiro de $2,000 procesado — BBVA · 1-2 días hábiles',actor:'Partner'},
+  {time:'Ayer 09:10',dot:'var(--green)',msg:'Servicio HVAC-04810 cerrado por Miguel · Score 92',actor:'Técnico'},
+  {time:'Hace 2 días',dot:'var(--blue)',msg:'Técnico TEC-049 (Sofía Reyes) registrado al equipo',actor:'Partner'},
+  {time:'Hace 3 días',dot:'var(--red)',msg:'Orden ELE-02330 rechazada — fuera de zona de cobertura',actor:'Thruver'},
+  {time:'Hace 5 días',dot:'var(--green)',msg:'Meta semanal alcanzada — $4,800 generados',actor:'Sistema'},
+];
+
+const ACC_LOG=[
+  {time:'Hoy 09:48',ip:'187.190.xx.xx',ciudad:'Culiacán, Sinaloa',device:'Chrome · macOS',ok:true},
+  {time:'Ayer 08:30',ip:'187.190.xx.xx',ciudad:'Culiacán, Sinaloa',device:'Safari · iPhone 15',ok:true},
+  {time:'Hace 2 días 08:45',ip:'187.190.xx.xx',ciudad:'Culiacán, Sinaloa',device:'Chrome · macOS',ok:true},
+  {time:'Hace 3 días 09:12',ip:'201.174.xx.xx',ciudad:'Culiacán, Sinaloa',device:'Chrome · Windows',ok:true},
+  {time:'Hace 5 días 20:10',ip:'187.190.xx.xx',ciudad:'Culiacán, Sinaloa',device:'Safari · iPhone 15',ok:true},
+  {time:'Hace 6 días 11:34',ip:'201.174.xx.xx',ciudad:'Los Mochis, Sinaloa',device:'Chrome · Android',ok:false},
+];
+
+let CU=null;
+
+// ═══ AUTH ═══════════════════════════════════════════════════
+function toggleSidebar(){
+  const sb=document.getElementById('sidebar');
+  const isCollapsed=sb.classList.toggle('collapsed');
+  localStorage.setItem('sb_collapsed',isCollapsed?'1':'0');
+}
+// Restore sidebar state
+window.addEventListener('DOMContentLoaded',()=>{
+  if(localStorage.getItem('sb_collapsed')==='1'){
+    document.getElementById('sidebar')?.classList.add('collapsed');
+  }
+});
+
+function doLogin(){
+  const id=document.getElementById('l_id').value.trim().toUpperCase();
+  const pw=document.getElementById('l_pw').value;
+  const u=PARTNERS[id];
+  if(!u||u.pw!==pw){
+    const e=document.getElementById('l_err'); e.style.display='block';
+    ['l_id','l_pw'].forEach(i=>{document.getElementById(i).style.borderColor='var(--red)';});
+    setTimeout(()=>{e.style.display='none';['l_id','l_pw'].forEach(i=>{document.getElementById(i).style.borderColor='';});},3000);
+    return;
+  }
+  CU={...u,id};
+  document.getElementById('screen-login').style.display='none';
+  document.getElementById('app-shell').style.display='block';
+  ['sb_av','top_av','mob_av'].forEach(el=>{const e=document.getElementById(el);if(e)e.textContent=CU.initials;});
+  document.getElementById('sb_nm').textContent=CU.name;
+  document.getElementById('sb_id').textContent=CU.id;
+  document.getElementById('top_nm').textContent=CU.name.split(' ').slice(0,2).join(' ');
+  go('home');
+}
+function doLogout(){CU=null;document.getElementById('app-shell').style.display='none';document.getElementById('screen-login').style.display='flex';document.getElementById('l_id').value='';document.getElementById('l_pw').value='';}
+
+// ═══ NAV ════════════════════════════════════════════════════
+const TABS={home:'Inicio',despacho:'Centro de despacho',tecnicos:'Mi flotilla',rendimiento:'Rendimiento',ingresos:'Ingresos',bitacora:'Bitácora',acceso:'Log de acceso'};
+const SUBS={home:'Vista general de operaciones',despacho:'Asignar y seguir ordenes en tiempo real',tecnicos:'Base de datos de tu equipo',rendimiento:'Métricas individuales y colectivas',ingresos:'Finanzas y retiros',bitacora:'Registro completo de operaciones',acceso:'Historial de sesiones'};
+
+function go(tab){
+  Object.keys(TABS).forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===tab?'block':'none';
+    const sl=document.getElementById('sl-'+t); if(sl) sl.className='sbl'+(t===tab?' active':'');
+    const mn=document.getElementById('mn-'+t); if(mn) mn.className='mni'+(t===tab?' active':'');
+  });
+  document.getElementById('topbar_t').textContent=TABS[tab];
+  document.getElementById('topbar_sub').textContent=SUBS[tab]||'';
+  document.getElementById('mob_t').textContent=TABS[tab];
+  closeSidebar();
+  document.getElementById('tab-'+tab).scrollTop=0;
+  const renders={home:renderHome,despacho:renderDespacho,tecnicos:renderTecnicos,rendimiento:renderRendimiento,ingresos:renderIngresos,bitacora:renderBitacora,acceso:renderAcceso};
+  renders[tab]?.();
+}
+function openSidebar(){document.getElementById('sidebar').classList.add('open');document.getElementById('sb_overlay').classList.add('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb_overlay').classList.remove('open');}
+
+// ═══ HOME ════════════════════════════════════════════════════
+function renderHome(){
+  const h=new Date().getHours();
+  const gr=h<12?'Buenos días,':h<19?'Buenas tardes,':'Buenas noches,';
+  const pending=ORDENES.filter(o=>o.status==='pending').length;
+  const active=ORDENES.filter(o=>o.status==='active').length;
+  const activos=TECNICOS.filter(t=>t.status==='activo').length;
+  const enCurso=ORDENES.filter(o=>o.status==='active').map(o=>o.tecnico).filter(Boolean);
+  const semana=[1200,920,0,750,1700,0,270];
+  const maxS=Math.max(...semana,1);
+
+  document.getElementById('tab-home').innerHTML=`
+    <!-- Header -->
+    <div class="anim" style="margin-bottom:24px">
+      <div style="font-size:12px;color:#6b7a99;font-weight:500;text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px">${gr}</div>
+      <div style="font-size:24px;font-weight:800;letter-spacing:-.04em;margin-bottom:2px;color:#1a2540">${CU.name}</div>
+      <div style="font-size:13px;color:#4d6490">${CU.empresa} · ${CU.ciudad}</div>
+    </div>
+
+    <!-- Alert if pending -->
+    ${pending>0?`<div style="background:#fef2f2;border:1px solid #fecaca;border-radius:var(--r);padding:12px 16px;margin-bottom:18px;display:flex;align-items:center;justify-content:space-between;gap:12px" class="anim">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:8px;height:8px;border-radius:50%;background:#dc2626;animation:pulse 1.5s infinite"></div>
+        <span style="font-size:13px;font-weight:600;color:#dc2626">${pending} orden${pending>1?'es':''} sin tecnico asignado — requieren accion inmediata</span>
+      </div>
+      <button class="btn btn-ghost" style="font-size:11px;border-color:#fecaca;color:#dc2626;flex-shrink:0" onclick="go('despacho')">Ir al despacho →</button>
+    </div>`:''}
+
+    <!-- KPIs -->
+    <div class="g4 anim d1" style="margin-bottom:24px">
+      <div class="kpi">
+        <div class="kpi-lbl">Ingresos hoy <span style="color:var(--green)">↑12%</span></div>
+        <div class="kpi-val gold">$4,840</div>
+        <div class="kpi-sub neutral">12 servicios esta semana</div>
+        <div class="sparkline">${semana.map((v,i)=>`<div class="spark-bar" style="height:${Math.max(4,Math.round((v/maxS)*100))}%${i===4?';background:var(--gold)':''}"></div>`).join('')}</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Equipo activo</div>
+        <div class="kpi-val">${activos}<span style="font-size:14px;color:var(--text3);font-weight:400"> / ${TECNICOS.length}</span></div>
+        <div class="kpi-sub neutral">${enCurso.length} en servicio ahora</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Score promedio <span style="color:${87>=85?'var(--green)':'var(--amber)'}">●</span></div>
+        <div class="kpi-val">${(TECNICOS.filter(t=>t.status==='activo').reduce((s,t)=>s+t.score,0)/activos).toFixed(0)}</div>
+        <div class="kpi-sub up">Protocolo: 87% cumplido</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Saldo disponible</div>
+        <div class="kpi-val gold">$${CU.banco.saldo.toLocaleString()}</div>
+        <div class="kpi-sub neutral" style="cursor:pointer;color:var(--gold)" onclick="go('ingresos')">Retirar →</div>
+      </div>
+    </div>
+
+    <!-- Two column layout -->
+    <div class="g2 anim d2" style="margin-bottom:24px;align-items:start">
+      <!-- Orders today -->
+      <div>
+        <div class="sh"><span class="sh-t" style="color:#1a2540"><div class="sh-line" style="background:#d0d5e4"></div>Ordenes de hoy</span><span class="sh-a" onclick="go('despacho')">Ver despacho →</span></div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          ${ORDENES.filter(o=>!o.time.startsWith('Ayer')).map(o=>{
+            const sp=SPECS[o.spec]||{color:'#888'};const tec=TECNICOS.find(t=>t.id===o.tecnico);
+            return `<div class="card-light" style="padding:12px;cursor:pointer" onclick="openOrden('${o.id}')">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:6px">
+                <div style="display:flex;align-items:center;gap:6px"><div style="width:6px;height:6px;border-radius:50%;background:${sp.color}"></div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:${sp.color}">${o.spec}</span></div>
+                <span class="chip ${o.status==='done'?'chip-done':o.status==='active'?'chip-active':'chip-pending'}">${o.status==='done'?'Completada':o.status==='active'?'En curso':'Sin asignar'}</span>
+              </div>
+              <div style="font-size:13px;font-weight:600;margin-bottom:3px;color:#1a2540">${o.address.split(',')[0]}</div>
+              <div style="font-size:11px;color:#4d6490;display:flex;gap:8px">
+                <span style="font-family:'DM Mono',monospace;color:#4d6490">${o.time}</span>
+                <span style="color:var(--green);font-weight:600">$${o.monto}</span>
+                ${tec?`<span style="color:var(--blue)">→ ${tec.nombre.split(' ')[0]}</span>`:o.status==='pending'?`<span style="color:var(--red);font-weight:600">Sin asignar</span>`:''}
+              </div>
+            </div>`;}).join('')}
+        </div>
+      </div>
+      <!-- Activity -->
+      <div>
+        <div class="sh"><span class="sh-t"><div class="sh-line"></div>Actividad reciente</span><span class="sh-a" onclick="go('bitacora')">Ver todo</span></div>
+        <div class="card" style="padding:14px">
+          ${LOG.slice(0,6).map(l=>`
+            <div class="tl-item">
+              <div class="tl-dot" style="background:${l.dot}20;width:28px;height:28px;flex-shrink:0">
+                <div style="width:7px;height:7px;border-radius:50%;background:${l.dot}"></div>
+              </div>
+              <div class="tl-body"><div class="tl-title">${l.msg}</div><div class="tl-sub">${l.actor}</div></div>
+              <div class="tl-time">${l.time}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <!-- Team status -->
+    <div class="sh anim d3"><span class="sh-t" style="color:#1a2540"><div class="sh-line" style="background:#d0d5e4"></div>Estado del equipo ahora</span><span class="sh-a" onclick="go('tecnicos')">Ver flotilla →</span></div>
+    <div class="g4 anim d3">
+      ${TECNICOS.filter(t=>t.status==='activo').map(t=>{
+        const ordActiva=ORDENES.find(o=>o.tecnico===t.id&&o.status==='active');
+        const sp=SPECS[t.spec]||{color:'#888'};
+        return `<div class="card-light" style="padding:12px;cursor:pointer" onclick="openTecnico('${t.id}')">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+            <div style="width:32px;height:32px;border-radius:50%;background:${sp.color}18;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${sp.color};border:1.5px solid ${sp.color}40">${t.nombre.split(' ').map(n=>n[0]).slice(0,2).join('')}</div>
+            <div><div style="font-size:12px;font-weight:700;color:#1a2540">${t.nombre.split(' ')[0]}</div><div style="font-size:10px;color:#4d6490">${t.spec}</div></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            ${ordActiva?`<span class="chip chip-active">En curso</span>`:`<span style="font-size:10px;color:#4d6490">Disponible</span>`}
+            <span style="font-size:11px;color:var(--gold);font-weight:600">${t.rating}★</span>
+          </div>
+        </div>`;}).join('')}
+    </div>`;
+}
+
+// ═══ CENTRO DE DESPACHO ═════════════════════════════════════
+function renderDespacho(){
+  const p=ORDENES.filter(o=>o.status==='pending');
+  const a=ORDENES.filter(o=>o.status==='active');
+  const d=ORDENES.filter(o=>o.status==='done');
+
+  document.getElementById('tab-despacho').innerHTML=`
+    <div class="sh" style="margin-bottom:16px">
+      <span class="sh-t"><div class="sh-line"></div>Centro de despacho</span>
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite"></div>
+        <span style="font-size:11px;color:var(--text2)">En vivo</span>
+      </div>
+    </div>
+
+    <!-- Incoming orders banner -->
+    <div style="background:var(--surface2);border:1px solid var(--border2);border-radius:var(--r);padding:14px 16px;margin-bottom:18px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),rgba(212,160,23,0))"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div style="width:36px;height:36px;border-radius:9px;background:rgba(212,160,23,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px">Ordenes entrantes — Thruver</div>
+            <div style="font-size:11px;color:var(--text2)">Solicitudes asignadas a tu empresa por el dispatcher de Thruver. Asígnalas a un técnico para ejecutarlas.</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;flex-shrink:0">
+          <div style="text-align:center">
+            <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:${p.length>0?'#ef4444':'var(--green)'}">${p.length}</div>
+            <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Sin asignar</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--blue)">${a.length}</div>
+            <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">En curso</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--green)">${d.length}</div>
+            <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Completadas</div>
+          </div>
+          <div style="text-align:center">
+            <div style="font-family:'DM Mono',monospace;font-size:20px;font-weight:800;color:var(--gold)">$${ORDENES.filter(o=>!o.time.startsWith('Ayer')).reduce((s,o)=>s+o.monto,0).toLocaleString()}</div>
+            <div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em">Monto total hoy</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kanban board -->
+    <div class="kanban anim">
+      <!-- Sin asignar -->
+      <div class="kan-col">
+        <div class="kan-header">
+          <div class="kan-title"><div style="width:8px;height:8px;border-radius:50%;background:var(--amber)"></div>Sin asignar</div>
+          <span class="kan-count">${p.length}</span>
+        </div>
+        <div class="kan-body">
+          ${p.length?p.map(o=>{const sp=SPECS[o.spec]||{color:'#888'};return `<div class="kan-card ${o.urgente?'urgent':'unassigned'}" onclick="openOrden('${o.id}')">
+            <div class="kan-spec" style="color:${sp.color}"><div style="width:6px;height:6px;border-radius:50%;background:${sp.color}"></div>${o.spec}${o.urgente?'<span class="chip chip-urgent" style="margin-left:auto">Urgente</span>':''}</div>
+            <div class="kan-address">${o.address.split(',')[0]}</div>
+            <div class="kan-meta"><span style="font-family:'DM Mono',monospace">${o.time}</span><span style="color:var(--green);font-weight:600">$${o.monto}</span></div>
+            <div style="font-size:11px;color:var(--text2);margin-top:4px;line-height:1.3">${o.problem.substring(0,55)}...</div>
+            <button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:8px;font-size:11px" onclick="event.stopPropagation();openOrden('${o.id}')">Asignar técnico →</button>
+          </div>`;}).join(''):`<div class="empty" style="padding:28px 16px"><div class="empty-icon"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--text3)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="empty-title" style="font-size:12px">Todo asignado</div></div>`}
+        </div>
+      </div>
+      <!-- En curso -->
+      <div class="kan-col">
+        <div class="kan-header">
+          <div class="kan-title"><div style="width:8px;height:8px;border-radius:50%;background:var(--blue)"></div>En curso</div>
+          <span class="kan-count">${a.length}</span>
+        </div>
+        <div class="kan-body">
+          ${a.map(o=>{const sp=SPECS[o.spec]||{color:'#888'};const tec=TECNICOS.find(t=>t.id===o.tecnico);return `<div class="kan-card" onclick="openOrden('${o.id}')">
+            <div class="kan-spec" style="color:${sp.color}"><div style="width:6px;height:6px;border-radius:50%;background:${sp.color}"></div>${o.spec}</div>
+            <div class="kan-address">${o.address.split(',')[0]}</div>
+            <div class="kan-meta"><span style="font-family:'DM Mono',monospace">${o.time}</span><span style="color:var(--green);font-weight:600">$${o.monto}</span></div>
+            ${tec?`<div class="kan-tec"><div style="width:20px;height:20px;border-radius:50%;background:${SPECS[tec.spec]?.color||'#888'}20;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:${SPECS[tec.spec]?.color||'#888'}">${tec.nombre.charAt(0)}</div>${tec.nombre}</div>`:''}
+          </div>`;}).join('')}
+        </div>
+      </div>
+      <!-- Completadas -->
+      <div class="kan-col">
+        <div class="kan-header">
+          <div class="kan-title"><div style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div>Completadas hoy</div>
+          <span class="kan-count">${d.length}</span>
+        </div>
+        <div class="kan-body">
+          ${d.map(o=>{const sp=SPECS[o.spec]||{color:'#888'};const tec=TECNICOS.find(t=>t.id===o.tecnico);return `<div class="kan-card" onclick="openOrden('${o.id}')">
+            <div class="kan-spec" style="color:${sp.color}"><div style="width:6px;height:6px;border-radius:50%;background:${sp.color}"></div>${o.spec}${o.score?`<span class="tag" style="margin-left:auto">Score ${o.score}</span>`:''}</div>
+            <div class="kan-address">${o.address.split(',')[0]}</div>
+            <div class="kan-meta"><span style="font-family:'DM Mono',monospace">${o.time}</span><span style="color:var(--green);font-weight:600">$${o.monto}</span></div>
+            ${tec?`<div class="kan-tec"><div style="width:20px;height:20px;border-radius:50%;background:${SPECS[tec.spec]?.color||'#888'}20;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:${SPECS[tec.spec]?.color||'#888'}">${tec.nombre.charAt(0)}</div>${tec.nombre}</div>`:''}
+          </div>`;}).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ═══ TECNICOS ════════════════════════════════════════════════
+function renderTecnicos(){
+  const hoy = new Date();
+  function tiempoActivo(id){
+    const idx = parseInt(id.replace('TEC-',''));
+    const meses = ((idx-42) * 3 + 8);
+    if(meses < 12) return meses + ' meses';
+    return Math.floor(meses/12) + ' año' + (Math.floor(meses/12)>1?'s':'');
+  }
+  document.getElementById('tab-tecnicos').innerHTML=`
+    <div class="sh">
+      <span class="sh-t"><div class="sh-line"></div>Mi flotilla (${TECNICOS.length})</span>
+      <button class="btn btn-gold btn-lg" onclick="openRegistroTecnico()">+ Registrar técnico</button>
+    </div>
+    <div class="g4 anim" style="margin-bottom:20px">
+      <div class="kpi-light"><div class="kpi-lbl">Total técnicos</div><div class="kpi-val" style="color:#1a2540">${TECNICOS.length}</div><div class="kpi-sub neutral">${TECNICOS.filter(t=>t.status==='activo').length} activos</div></div>
+      <div class="kpi-light"><div class="kpi-lbl">Ingresos equipo/mes</div><div class="kpi-val gold">$${TECNICOS.reduce((s,t)=>s+t.ingreso_mes,0).toLocaleString()}</div><div class="kpi-sub up">Consolidado</div></div>
+      <div class="kpi-light"><div class="kpi-lbl">Score promedio</div><div class="kpi-val" style="color:#1a2540">${(TECNICOS.reduce((s,t)=>s+t.score,0)/TECNICOS.length).toFixed(0)}</div><div class="kpi-sub up">Equipo completo</div></div>
+      <div class="kpi-light"><div class="kpi-lbl">Eficiencia prom.</div><div class="kpi-val" style="color:#1a2540">${(TECNICOS.filter(t=>t.status==='activo').reduce((s,t)=>s+t.eficiencia,0)/TECNICOS.filter(t=>t.status==='activo').length).toFixed(0)}%</div><div class="kpi-sub up">Protocolo SOP</div></div>
+    </div>
+
+    <!-- Search bar -->
+    <div style="position:relative;margin-bottom:14px">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7a99" stroke-width="2" stroke-linecap="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" placeholder="Buscar técnico por nombre, especialidad o ID..." oninput="filtrarFlotilla(this.value)"
+        style="width:100%;padding:10px 14px 10px 36px;border:1.5px solid #1a2540;border-radius:var(--r);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;background:#fff;color:#111"
+        onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='#1a2540'">
+    </div>
+
+    <!-- Table -->
+    <div style="background:#fff;border:1.5px solid #1a2540;border-radius:var(--r);overflow:hidden;box-shadow:0 2px 8px rgba(26,37,64,.08)">
+      <!-- Header -->
+      <div style="display:grid;grid-template-columns:2.2fr 1.1fr 1.1fr 0.9fr 0.7fr 0.7fr 0.8fr 1fr 0.9fr;gap:0;background:#1a2540;padding:10px 16px">
+        ${['Técnico','Teléfono','Especialidad','Tiempo activo','Servicios','Rating','Score','Ingresos/mes','Estado'].map(h=>
+          `<div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.5)">${h}</div>`
+        ).join('')}
+      </div>
+      <!-- Rows -->
+      <div id="flotilla_rows">
+        ${TECNICOS.map((t,i)=>{
+          const sp=SPECS[t.spec]||{color:'#888'};
+          const ordActiva=ORDENES.find(o=>o.tecnico===t.id&&o.status==='active');
+          const scoreColor=t.score>=90?'#16a34a':t.score>=80?'#d97706':'#dc2626';
+          const isLast=i===TECNICOS.length-1;
+          return `<div data-search="${t.nombre.toLowerCase()} ${t.spec.toLowerCase()} ${t.id.toLowerCase()}"
+            style="display:grid;grid-template-columns:2.2fr 1.1fr 1.1fr 0.9fr 0.7fr 0.7fr 0.8fr 1fr 0.9fr;gap:0;padding:12px 16px;${!isLast?'border-bottom:1px solid #e8ecf4':''};cursor:pointer;transition:background .12s;align-items:center"
+            onclick="openHistorialDrawer('${t.id}')" onmouseover="this.style.background='#f8f9fc'" onmouseleave="this.style.background='#fff'">
+            <!-- Nombre -->
+            <div style="display:flex;align-items:center;gap:9px">
+              <div style="width:32px;height:32px;border-radius:50%;background:${sp.color}18;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${sp.color};flex-shrink:0;border:1.5px solid ${sp.color}40">${t.nombre.split(' ').map(n=>n[0]).slice(0,2).join('')}</div>
+              <div>
+                <div style="font-size:13px;font-weight:700;color:#111;margin-bottom:1px">${t.nombre}</div>
+                <div style="font-family:'DM Mono',monospace;font-size:9px;color:#9ca3af">${t.id}</div>
+              </div>
+            </div>
+            <!-- Tel -->
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#4d6490">${t.tel}</div>
+            <!-- Especialidad -->
+            <div style="display:flex;align-items:center;gap:5px">
+              <div style="width:6px;height:6px;border-radius:50%;background:${sp.color};flex-shrink:0"></div>
+              <span style="font-size:12px;font-weight:600;color:${sp.color}">${t.spec}</span>
+            </div>
+            <!-- Tiempo activo -->
+            <div style="font-size:12px;color:#4d6490">${tiempoActivo(t.id)}</div>
+            <!-- Servicios -->
+            <div style="font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:#1a2540">${t.ordenes}</div>
+            <!-- Rating -->
+            <div style="font-size:13px;font-weight:700;color:#d4a017">${t.rating}★</div>
+            <!-- Score -->
+            <div>
+              <div style="font-family:'DM Mono',monospace;font-size:13px;font-weight:700;color:${scoreColor};margin-bottom:3px">${t.score}</div>
+              <div style="height:3px;background:#e8ecf4;border-radius:2px;width:48px;overflow:hidden"><div style="height:100%;width:${t.score}%;background:${scoreColor};border-radius:2px"></div></div>
+            </div>
+            <!-- Estado -->
+            <div>
+              ${ordActiva?`<span class="chip chip-active">En servicio</span>`:
+                t.status==='activo'?`<span style="font-size:10px;color:#16a34a;font-weight:700">● Activo</span>`:
+                `<span style="font-size:10px;color:#9ca3af;font-weight:600">● Inactivo</span>`}
+            </div>
+          </div>`;}).join('')}
+      </div>
+    </div>
+
+    <div style="margin-top:12px;padding:10px 14px;background:#fffbeb;border:1px solid #fde68a;border-radius:var(--rs);font-size:12px;color:#92400e;display:flex;gap:8px;align-items:center">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Los técnicos no pueden eliminarse — solo desactivarse. El historial queda registrado permanentemente en Thruver.
+    </div>`;
+}
+
+function filtrarFlotilla(q){
+  const qL=q.toLowerCase();
+  document.querySelectorAll('#flotilla_rows > div[data-search]').forEach(row=>{
+    row.style.display=(!qL||row.dataset.search.includes(qL))?'grid':'none';
+  });
+}
+// ═══ RENDIMIENTO ════════════════════════════════════════════
+function renderRendimiento(){
+  const activos=TECNICOS.filter(t=>t.status==='activo').sort((a,b)=>b.score-a.score);
+  const maxI=Math.max(...activos.map(t=>t.ingreso_mes),1);
+
+  document.getElementById('tab-rendimiento').innerHTML=`
+    <!-- Top performer -->
+    <div class="sh"><span class="sh-t"><div class="sh-line"></div>Mejor técnico del mes</span></div>
+    <div class="card-light anim" style="display:flex;align-items:center;gap:20px;margin-bottom:22px">
+      <div style="position:relative">
+        <div style="width:64px;height:64px;border-radius:50%;background:${SPECS[activos[0].spec]?.color||'#888'}20;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:${SPECS[activos[0].spec]?.color||'#888'};border:2px solid ${SPECS[activos[0].spec]?.color||'#888'}40">${activos[0].nombre.split(' ').map(n=>n[0]).slice(0,2).join('')}</div>
+        <div style="position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:10px">🏆</div>
+      </div>
+      <div style="flex:1">
+        <div style="font-size:18px;font-weight:800;letter-spacing:-.025em;margin-bottom:3px;color:#1a2540">${activos[0].nombre}</div>
+        <div style="font-size:12px;color:#4d6490;margin-bottom:8px">${activos[0].spec} · ${activos[0].ordenes} servicios · ${activos[0].rating}★</div>
+        <div style="display:flex;gap:12px">
+          <div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:700;color:var(--gold)">$${activos[0].ingreso_mes.toLocaleString()}</div><div style="font-size:9px;color:#6b7a99;text-transform:uppercase;letter-spacing:.08em">Este mes</div></div>
+          <div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:700;color:var(--green)">${activos[0].score}</div><div style="font-size:9px;color:#6b7a99;text-transform:uppercase;letter-spacing:.08em">Score SOP</div></div>
+          <div><div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:700;color:var(--blue)">${activos[0].eficiencia}%</div><div style="font-size:9px;color:#6b7a99;text-transform:uppercase;letter-spacing:.08em">Protocolo</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g2 anim d1" style="align-items:start;margin-bottom:22px">
+      <!-- Ranking -->
+      <div>
+        <div class="sh"><span class="sh-t"><div class="sh-line"></div>Ranking por ingresos</span></div>
+        <div class="card-light">
+          ${activos.map((t,i)=>{
+            const sp=SPECS[t.spec]||{color:'#888'};
+            const pct=Math.round((t.ingreso_mes/maxI)*100);
+            return `<div style="padding:10px 0;${i<activos.length-1?'border-bottom:1px solid #e0e4ed':''}">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <span style="font-family:'DM Mono',monospace;font-size:11px;color:#6b7a99;width:16px">${i+1}</span>
+                <div style="width:22px;height:22px;border-radius:50%;background:${sp.color}18;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:${sp.color}">${t.nombre.charAt(0)}</div>
+                <span style="font-size:12px;font-weight:600;flex:1;color:#1a2540">${t.nombre.split(' ')[0]}</span>
+                <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green);font-weight:600">$${t.ingreso_mes.toLocaleString()}</span>
+              </div>
+              <div style="height:4px;background:var(--surface2);border-radius:2px;margin-left:24px;overflow:hidden">
+                <div style="height:100%;width:${pct}%;background:${sp.color};border-radius:2px;transition:width 1s ease"></div>
+              </div>
+            </div>`;}).join('')}
+        </div>
+      </div>
+      <!-- Score comparison -->
+      <div>
+        <div class="sh"><span class="sh-t"><div class="sh-line"></div>Score SOP por técnico</span></div>
+        <div class="card-light">
+          ${activos.map((t,i)=>{
+            const sp=SPECS[t.spec]||{color:'#888'};
+            const scoreColor=t.score>=90?'var(--green)':t.score>=80?'var(--amber)':'var(--red)';
+            return `<div style="display:flex;align-items:center;gap:10px;padding:9px 0;${i<activos.length-1?'border-bottom:1px solid var(--border)':''}">
+              <div style="width:22px;height:22px;border-radius:50%;background:${sp.color}18;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:${sp.color};flex-shrink:0">${t.nombre.charAt(0)}</div>
+              <div style="flex:1">
+                <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;font-weight:500;color:#1a2540">${t.nombre.split(' ')[0]}</span><span style="font-size:11px;font-weight:700;color:${scoreColor}">${t.score}</span></div>
+                <div style="height:4px;background:var(--surface2);border-radius:2px;overflow:hidden"><div style="height:100%;width:${t.score}%;background:${scoreColor};border-radius:2px"></div></div>
+              </div>
+            </div>`;}).join('')}
+        </div>
+        <div class="sh" style="margin-top:16px"><span class="sh-t"><div class="sh-line"></div>Eficiencia de protocolo</span></div>
+        <div class="card-light">
+          ${activos.map((t,i)=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;${i<activos.length-1?'border-bottom:1px solid var(--border)':''}">
+            <div style="flex:1">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;font-weight:500;color:#1a2540">${t.nombre.split(' ')[0]}</span><span style="font-size:11px;font-weight:700;color:${t.eficiencia>=95?'var(--green)':t.eficiencia>=85?'var(--amber)':'var(--red)'}">${t.eficiencia}%</span></div>
+              <div style="height:4px;background:var(--surface2);border-radius:2px;overflow:hidden"><div style="height:100%;width:${t.eficiencia}%;background:${t.eficiencia>=95?'var(--green)':t.eficiencia>=85?'var(--amber)':'var(--red)'};border-radius:2px"></div></div>
+            </div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ═══ INGRESOS ════════════════════════════════════════════════
+function renderIngresos(){
+  const b=CU.banco;
+  const days=[{d:'Lun',v:680},{d:'Mar',v:920},{d:'Mie',v:340},{d:'Jue',v:0},{d:'Vie',v:1200},{d:'Sab',v:1700},{d:'Dom',v:0}];
+  const max=Math.max(...days.map(d=>d.v),1);
+  document.getElementById('tab-ingresos').innerHTML=`
+    <!-- Hero saldo -->
+    <div class="card-light anim" style="border:1.5px solid #e0e4ed;margin-bottom:18px;padding:22px">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#6b7a99;margin-bottom:7px">Saldo disponible para retiro</div>
+          <div style="font-family:'DM Mono',monospace;font-size:38px;font-weight:800;letter-spacing:-.04em;color:var(--gold);margin-bottom:5px">$${b.saldo.toLocaleString()}</div>
+          <div style="display:flex;gap:14px;font-size:12px;color:#4d6490">
+            <span>Total junio: <strong style="color:var(--text)">$18,840</strong></span>
+            <span>Retirado: <strong style="color:var(--text)">$${b.retirado.toLocaleString()}</strong></span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;flex-shrink:0">
+          <button style="background:#16a34a;color:#fff;font-size:13px;font-weight:700;padding:10px 20px;border-radius:var(--rs);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 2px 8px rgba(22,163,74,.25);transition:all .15s" onmouseover="this.style.opacity='.9'" onmouseout="this.style.opacity='1'" onclick="openRetiro()">Retirar fondos →</button>
+          <button class="btn btn-ghost" style="font-size:11px;justify-content:center;color:#1a2540;border-color:#d0d5e4" onclick="openCuenta()">Ver cuenta bancaria</button>
+          <button style="background:var(--blue-dim);border:1px solid rgba(79,142,247,.3);color:var(--blue);font-size:11px;font-weight:600;padding:7px 14px;border-radius:var(--rs);cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px;transition:all .15s" onmouseover="this.style.background='rgba(79,142,247,.22)'" onmouseout="this.style.background='var(--blue-dim)'" onclick="openTransferirTecnico()">Transferir a técnico →</button>
+        </div>
+      </div>
+    </div>
+    <!-- KPIs -->
+    <div class="g4 anim d1" style="margin-bottom:22px">
+      <div class="kpi-light"><div class="kpi-lbl">Esta semana</div><div class="kpi-val up">$4,840</div><div class="kpi-sub up">↑ 14% vs semana anterior</div></div>
+      <div class="kpi-light"><div class="kpi-lbl">Este mes</div><div class="kpi-val">$18,840</div><div class="kpi-sub up">↑ 21% vs mayo</div></div>
+      <div class="kpi-light"><div class="kpi-lbl">Por servicio prom.</div><div class="kpi-val">$620</div><div class="kpi-sub up">↑ 8%</div></div>
+      <div class="kpi-light"><div class="kpi-lbl">Proyección mensual</div><div class="kpi-val gold">$21,200</div><div class="kpi-sub neutral">Basado en tendencia</div></div>
+    </div>
+    <div class="g2 anim d2" style="align-items:start;margin-bottom:22px">
+      <div>
+        <div class="sh"><span class="sh-t"><div class="sh-line"></div>Esta semana por día</span></div>
+        <div class="card-light">
+          ${days.map(d=>{const pct=d.v?Math.max(8,Math.round((d.v/max)*100)):0;const inside=pct>22;
+          return `<div class="bar-row"><span class="bar-lbl">${d.d}</span><div class="bar-track" style="position:relative"><div class="bar-fill" style="width:${pct?pct+'%':'4px'};background:${d.v?'var(--gold)':'var(--border)'}">${d.v&&inside?`<span class="bar-val">$${d.v}</span>`:''}</div>${d.v&&!inside?`<span style="position:absolute;left:${pct+1}%;top:50%;transform:translateY(-50%);font-size:9px;font-family:'DM Mono',monospace;font-weight:600;color:var(--text2)">$${d.v}</span>`:''}</div></div>`;}).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="sh"><span class="sh-t"><div class="sh-line"></div>Ingresos por técnico / mes</span></div>
+        <div class="card-light">
+          ${TECNICOS.filter(t=>t.ingreso_mes>0).sort((a,b)=>b.ingreso_mes-a.ingreso_mes).map((t,i,arr)=>{
+            const sp=SPECS[t.spec]||{color:'var(--gold)'};
+            return `<div class="card-sm-light" style="margin-bottom:${i<arr.length-1?'7px':'0'};background:#f2f3f7;padding:10px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div style="width:6px;height:6px;border-radius:50%;background:${sp.color};flex-shrink:0"></div>
+                <div style="flex:1">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                    <span style="font-size:12px;font-weight:600;color:#1a2540">${t.nombre.split(' ')[0]}</span>
+                    <span style="font-family:'DM Mono',monospace;font-size:12px;color:var(--green)">$${t.ingreso_mes.toLocaleString()}</span>
+                  </div>
+                  <div style="height:3px;background:#e8ecf4;border-radius:2px;overflow:hidden"><div style="height:100%;width:${Math.round((t.ingreso_mes/4200)*100)}%;background:${sp.color};border-radius:2px"></div></div>
+                </div>
+              </div>
+            </div>`;}).join('')}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ═══ BITACORA ════════════════════════════════════════════════
+function renderBitacora(){
+  const pending=ORDENES.filter(o=>o.status==='pending');
+  document.getElementById('tab-bitacora').innerHTML=`
+    <div class="sh">
+      <span class="sh-t"><div class="sh-line"></div>Bitácora de operaciones</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <span class="tag">${LOG.length} entradas</span>
+        ${pending.length?`<button class="btn btn-gold" style="font-size:11px;padding:5px 12px" onclick="openAsignarDesdeBitacora()">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M3 7h18l-1 13H4L3 7z"/></svg>
+          Asignar orden (${pending.length})
+        </button>`:''}
+      </div>
+    </div>
+
+    <!-- Ordenes pendientes banner (if any) -->
+    ${pending.length?`
+    <div style="background:#fff;border:1.5px solid #1a2540;border-radius:var(--r);padding:12px 14px;margin-bottom:16px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6b7a99;margin-bottom:9px">Órdenes sin asignar</div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        ${pending.map(o=>{
+          const sp=SPECS[o.spec]||{color:'#888'};
+          return `<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;background:#f8f9fc;border:1px solid #e0e4ed;border-radius:var(--rs)">
+            <div style="width:6px;height:6px;border-radius:50%;background:${sp.color};flex-shrink:0"></div>
+            <div style="flex:1">
+              <div style="font-size:12px;font-weight:600;color:#111">${o.address.split(',')[0]}</div>
+              <div style="font-size:10px;color:#6b7a99">${o.spec} · ${o.time} · $${o.monto}</div>
+            </div>
+            <button onclick="openOrden('${o.id}')" style="padding:5px 12px;background:#1a2540;color:#fff;border:none;border-radius:var(--rs);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap">Asignar →</button>
+          </div>`;}).join('')}
+      </div>
+    </div>`:''}
+
+    <!-- Log completo -->
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a2540;margin-bottom:10px">Registro de actividad</div>
+    <div style="background:#fff;border:1.5px solid #1a2540;border-radius:var(--r);overflow:hidden">
+      ${LOG.map((l,i,arr)=>`
+        <div style="display:grid;grid-template-columns:120px 1fr auto;gap:10px;padding:10px 14px;${i<arr.length-1?'border-bottom:1px solid #e8ecf4':''};align-items:start">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7a99;padding-top:2px">${l.time}</div>
+          <div style="font-size:12px;color:#1a2540;line-height:1.4;display:flex;align-items:flex-start;gap:7px">
+            <span style="width:7px;height:7px;border-radius:50%;background:${l.dot};flex-shrink:0;margin-top:4px;display:inline-block"></span>
+            ${l.msg}
+          </div>
+          <div style="font-size:10px;font-weight:600;color:#6b7a99;white-space:nowrap">${l.actor}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function openAsignarDesdeBitacora(){
+  const pending=ORDENES.filter(o=>o.status==='pending');
+  if(!pending.length) return;
+  // open first unassigned
+  openOrden(pending[0].id);
+}
+
+// ═══ ACCESO ══════════════════════════════════════════════════
+function renderAcceso(){
+  document.getElementById('tab-acceso').innerHTML=`
+    <div class="sh"><span class="sh-t"><div class="sh-line"></div>Historial de acceso</span><span class="tag">${ACC_LOG.length} sesiones registradas</span></div>
+    <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:var(--r);padding:11px 14px;margin-bottom:16px;font-size:12px;color:#1d4ed8;display:flex;gap:8px;align-items:flex-start" class="anim">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Cada acceso a tu cuenta queda registrado con IP, dispositivo y ubicación. Si detectas una sesión que no reconoces, contacta a tu ejecutivo Thruver de inmediato.
+    </div>
+    <div class="card-light anim d1">
+      ${ACC_LOG.map((a,i,arr)=>`
+        <div class="acc-row" style="${i===arr.length-1?'border-bottom:none':''}">
+          <div style="width:34px;height:34px;border-radius:9px;background:${a.ok?'var(--green-dim)':'var(--amber-dim)'};display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="${a.ok?'var(--green)':'var(--amber)'}" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;margin-bottom:2px;display:flex;align-items:center;gap:7px;color:#1a2540">
+              ${a.ciudad}
+              ${!a.ok?`<span class="chip chip-pending">Ubicación distinta</span>`:''}
+            </div>
+            <div style="font-size:11px;color:#6b7a99">${a.device} · IP: ${a.ip}</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3);text-align:right;flex-shrink:0">${a.time}</div>
+        </div>`).join('')}
+    </div>`;
+}
+
+// ═══ MODALS ══════════════════════════════════════════════════
+function openOrden(id){
+  const o=ORDENES.find(x=>x.id===id); if(!o) return;
+  const sp=SPECS[o.spec]||{color:'#888'};
+  const tec=TECNICOS.find(t=>t.id===o.tecnico);
+  const available=TECNICOS.filter(t=>t.status==='activo'&&(t.spec===o.spec||t.spec===o.spec.split('/')[0].trim()));
+  const sheet=mkSheet();
+  sheet.div.innerHTML=`
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px">
+      <div>
+        <div style="display:flex;align-items:center;gap:6px;margin-bottom:5px"><div style="width:7px;height:7px;border-radius:50%;background:${sp.color}"></div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:${sp.color}">${o.spec}</span></div>
+        <div style="font-size:18px;font-weight:800;letter-spacing:-.025em;margin-bottom:2px">${o.address}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text3)">${o.id}</div>
+      </div>
+      <span class="chip ${o.status==='done'?'chip-done':o.status==='active'?'chip-active':'chip-pending'}">${o.status==='done'?'Completada':o.status==='active'?'En curso':'Sin asignar'}</span>
+    </div>
+    <div class="card-sm" style="background:var(--surface2);margin-bottom:14px">
+      <div style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3);margin-bottom:3px">Problema reportado</div>
+      <div style="font-size:13px;line-height:1.5">${o.problem}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px">
+      <div class="card-sm" style="text-align:center;background:var(--surface2)"><div style="font-family:'DM Mono',monospace;font-size:14px;font-weight:600">${o.time}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Horario</div></div>
+      <div class="card-sm" style="text-align:center;background:var(--surface2)"><div style="font-size:15px;font-weight:700;color:var(--green)">$${o.monto}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Monto</div></div>
+      <div class="card-sm" style="text-align:center;background:var(--surface2)"><div style="font-size:13px;font-weight:600;color:${tec?'var(--blue)':'var(--text3)'}">${tec?tec.nombre.split(' ')[0]:'—'}</div><div style="font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Técnico</div></div>
+    </div>
+    ${o.status==='pending'?`
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text2);margin-bottom:9px">Asignar técnico de tu equipo</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px">
+      ${available.length?available.map(t=>`
+        <div onclick="asignar('${o.id}','${t.id}',this)" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px solid #1a2540;border-radius:var(--r);cursor:pointer;transition:all .15s;background:#f5f6f8" onmouseover="this.style.borderColor='var(--gold)';this.style.background='#fffbeb'" onmouseleave="this.style.borderColor='#1a2540';this.style.background='#f5f6f8'">
+          <div style="width:32px;height:32px;border-radius:50%;background:${SPECS[t.spec]?.color||'#888'}20;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:${SPECS[t.spec]?.color||'#888'}">${t.nombre.split(' ').map(n=>n[0]).slice(0,2).join('')}</div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:600;color:#1a2540">${t.nombre}</div>
+            <div style="font-size:10px;color:#4d6490">${t.spec} · ${t.ordenes} servicios · ${t.rating}★ · Score ${t.score}</div>
+          </div>
+          <div style="text-align:right"><div style="font-size:11px;font-weight:600;color:var(--green)">$${t.ingreso_mes.toLocaleString()}/mes</div><div style="font-size:9px;color:#4d6490">${ORDENES.find(x=>x.tecnico===t.id&&x.status==='active')?'En servicio ahora':'Disponible'}</div></div>
+        </div>`).join(''):`<div class="empty" style="padding:20px"><div class="empty-title">Sin técnicos de ${o.spec} disponibles</div><div class="empty-sub">Registra técnicos de esta especialidad o verifica disponibilidad.</div></div>`}
+    </div>`:
+    `<div style="background:${o.status==='done'?'var(--green-dim)':'var(--blue-dim)'};border:1px solid ${o.status==='done'?'rgba(34,197,94,.2)':'rgba(59,130,246,.2)'};border-radius:var(--rs);padding:10px;text-align:center;font-size:12px;font-weight:600;color:${o.status==='done'?'var(--green)':'var(--blue)'};margin-bottom:14px">${o.status==='done'?`✓ Orden completada${o.score?` · Score ${o.score}`:''}` :'⚡ En curso — técnico ejecutando el servicio'}</div>`}
+    <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('[style*=fixed]').remove()">Cerrar</button>`;
+  document.body.appendChild(sheet.el);
+}
+
+function asignar(ordId,tecId,row){
+  row.closest('[style*=flex-direction]')?.querySelectorAll('[onclick*=asignar]').forEach(r=>{r.style.borderColor='var(--border)';r.style.background='';});
+  row.style.borderColor='var(--gold)'; row.style.background='var(--gold-dim)';
+  setTimeout(()=>{
+    const ord=ORDENES.find(o=>o.id===ordId); if(ord){ord.tecnico=tecId;ord.status='active';}
+    const tn=TECNICOS.find(t=>t.id===tecId)?.nombre||'';
+    LOG.unshift({time:'Ahora',dot:'var(--gold)',msg:`Orden ${ordId} asignada a ${tn}`,actor:'Partner'});
+    document.querySelectorAll('[style*="position:fixed;inset"]').forEach(e=>e.remove());
+    const p=ORDENES.filter(o=>o.status==='pending').length;
+    const b=document.getElementById('sb_badge'); if(b){b.textContent=p||'';b.style.display=p?'':'none';}
+    toast(`Asignada a ${tn}`,'gold');
+    renderDespacho();
+  },450);
+}
+
+function openTecnico(id){
+  const t=TECNICOS.find(x=>x.id===id); if(!t) return;
+  const sp=SPECS[t.spec]||{color:'#888'};
+  const ords=ORDENES.filter(o=>o.tecnico===t.id);
+  const sheet=mkSheet();
+  const scoreColor=t.score>=90?'#16a34a':t.score>=80?'#d97706':'#dc2626';
+  sheet.div.innerHTML=`
+    <!-- Header -->
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px">
+      <div style="width:58px;height:58px;border-radius:50%;background:${sp.color}18;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:${sp.color};border:2px solid ${sp.color}50;flex-shrink:0">${t.nombre.split(' ').map(n=>n[0]).slice(0,2).join('')}</div>
+      <div>
+        <div style="font-size:19px;font-weight:800;letter-spacing:-.025em;margin-bottom:3px;color:#111">${t.nombre}</div>
+        <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6b7a99;margin-bottom:3px">${t.id} · ${t.tel}</div>
+        <span style="font-size:11px;font-weight:700;color:${sp.color};background:${sp.color}12;padding:2px 8px;border-radius:100px;border:1px solid ${sp.color}30">${t.spec}</span>
+      </div>
+    </div>
+
+    <!-- Stats grid -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
+      ${[
+        [t.ordenes, 'Servicios', '#1a2540'],
+        [t.rating+'★', 'Rating', '#d4a017'],
+        [t.score, 'Score SOP', scoreColor],
+        [t.eficiencia+'%', 'Protocolo', '#16a34a']
+      ].map(([v,l,vc])=>`
+        <div style="background:#fff;border:1.5px solid #d0d5e0;border-radius:var(--rs);padding:11px;text-align:center">
+          <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:800;color:${vc};margin-bottom:3px">${v}</div>
+          <div style="font-size:9px;color:#6b7a99;text-transform:uppercase;letter-spacing:.08em">${l}</div>
+        </div>`).join('')}
+    </div>
+
+    <!-- Herramientas -->
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a2540;margin-bottom:7px">Herramientas</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px">
+      ${t.herramientas.map(h=>`<span style="font-size:11px;color:#1a2540;background:#fff;border:1.5px solid #1a2540;border-radius:100px;padding:3px 10px;font-weight:500">${h}</span>`).join('')}
+    </div>
+
+    <!-- Ingresos -->
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a2540;margin-bottom:7px">Ingresos</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px">
+      <div style="background:#fff;border:1.5px solid #d0d5e0;border-radius:var(--rs);padding:12px;text-align:center">
+        <div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:800;color:#16a34a;margin-bottom:3px">$${t.ingreso_mes.toLocaleString()}</div>
+        <div style="font-size:9px;color:#6b7a99;text-transform:uppercase;letter-spacing:.08em">Este mes</div>
+      </div>
+      <div style="background:#fff;border:1.5px solid #d0d5e0;border-radius:var(--rs);padding:12px;text-align:center">
+        <div style="font-family:'DM Mono',monospace;font-size:18px;font-weight:800;color:#1a2540;margin-bottom:3px">$${t.ingreso_semana.toLocaleString()}</div>
+        <div style="font-size:9px;color:#6b7a99;text-transform:uppercase;letter-spacing:.08em">Esta semana</div>
+      </div>
+    </div>
+
+    <!-- Últimas órdenes -->
+    ${ords.length?`
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#1a2540;margin-bottom:7px">Últimas órdenes</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
+      ${ords.slice(0,3).map(o=>{
+        const s=SPECS[o.spec]||{color:'#888'};
+        return `<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;background:#fff;border:1.5px solid #d0d5e0;border-radius:var(--rs)">
+          <div style="width:7px;height:7px;border-radius:50%;background:${s.color};flex-shrink:0"></div>
+          <span style="font-size:12px;font-weight:600;flex:1;color:#111">${o.address.split(',')[0]}</span>
+          <span style="font-size:10px;font-family:'DM Mono',monospace;color:#6b7a99">${o.time}</span>
+          <span style="font-size:12px;font-weight:700;color:#16a34a">$${o.monto}</span>
+        </div>`;}).join('')}
+    </div>`:''}
+
+    <!-- Nota -->
+    <div style="background:#fffbeb;border:1px solid #fde68a;border-radius:var(--rs);padding:9px 12px;font-size:11px;color:#92400e;margin-bottom:14px;display:flex;gap:7px;align-items:flex-start">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      Los técnicos no pueden eliminarse — solo desactivarse. El historial queda registrado permanentemente.
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;gap:8px">
+      ${t.status==='activo'
+        ?`<button style="flex:1;padding:10px;border:1.5px solid #dc2626;background:#fff;color:#dc2626;font-size:12px;font-weight:700;border-radius:var(--rs);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.background='#fef2f2'" onmouseout="this.style.background='#fff'" onclick="toggleTec('${t.id}')">Desactivar</button>`
+        :`<button class="btn btn-gold" style="flex:1;justify-content:center" onclick="toggleTec('${t.id}')">Reactivar</button>`}
+      <button style="flex:1;padding:10px;border:1.5px solid #1a2540;background:#1a2540;color:#fff;font-size:12px;font-weight:700;border-radius:var(--rs);cursor:pointer;font-family:'DM Sans',sans-serif" onclick="this.closest('[style*=fixed]').remove()">Cerrar</button>
+    </div>`;
+  document.body.appendChild(sheet.el);
+}
+
+function openRegistroTecnico(){
+  const sheet=mkSheet();
+  sheet.div.innerHTML=`
+    <div style="font-size:16px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px;color:#111">Registrar técnico</div>
+    <div style="font-size:12px;color:#4d6490;margin-bottom:20px">Quedará registrado en tu equipo y en la base de datos de Thruver.</div>
+    <div class="fg fg2" style="margin-bottom:12px">
+      <div class="fblock"><label class="flabel">Nombre completo<span class="req"></span></label><input class="finput" id="nt_n" placeholder="Nombre del técnico"></div>
+      <div class="fblock"><label class="flabel">Teléfono<span class="req"></span></label><input class="finput" id="nt_t" type="tel" placeholder="+52 667 ..."></div>
+    </div>
+    <div class="fg fg2" style="margin-bottom:12px">
+      <div class="fblock"><label class="flabel">Especialidad<span class="req"></span></label><select class="finput" id="nt_s"><option value="">Selecciona</option>${SPECS_LIST.map(s=>`<option>${s}</option>`).join('')}</select></div>
+      <div class="fblock"><label class="flabel">Años de experiencia</label><select class="finput" id="nt_e"><option>Selecciona</option><option>Menos de 1</option><option>1–3 años</option><option>3–7 años</option><option>Más de 7</option></select></div>
+    </div>
+    <div class="fblock" style="margin-bottom:18px">
+      <label class="flabel" style="margin-bottom:6px">Herramientas disponibles</label>
+      <div style="display:flex;flex-wrap:wrap;gap:5px" id="tool_list">
+        ${['Multímetro digital','Pinza amperimétrica','Manifold','Termómetro IR','Manómetro de agua','Llave stilson','Destapador','Taladro','Escalera','Rodillos','Guantes dieléctricos'].map(h=>`<label style="display:inline-flex;align-items:center;gap:4px;padding:4px 9px;background:#fff;border:1.5px solid #d0d5e0;border-radius:100px;font-size:11px;cursor:pointer;user-select:none;color:#1a2540;transition:all .15s" onmouseover="this.style.borderColor='#1a2540'" onmouseout="if(!this.querySelector('input').checked)this.style.borderColor='#d0d5e0'"><input type="checkbox" style="display:none" onchange="this.closest('label').style.background=this.checked?'var(--gold-dim)':'';this.closest('label').style.borderColor=this.checked?'var(--gold)':'';this.closest('label').style.fontWeight=this.checked?'700':'400'">${h}</label>`).join('')}
+      </div>
+    </div>
+    <button class="btn btn-gold btn-lg" style="width:100%;justify-content:center;margin-bottom:8px" onclick="guardarTec()">Registrar técnico</button>
+    <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('[style*=fixed]').remove()">Cancelar</button>`;
+  document.body.appendChild(sheet.el);
+}
+
+function guardarTec(){
+  const n=document.getElementById('nt_n')?.value.trim();
+  const t=document.getElementById('nt_t')?.value.trim();
+  const s=document.getElementById('nt_s')?.value;
+  if(!n||!t||!s){toast('Completa los campos requeridos','red');return;}
+  const tools=Array.from(document.querySelectorAll('#tool_list input:checked')).map(c=>c.nextSibling?.textContent?.trim()).filter(Boolean);
+  const nid='TEC-0'+String(50+TECNICOS.length);
+  TECNICOS.push({id:nid,nombre:n,tel:t,spec:s.replace(' / Minisplit',''),status:'activo',ordenes:0,rating:0,score:0,eficiencia:0,herramientas:tools,ingreso_mes:0,ingreso_semana:0,servicios_semana:0});
+  LOG.unshift({time:'Ahora',dot:'var(--green)',msg:`Técnico ${n} (${nid}) registrado al equipo`,actor:'Partner'});
+  document.querySelectorAll('[style*="position:fixed;inset"]').forEach(e=>e.remove());
+  toast(`${n} registrado en tu flotilla`,'gold');
+  renderTecnicos();
+}
+
+function toggleTec(id){
+  const t=TECNICOS.find(x=>x.id===id); if(!t) return;
+  t.status=t.status==='activo'?'inactivo':'activo';
+  LOG.unshift({time:'Ahora',dot:'var(--amber)',msg:`Técnico ${t.nombre} ${t.status==='activo'?'reactivado':'desactivado'}`,actor:'Partner'});
+  document.querySelectorAll('[style*="position:fixed;inset"]').forEach(e=>e.remove());
+  toast(`${t.nombre} ${t.status==='activo'?'reactivado':'desactivado'}`,'amber');
+  renderTecnicos();
+}
+
+function openRetiro(){
+  const b=CU.banco;
+  const sheet=mkSheet();
+  sheet.div.innerHTML=`
+    <div style="font-size:16px;font-weight:700;letter-spacing:-.02em;margin-bottom:16px;color:#111">Retirar fondos</div>
+    <div class="card" style="background:var(--surface2);text-align:center;margin-bottom:14px;padding:20px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);margin-bottom:6px">Disponible para retiro</div>
+      <div style="font-family:'DM Mono',monospace;font-size:32px;font-weight:800;color:var(--gold)">$${b.saldo.toLocaleString()}</div>
+      <div style="font-size:11px;color:#4d6490;margin-top:3px">Sin comisiones — lo que ganaste es tuyo</div>
+    </div>
+    <div class="fblock" style="margin-bottom:12px">
+      <label class="flabel">Monto a retirar</label>
+      <div style="position:relative"><span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:15px;color:var(--text3)">$</span>
+      <input type="number" id="ret_m" max="${b.saldo}" placeholder="0" class="finput" style="font-family:'DM Mono',monospace;font-size:20px;padding-left:26px" oninput="const v=parseFloat(this.value)||0;const btn=document.getElementById('ret_b');btn.disabled=v<=0||v>${b.saldo};btn.textContent=v>0?'Retirar $'+v.toLocaleString()+' →':'Confirmar retiro'"></div>
+      <div style="display:flex;gap:5px;margin-top:6px">${[25,50,75,100].map(p=>`<button onclick="document.getElementById('ret_m').value=Math.floor(${b.saldo}*${p/100});const v=Math.floor(${b.saldo}*${p/100});document.getElementById('ret_b').disabled=false;document.getElementById('ret_b').textContent='Retirar $'+v.toLocaleString()+' →'" class="btn btn-ghost" style="flex:1;font-size:10px;padding:5px;justify-content:center">${p}%</button>`).join('')}</div>
+    </div>
+    <div class="card-sm" style="background:var(--surface2);margin-bottom:14px;display:flex;align-items:center;gap:8px">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <div><div style="font-size:12px;font-weight:600">${b.banco} · CLABE ...${b.clabe.slice(-4)}</div><div style="font-size:10px;color:var(--text3)">${b.titular} · 1-2 días hábiles</div></div>
+    </div>
+    <button id="ret_b" class="btn btn-gold btn-lg" style="width:100%;justify-content:center;margin-bottom:8px" disabled onclick="const v=parseFloat(document.getElementById('ret_m').value)||0;if(v>0&&v<=${b.saldo}){CU.banco.saldo-=v;document.querySelectorAll('[style*=fixed]').forEach(e=>e.remove());toast('Retiro de $'+v.toLocaleString()+' solicitado — 1-2 días hábiles','gold');renderIngresos();}">Confirmar retiro</button>
+    <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('[style*=fixed]').remove()">Cancelar</button>`;
+  document.body.appendChild(sheet.el);
+}
+
+function openCuenta(){
+  const b=CU.banco;
+  const sheet=mkSheet();
+  sheet.div.innerHTML=`
+    <div style="font-size:16px;font-weight:700;margin-bottom:16px;color:#111">Datos bancarios</div>
+    <div class="card-sm" style="background:var(--surface2);margin-bottom:12px">
+      ${[['Banco',b.banco],['CLABE interbancaria',b.clabe],['Titular',b.titular]].map((r,i,a)=>`<div style="display:flex;justify-content:space-between;padding:9px 0;${i<a.length-1?'border-bottom:1px solid var(--border)':''}"><span style="font-size:11px;color:var(--text2)">${r[0]}</span><span style="font-family:'DM Mono',monospace;font-size:11px">${r[1]}</span></div>`).join('')}
+    </div>
+    <div style="background:rgba(212,160,23,.08);border:1px solid rgba(212,160,23,.2);border-radius:var(--rs);padding:9px 12px;font-size:11px;color:var(--text2);margin-bottom:12px">Para modificar tus datos bancarios contacta a Thruver. Los cambios requieren verificación de identidad.</div>
+    <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('[style*=fixed]').remove()">Cerrar</button>`;
+  document.body.appendChild(sheet.el);
+}
+
+// ═══ UTILS ══════════════════════════════════════════════════
+// ═══ HISTORIAL DRAWER ═══════════════════════════════════════
+function openHistorialDrawer(tecId){
+  const t = TECNICOS.find(x=>x.id===tecId); if(!t) return;
+  const sp = SPECS[t.spec]||{color:'#888'};
+
+  // Remove existing drawer
+  document.getElementById('hist_drawer')?.remove();
+  document.getElementById('hist_overlay')?.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'hist_overlay';
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:400;animation:fadeIn .2s ease;backdrop-filter:blur(2px)';
+  overlay.onclick = closeHistorialDrawer;
+  document.body.appendChild(overlay);
+
+  const drawer = document.createElement('div');
+  drawer.id = 'hist_drawer';
+  drawer.style.cssText = 'position:fixed;top:0;right:0;width:460px;max-width:100vw;height:100vh;background:#fff;z-index:500;display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(26,37,64,.15);border-left:2px solid #1a2540;transform:translateX(100%);transition:transform .3s cubic-bezier(.25,1,.5,1)';
+
+  const hist = t.historial||[];
+  const totalHist = hist.reduce((s,h)=>s+(h.monto||0),0);
+  const doneHist = hist.filter(h=>h.status==='done');
+  const scoreAvg = doneHist.length ? Math.round(doneHist.reduce((s,h)=>s+(h.score||0),0)/doneHist.length) : 0;
+  const scoreColor = scoreAvg>=90?'#16a34a':scoreAvg>=80?'#d97706':'#dc2626';
+
+  drawer.innerHTML = `
+    <!-- Header -->
+    <div style="background:#1a2540;padding:20px;flex-shrink:0">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4)">Historial de servicios</div>
+        <button onclick="closeHistorialDrawer()" style="width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">×</button>
+      </div>
+      <!-- Tech info -->
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+        <div style="width:48px;height:48px;border-radius:50%;background:${sp.color}25;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:${sp.color};flex-shrink:0;border:2px solid ${sp.color}50">${t.nombre.split(' ').map(n=>n[0]).slice(0,2).join('')}</div>
+        <div>
+          <div style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-.02em;margin-bottom:2px">${t.nombre}</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.4);font-family:'DM Mono',monospace">${t.id} · ${t.tel}</div>
+          <div style="font-size:11px;color:${sp.color};font-weight:600;margin-top:2px">${t.spec}</div>
+        </div>
+      </div>
+      <!-- Summary KPIs -->
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px">
+        ${[
+          ['$'+t.ingreso_mes.toLocaleString(),'Este mes','#d4a017'],
+          ['$'+t.ingreso_semana.toLocaleString(),'Esta semana','#22c55e'],
+          [t.ordenes,'Servicios','#fff'],
+          [scoreAvg||t.score,'Score prom.',scoreColor]
+        ].map(([v,l,vc])=>`
+          <div style="background:rgba(255,255,255,.07);border-radius:7px;padding:10px;text-align:center">
+            <div style="font-family:'DM Mono',monospace;font-size:16px;font-weight:800;color:${vc};margin-bottom:2px">${v}</div>
+            <div style="font-size:8px;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em">${l}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+
+    <!-- History list -->
+    <div style="flex:1;overflow-y:auto;padding:0">
+      <div style="padding:16px 20px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#6b7a99;border-bottom:1px solid #e8ecf4;display:flex;align-items:center;justify-content:space-between">
+        <span>Servicios recientes</span>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:#1a2540;font-weight:700;background:#f2f3f7;padding:2px 8px;border-radius:100px">${hist.length} registros</span>
+      </div>
+
+      ${hist.length ? hist.map((h,i)=>{
+        const hs = SPECS[h.spec]||{color:'#888'};
+        const statusColor = h.status==='done'?'#16a34a':h.status==='active'?'#3b82f6':'#f59e0b';
+        const statusLabel = h.status==='done'?'Completado':h.status==='active'?'En curso':'Pendiente';
+        const scoreC = h.score>=90?'#16a34a':h.score>=80?'#d97706':'#dc2626';
+        return `
+          <div style="padding:16px 20px;${i>0?'border-top:1px solid #f0f2f7':''}">
+            <!-- Top row -->
+            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px">
+              <div>
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
+                  <div style="width:6px;height:6px;border-radius:50%;background:${hs.color};flex-shrink:0"></div>
+                  <span style="font-size:10px;font-weight:700;color:${hs.color};text-transform:uppercase;letter-spacing:.07em">${h.spec}</span>
+                  <span style="font-family:'DM Mono',monospace;font-size:9px;color:#9ca3af">${h.id}</span>
+                </div>
+                <div style="font-size:14px;font-weight:700;color:#111;margin-bottom:3px">${h.address}</div>
+                <div style="font-size:11px;color:#6b7a99;line-height:1.45">${h.problema}</div>
+              </div>
+              <div style="text-align:right;flex-shrink:0">
+                <div style="font-size:17px;font-weight:800;font-family:'DM Mono',monospace;color:#16a34a">$${h.monto.toLocaleString()}</div>
+                ${h.score?`<div style="font-size:10px;font-weight:700;color:${scoreC};margin-top:2px">Score ${h.score}</div>`:''}
+              </div>
+            </div>
+            <!-- Bottom row -->
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;color:#9ca3af">${h.fecha}</div>
+              <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;padding:3px 9px;border-radius:100px;background:${statusColor}15;color:${statusColor};border:1px solid ${statusColor}30">${statusLabel}</span>
+            </div>
+            ${h.score?`
+            <div style="margin-top:8px;height:3px;background:#e8ecf4;border-radius:2px;overflow:hidden">
+              <div style="height:100%;width:${h.score}%;background:${scoreC};border-radius:2px;transition:width 1s ease"></div>
+            </div>`:''}
+          </div>`;}).join('')
+        : `<div style="text-align:center;padding:48px 20px">
+            <div style="width:44px;height:44px;border-radius:12px;background:#f2f3f7;border:1px solid #e0e4ed;display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M3 7h18l-1 13H4L3 7z"/></svg>
+            </div>
+            <div style="font-size:14px;font-weight:700;color:#1a2540;margin-bottom:4px">Sin historial aún</div>
+            <div style="font-size:12px;color:#6b7a99;line-height:1.6">Los servicios de este técnico aparecerán aquí una vez que complete su primera orden.</div>
+          </div>`}
+    </div>
+
+    <!-- Footer actions -->
+    <div style="padding:16px 20px;border-top:1.5px solid #e0e4ed;background:#f8f9fc;flex-shrink:0;display:flex;gap:8px">
+      <button onclick="openTecnico('${t.id}')" style="flex:1;padding:10px;background:#1a2540;color:#fff;border:none;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">Ver perfil completo</button>
+      <button onclick="closeHistorialDrawer()" style="padding:10px 16px;background:#fff;color:#1a2540;border:1.5px solid #1a2540;border-radius:7px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif">Cerrar</button>
+    </div>`;
+
+  document.body.appendChild(drawer);
+  // Trigger animation
+  requestAnimationFrame(()=>{ drawer.style.transform='translateX(0)'; });
+}
+
+function closeHistorialDrawer(){
+  const d=document.getElementById('hist_drawer');
+  const o=document.getElementById('hist_overlay');
+  if(d){ d.style.transform='translateX(100%)'; setTimeout(()=>d.remove(),320); }
+  if(o){ o.style.opacity='0'; setTimeout(()=>o.remove(),300); }
+}
+
+function mkSheet(){
+  const el=document.createElement('div');
+  el.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease;backdrop-filter:blur(4px)';
+  const div=document.createElement('div');
+  div.style.cssText='background:#f5f6f8;border-radius:16px 16px 0 0;padding:20px;width:100%;max-width:620px;max-height:90vh;overflow-y:auto;box-shadow:0 -8px 32px rgba(26,37,64,.2);border-top:2px solid #1a2540';
+  div.innerHTML='<div style="width:36px;height:4px;background:#1a2540;border-radius:2px;margin:0 auto 18px"></div>';
+  el.appendChild(div); el.onclick=e=>{if(e.target===el)el.remove();};
+  return {el,div};
+}
+
+function toast(msg,type){
+  const c={gold:'var(--gold)',green:'var(--green)',red:'var(--red)',amber:'var(--amber)',blue:'var(--blue)'};
+  const t=document.createElement('div');
+  t.style.cssText=`position:fixed;bottom:76px;left:50%;transform:translateX(-50%);background:${c[type]||'var(--text)'};color:${type==='gold'?'#000':'#fff'};border-radius:var(--r);padding:10px 18px;font-size:12px;font-weight:700;z-index:600;box-shadow:var(--shadow-lg);white-space:nowrap;animation:slideUp .25s ease;font-family:'DM Sans',sans-serif`;
+  t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000);
+}
+
+function openTransferirTecnico(){
+  const sheet=mkSheet();
+  const activos=TECNICOS.filter(t=>t.status==='activo');
+  sheet.div.innerHTML=`
+    <div style="font-size:16px;font-weight:700;letter-spacing:-.02em;margin-bottom:4px">Transferir a técnico</div>
+    <div style="font-size:12px;color:var(--text2);margin-bottom:18px">Envía fondos directamente desde tu saldo a un técnico de tu equipo. Tú gestionas los pagos internamente.</div>
+    <div class="fblock" style="margin-bottom:14px">
+      <label class="flabel">Seleccionar técnico<span class="req"></span></label>
+      <select class="finput" id="tr_tec" onchange="updateTransfer()">
+        <option value="">Selecciona un técnico</option>
+        ${activos.map(t=>`<option value="${t.id}">${t.nombre} · ${t.spec} · ${t.id}</option>`).join('')}
+      </select>
+    </div>
+    <div class="fblock" style="margin-bottom:14px">
+      <label class="flabel">Monto a transferir<span class="req"></span></label>
+      <div style="position:relative">
+        <span style="position:absolute;left:11px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:15px;color:var(--text3)">$</span>
+        <input type="number" id="tr_monto" max="${CU.banco.saldo}" placeholder="0" class="finput" style="font-family:'DM Mono',monospace;font-size:20px;padding-left:26px" oninput="updateTransfer()">
+      </div>
+      <div id="tr_err" style="font-size:11px;color:var(--red);margin-top:4px;display:none">El monto supera tu saldo disponible.</div>
+    </div>
+    <div class="fblock" style="margin-bottom:18px">
+      <label class="flabel">Concepto</label>
+      <input class="finput" id="tr_concepto" placeholder="Ej. Pago semana del 17 al 21 de junio">
+    </div>
+    <div id="tr_preview" style="display:none;background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.2);border-radius:var(--rs);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--text)">
+      <div style="font-weight:700;margin-bottom:3px" id="tr_preview_title">—</div>
+      <div style="color:var(--text2)" id="tr_preview_sub">—</div>
+    </div>
+    <button id="tr_btn" class="btn btn-lg" style="width:100%;justify-content:center;margin-bottom:8px;background:#16a34a;color:#fff;box-shadow:0 2px 8px rgba(22,163,74,.25)" disabled onclick="confirmarTransfer()">Confirmar transferencia</button>
+    <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('[style*=fixed]').remove()">Cancelar</button>`;
+  document.body.appendChild(sheet.el);
+}
+
+function updateTransfer(){
+  const tec=document.getElementById('tr_tec')?.value;
+  const monto=parseFloat(document.getElementById('tr_monto')?.value)||0;
+  const btn=document.getElementById('tr_btn');
+  const err=document.getElementById('tr_err');
+  const preview=document.getElementById('tr_preview');
+  const inp=document.getElementById('tr_monto');
+  if(!btn) return;
+  if(monto>CU.banco.saldo){
+    err.style.display='block'; btn.disabled=true; inp.style.borderColor='var(--red)'; preview.style.display='none'; return;
+  }
+  err.style.display='none'; inp.style.borderColor=monto>0?'var(--green)':'';
+  if(tec && monto>0){
+    const t=TECNICOS.find(x=>x.id===tec);
+    btn.disabled=false;
+    preview.style.display='block';
+    document.getElementById('tr_preview_title').textContent='Transferencia a '+t?.nombre;
+    document.getElementById('tr_preview_sub').textContent='$'+monto.toLocaleString()+' MXN · Saldo restante: $'+(CU.banco.saldo-monto).toLocaleString();
+  } else { btn.disabled=true; preview.style.display='none'; }
+}
+
+function confirmarTransfer(){
+  const tecId=document.getElementById('tr_tec')?.value;
+  const monto=parseFloat(document.getElementById('tr_monto')?.value)||0;
+  const concepto=document.getElementById('tr_concepto')?.value||'Sin concepto';
+  const t=TECNICOS.find(x=>x.id===tecId);
+  if(!t||!monto) return;
+  CU.banco.saldo-=monto;
+  LOG.unshift({time:'Ahora',dot:'var(--green)',msg:`Transferencia de $${monto.toLocaleString()} a ${t.nombre} — ${concepto}`,actor:'Partner'});
+  document.querySelectorAll('[style*="position:fixed;inset"]').forEach(e=>e.remove());
+  toast(`$${monto.toLocaleString()} transferidos a ${t.nombre.split(' ')[0]}`,'green');
+  renderIngresos();
+}
+
+function showNotif(){
+  const s=document.createElement('div');
+  s.style.cssText='position:fixed;top:60px;right:14px;width:290px;background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);box-shadow:var(--shadow-lg);z-index:500;animation:slideUp .2s ease;overflow:hidden';
+  s.innerHTML=`<div style="padding:10px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center"><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--text3)">Notificaciones</span><span style="cursor:pointer;color:var(--text2);font-size:12px" onclick="this.closest('[style*=fixed]').remove()">✕</span></div>
+  ${[{msg:'HVAC-04812 sin técnico — acción requerida',sub:'Hace 23 minutos',dot:'var(--red)'},{msg:'Nuevo servicio disponible · Colinas del Sol',sub:'$780 · HVAC · Hace 1 hora',dot:'var(--gold)'},{msg:'Miguel R. completó HVAC-04810 · Score 92',sub:'Excelente servicio · Hace 2 horas',dot:'var(--green)'}].map(n=>`<div style="padding:10px 14px;border-bottom:1px solid var(--border)"><div style="display:flex;gap:8px"><div style="width:7px;height:7px;border-radius:50%;background:${n.dot};flex-shrink:0;margin-top:4px"></div><div><div style="font-size:12px;font-weight:500;margin-bottom:1px">${n.msg}</div><div style="font-size:10px;color:var(--text3)">${n.sub}</div></div></div></div>`).join('')}`;
+  document.body.appendChild(s); setTimeout(()=>s?.remove(),6000);
+}
+</script>
+</body>
+</html>

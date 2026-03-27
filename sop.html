@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1a1a18">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Thruver Field">
+<link rel="manifest" href="data:application/json;charset=utf-8,{
+  &quot;name&quot;:&quot;Thruver Field SOP&quot;,
+  &quot;short_name&quot;:&quot;Thruver&quot;,
+  &quot;description&quot;:&quot;SOP de campo para tecnicos Thruver Fix&quot;,
+  &quot;start_url&quot;:&quot;.&quot;,
+  &quot;display&quot;:&quot;standalone&quot;,
+  &quot;background_color&quot;:&quot;#f7f7f5&quot;,
+  &quot;theme_color&quot;:&quot;#1a1a18&quot;,
+  &quot;orientation&quot;:&quot;portrait&quot;,
+  &quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231a1a18'/%3E%3Cpath d='M20 45 L50 20 L80 45 V80 a4 4 0 01-4 4H24a4 4 0 01-4-4Z' fill='none' stroke='white' stroke-width='5' stroke-linejoin='round'/%3E%3C/svg%3E&quot;,&quot;sizes&quot;:&quot;any&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;}]
+}">
+<title>Thruver · SOP</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --canvas:#f7f7f5;--surface:#fff;--surface-2:#f2f2f0;
+  --border:#e4e4e0;--border-2:#d0d0cc;
+  --text:#111110;--text-2:#6b6b66;--text-3:#a8a8a4;
+  --accent:#1a1a18;
+  --blue:#1d6bf3;--blue-bg:#dbeafe;
+  --green:#16a34a;--green-bg:#dcfce7;
+  --amber:#c27803;--amber-bg:#fef9c3;
+  --red:#dc2626;--red-bg:#fee2e2;
+  --r:8px;--rs:5px;
+  --shadow:0 1px 3px rgba(0,0,0,0.07),0 0 0 1px rgba(0,0,0,0.04);
+  --spec-color:#1d6bf3;
+}
+html{font-size:14px;-webkit-text-size-adjust:100%}
+body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;line-height:1.55}
+
+/* ── DISPATCH ── */
+#dispatch{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px}
+.d-logo{display:flex;align-items:center;gap:10px;margin-bottom:40px}
+.d-logomark{width:36px;height:36px;background:var(--accent);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.d-logoname{font-size:17px;font-weight:700;letter-spacing:-0.02em}
+.d-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:28px;width:100%;max-width:460px;box-shadow:var(--shadow)}
+.d-title{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:4px}
+.d-sub{font-size:12px;color:var(--text-3);margin-bottom:24px}
+.d-field{margin-bottom:14px}
+.d-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-2);margin-bottom:5px;display:block}
+.d-input{background:var(--surface-2);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;width:100%;outline:none;transition:border-color 0.15s;-webkit-appearance:none;appearance:none}
+.d-input:focus{border-color:var(--blue);background:var(--surface);box-shadow:0 0 0 3px rgba(29,107,243,0.1)}
+.d-input::placeholder{color:var(--text-3)}
+select.d-input{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23a8a8a4' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:32px;cursor:pointer}
+.d-problema-input{width:100%;background:var(--surface-2);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:9px 12px;outline:none;resize:none;min-height:64px;transition:border-color 0.15s}
+.d-problema-input:focus{border-color:var(--blue);background:var(--surface);box-shadow:0 0 0 3px rgba(29,107,243,0.1)}
+.d-btn{background:var(--accent);color:#fff;font-size:13px;font-weight:700;width:100%;padding:11px;border-radius:var(--rs);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;letter-spacing:-0.01em;transition:background 0.15s}
+.d-btn:hover{background:#2d2d2b}
+.d-btn:disabled{background:var(--border-2);color:var(--text-3);cursor:not-allowed}
+
+/* ── RAIL ── */
+.rail{position:fixed;top:0;left:0;right:0;z-index:200;height:3px;background:var(--border)}
+.rail-fill{height:100%;background:var(--spec-color);transition:width 0.5s cubic-bezier(0.25,1,0.5,1)}
+
+/* ── SHELL ── */
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh;padding-top:3px}
+
+/* ── SIDEBAR ── */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:0;position:sticky;top:3px;height:calc(100vh - 3px);overflow-y:auto;display:flex;flex-direction:column}
+.sb-brand{padding:18px 20px 16px;border-bottom:1px solid var(--border)}
+.sb-logo{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.sb-logomark{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-logoname{font-size:12px;font-weight:700;letter-spacing:-0.01em}
+.sb-service{font-size:11px;font-weight:600;color:var(--text-2);margin-bottom:3px}
+.sb-problema{font-size:11px;color:var(--text-3);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sb-steps{padding:8px 0;flex:1}
+.sb-group{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-3);padding:10px 20px 4px}
+.sb-step{display:flex;align-items:flex-start;gap:9px;padding:7px 16px 7px 20px;cursor:pointer;position:relative;transition:background 0.1s}
+.sb-step::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:transparent;transition:background 0.2s}
+.sb-step.active::before{background:var(--spec-color)}
+.sb-step.active{background:rgba(29,107,243,0.04)}
+.sb-step.complete::before{background:var(--green)}
+.sb-step.blocked::before{background:var(--red)}
+.sb-node{width:17px;height:17px;min-width:17px;border-radius:50%;border:1.5px solid var(--border-2);background:var(--surface);display:flex;align-items:center;justify-content:center;margin-top:2px;font-size:8px;font-weight:700;color:var(--text-3);transition:all 0.2s;font-family:'DM Mono',monospace}
+.sb-step.active .sb-node{border-color:var(--spec-color);background:var(--spec-color);color:#fff}
+.sb-step.complete .sb-node{border-color:var(--green);background:var(--green);color:#fff}
+.sb-step.blocked .sb-node{border-color:var(--red);background:var(--red);color:#fff}
+.sb-step-name{font-size:12px;font-weight:500;color:var(--text-3);line-height:1.35;transition:color 0.15s}
+.sb-step.active .sb-step-name{color:var(--text);font-weight:600}
+.sb-step.complete .sb-step-name{color:var(--green)}
+.sb-footer{padding:14px 20px;border-top:1px solid var(--border);margin-top:auto}
+.sb-meta{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);line-height:1.6}
+.sb-progress{display:flex;justify-content:space-between;font-size:10px;color:var(--text-3);margin-bottom:4px}
+.sb-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.sb-bar-fill{height:100%;background:var(--spec-color);border-radius:2px;transition:width 0.4s ease}
+
+/* ── MAIN ── */
+.main{padding:36px 48px;max-width:760px}
+.step-eyebrow{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--spec-color);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.eyebrow-line{flex:1;height:1px;background:var(--blue-bg);max-width:36px}
+.step-title{font-size:22px;font-weight:700;letter-spacing:-0.03em;margin-bottom:7px;line-height:1.2}
+.step-desc{font-size:13px;color:var(--text-2);line-height:1.65;max-width:500px;margin-bottom:28px}
+
+/* Problema card — el motivo de la visita */
+.problema-card{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;margin-bottom:24px;display:flex;gap:10px;align-items:flex-start}
+.problema-dot{width:6px;height:6px;border-radius:50%;background:var(--spec-color);flex-shrink:0;margin-top:5px}
+.problema-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);margin-bottom:2px}
+.problema-text{font-size:13px;font-weight:500;color:var(--text);line-height:1.4}
+
+/* Block alert */
+.block-alert{background:#fff8f8;border:1.5px solid var(--red);border-radius:var(--r);padding:14px 16px;margin-bottom:20px;display:none}
+.block-alert.show{display:block;animation:slideIn 0.2s ease}
+.ba-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:0.12em;color:var(--red);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.ba-msg{font-size:13px;font-weight:500;color:#7f1d1d;line-height:1.5;margin-bottom:4px}
+.ba-action{font-size:11px;color:var(--red);font-style:italic}
+
+/* Warn alert */
+.warn-alert{background:#fffef0;border:1px solid #f0d060;border-radius:var(--r);padding:10px 14px;margin-bottom:12px;display:none;gap:8px;align-items:flex-start}
+.warn-alert.show{display:flex;animation:slideIn 0.2s ease}
+.wa-dot{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0;margin-top:5px}
+.wa-body{font-size:12px;color:#6b4c00;line-height:1.5}
+.wa-sugg{font-size:11px;color:var(--amber);font-weight:600;margin-top:3px}
+
+@keyframes slideIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+
+/* Section divider */
+.sec-div{height:1px;background:var(--border);margin:22px 0;position:relative}
+.sec-div-label{position:absolute;left:0;top:-8px;background:var(--canvas);padding-right:10px;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3)}
+
+/* Fields */
+.fg{display:grid;gap:14px}
+.fg-2{grid-template-columns:1fr 1fr}
+.fblock{display:flex;flex-direction:column;gap:5px}
+.flabel{font-size:10px;font-weight:700;color:var(--text-2);text-transform:uppercase;letter-spacing:0.07em;display:flex;align-items:center;gap:5px}
+.freq{width:5px;height:5px;border-radius:50%;background:var(--spec-color)}
+.fnote{font-size:10px;color:var(--text-3);font-style:italic;line-height:1.4}
+.fnorm{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:1px 6px;display:inline-block;margin-top:1px}
+.iwrap{position:relative}
+.finput{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--rs);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 34px 8px 10px;width:100%;outline:none;transition:border-color 0.15s,box-shadow 0.15s;-webkit-appearance:none;appearance:none}
+.finput[type=number]{font-family:'DM Mono',monospace;font-size:14px;padding-right:52px}
+.finput:focus{border-color:var(--spec-color);box-shadow:0 0 0 3px rgba(29,107,243,0.1)}
+.finput::placeholder{color:var(--text-3)}
+.finput.ok{border-color:var(--green);background:#f8fef9}
+.finput.warn{border-color:#d4a017;background:#fffef5}
+.finput.err{border-color:var(--red);background:#fff8f8}
+select.finput{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='11' height='11' viewBox='0 0 24 24' fill='none' stroke='%23a8a8a4' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;cursor:pointer;padding-right:32px}
+textarea.finput{resize:vertical;min-height:68px;padding-right:10px}
+.unit{position:absolute;right:10px;top:50%;transform:translateY(-50%);font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:1px 5px;pointer-events:none}
+.sicon{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;border-radius:50%;display:none;align-items:center;justify-content:center;pointer-events:none}
+.sicon.show{display:flex}
+.sicon.ok{background:var(--green-bg)}.sicon.warn{background:var(--amber-bg)}.sicon.err{background:var(--red-bg)}
+.vmsg{display:none;font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;align-items:center;gap:4px;margin-top:3px}
+.vmsg.show{display:flex}
+.vmsg.ok{color:#14532d;background:var(--green-bg)}.vmsg.warn{color:#713f12;background:var(--amber-bg)}.vmsg.err{color:#7f1d1d;background:var(--red-bg)}
+
+/* Scale */
+.scale-wrap{display:flex;gap:4px;margin-top:2px}
+.sbn{flex:1;padding:7px 4px;border:1.5px solid var(--border);border-radius:var(--rs);background:var(--surface);color:var(--text-3);font-size:12px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.15s;font-family:'DM Sans',sans-serif}
+.sbn:hover{border-color:var(--border-2);color:var(--text-2)}
+.sbn.s1{background:#fff2f2;border-color:var(--red);color:var(--red)}
+.sbn.s2{background:#fff7ed;border-color:#f97316;color:#c2410c}
+.sbn.s3{background:var(--amber-bg);border-color:var(--amber);color:var(--amber)}
+.sbn.s4{background:#f0fdf4;border-color:var(--green);color:var(--green)}
+.sbn.s5{background:var(--green-bg);border-color:var(--green);color:var(--green)}
+.scale-labels{display:flex;justify-content:space-between;font-size:9px;color:var(--text-3);margin-top:3px}
+
+/* Checklist */
+.clist{display:flex;flex-direction:column;gap:5px}
+.citem{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);cursor:pointer;user-select:none;transition:all 0.15s}
+.citem:hover{border-color:var(--border-2)}
+.citem.checked{border-color:var(--green);background:var(--green-bg)}
+.citem.mandatory{border-left:3px solid var(--spec-color)}
+.citem.mandatory.checked{border-left:3px solid var(--green)}
+.cbox{width:17px;height:17px;min-width:17px;border-radius:3px;border:1.5px solid var(--border-2);background:var(--surface);display:flex;align-items:center;justify-content:center;transition:all 0.15s;margin-top:1px}
+.citem.checked .cbox{background:var(--green);border-color:var(--green)}
+.cmark{display:none}.citem.checked .cmark{display:block}
+.ctext{flex:1}
+.clabel{font-size:13px;font-weight:500;color:var(--text);line-height:1.35}
+.cnote{font-size:10px;color:var(--text-3);margin-top:1px;line-height:1.4}
+.ctag{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;background:var(--blue-bg);color:var(--blue);border-radius:3px;padding:1px 5px;margin-left:5px;vertical-align:middle}
+
+/* Vitals grid */
+.vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.vcard{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:12px}
+.vval{font-family:'DM Mono',monospace;font-size:18px;font-weight:600;letter-spacing:-0.02em;margin-bottom:2px}
+.vval.ok{color:var(--green)}.vval.warn{color:var(--amber)}.vval.err{color:var(--red)}.vval.neutral{color:var(--text)}
+.vlabel{font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em;font-weight:500}
+.vnorm{font-size:9px;font-family:'DM Mono',monospace;color:var(--text-3);margin-top:2px}
+
+/* Score */
+.score-wrap{background:var(--accent);border-radius:var(--r);padding:18px 22px;margin-bottom:18px;display:flex;align-items:center;gap:20px}
+.score-ring{position:relative;width:64px;height:64px;flex-shrink:0}
+.score-ring svg{transform:rotate(-90deg)}
+.score-val{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:17px;font-weight:700}
+.score-info-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px}
+.score-info-sub{font-size:11px;color:rgba(255,255,255,0.4);line-height:1.5}
+
+/* Findings */
+.findings{display:flex;flex-direction:column;gap:5px;margin-bottom:18px}
+.finding{display:flex;align-items:flex-start;gap:8px;padding:9px 12px;border-radius:var(--rs);border:1px solid;font-size:12px;line-height:1.5}
+.finding.err{background:#fff8f8;border-color:#fecaca;color:#7f1d1d}
+.finding.warn{background:#fffef5;border-color:#fde68a;color:#713f12}
+.finding.ok{background:#f8fef9;border-color:#bbf7d0;color:#14532d}
+.fdot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.finding.err .fdot{background:var(--red)}.finding.warn .fdot{background:var(--amber)}.finding.ok .fdot{background:var(--green)}
+.fref{font-size:9px;font-family:'DM Mono',monospace;opacity:0.4;margin-left:auto;white-space:nowrap;padding-left:8px}
+
+/* Context card */
+.ctx-card{background:var(--blue-bg);border:1px solid #bfdbfe;border-radius:var(--r);padding:14px;margin-bottom:16px;display:none}
+.ctx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.ctx-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--rs);padding:9px}
+.ctx-val{font-family:'DM Mono',monospace;font-size:14px;font-weight:600;color:var(--green);margin-bottom:1px}
+.ctx-label{font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.06em}
+
+/* JSON block */
+.json-block{background:#fafaf8;border:1px solid var(--border);border-radius:var(--r);padding:12px;font-family:'DM Mono',monospace;font-size:10px;color:var(--text-2);white-space:pre;overflow-x:auto;line-height:1.6;max-height:240px;overflow-y:auto;margin-bottom:14px}
+
+/* Nav */
+.nav-row{display:flex;align-items:center;justify-content:space-between;margin-top:28px;padding-top:22px;border-top:1px solid var(--border)}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 16px;border-radius:var(--rs);font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all 0.15s;font-family:'DM Sans',sans-serif;letter-spacing:-0.01em}
+.btn-ghost{background:transparent;color:var(--text-2);border:1.5px solid var(--border)}
+.btn-ghost:hover{background:var(--surface-2);color:var(--text)}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#2d2d2b}
+.btn-primary:disabled{background:var(--border-2);color:var(--text-3);cursor:not-allowed}
+.btn-export{background:var(--spec-color);color:#fff}
+.btn-export:hover{opacity:0.9}
+.step-ctr{font-size:11px;color:var(--text-3);font-family:'DM Mono',monospace}
+
+/* ═══════════════════════════════════
+   MOBILE FIELD MODE — 768px y menor
+   Misma estructura, optimizada para
+   celular en campo con luz solar
+═══════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Ocultar sidebar — navegacion por botones */
+  .sidebar { display: none !important; }
+
+  /* Shell en columna unica */
+  .shell { grid-template-columns: 1fr !important; }
+
+  /* Main — padding comodo para pulgar */
+  .main { padding: 16px 16px 100px !important; max-width: 100% !important; }
+
+  /* Rail mas grueso — visible */
+  .rail { height: 4px !important; }
+
+  /* ── HEADER MOVIL FIJO ── */
+  .mobile-hdr {
+    display: flex !important;
+  }
+
+  /* Step header compacto */
+  .step-eyebrow { font-size: 10px !important; margin-bottom: 4px !important; }
+  .step-title { font-size: 20px !important; letter-spacing: -0.025em !important; }
+  .step-desc { font-size: 13px !important; margin-bottom: 20px !important; }
+
+  /* Problema del cliente — siempre visible */
+  .problema-card { padding: 10px 12px !important; margin-bottom: 18px !important; }
+  .problema-text { font-size: 12px !important; }
+
+  /* ── CAMPOS ── */
+  .fg-2 { grid-template-columns: 1fr !important; }
+
+  /* Inputs grandes para pulgar */
+  .finput {
+    font-size: 16px !important; /* evita zoom en iOS */
+    padding: 14px 12px !important;
+    border-radius: 8px !important;
+    min-height: 50px !important;
+  }
+  .finput[type=number] {
+    font-family: 'DM Mono', monospace !important;
+    font-size: 24px !important;
+    padding: 14px 56px 14px 14px !important;
+    letter-spacing: -0.01em !important;
+  }
+  .unit { font-size: 12px !important; right: 12px !important; }
+  .sicon { right: 8px !important; }
+
+  /* Select con altura comoda */
+  select.finput {
+    min-height: 50px !important;
+    padding-right: 36px !important;
+  }
+
+  /* Textarea */
+  textarea.finput { min-height: 88px !important; }
+
+  /* Labels */
+  .flabel { font-size: 11px !important; margin-bottom: 2px !important; }
+  .fnote  { font-size: 11px !important; }
+  .fnorm  { font-size: 10px !important; }
+
+  /* Validation messages — mas grandes */
+  .vmsg.show { font-size: 12px !important; padding: 5px 10px !important; }
+  .warn-alert.show { padding: 10px 12px !important; }
+  .wa-body { font-size: 13px !important; }
+
+  /* ── ESCALAS — botones mas grandes ── */
+  .sbn {
+    padding: 16px 4px !important;
+    font-size: 16px !important;
+    border-radius: 8px !important;
+    min-height: 52px !important;
+  }
+  .scale-labels { font-size: 10px !important; }
+
+  /* ── CHECKLIST — items grandes para pulgar ── */
+  .citem {
+    padding: 14px 12px !important;
+    border-radius: 10px !important;
+    gap: 12px !important;
+  }
+  .cbox {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    border-radius: 6px !important;
+  }
+  .clabel { font-size: 14px !important; }
+  .cnote  { font-size: 11px !important; }
+
+  /* ── ALERTAS ── */
+  .block-alert { padding: 14px !important; border-radius: 10px !important; }
+  .ba-msg { font-size: 15px !important; }
+  .ba-action { font-size: 13px !important; }
+  .warn-alert { border-radius: 8px !important; }
+
+  /* ── CONTEXT CARD ── */
+  .ctx-card { padding: 12px !important; }
+  .ctx-grid { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+  .ctx-val { font-size: 13px !important; }
+
+  /* ── SECCION DIVIDER ── */
+  .sec-div { margin: 18px 0 !important; }
+
+  /* ── EXPORT / VITALS ── */
+  .vitals-grid { grid-template-columns: 1fr 1fr !important; gap: 7px !important; }
+  .vval { font-size: 16px !important; }
+  .score-wrap { padding: 14px 16px !important; gap: 14px !important; }
+  .score-ring { width: 56px !important; height: 56px !important; }
+  .score-info-title { font-size: 13px !important; }
+  .json-block { font-size: 9px !important; max-height: 160px !important; }
+
+  /* ── NAV BUTTONS — barra fija al fondo ── */
+  .nav-row {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: var(--canvas) !important;
+    border-top: 1px solid var(--border) !important;
+    padding: 10px 16px calc(env(safe-area-inset-bottom, 0px) + 10px) !important;
+    margin-top: 0 !important;
+    z-index: 50 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+  }
+  .btn { 
+    padding: 14px 20px !important; 
+    font-size: 14px !important; 
+    border-radius: 8px !important;
+    min-height: 48px !important;
+  }
+  .btn-primary { flex: 1 !important; justify-content: center !important; margin-left: 10px !important; }
+  .btn-ghost { min-width: 80px !important; }
+  .step-ctr { font-size: 11px !important; }
+
+  /* ── DISPATCH MOVIL ── */
+  #dispatch { padding: 24px 20px !important; }
+  .d-card { padding: 24px 20px !important; max-width: 100% !important; }
+  .d-inp {
+    font-size: 16px !important;
+    padding: 14px !important;
+    min-height: 50px !important;
+  }
+  select.d-inp { min-height: 50px !important; }
+  textarea.d-inp { min-height: 80px !important; }
+  .d-btn {
+    padding: 16px !important;
+    font-size: 16px !important;
+    min-height: 52px !important;
+  }
+}
+
+/* ── HEADER MOVIL — se muestra solo en mobile ── */
+.mobile-hdr {
+  display: none;
+  position: sticky;
+  top: 3px;
+  z-index: 100;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.mhdr-mark {
+  width: 24px; height: 24px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.mhdr-service { font-size: 12px; font-weight: 700; flex: 1; }
+.mhdr-step { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-3); }
+/* Barra de progreso mobile */
+.mobile-prog {
+  display: none;
+  height: 3px;
+  background: var(--border);
+  position: sticky;
+  top: calc(3px + 44px);
+  z-index: 99;
+}
+@media (max-width: 768px) {
+  .mobile-prog { display: block; }
+  .mobile-prog-fill { height: 100%; background: var(--spec-color); transition: width 0.4s ease; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ DISPATCH ═══════════ -->
+<div id="dispatch">
+  <div class="d-logo">
+    <div class="d-logomark"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+    <span class="d-logoname">Thruver Fix · SOP</span>
+  </div>
+  <div class="d-card">
+    <div class="d-title">Nueva orden de trabajo</div>
+    <div class="d-sub">Ingresa los datos de la orden asignada por el dispatcher</div>
+    <div class="d-field">
+      <label class="d-label">Especialidad del servicio</label>
+      <select class="d-input" id="d_service" onchange="checkDispatch()">
+        <option value="">Selecciona</option>
+        <option value="hvac">HVAC / Minisplit</option>
+        <option value="electrico">Electrico</option>
+        <option value="plomeria">Plomeria</option>
+        <option value="carpinteria">Carpinteria</option>
+        <option value="pintura">Pintura</option>
+        <option value="impermeabilizacion">Impermeabilizacion</option>
+      </select>
+    </div>
+    <div class="d-field">
+      <label class="d-label">ID Propiedad</label>
+      <input class="d-input" id="d_prop" placeholder="PROP-00123" oninput="checkDispatch()">
+    </div>
+    <div class="d-field">
+      <label class="d-label">ID Tecnico</label>
+      <input class="d-input" id="d_tec" placeholder="TEC-0042" oninput="checkDispatch()">
+    </div>
+    <div class="d-field">
+      <label class="d-label">Problema reportado por el cliente</label>
+      <textarea class="d-problema-input" id="d_problema" placeholder="Describe exactamente lo que reporto el cliente..." oninput="checkDispatch()"></textarea>
+    </div>
+    <button class="d-btn" id="d_btn" onclick="launchSOP()" disabled>Abrir SOP</button>
+  </div>
+</div>
+
+<!-- ═══════════ SOP SHELL ═══════════ -->
+<div id="sop_shell" style="display:none">
+  <div class="rail"><div class="rail-fill" id="rail" style="width:0%"></div></div>
+  <!-- MOBILE HEADER — solo visible en celular -->
+<div class="mobile-hdr" id="mob_hdr">
+  <div class="mhdr-mark" id="mob_mark">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+  </div>
+  <div class="mhdr-service" id="mob_service">—</div>
+  <div class="mhdr-step" id="mob_step">—</div>
+</div>
+<div class="mobile-prog" id="mob_prog"><div class="mobile-prog-fill" id="mob_prog_fill" style="width:0%"></div></div>
+
+<div class="shell">
+    <aside class="sidebar">
+      <div class="sb-brand">
+        <div class="sb-logo">
+          <div class="sb-logomark" id="sb_logomark"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
+          <span class="sb-logoname">Thruver Fix</span>
+        </div>
+        <div class="sb-service" id="sb_service">—</div>
+        <div class="sb-problema" id="sb_problema">—</div>
+      </div>
+      <div class="sb-steps" id="sb_steps"></div>
+      <div class="sb-footer">
+        <div class="sb-progress">
+          <span>Progreso</span><span id="sb_pct">0%</span>
+        </div>
+        <div class="sb-bar"><div class="sb-bar-fill" id="sb_bar" style="width:0%"></div></div>
+        <div class="sb-meta" style="margin-top:10px" id="sb_meta">—</div>
+      </div>
+    </aside>
+    <main class="main" id="main_area"></main>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// THRESHOLDS ENGINE — calibra con datos de placa
+// ═══════════════════════════════════════════════════════════════
+const VOLTAGE_SPECS = {
+  127:{ok:[120,134],warn_lo:[114,120],warn_hi:[134,140],block_lo:114,block_hi:140},
+  220:{ok:[209,231],warn_lo:[198,209],warn_hi:[231,242],block_lo:198,block_hi:242},
+  230:{ok:[218,242],warn_lo:[207,218],warn_hi:[242,253],block_lo:207,block_hi:253},
+  240:{ok:[228,252],warn_lo:[216,228],warn_hi:[252,264],block_lo:216,block_hi:264},
+};
+const PRESSURE_SPECS = {
+  'R-410A':{low:{ok:[58,80],warn_lo:[40,58],warn_hi:[80,95]},high:{ok:[240,350],warn_lo:[180,240],warn_hi:[350,420]}},
+  'R-32'  :{low:{ok:[100,130],warn_lo:[75,100],warn_hi:[130,155]},high:{ok:[350,450],warn_lo:[280,350],warn_hi:[450,520]}},
+  'R-22'  :{low:{ok:[55,70],warn_lo:[40,55],warn_hi:[70,85]},high:{ok:[200,275],warn_lo:[150,200],warn_hi:[275,320]}},
+};
+let THR = {vn:127,ref:'R-410A',an:null,sv:VOLTAGE_SPECS[127],sp:PRESSURE_SPECS['R-410A'],ta:null};
+
+function updateTHR(){
+  const vn=parseInt(SD['voltaje_nominal'])||127;
+  const ref=SD['refrigerante']||'R-410A';
+  const an=parseFloat(SD['amperaje_nominal_placa'])||null;
+  const ta=parseFloat(SD['temp_ambiente'])||null;
+  const kv=Object.keys(VOLTAGE_SPECS).reduce((p,c)=>Math.abs(c-vn)<Math.abs(p-vn)?c:p);
+  THR={vn,ref,an,sv:VOLTAGE_SPECS[kv]||VOLTAGE_SPECS[127],sp:PRESSURE_SPECS[ref]||PRESSURE_SPECS['R-410A'],ta};
+  if(ta!==null) THR.sp=calcPressuresByTemp(ref,ta);
+  renderCtxCard();
+}
+
+function calcPressuresByTemp(ref,ta){
+  const Tc=ta+15, Te=Math.min(ta-10,12);
+  const poly={'R-410A':[4.926,0.2678,0.003124],'R-32':[5.784,0.2845,0.00298],'R-22':[3.85,0.2213,0.002456]};
+  const p=poly[ref]||poly['R-410A'];
+  const pHigh=Math.round((p[0]+p[1]*Tc+p[2]*Tc*Tc)*14.504);
+  const pLow =Math.round((p[0]+p[1]*Te+p[2]*Te*Te)*14.504);
+  return{low:{ok:[Math.round(pLow*.9),Math.round(pLow*1.1)],warn_lo:[Math.round(pLow*.8),Math.round(pLow*.9)],warn_hi:[Math.round(pLow*1.1),Math.round(pLow*1.2)],calc:true,Tc,Te},
+         high:{ok:[Math.round(pHigh*.9),Math.round(pHigh*1.1)],warn_lo:[Math.round(pHigh*.8),Math.round(pHigh*.9)],warn_hi:[Math.round(pHigh*1.1),Math.round(pHigh*1.2)],calc:true,Tc,Te}};
+}
+
+function renderCtxCard(){
+  const card=document.getElementById('ctx_card');
+  if(!card) return;
+  if(!SD['voltaje_nominal']&&!SD['refrigerante']){card.style.display='none';return;}
+  const sv=THR.sv, sp=THR.sp, ref=THR.ref.split(' ')[0];
+  const isCalc=sp?.low?.calc;
+  card.style.display='block';
+  card.innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;gap:10px">
+      <div>
+        <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--blue);margin-bottom:4px">Lo que debes ver al medir</div>
+        <div style="font-size:11px;color:${isCalc?'var(--green)':'var(--amber)'};line-height:1.4">
+          ${isCalc
+            ? `Rangos calculados para ${THR.ta}°C exterior. Son precisos para las condiciones de hoy.`
+            : `Rangos aproximados — validos en condiciones normales. Para mayor precision, ingresa la temperatura exterior en el Paso 4 (Mediciones en operacion) y estos rangos se recalcularan automaticamente.`}
+        </div>
+      </div>
+      <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;background:${isCalc?'var(--green-bg)':'var(--amber-bg)'};color:${isCalc?'var(--green)':'var(--amber)'};padding:3px 9px;border-radius:100px;border:1px solid ${isCalc?'#bbf7d0':'#fde68a'};white-space:nowrap;flex-shrink:0">${isCalc?`Calculado · ${THR.ta}°C`:'Referencia aproximada'}</span>
+    </div>
+    <div class="ctx-grid">
+      <div class="ctx-item"><div class="ctx-val">${sv.ok[0]}–${sv.ok[1]}V</div><div class="ctx-label">Voltaje optimo</div><div style="font-size:9px;color:var(--text-3)">Nominal ${THR.vn}V ±5%</div></div>
+      <div class="ctx-item"><div class="ctx-val">${sp.low.ok[0]}–${sp.low.ok[1]} PSI</div><div class="ctx-label">Presion baja (${ref})</div><div style="font-size:9px;color:var(--text-3)">${isCalc?`Te≈${sp.low.Te}°C`:'±10% en temperatura extrema'}</div></div>
+      <div class="ctx-item"><div class="ctx-val">${sp.high.ok[0]}–${sp.high.ok[1]} PSI</div><div class="ctx-label">Presion alta (${ref})</div><div style="font-size:9px;color:var(--text-3)">${isCalc?`Tc≈${sp.high.Tc}°C`:'±10% en temperatura extrema'}</div></div>
+      ${THR.an?`<div class="ctx-item"><div class="ctx-val">${(THR.an*.95).toFixed(1)}–${(THR.an*1.1).toFixed(1)}A</div><div class="ctx-label">Amperaje esperado</div><div style="font-size:9px;color:var(--text-3)">Nominal ${THR.an}A de placa</div></div>`:''}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SOP LIBRARY — un JSON por especialidad
+// ═══════════════════════════════════════════════════════════════
+const SOPS = {
+
+// ── HVAC ─────────────────────────────────────────────────────
+hvac:{
+  id:'sop_hvac_v1', service:'HVAC / Minisplit', color:'#0ea5e9', icon:'M12 2a10 10 0 100 20A10 10 0 0012 2zm0 4v4l3 3',
+  steps:[
+    {id:'activo',title:'Datos del activo',desc:'Lee la placa del equipo antes de cualquier intervencion. Estos datos recalibran todos los rangos del SOP.',
+     sections:[
+       {label:'Orden de trabajo',fields:[
+         {id:'prop_id',type:'text',label:'ID Propiedad',req:true},{id:'tec_id',type:'text',label:'ID Tecnico',req:true},
+       ]},
+       {label:'Placa del equipo — transcribir exactamente',ctxCard:true,fields:[
+         {id:'marca',type:'text',label:'Marca',placeholder:'Mirage, Carrier, LG...',req:true,note:'Correlaciona marca con tipo de falla'},
+         {id:'modelo',type:'text',label:'Modelo',placeholder:'Ej. EWF261E',req:true,note:'Busca: MODELO en la etiqueta'},
+         {id:'serial',type:'text',label:'Numero de serie',placeholder:'S/N o codigo de barras',note:'Trazabilidad del activo'},
+         {id:'voltaje_nominal',type:'number',unit:'V',label:'Voltaje nominal',placeholder:'230',req:true,onChange:'thr',
+          note:'Busca: VOLTAJE en la placa. Recalibra todos los rangos del SOP'},
+         {id:'amperaje_nominal_placa',type:'number',unit:'A',label:'Amperaje nominal',placeholder:'9.6',step:'0.1',req:true,onChange:'thr',
+          note:'Busca: AMPERAJE o FLA en la placa'},
+         {id:'refrigerante',type:'select',label:'Refrigerante',req:true,onChange:'thr',
+          options:['','R-410A','R-32','R-22','No identificado'],
+          note:'Busca: REFRIGERANTE. Define los rangos de presion',
+          rules:[{cond:v=>v==='R-22',sev:'warn',msg:'Refrigerante descontinuado. No se fabrica ni importa legalmente.',sugg:'Informar al cliente: recarga sera muy costosa. Evaluar reemplazo.'}]},
+         {id:'capacidad',type:'select',label:'Capacidad',options:['','9,000 BTU','12,000 BTU','18,000 BTU','23,000 BTU','24,000 BTU','36,000 BTU','Otro']},
+         {id:'anio_inst',type:'number',label:'Año de instalacion',placeholder:'2018',req:true,
+          note:'Si no esta en la placa, estimar por modelo',
+          rules:[{cond:v=>(new Date().getFullYear()-v)>=12,sev:'warn',msg:`Equipo cercano al fin de vida util (12–15 anos).`,sugg:'Incluir evaluacion de reemplazo en el reporte.'}]},
+       ]}
+     ]},
+    {id:'electrico_previo',title:'Seguridad electrica previa',desc:'Medir con el equipo APAGADO. Si el voltaje es critico, el SOP se bloquea — no encender el equipo hasta resolver.',canBlock:true,
+     sections:[
+       {label:'Mediciones de alimentacion — multimetro',fields:[
+         {id:'voltaje_l1',type:'number',unit:'V',label:'Voltaje Linea 1',placeholder:'230',req:true,
+          norm:'Calibrado con voltaje nominal de la placa',dynNorm:'v',
+          rules:[{cond:v=>{const s=THR.sv;return v<s.block_lo||v>s.block_hi},sev:'block',msg:'Voltaje fuera de norma (±10% del nominal). Riesgo de dano inminente.',act:'No encender el equipo. Revisar tablero o reportar a CFE.'},
+                 {cond:v=>{const s=THR.sv;return(v>=s.block_lo&&v<s.ok[0])||(v>s.ok[1]&&v<=s.block_hi)},sev:'warn',msg:'Voltaje fuera del rango optimo (±5%).',sugg:'Documentar y recomendar revision de acometida.'}]},
+         {id:'neutro_tierra',type:'number',unit:'V',label:'Voltaje Neutro–Tierra',placeholder:'0.4',step:'0.1',req:true,
+          norm:'Causa #1 de quema de tarjetas electronicas',
+          rules:[{cond:v=>v>5,sev:'block',msg:'N-T critico. Riesgo inmediato de dano a tarjeta electronica.',act:'No encender. Revisar varilla de tierra fisica antes de continuar.'},
+                 {cond:v=>v>2&&v<=5,sev:'warn',msg:'N-T elevado. Puede danar tarjetas con el tiempo.',sugg:'Añadir correccion de varilla de tierra al presupuesto.'}]},
+         {id:'frecuencia',type:'number',unit:'Hz',label:'Frecuencia de red',placeholder:'60',
+          norm:'Estandar Mexico: 60 Hz',
+          rules:[{cond:v=>v<58||v>62,sev:'warn',msg:'Variacion de frecuencia. Puede afectar el inverter.',sugg:'Documentar para historial.'}]},
+       ]},
+       {label:'Circuito dedicado — inspeccion visual',fields:[
+         {id:'breaker',type:'select',label:'Estado del breaker dedicado',
+          options:['','Correcto','Sobredimensionado','Subdimensionado — riesgo de disparo','Sin breaker dedicado'],
+          rules:[{cond:v=>v.includes('Sin breaker'),sev:'warn',msg:'Sin circuito dedicado.',sugg:'Cotizar instalacion de circuito dedicado.'}]},
+         {id:'cableado',type:'select',label:'Cableado',options:['','12 AWG Cobre THW','10 AWG Cobre THW','Aluminio — riesgo en empalmes','Aislamiento deteriorado','No identificado']},
+       ]},
+     ]},
+    {id:'inspeccion',title:'Inspeccion fisica — equipo apagado',desc:'Inspeccion visual y fisica antes de encender. Identifica condiciones que deben corregirse primero.',
+     sections:[
+       {label:'Unidad interior',fields:[
+         {id:'filtro',type:'select',label:'Estado del filtro',req:true,options:['','Limpio','Levemente sucio','Sucio — reduccion de flujo','Muy sucio — obstruccion severa'],
+          rules:[{cond:v=>v.includes('Muy sucio'),sev:'warn',msg:'Filtro muy sucio. Reduce eficiencia hasta 40% y puede causar congelamiento.',sugg:'Limpiar filtro antes de cualquier medicion.'}]},
+         {id:'filtro_meses',type:'number',unit:'meses',label:'Ultimo cambio de filtro',placeholder:'6',
+          rules:[{cond:v=>v>12,sev:'warn',msg:'Filtros sin servicio por mas de 12 meses.',sugg:'Programar limpieza cada 3 meses en Culiacan por el clima.'}]},
+         {id:'evaporador',type:'scale',label:'Serpentin evaporador',req:true,scaleLabels:['Critico','Malo','Regular','Bueno','Excelente']},
+         {id:'moho',type:'select',label:'Moho en evaporador',options:['','Sin moho','Leve','Moderado — limpiar urgente','Severo — riesgo sanitario'],
+          rules:[{cond:v=>v.includes('Severo'),sev:'warn',msg:'Moho severo. Contamina el aire interior.',sugg:'Incluir limpieza quimica con agente antifungico.'}]},
+         {id:'drenaje',type:'select',label:'Drenaje de condensado',req:true,options:['','Libre y correcto','Con acumulacion leve','Parcialmente obstruido','Completamente obstruido — goteo activo'],
+          rules:[{cond:v=>v.includes('Completamente'),sev:'warn',msg:'Drenaje obstruido — causara goteo.',sugg:'Limpiar drenaje ANTES de cerrar la carcasa al terminar.'}]},
+       ]},
+       {label:'Unidad exterior',fields:[
+         {id:'condensador',type:'scale',label:'Serpentin condensador',req:true,scaleLabels:['Critico','Malo','Regular','Bueno','Excelente'],note:'Condensador sucio = causa mas comun de sobrecalentamiento'},
+         {id:'ventilador_ext',type:'select',label:'Ventilador exterior',options:['','Sin ruido ni vibracion','Vibracion leve','Vibracion severa — revisar rodamientos','No gira']},
+         {id:'corrosion',type:'select',label:'Corrosion en unidad exterior',options:['','Sin corrosion','Superficial','Moderada — afecta aletas','Severa']},
+       ]},
+     ]},
+    {id:'servicio',title:'Protocolo de servicio',desc:'Los pasos marcados como Obligatorio deben completarse. Son los que garantizan la calidad del servicio.',
+     sections:[
+       {label:'Limpieza — pasos obligatorios',checklist:[
+         {id:'lim_filtro',label:'Limpieza de filtros',note:'Agua, cepillo suave, secado completo antes de reinstalar',mandatory:true},
+         {id:'lim_evap',label:'Limpieza de serpentin evaporador',note:'Espuma desengrasante, enjuague, sin residuos',mandatory:true},
+         {id:'lim_cond',label:'Limpieza de serpentin condensador',note:'Agua a presion de afuera hacia adentro, aletas sin deformar',mandatory:true},
+         {id:'lim_drenaje',label:'Limpieza y verificacion del drenaje',note:'Verificar flujo libre antes de cerrar la carcasa',mandatory:true},
+         {id:'lim_bandeja',label:'Limpieza de bandeja de condensado',note:'Eliminar agua estancada y biofilm'},
+         {id:'lim_carcasa',label:'Limpieza de carcasa y rejillas'},
+       ]},
+       {label:'Componentes electricos',checklist:[
+         {id:'check_cap',label:'Verificacion del capacitor de arranque',note:'Medir con capacimetro — tolerancia ±5% del valor nominal',mandatory:true},
+         {id:'check_con',label:'Revision de conexiones electricas',note:'Ajuste, oxidacion y temperatura de bornes',mandatory:true},
+         {id:'check_lub',label:'Lubricacion de rodamientos de ventiladores'},
+       ]},
+       {label:'Materiales instalados',fields:[
+         {id:'refacciones',type:'textarea',label:'Refacciones instaladas',placeholder:'Ej. 1 capacitor 45/5 MFD 370V, filtro G4...'},
+       ]},
+     ]},
+    {id:'operacion',title:'Mediciones en operacion',desc:'Encender y esperar 15 min de operacion estable antes de medir. Estas lecturas determinan la salud real del sistema.',canBlock:true,
+     sections:[
+       {label:'Condiciones de operacion',fields:[
+         {id:'temp_ambiente',type:'number',unit:'°C',label:'Temperatura exterior',placeholder:'38',req:true,onChange:'thr',
+          note:'Recalibra los rangos de presion del refrigerante segun la temperatura real',
+          rules:[{cond:v=>v>45,sev:'warn',msg:'Temperatura extrema. Equipos residenciales al limite de diseno termico.',sugg:'Documentar — correlacion calor extremo con fallas es dato clave para Culiacan.'}]},
+       ]},
+       {label:'Circuito de refrigeracion — manometros',fields:[
+         {id:'presion_baja',type:'number',unit:'PSI',label:'Presion de succion (baja)',placeholder:'68',req:true,
+          norm:'Calculado segun refrigerante y temperatura',dynNorm:'pb',
+          rules:[{cond:v=>{const s=THR.sp.low;return v<s.warn_lo[0]},sev:'block',msg:'Presion de succion criticamente baja. Fuga probable o compresor danado.',act:'Detener operacion. Localizar fuga antes de recargar.'},
+                 {cond:v=>{const s=THR.sp.low;return(v>=s.warn_lo[0]&&v<s.ok[0])||(v>s.ok[1]&&v<=s.warn_hi[1])},sev:'warn',msg:'Presion de succion fuera del rango optimo.',sugg:'Verificar carga de refrigerante y condiciones de carga termica.'}]},
+         {id:'presion_alta',type:'number',unit:'PSI',label:'Presion de descarga (alta)',placeholder:'295',req:true,
+          norm:'Calculado segun refrigerante y temperatura',dynNorm:'pa',
+          rules:[{cond:v=>{const s=THR.sp.high;return v>s.warn_hi[1]},sev:'block',msg:'Presion de descarga peligrosamente alta. Riesgo de dano al compresor.',act:'Apagar inmediatamente. Verificar condensador.'},
+                 {cond:v=>{const s=THR.sp.high;return(v>=s.warn_lo[0]&&v<s.ok[0])||(v>s.ok[1]&&v<=s.warn_hi[1])},sev:'warn',msg:'Presion de descarga fuera de rango normal.',sugg:'Posible condensador sucio o refrigerante incorrecto.'}]},
+         {id:'nivel_ref',type:'select',label:'Nivel de refrigerante',req:true,options:['','Correcto','Bajo — requiere recarga','Muy bajo — fuga activa probable','Exceso — purga necesaria'],
+          rules:[{cond:v=>v.includes('Muy bajo')||v.includes('Exceso'),sev:'warn',msg:'Carga de refrigerante incorrecta.',sugg:'Ajustar y verificar hermeticidad. Documentar cantidad recargada.'}]},
+         {id:'fuga',type:'select',label:'Prueba de fuga',options:['','Sin fuga — sistema hermetico','Micro-fuga — aceite o escarcha','Fuga activa confirmada'],
+          rules:[{cond:v=>v.includes('activa'),sev:'block',msg:'Fuga activa. No completar la carga hasta reparar.',act:'Localizar y reparar la fuga primero.'}]},
+       ]},
+       {label:'Consumo electrico — pinza amperimetrica',fields:[
+         {id:'amps_comp',type:'number',unit:'A',label:'Amperaje compresor medido',placeholder:'9.6',step:'0.1',
+          note:'Comparar vs amperaje nominal de la placa',
+          rules:[{cond:(v,a)=>{const n=THR.an||parseFloat(a['amperaje_nominal_placa']);return n&&v>n*1.25},sev:'block',msg:'Amperaje critico — mas del 25% sobre el nominal. Riesgo de dano.',act:'Apagar. Diagnosticar sobreamperage antes de continuar.'},
+                 {cond:(v,a)=>{const n=THR.an||parseFloat(a['amperaje_nominal_placa']);return n&&v>n*1.15&&v<=n*1.25},sev:'warn',msg:'Amperaje elevado — sobre 15% del nominal.',sugg:'Verificar carga de refrigerante y estado del condensador.'}]},
+         {id:'temp_retorno',type:'number',unit:'°C',label:'Temperatura de retorno',placeholder:'28'},
+         {id:'temp_suministro',type:'number',unit:'°C',label:'Temperatura de suministro',placeholder:'14',
+          norm:'Delta T optimo: 10–14°C',
+          rules:[{cond:(v,a)=>{const tr=parseFloat(a['temp_retorno']);if(!tr)return false;const dt=tr-v;return dt<7||dt>18},sev:'warn',msg:'Delta T fuera del rango optimo. Sistema puede no enfriar correctamente.',sugg:'Verificar carga de refrigerante y flujo de aire.'}]},
+       ]},
+     ]},
+    {id:'cierre',title:'Verificacion final y cierre',desc:'Protocolo de cierre obligatorio antes de salir de la propiedad.',
+     sections:[
+       {label:'Checklist de cierre — obligatorio',checklist:[
+         {id:'cl_carcasa',label:'Carcasa cerrada y asegurada correctamente',note:'Todos los clips y tornillos en su lugar',mandatory:true},
+         {id:'cl_drenaje',label:'Flujo de drenaje verificado con equipo encendido',note:'El agua debe fluir libremente',mandatory:true},
+         {id:'cl_temp',label:'Delta T dentro del rango esperado (10–14°C)',mandatory:true},
+         {id:'cl_ruido',label:'Sin ruidos anormales en operacion al terminar',mandatory:true},
+       ]},
+       {label:'Resumen del servicio',fields:[
+         {id:'notas',type:'textarea',label:'Observaciones tecnicas para el expediente',placeholder:'Que se encontro, que se hizo, que se recomienda en la proxima visita...'},
+         {id:'resuelto',type:'select',label:'Resultado del servicio',req:true,options:['','Servicio completo — equipo operando correctamente','Servicio completo — con observaciones','Requiere segunda visita','Equipo requiere reemplazo']},
+         {id:'proxima',type:'select',label:'Proxima visita preventiva',options:['','3 meses','6 meses','1 año','Antes del proximo verano']},
+         {id:'garantia',type:'select',label:'Garantia del servicio',options:['','30 dias','60 dias','90 dias','Sin garantia']},
+       ]},
+     ]},
+    {id:'export',title:'Signos vitales y expediente',desc:'Resumen de salud del equipo. Este JSON se registra en el expediente de la propiedad.',isExport:true},
+  ]
+},
+
+// ── ELÉCTRICO ─────────────────────────────────────────────────
+electrico:{
+  id:'sop_electrico_v1', service:'Electrico', color:'#f59e0b',
+  steps:[
+    {id:'activo',title:'Datos del servicio',desc:'Identificar la instalacion y el problema antes de intervenir.',
+     sections:[
+       {label:'Orden de trabajo',fields:[
+         {id:'prop_id',type:'text',label:'ID Propiedad',req:true},{id:'tec_id',type:'text',label:'ID Tecnico',req:true},
+         {id:'area',type:'text',label:'Area o zona afectada',placeholder:'Cocina, cuarto principal, tablero principal...',req:true},
+       ]},
+       {label:'Instalacion electrica',fields:[
+         {id:'tipo_inst',type:'select',label:'Tipo de instalacion',req:true,options:['','Residencial 127V monofasico','Residencial 220V bifasico','Mixta 127/220V','Comercial']},
+         {id:'antiguedad_inst',type:'select',label:'Antiguedad estimada de la instalacion',options:['','Menos de 5 anos','5–15 anos','16–25 anos','Mas de 25 anos','Desconocida'],
+          rules:[{cond:v=>v.includes('Mas de 25'),sev:'warn',msg:'Instalacion antigua. Mayor probabilidad de cableado deteriorado y sin tierra fisica.',sugg:'Recomendar revision general de la instalacion.'}]},
+         {id:'tablero_marca',type:'text',label:'Marca del tablero',placeholder:'Square D, Siemens, IEM, Cutler-Hammer...'},
+       ]},
+     ]},
+    {id:'seguridad',title:'Seguridad previa — EPP y mediciones',desc:'Verificar condiciones de seguridad antes de intervenir. No trabajar en instalaciones energizadas sin el EPP correcto.',canBlock:true,
+     sections:[
+       {label:'Equipo de proteccion personal',checklist:[
+         {id:'epp_guantes',label:'Guantes dielectricos clase 0 (1000V)',mandatory:true},
+         {id:'epp_lentes',label:'Lentes de proteccion',mandatory:true},
+         {id:'epp_herramienta',label:'Herramienta con aislamiento dielectrico',mandatory:true},
+       ]},
+       {label:'Mediciones en tablero principal — multimetro',fields:[
+         {id:'voltaje_tablero',type:'number',unit:'V',label:'Voltaje en tablero principal',placeholder:'127',req:true,
+          norm:'NOM-001-SEDE-2012 · 127V monofasico o 220V bifasico',
+          rules:[{cond:v=>(v<108||v>145)&&(v<198||v>242),sev:'block',msg:'Voltaje fuera de rango de norma. Riesgo critico en la instalacion.',act:'No intervenir. Reportar a CFE. Informar al cliente.'},
+                 {cond:v=>(v>=108&&v<120)||(v>134&&v<=145),sev:'warn',msg:'Voltaje fuera del rango optimo.',sugg:'Documentar y recomendar revision de acometida.'}]},
+         {id:'nt_tablero',type:'number',unit:'V',label:'Voltaje Neutro–Tierra en tablero',placeholder:'0.3',step:'0.1',
+          norm:'Optimo: menos de 1V',
+          rules:[{cond:v=>v>3,sev:'block',msg:'N-T critico en tablero. Riesgo de dano a equipos electronicos en toda la instalacion.',act:'Revisar varilla de tierra fisica antes de continuar.'},
+                 {cond:v=>v>1&&v<=3,sev:'warn',msg:'N-T elevado.',sugg:'Revisar y mejorar sistema de tierra fisica.'}]},
+         {id:'continuidad_tierra',type:'select',label:'Continuidad de tierra fisica',req:true,options:['','Continua — correcta','Discontinua — revisar','Sin tierra fisica','No verificada'],
+          rules:[{cond:v=>v.includes('Sin tierra'),sev:'warn',msg:'Sin tierra fisica. Riesgo para equipos y personas.',sugg:'Instalar varilla de tierra — incluir en presupuesto.'}]},
+       ]},
+     ]},
+    {id:'diagnostico',title:'Diagnostico del problema',desc:'Identificar la causa raiz del problema electrico reportado.',canBlock:true,
+     sections:[
+       {label:'Identificacion del problema',fields:[
+         {id:'tipo_falla',type:'select',label:'Tipo de falla identificada',req:true,options:['','Corto circuito','Sobrecarga de circuito','Falla de tierra','Breaker defectuoso','Cableado deteriorado','Conexion suelta o quemada','Contacto o placa dañada','Falla de alimentacion CFE','Otro'],
+          rules:[{cond:v=>v.includes('Corto circuito'),sev:'warn',msg:'Corto circuito detectado. Localizar el origen antes de reponer el breaker.',sugg:'Revisar cada punto de la linea antes de energizar.'}]},
+         {id:'circuito',type:'text',label:'Circuito o linea afectada',placeholder:'Ej. Circuito 3 — tomas sala, breaker 20A'},
+         {id:'voltaje_punto',type:'number',unit:'V',label:'Voltaje en el punto afectado',placeholder:'127',
+          rules:[{cond:v=>v<100||v>145,sev:'warn',msg:'Voltaje incorrecto en el punto afectado.',sugg:'Verificar continuidad desde el tablero hasta el punto.'}]},
+         {id:'causa_raiz',type:'select',label:'Causa raiz',req:true,options:['','Conexion suelta o corroida','Cableado danado por humedad','Sobrecarga por exceso de equipos','Cortocircuito por falla de aislamiento','Breaker defectuoso','Instalacion incorrecta original','Daño por descarga electrica (rayo)','Otra'],
+          rules:[{cond:v=>v.includes('humedad'),sev:'warn',msg:'Dano por humedad en cableado. Verificar impermeabilizacion de la zona.',sugg:'Coordinar con especialidad de impermeabilizacion si aplica.'}]},
+         {id:'era_prevenible',type:'select',label:'La falla era prevenible?',req:true,options:['','Si — con mantenimiento preventivo','Si — instalacion original deficiente','Si — sobrecarga evitable','No — falla aleatoria'],
+          note:'Dato critico para el modelo predictivo de Thruver'},
+       ]},
+     ]},
+    {id:'trabajo',title:'Trabajo realizado',desc:'Documentar exactamente la intervencion para el expediente y la garantia.',
+     sections:[
+       {label:'Trabajos ejecutados',checklist:[
+         {id:'t_conexion',label:'Correccion de conexion suelta o quemada'},{id:'t_cableado',label:'Cambio de tramo de cableado'},
+         {id:'t_breaker',label:'Cambio de breaker'},{id:'t_contacto',label:'Cambio de contacto o placa'},
+         {id:'t_tierra',label:'Instalacion o mejora de tierra fisica'},{id:'t_tablero',label:'Intervencion en tablero'},
+         {id:'t_circuito',label:'Instalacion de circuito nuevo'},
+       ]},
+       {label:'Materiales y cierre',fields:[
+         {id:'materiales',type:'textarea',label:'Materiales utilizados',placeholder:'Ej. 2m cable calibre 12 THHN, 1 breaker 20A Square D, 1 contacto doble...'},
+         {id:'resuelto',type:'select',label:'Resultado del servicio',req:true,options:['','Resuelto — instalacion funcional al salir','Parcialmente — requiere segunda visita','No — requiere material adicional']},
+         {id:'garantia',type:'select',label:'Garantia',options:['','30 dias','60 dias','90 dias','Sin garantia']},
+         {id:'notas',type:'textarea',label:'Observaciones para el expediente',placeholder:'Estado general de la instalacion, riesgos detectados, recomendaciones...'},
+       ]},
+     ]},
+    {id:'verificacion',title:'Verificacion final',desc:'Confirmar que la instalacion quedo correcta y segura antes de salir.',canBlock:false,
+     sections:[
+       {label:'Pruebas de verificacion',checklist:[
+         {id:'v_voltaje',label:'Voltaje correcto en el punto intervenido',mandatory:true},
+         {id:'v_funcionamiento',label:'Equipo o circuito funciona correctamente',mandatory:true},
+         {id:'v_tierra',label:'Continuidad de tierra verificada',mandatory:true},
+         {id:'v_breaker',label:'Breaker no dispara bajo carga normal',mandatory:true},
+         {id:'v_temperatura',label:'Sin puntos calientes detectados en conexiones',mandatory:true},
+       ]},
+     ]},
+    {id:'export',title:'Reporte y expediente',desc:'Datos del servicio generados para el expediente de la propiedad.',isExport:true},
+  ]
+},
+
+// ── PLOMERÍA ────────────────────────────────────────────────
+plomeria:{
+  id:'sop_plomeria_v1', service:'Plomeria', color:'#16a34a',
+  steps:[
+    {id:'activo',title:'Datos del servicio',desc:'Identificar la instalacion y el problema antes de intervenir.',
+     sections:[
+       {label:'Orden de trabajo',fields:[
+         {id:'prop_id',type:'text',label:'ID Propiedad',req:true},{id:'tec_id',type:'text',label:'ID Tecnico',req:true},
+         {id:'area',type:'text',label:'Area afectada',placeholder:'Baño principal, cocina, patio...'},
+       ]},
+       {label:'Instalacion hidraulica',fields:[
+         {id:'material',type:'select',label:'Material predominante de la red',req:true,options:['','Cobre','CPVC / PVC','Galvanizado','Polietileno','Mixto','No identificado'],
+          rules:[{cond:v=>v.includes('Galvanizado'),sev:'warn',msg:'Galvanizado en agua dura tiene vida util reducida.',sugg:'Dato predictivo: tuberias galvanizadas + agua dura = fugas en 5–15 anos.'}]},
+         {id:'antiguedad',type:'select',label:'Antiguedad estimada de la red',options:['','Menos de 5 anos','5–15 anos','16–25 anos','Mas de 25 anos'],
+          rules:[{cond:v=>v.includes('Mas de 25'),sev:'warn',msg:'Red antigua. Alta probabilidad de fugas en uniones y corrosion interna.',sugg:'Recomendar evaluacion general de la red hidraulica.'}]},
+         {id:'calidad_agua',type:'select',label:'Calidad del agua de la zona',onChange:'thr',options:['','Agua dura — cal visible en grifos','Agua moderada','Agua normal','Con sistema de suavizado'],
+          note:'Culiacan: agua moderadamente dura — acelera corrosion'},
+       ]},
+     ]},
+    {id:'diagnostico',title:'Diagnostico y mediciones',desc:'Identificar el problema y medir las condiciones del sistema hidraulico.',canBlock:true,
+     sections:[
+       {label:'Mediciones de presion — manometro',fields:[
+         {id:'presion_entrada',type:'number',unit:'PSI',label:'Presion de red en entrada',placeholder:'45',
+          norm:'CONAGUA: optimo 35–60 PSI, minimo 21 PSI',
+          rules:[{cond:v=>v>80,sev:'block',msg:'Presion excesiva. Dano inminente en valvulas, calentador y conexiones.',act:'Instalar reductor de presion antes de continuar.'},
+                 {cond:v=>v>60&&v<=80,sev:'warn',msg:'Presion alta. Recomienda reductor.',sugg:'Cotizar e instalar reductor de presion.'},
+                 {cond:v=>v<21,sev:'warn',msg:'Presion por debajo del minimo CONAGUA.',sugg:'Verificar nivel de cisterna y funcionamiento de bomba.'}]},
+         {id:'variacion_presion',type:'number',unit:'PSI',label:'Variacion de presion en 10 min (hermeticidad)',placeholder:'0',step:'0.5',
+          norm:'Sistema hermetico: 0–2 PSI. Mas de 5 PSI = fuga activa',
+          rules:[{cond:v=>v>5,sev:'block',msg:'Fuga activa confirmada por prueba de presion.',act:'Localizar y reparar la fuga antes de continuar.'},
+                 {cond:v=>v>2&&v<=5,sev:'warn',msg:'Posible micro-fuga.',sugg:'Inspeccionar todas las uniones y conexiones.'}]},
+         {id:'temp_caliente',type:'number',unit:'°C',label:'Temperatura agua caliente en grifo',placeholder:'42',
+          norm:'Optimo: 40–50°C. Mas de 60°C = peligro de quemaduras',
+          rules:[{cond:v=>v>=60,sev:'warn',msg:'Temperatura peligrosa. Riesgo de quemaduras.',sugg:'Ajustar termostato del calentador.'},
+                 {cond:v=>v<35,sev:'warn',msg:'Temperatura baja. El calentador puede estar fallando.',sugg:'Revisar estado del calentador.'}]},
+       ]},
+       {label:'Identificacion del problema',fields:[
+         {id:'tipo_problema',type:'select',label:'Tipo de problema',req:true,options:['','Fuga activa visible','Fuga oculta — humedad sin origen claro','Sin presion o presion baja','Sin agua caliente','Drenaje obstruido','Ruido en tuberias','Calentador sin funcionar','Otro']},
+         {id:'causa_raiz',type:'select',label:'Causa raiz identificada',req:true,options:['','Corrosion de galvanizado','Fractura de tuberia','Union o codo fallido','Sarro — obstruccion mineral','Presion excesiva sin reductor','Calentador fuera de vida util','Valvula de seguridad T&P fallida','Drenaje obstruido por grasa','Drenaje obstruido por solidos','Flotador de WC desgastado','Otra'],
+          note:'Dato critico para el modelo predictivo'},
+         {id:'era_prevenible',type:'select',label:'Era prevenible?',req:true,options:['','Si — corrosion predecible por edad y material','Si — presion excesiva sin reductor','Si — calentador fuera de vida util','Si — mantenimiento preventivo','No — falla aleatoria']},
+       ]},
+     ]},
+    {id:'calentador',title:'Calentador de agua',desc:'Si el servicio involucra el calentador, documentar su estado. Si no aplica, avanzar.',
+     sections:[
+       {label:'Identificacion del calentador',fields:[
+         {id:'cal_tipo',type:'select',label:'Tipo',options:['No aplica','Gas LP boiler','Gas LP paso','Gas natural boiler','Gas natural paso','Electrico','Solar']},
+         {id:'cal_marca',type:'text',label:'Marca',placeholder:'Calorex, Bosch, Rheem...'},
+         {id:'cal_anio',type:'number',label:'Año instalacion',placeholder:'2016',
+          rules:[{cond:(v,a)=>{const esDura=a['calidad_agua']?.includes('dura');const edad=new Date().getFullYear()-v;return edad>=(esDura?10:15)},sev:'warn',msg:'Calentador fuera de vida util.',sugg:'Reemplazo preventivo urgente.'},
+                 {cond:(v,a)=>{const esDura=a['calidad_agua']?.includes('dura');const edad=new Date().getFullYear()-v;return edad>=(esDura?7:10)&&edad<(esDura?10:15)},sev:'warn',msg:'Calentador proximo al fin de vida util.',sugg:'Informar al cliente y planificar reemplazo.'}]},
+         {id:'cal_llama',type:'select',label:'Color de llama (gas)',options:['No aplica / Electrico','Azul uniforme — correcto','Azul con amarillo — revisar','Amarilla — PELIGRO monoxido de carbono'],
+          rules:[{cond:v=>v.includes('Amarilla'),sev:'block',msg:'Llama amarilla produce monoxido de carbono. Riesgo de intoxicacion.',act:'Apagar el calentador inmediatamente. Ventilar. Llamar a tecnico de gas.'}]},
+         {id:'cal_valvula',type:'select',label:'Valvula de seguridad T&P',options:['Funcional','Con corrosion — monitorear','Danada — reemplazar urgente','AUSENTE — riesgo de explosion'],
+          rules:[{cond:v=>v.includes('AUSENTE'),sev:'block',msg:'Sin valvula T&P. Riesgo de explosion del calentador.',act:'No encender hasta instalar valvula de seguridad.'}]},
+       ]},
+     ]},
+    {id:'trabajo',title:'Trabajo realizado',desc:'Documentar la intervencion para el expediente y la garantia.',
+     sections:[
+       {label:'Trabajos ejecutados',checklist:[
+         {id:'t_fuga',label:'Reparacion de fuga'},{id:'t_tuberia',label:'Cambio de seccion de tuberia'},
+         {id:'t_destape',label:'Destape mecanico'},{id:'t_hidrojet',label:'Destape con hidrojet'},
+         {id:'t_calentador',label:'Cambio de calentador'},{id:'t_valvula_tp',label:'Cambio de valvula T&P'},
+         {id:'t_anodo',label:'Cambio de anodo de magnesio'},{id:'t_reductor',label:'Instalacion de reductor de presion'},
+         {id:'t_llave',label:'Cambio de llave o grifo'},{id:'t_flotador',label:'Ajuste o cambio de flotador WC'},
+       ]},
+       {label:'Materiales y cierre',fields:[
+         {id:'materiales',type:'textarea',label:'Materiales utilizados',placeholder:'Ej. 2m tubo cobre 1/2, 3 codos, 1 valvula de paso, teflon...'},
+         {id:'resuelto',type:'select',label:'Resultado',req:true,options:['','Resuelto — sin fugas, presion y temperatura correctas','Parcialmente — requiere seguimiento','No — requiere material adicional']},
+         {id:'garantia',type:'select',label:'Garantia',options:['','30 dias','60 dias','90 dias','Sin garantia']},
+         {id:'notas',type:'textarea',label:'Observaciones para el expediente',placeholder:'Estado de la red, riesgos detectados, recomendaciones...'},
+       ]},
+     ]},
+    {id:'verificacion',title:'Verificacion final',
+     sections:[
+       {label:'Checklist de cierre',checklist:[
+         {id:'v_presion',label:'Presion correcta verificada con manometro',mandatory:true},
+         {id:'v_fugas',label:'Sin fugas en todos los puntos intervenidos',mandatory:true},
+         {id:'v_drenaje',label:'Drenaje con flujo libre',mandatory:true},
+         {id:'v_temp',label:'Temperatura de agua caliente dentro de rango seguro',mandatory:true},
+       ]},
+     ]},
+    {id:'export',title:'Reporte y expediente',isExport:true},
+  ]
+},
+
+// ── CARPINTERÍA ───────────────────────────────────────────────
+carpinteria:{
+  id:'sop_carpinteria_v1', service:'Carpinteria', color:'#92400e',
+  steps:[
+    {id:'activo',title:'Datos del servicio',
+     sections:[
+       {label:'Orden de trabajo',fields:[
+         {id:'prop_id',type:'text',label:'ID Propiedad',req:true},{id:'tec_id',type:'text',label:'ID Tecnico',req:true},
+         {id:'elemento',type:'select',label:'Elemento a intervenir',req:true,options:['','Puerta interior','Puerta exterior','Ventana','Mueble de cocina','Closet','Cajones','Piso de madera','Mueble de bano','Otro']},
+         {id:'material_elem',type:'select',label:'Material del elemento',options:['','Madera maciza','MDF','Triplay','Aluminio','PVC','Mixto']},
+       ]},
+     ]},
+    {id:'diagnostico',title:'Diagnostico visual',desc:'Identificar el problema y su causa para definir la intervencion correcta.',
+     sections:[
+       {label:'Estado del elemento',fields:[
+         {id:'problema_carp',type:'select',label:'Problema identificado',req:true,options:['','No cierra correctamente','No abre correctamente','Bisagra danad o suelta','Chapa o cerradura fallida','Madera hinchada por humedad','Madera podrida','Ranuras o repisas danadadas','Cajones atascados','Acabado deteriorado','Otro']},
+         {id:'estado_elem',type:'scale',label:'Estado general del elemento',req:true,scaleLabels:['Requiere reemplazo','Muy deteriorado','Deteriorado','Bueno','Excelente']},
+         {id:'causa_carp',type:'select',label:'Causa del problema',options:['','Humedad — madera hinchada','Tiempo y uso normal','Golpe o impacto','Herraje suelto o roto','Instalacion original deficiente','Movimiento estructural'],
+          rules:[{cond:v=>v.includes('Humedad'),sev:'warn',msg:'Problema causado por humedad.',sugg:'Verificar origen de humedad — puede requerir impermeabilizacion o plomeria.'}]},
+         {id:'reemplazo_req',type:'select',label:'Requiere reemplazo total?',options:['','No — reparacion viable','Parcial — cambio de componente','Si — elemento sin reparacion posible']},
+       ]},
+     ]},
+    {id:'trabajo',title:'Trabajo realizado',
+     sections:[
+       {label:'Trabajos ejecutados',checklist:[
+         {id:'t_ajuste',label:'Ajuste de bisagras y herrajes'},{id:'t_bisagra',label:'Cambio de bisagras'},
+         {id:'t_chapa',label:'Reparacion o cambio de chapa/cerradura'},{id:'t_lijado',label:'Lijado de elemento para ajuste'},
+         {id:'t_relleno',label:'Relleno de grietas o huecos'},{id:'t_refuerzo',label:'Refuerzo estructural del elemento'},
+         {id:'t_acabado',label:'Aplicacion de acabado o barniz'},{id:'t_reemplazo',label:'Reemplazo total del elemento'},
+       ]},
+       {label:'Cierre',fields:[
+         {id:'materiales',type:'textarea',label:'Materiales utilizados',placeholder:'Ej. 2 bisagras 3.5", lija #80 y #120, barniz transparente...'},
+         {id:'resuelto',type:'select',label:'Resultado',req:true,options:['','Resuelto — funciona correctamente','Parcialmente — requiere seguimiento','No resuelto — requiere reemplazo']},
+         {id:'notas',type:'textarea',label:'Observaciones',placeholder:'Estado general, recomendaciones...'},
+       ]},
+     ]},
+    {id:'verificacion',title:'Verificacion final',
+     sections:[
+       {label:'Checklist de cierre',checklist:[
+         {id:'v_func',label:'Elemento abre y cierra correctamente',mandatory:true},
+         {id:'v_herraje',label:'Herrajes apretados y sin juego',mandatory:true},
+         {id:'v_acabado',label:'Acabado correcto sin marcas visibles',mandatory:true},
+       ]},
+     ]},
+    {id:'export',title:'Reporte y expediente',isExport:true},
+  ]
+},
+
+// ── PINTURA ───────────────────────────────────────────────────
+pintura:{
+  id:'sop_pintura_v1', service:'Pintura', color:'#8b5cf6',
+  steps:[
+    {id:'activo',title:'Datos del servicio',
+     sections:[
+       {label:'Orden de trabajo',fields:[
+         {id:'prop_id',type:'text',label:'ID Propiedad',req:true},{id:'tec_id',type:'text',label:'ID Tecnico',req:true},
+         {id:'area_pintura',type:'text',label:'Area a pintar',placeholder:'Sala, recamara, fachada, bano...',req:true},
+         {id:'tipo_superficie',type:'select',label:'Tipo de superficie',req:true,options:['','Muro de concreto / tablaroca interior','Muro exterior — fachada','Techo','Madera','Herreria / metal','Otro']},
+         {id:'m2_estimado',type:'number',label:'Metros cuadrados estimados',placeholder:'25'},
+       ]},
+     ]},
+    {id:'prep',title:'Preparacion de superficie',desc:'La preparacion es el 80% del resultado. Un acabado perfecto depende de una superficie correctamente preparada.',
+     sections:[
+       {label:'Estado de la superficie',fields:[
+         {id:'estado_sup',type:'scale',label:'Estado actual de la superficie',req:true,scaleLabels:['Muy deteriorada','Deteriorada','Regular','Buena','Excelente']},
+         {id:'humedad_sup',type:'select',label:'Humedad visible en la superficie',options:['','Sin humedad','Manchas de humedad antigua','Humedad activa — goteo o filtracion'],
+          rules:[{cond:v=>v.includes('activa'),sev:'block',msg:'Humedad activa detectada. Pintar sobre humedad activa es inutil — la pintura se desprendera.',act:'Resolver el origen de la humedad antes de pintar. Coordinar con plomeria o impermeabilizacion.'}]},
+         {id:'eflorescencia',type:'select',label:'Sales o eflorescencias',options:['','Sin eflorescencias','Leves — se pueden tratar','Severas — requieren tratamiento profundo'],
+          rules:[{cond:v=>v.includes('Severas'),sev:'warn',msg:'Eflorescencias severas. Requieren limpieza con acido y sellador antes de pintar.',sugg:'Incluir tratamiento anti-salitre en el presupuesto.'}]},
+       ]},
+       {label:'Preparacion ejecutada',checklist:[
+         {id:'prep_limpieza',label:'Limpieza de polvo, grasa y suciedad',mandatory:true},
+         {id:'prep_lija',label:'Lijado de irregularidades y pintura desprendida',mandatory:true},
+         {id:'prep_resane',label:'Resane de grietas y hoyos con pasta o masilla',mandatory:true},
+         {id:'prep_sellador',label:'Aplicacion de sellador o fondo segun la superficie',mandatory:true},
+       ]},
+     ]},
+    {id:'aplicacion',title:'Aplicacion de pintura',
+     sections:[
+       {label:'Especificaciones del material',fields:[
+         {id:'marca_pintura',type:'text',label:'Marca y linea de pintura',placeholder:'Comex Vinimex, Sherwin Elastomerica, Pintex...'},
+         {id:'color_pintura',type:'text',label:'Color / codigo de color',placeholder:'Blanco Marfil, PX-2045...'},
+         {id:'tipo_pintura',type:'select',label:'Tipo de pintura',options:['','Vinilica interior','Esmalte brillante','Esmalte satinado','Elastomerica impermeabilizante','Pintura de trafico','Barniz madera','Anticorrosivo']},
+         {id:'num_manos',type:'select',label:'Numero de manos aplicadas',options:['','1 mano — toque up','2 manos — estandar','3 manos — cobertura total']},
+       ]},
+       {label:'Aplicacion',checklist:[
+         {id:'ap_primera',label:'Primera mano aplicada y seca correctamente',mandatory:true},
+         {id:'ap_segunda',label:'Segunda mano aplicada con cobertura uniforme',mandatory:true},
+         {id:'ap_bordes',label:'Bordes, esquinas y molduras terminados',mandatory:true},
+         {id:'ap_proteccion',label:'Muebles y pisos protegidos durante el trabajo',mandatory:true},
+       ]},
+     ]},
+    {id:'verificacion',title:'Verificacion y cierre',
+     sections:[
+       {label:'Checklist de calidad',checklist:[
+         {id:'v_cobertura',label:'Cobertura uniforme sin manchas de la capa anterior',mandatory:true},
+         {id:'v_escurrimientos',label:'Sin escurrimientos ni marcas de brocha visible',mandatory:true},
+         {id:'v_bordes',label:'Bordes y lineas limpios',mandatory:true},
+         {id:'v_limpieza',label:'Area limpia — sin salpicaduras en pisos o muebles',mandatory:true},
+       ]},
+       {label:'Cierre',fields:[
+         {id:'resuelto',type:'select',label:'Resultado',req:true,options:['','Terminado — acabado correcto','Requiere tercera mano','Requiere segunda visita']},
+         {id:'notas',type:'textarea',label:'Observaciones',placeholder:'Condiciones de la superficie, recomendaciones de mantenimiento...'},
+       ]},
+     ]},
+    {id:'export',title:'Reporte y expediente',isExport:true},
+  ]
+},
+
+// ── IMPERMEABILIZACIÓN ─────────────────────────────────────────
+impermeabilizacion:{
+  id:'sop_imperm_v1', service:'Impermeabilizacion', color:'#0f766e',
+  steps:[
+    {id:'activo',title:'Datos del servicio',
+     sections:[
+       {label:'Orden de trabajo',fields:[
+         {id:'prop_id',type:'text',label:'ID Propiedad',req:true},{id:'tec_id',type:'text',label:'ID Tecnico',req:true},
+         {id:'zona',type:'select',label:'Zona a impermeabilizar',req:true,options:['','Azotea — losa plana','Azotea — losa inclinada','Terraza habitable','Barda perimetral','Muro exterior','Jardin o cisterna','Otro']},
+         {id:'m2_imperm',type:'number',label:'Metros cuadrados estimados',placeholder:'60'},
+       ]},
+     ]},
+    {id:'inspeccion',title:'Inspeccion de la superficie',desc:'El diagnostico correcto de la superficie define el sistema impermeabilizante adecuado.',
+     sections:[
+       {label:'Estado de la superficie',fields:[
+         {id:'imperm_anterior',type:'select',label:'Impermeabilizante anterior',options:['','Sin impermeabilizante previo','Impermeabilizante en buen estado','Impermeabilizante deteriorado parcialmente','Impermeabilizante completamente fallido']},
+         {id:'anios_imperm',type:'number',label:'Anos desde la ultima aplicacion',placeholder:'5',
+          rules:[{cond:v=>v>7,sev:'warn',msg:'Mas de 7 anos sin impermeabilizacion. Muy probable que haya fallas.',sugg:'Revisar toda la superficie cuidadosamente.'},
+                 {cond:v=>v>10,sev:'warn',msg:'Mas de 10 anos. Alta probabilidad de fallas estructurales por filtracion.'}]},
+         {id:'grietas',type:'select',label:'Grietas en la superficie',req:true,options:['','Sin grietas','Fisuras capilares — menos de 1mm','Grietas medias — 1–3mm','Grietas anchas — mas de 3mm','Grietas con desplazamiento'],
+          rules:[{cond:v=>v.includes('mas de 3mm')||v.includes('desplazamiento'),sev:'warn',msg:'Grietas estructurales detectadas.',sugg:'Evaluar con especialista estructural antes de impermeabilizar.'}]},
+         {id:'humedad_losa',type:'select',label:'Humedad activa en la losa',req:true,options:['','Sin humedad activa','Manchas de humedad antigua','Humedad activa — goteo interior','Charcos o estancamiento'],
+          rules:[{cond:v=>v.includes('activa')||v.includes('Charcos'),sev:'warn',msg:'Humedad activa detectada. El sistema impermeabilizante debe esperar a que la superficie este completamente seca.',sugg:'Trabajar en dias sin lluvia y esperar al menos 48 horas de secado.'}]},
+         {id:'estado_sup_imperm',type:'scale',label:'Estado general de la superficie',req:true,scaleLabels:['Critico','Muy deteriorado','Regular','Bueno','Excelente']},
+       ]},
+     ]},
+    {id:'trabajo',title:'Aplicacion del sistema impermeabilizante',
+     sections:[
+       {label:'Especificaciones del material',fields:[
+         {id:'marca_imperm',type:'text',label:'Marca y producto',placeholder:'Imperquimia, Tepejil, Sika, Comex Impercapas...'},
+         {id:'tipo_imperm',type:'select',label:'Tipo de sistema',req:true,options:['','Membrana liquida acrilica','Membrana liquida poliuretano','Membrana en rollo — polietileno','Membrana en rollo — bituminosa','Cristalizacion para concreto','Otro']},
+         {id:'manos_imperm',type:'select',label:'Capas a aplicar',options:['','2 manos — mantenimiento','3 manos — estandar','4 manos — alto trafico o exposicion severa']},
+       ]},
+       {label:'Proceso de aplicacion',checklist:[
+         {id:'pi_limpieza',label:'Limpieza completa de la superficie — sin polvo ni grasa',mandatory:true},
+         {id:'pi_grietas',label:'Sellado de grietas con elastomero o mortero',mandatory:true},
+         {id:'pi_primer',label:'Aplicacion de primer o fondo adhesivo',mandatory:true},
+         {id:'pi_primera',label:'Primera capa aplicada uniformemente',mandatory:true},
+         {id:'pi_espera',label:'Tiempo de secado entre capas respetado',mandatory:true},
+         {id:'pi_segunda',label:'Segunda capa aplicada perpendicularmente a la primera',mandatory:true},
+         {id:'pi_terminado',label:'Capa de terminado y proteccion UV aplicada'},
+         {id:'pi_bajadas',label:'Bajadas pluviales y bordes perimetrales sellados',mandatory:true},
+       ]},
+     ]},
+    {id:'verificacion',title:'Verificacion y prueba de agua',
+     sections:[
+       {label:'Prueba de hermeticidad',checklist:[
+         {id:'pv_agua',label:'Prueba de agua estancada por 24 horas (si es posible)',mandatory:false},
+         {id:'pv_bordes',label:'Bordes y remates sin fisuras visibles',mandatory:true},
+         {id:'pv_bajadas',label:'Bajadas pluviales selladas y funcionales',mandatory:true},
+         {id:'pv_uniforme',label:'Cobertura uniforme sin zonas sin cubrir',mandatory:true},
+       ]},
+       {label:'Cierre',fields:[
+         {id:'resuelto',type:'select',label:'Resultado',req:true,options:['','Terminado — superficie impermeabilizada correctamente','Requiere segunda visita','Requiere evaluacion estructural adicional']},
+         {id:'garantia_imperm',type:'select',label:'Garantia del sistema',options:['','1 ano','2 anos','3 anos','5 anos — sistema de alta duracion']},
+         {id:'prox_imperm',type:'select',label:'Proxima impermeabilizacion recomendada',options:['','3 anos','5 anos','7 anos']},
+         {id:'notas',type:'textarea',label:'Observaciones',placeholder:'Condiciones de la superficie, zonas de riesgo, recomendaciones...'},
+       ]},
+     ]},
+    {id:'export',title:'Reporte y expediente',isExport:true},
+  ]
+},
+
+}; // end SOPS
+
+// ═══════════════════════════════════════════════════════════════
+// ENGINE STATE
+// ═══════════════════════════════════════════════════════════════
+let CUR_SOP   = null;
+let curStep   = 0;
+let SD        = {};   // stepData
+let SC        = {};   // scales
+let CHECKS    = new Set();
+let BLOCKED   = {};
+let folio     = '';
+let startTs   = null;
+let PROBLEMA  = '';
+
+const SVGS = {
+  ok:`<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#14532d" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  warn:`<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#713f12" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>`,
+  err:`<svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#7f1d1d" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+};
+
+// ═══════════════════════════════════════════════════════════════
+// DISPATCH
+// ═══════════════════════════════════════════════════════════════
+function checkDispatch(){
+  const ok = document.getElementById('d_service').value &&
+             document.getElementById('d_prop').value.trim() &&
+             document.getElementById('d_tec').value.trim() &&
+             document.getElementById('d_problema').value.trim();
+  document.getElementById('d_btn').disabled = !ok;
+}
+
+function launchSOP(){
+  const spec    = document.getElementById('d_service').value;
+  const prop    = document.getElementById('d_prop').value.trim();
+  const tec     = document.getElementById('d_tec').value.trim();
+  const problema= document.getElementById('d_problema').value.trim();
+
+  CUR_SOP  = SOPS[spec];
+  PROBLEMA = problema;
+  SD       = {prop_id:prop, tec_id:tec};
+  SC       = {}; CHECKS = new Set(); BLOCKED = {};
+  curStep  = 0;
+  startTs  = new Date();
+  folio    = spec.toUpperCase().substring(0,3)+'-'+startTs.getFullYear()+'-'+String(Math.floor(Math.random()*90000)+10000);
+
+  // Set CSS color variable
+  document.documentElement.style.setProperty('--spec-color', CUR_SOP.color);
+
+  // Build UI
+  buildSidebar();
+  document.getElementById('sb_service').textContent = CUR_SOP.service;
+  document.getElementById('sb_problema').textContent = problema;
+  document.getElementById('sb_logomark').style.background = CUR_SOP.color;
+  document.getElementById('sb_meta').innerHTML = `${folio}<br>${startTs.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'})}`;
+
+  // Mobile header
+  document.getElementById('mob_service').textContent = CUR_SOP.service;
+  document.getElementById('mob_mark').style.background = CUR_SOP.color;
+
+  document.getElementById('dispatch').style.display = 'none';
+  document.getElementById('sop_shell').style.display = 'block';
+  renderStep(0);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SIDEBAR
+// ═══════════════════════════════════════════════════════════════
+function buildSidebar(){
+  const cont = document.getElementById('sb_steps');
+  cont.innerHTML = CUR_SOP.steps.map((s,i) =>
+    `<div class="sb-step" id="sbst_${i}" onclick="tryNav(${i})">
+      <div class="sb-node" id="sbn_${i}">${i+1}</div>
+      <div class="sb-step-name">${s.title}</div>
+    </div>`
+  ).join('');
+  updateSidebar();
+}
+
+function updateSidebar(){
+  const n = CUR_SOP.steps.length;
+  CUR_SOP.steps.forEach((_,i) => {
+    const el  = document.getElementById('sbst_'+i);
+    const nd  = document.getElementById('sbn_'+i);
+    el.className='sb-step'+(i===curStep?' active':BLOCKED[i]?' blocked':i<curStep?' complete':'');
+    nd.innerHTML = i===curStep ? i+1 : BLOCKED[i]
+      ? `<svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`
+      : i<curStep
+        ? `<svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`
+        : i+1;
+  });
+  const pct = Math.round((curStep/(n-1))*100);
+  document.getElementById('rail').style.width = pct+'%';
+  document.getElementById('sb_bar').style.width = pct+'%';
+  document.getElementById('sb_pct').textContent = pct+'%';
+  // Mobile progress
+  document.getElementById('mob_prog_fill').style.width = pct+'%';
+  document.getElementById('mob_step').textContent = `${curStep+1} / ${n}`;
+}
+
+function tryNav(i){ if(i<=curStep){ curStep=i; updateSidebar(); renderStep(i); } }
+
+// ═══════════════════════════════════════════════════════════════
+// STEP RENDERER
+// ═══════════════════════════════════════════════════════════════
+function renderStep(idx){
+  const step = CUR_SOP.steps[idx];
+  const main = document.getElementById('main_area');
+  window.scrollTo(0,0);
+
+  if(step.isExport){ renderExport(main); return; }
+
+  let h = `
+    <div class="step-eyebrow">Paso ${idx+1}<div class="eyebrow-line"></div></div>
+    <div class="step-title">${step.title}</div>
+    <div class="step-desc">${step.desc||''}</div>
+    <div class="problema-card"><div class="problema-dot"></div><div><div class="problema-label">Problema reportado</div><div class="problema-text">${PROBLEMA}</div></div></div>
+    <div class="block-alert" id="blk_alert"><div class="ba-label"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Alerta critica — paso bloqueado</div><div class="ba-msg" id="blk_msg"></div><div class="ba-action" id="blk_act"></div></div>
+  `;
+
+  if(step.sections){
+    step.sections.forEach(sec => {
+      h += `<div class="sec-div"><span class="sec-div-label">${sec.label}</span></div>`;
+      if(sec.ctxCard) h += `<div class="ctx-card" id="ctx_card"></div>`;
+      if(sec.checklist){
+        h += `<div class="clist">`;
+        sec.checklist.forEach(item => {
+          h += `<div class="citem${item.mandatory?' mandatory':''}" id="ci_${item.id}" onclick="toggleCheck('${item.id}')">
+            <div class="cbox"><svg class="cmark" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            <div class="ctext"><div class="clabel">${item.label}${item.mandatory?'<span class="ctag">Obligatorio</span>':''}</div>${item.note?`<div class="cnote">${item.note}</div>`:''}</div>
+          </div>`;
+        });
+        h += `</div>`;
+      }
+      if(sec.fields){
+        const cols = sec.fields.some(f=>!f.fullWidth) && sec.fields.filter(f=>!f.fullWidth).length > 1;
+        h += `<div class="fg${cols?' fg-2':''}">`;
+        sec.fields.forEach(f => { h += renderField(f,idx); });
+        h += `</div>`;
+      }
+    });
+  }
+
+  h += `<div class="nav-row"><div class="step-ctr">Paso ${idx+1} de ${CUR_SOP.steps.length}</div>
+    <div style="display:flex;gap:8px">
+      ${idx>0?`<button class="btn btn-ghost" onclick="nav(-1)">Atras</button>`:''}
+      <button class="btn btn-primary" id="btn_next" onclick="nav(1)">${idx===CUR_SOP.steps.length-2?'Ver expediente':'Siguiente'}</button>
+    </div></div>`;
+
+  main.innerHTML = h;
+  restoreValues(step);
+  CHECKS.forEach(id => document.getElementById('ci_'+id)?.classList.add('checked'));
+
+  // Restore validation states
+  if(step.sections) step.sections.forEach(sec => {
+    sec.fields?.forEach(f => { if(SD[f.id]!==undefined && f.rules) runRules(f, SD[f.id], idx, false); });
+  });
+
+  if(BLOCKED[idx]) showBlock(BLOCKED[idx].rule);
+  renderCtxCard();
+  updateNextBtn();
+}
+
+function renderField(f, idx){
+  const saved = SD[f.id]??'';
+  const wrap = f.fullWidth?'style="grid-column:1/-1"':'';
+  let inner = '';
+
+  if(f.type==='scale'){
+    const labs = f.scaleLabels||['Muy malo','Malo','Regular','Bueno','Excelente'];
+    inner = `<div class="scale-wrap" id="sc_${f.id}">${[1,2,3,4,5].map(n=>`<button class="sbn${SC[f.id]===n?' s'+n:''}" onclick="setScale('${f.id}',${n},${idx})">${n}</button>`).join('')}</div>
+    <div class="scale-labels"><span>${labs[0]}</span><span>${labs[4]}</span></div>`;
+  } else if(f.type==='select'){
+    const opts = (f.options||[]).map(o=>`<option value="${o}"${saved===o?' selected':''}>${o||'Selecciona'}</option>`).join('');
+    inner = `<div class="iwrap"><select class="finput" id="f_${f.id}" onchange="onFC('${f.id}',this.value,${idx})">${opts}</select></div>`;
+  } else if(f.type==='textarea'){
+    inner = `<textarea class="finput" id="f_${f.id}" placeholder="${f.placeholder||''}" oninput="onFC('${f.id}',this.value,${idx})">${saved}</textarea>`;
+  } else {
+    const hasUnit = !!f.unit;
+    inner = `<div class="iwrap">
+      <input type="${f.type||'text'}" class="finput" id="f_${f.id}" placeholder="${f.placeholder||''}" ${f.step?`step="${f.step}"`:''}
+        value="${saved}" ${hasUnit?'':`style="padding-right:34px"`}
+        oninput="onFC('${f.id}',this.value,${idx})">
+      ${hasUnit?`<span class="unit" id="unit_${f.id}">${f.unit}</span>`:`<span class="sicon" id="si_${f.id}"></span>`}
+    </div>`;
+    if(hasUnit) inner += `<span class="sicon" id="si_${f.id}" style="display:none"></span>`;
+  }
+
+  return `<div class="fblock" ${wrap}>
+    <label class="flabel">${f.label}${f.req?'<span class="freq"></span>':''}</label>
+    ${inner}
+    ${f.note?`<div class="fnote">${f.note}</div>`:''}
+    ${f.norm?`<span class="fnorm" ${f.dynNorm?`data-dyn="${f.dynNorm}"`:''}>${f.norm}</span>`:''}
+    ${f.dynNorm&&!f.norm?`<span class="fnorm" data-dyn="${f.dynNorm}">Calibrando...</span>`:''}
+    <div class="warn-alert" id="wa_${f.id}"><div class="wa-dot"></div><div class="wa-body" id="wm_${f.id}"><span id="ws_${f.id}"></span></div></div>
+    <div class="vmsg" id="vm_${f.id}"></div>
+  </div>`;
+}
+
+function restoreValues(step){
+  step.sections?.forEach(sec => sec.fields?.forEach(f => {
+    const el=document.getElementById('f_'+f.id);
+    if(el&&SD[f.id]!==undefined) el.value=SD[f.id];
+    if(f.type==='scale'&&SC[f.id]){
+      document.getElementById('sc_'+f.id)?.querySelectorAll('.sbn').forEach((b,i)=>{
+        b.className='sbn'+(SC[f.id]===i+1?' s'+(i+1):'');
+      });
+    }
+  }));
+}
+
+// ═══════════════════════════════════════════════════════════════
+// FIELD EVENTS
+// ═══════════════════════════════════════════════════════════════
+function onFC(fid, val, idx){
+  SD[fid]=val;
+  let field=null;
+  CUR_SOP.steps[idx].sections?.forEach(s=>s.fields?.forEach(f=>{if(f.id===fid)field=f;}));
+  if(field?.onChange==='thr'){
+    setTimeout(()=>{
+      updateTHR();
+      updateDynNorms();
+      ['voltaje_l1','presion_baja','presion_alta','amps_comp'].forEach(fid2=>{
+        if(SD[fid2]!==undefined&&SD[fid2]!==''){
+          CUR_SOP.steps.forEach((s,si)=>s.sections?.forEach(sec=>sec.fields?.forEach(f=>{
+            if(f.id===fid2&&f.rules) runRules(f,SD[fid2],si,false);
+          })));
+        }
+      });
+    },0);
+  }
+  if(field?.rules) runRules(field,val,idx,true);
+}
+
+function updateDynNorms(){
+  const sv=THR.sv, sp=THR.sp, ref=THR.ref.split(' ')[0];
+  const map={
+    v:`NOM-001-SEDE-2012 · Nominal: ${THR.vn}V · Optimo: ${sv.ok[0]}–${sv.ok[1]}V`,
+    pb:`${ref} · Optimo: ${sp.low.ok[0]}–${sp.low.ok[1]} PSI`,
+    pa:`${ref} · Optimo: ${sp.high.ok[0]}–${sp.high.ok[1]} PSI`,
+  };
+  Object.entries(map).forEach(([k,v])=>document.querySelectorAll(`[data-dyn="${k}"]`).forEach(el=>el.textContent=v));
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RULES ENGINE
+// ═══════════════════════════════════════════════════════════════
+function runRules(f, val, idx, animate){
+  const num = parseFloat(val);
+  const el  = document.getElementById('f_'+f.id);
+  const si  = document.getElementById('si_'+f.id);
+  const vm  = document.getElementById('vm_'+f.id);
+  const wa  = document.getElementById('wa_'+f.id);
+  const wm  = document.getElementById('wm_'+f.id);
+  const ws  = document.getElementById('ws_'+f.id);
+
+  // Clear
+  el?.classList.remove('ok','warn','err');
+  if(si){si.className='sicon';si.innerHTML='';}
+  if(vm){vm.className='vmsg';vm.innerHTML='';}
+  if(wa) wa.className='warn-alert';
+
+  let blocked=false, warned=false;
+
+  for(const rule of f.rules){
+    let hit=false;
+    try{ hit = rule.cond(isNaN(num)?val:num, SD); }catch(e){}
+    if(!hit) continue;
+
+    if(rule.sev==='block'){
+      blocked=true;
+      BLOCKED[idx]={fid:f.id,rule};
+      el?.classList.add('err');
+      if(si){si.className='sicon show err';si.innerHTML=SVGS.err;}
+      if(vm){vm.className='vmsg show err';vm.innerHTML=SVGS.err+'<span>Valor critico — ver alerta</span>';}
+      showBlock(rule);
+      break;
+    }
+    if(rule.sev==='warn'&&!blocked){
+      warned=true;
+      el?.classList.add('warn');
+      if(si){si.className='sicon show warn';si.innerHTML=SVGS.warn;}
+      if(wa) wa.className='warn-alert show';
+      if(wm) wm.childNodes[0]?.nodeType===3 ? wm.childNodes[0].textContent=rule.msg : wm.prepend(document.createTextNode(rule.msg));
+      if(ws&&rule.sugg){ws.className='wa-sugg';ws.textContent='Sugerencia: '+rule.sugg;}
+    }
+  }
+
+  if(!blocked){
+    if(BLOCKED[idx]?.fid===f.id){ delete BLOCKED[idx]; hideBlock(); }
+  }
+  if(!blocked&&!warned&&val){
+    el?.classList.add('ok');
+    if(si){si.className='sicon show ok';si.innerHTML=SVGS.ok;}
+  }
+  updateNextBtn();
+  updateSidebar();
+}
+
+function showBlock(rule){
+  const a=document.getElementById('blk_alert');
+  if(!a) return;
+  a.classList.add('show');
+  document.getElementById('blk_msg').textContent=rule.msg||'';
+  document.getElementById('blk_act').textContent=rule.act||'';
+  updateNextBtn();
+}
+function hideBlock(){
+  document.getElementById('blk_alert')?.classList.remove('show');
+  updateNextBtn();
+}
+function updateNextBtn(){
+  const btn=document.getElementById('btn_next');
+  if(!btn) return;
+  const step = CUR_SOP.steps[curStep];
+  if(!step) return;
+
+  // Check 1: critical block (measurement out of range)
+  if(BLOCKED[curStep]){
+    btn.disabled=true;
+    btn.textContent='Resolver alerta critica para continuar';
+    btn.style.background='var(--red)';
+    btn.style.color='#fff';
+    return;
+  }
+
+  // Check 2: required fields empty
+  const missingReq=[];
+  step.sections?.forEach(sec=>sec.fields?.forEach(f=>{
+    if(f.req && (!SD[f.id]||SD[f.id]==='')) missingReq.push(f.label);
+  }));
+  if(missingReq.length>0){
+    btn.disabled=true;
+    btn.textContent=`Completar ${missingReq.length} campo${missingReq.length>1?'s':''} requerido${missingReq.length>1?'s':''} para continuar`;
+    btn.style.background='var(--border-2)';
+    btn.style.color='var(--text-3)';
+    return;
+  }
+
+  // Check 3: mandatory checklist items
+  const mandatoryItems=[];
+  step.sections?.forEach(sec=>sec.checklist?.forEach(item=>{
+    if(item.mandatory && !CHECKS.has(item.id)) mandatoryItems.push(item.id);
+  }));
+  if(mandatoryItems.length>0){
+    btn.disabled=true;
+    btn.textContent=`${mandatoryItems.length} paso${mandatoryItems.length>1?'s':''} obligatorio${mandatoryItems.length>1?'s':''} sin confirmar`;
+    btn.style.background='var(--border-2)';
+    btn.style.color='var(--text-3)';
+    return;
+  }
+
+  // All clear
+  btn.disabled=false;
+  btn.style.background='var(--accent)';
+  btn.style.color='#fff';
+  btn.textContent=curStep===CUR_SOP.steps.length-2?'Ver expediente':'Siguiente →';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONTROLS
+// ═══════════════════════════════════════════════════════════════
+function setScale(fid,val,idx){SC[fid]=val;SD[fid]=val;document.getElementById('sc_'+fid)?.querySelectorAll('.sbn').forEach((b,i)=>{b.className='sbn'+(i+1===val?' s'+val:'');});}
+function toggleCheck(id){const el=document.getElementById('ci_'+id);el?.classList.toggle('checked');el?.classList.contains('checked')?CHECKS.add(id):CHECKS.delete(id);updateNextBtn();}
+function nav(d){
+  if(d>0&&BLOCKED[curStep]) return;
+  curStep=Math.max(0,Math.min(curStep+d,CUR_SOP.steps.length-1));
+  updateSidebar();
+  renderStep(curStep);
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EXPORT STEP
+// ═══════════════════════════════════════════════════════════════
+function renderExport(main){
+  const vitals=buildVitals();
+  const findings=buildFindings(vitals);
+  const score=calcScore(findings);
+  const json=buildJSON(vitals,findings,score);
+  const scoreColor=score>=80?'#4ade80':score>=60?'#fbbf24':'#f87171';
+  const scoreLabel=score>=80?'Servicio en orden':score>=60?'Requiere atencion':'Estado critico';
+
+  let h=`
+    <div class="step-eyebrow">Cierre de orden<div class="eyebrow-line"></div></div>
+    <div class="step-title">Firma y cierre de visita</div>
+    <div class="step-desc">Revisa el resumen, descarga el reporte y firma para cerrar la orden. Esta accion no se puede deshacer.</div>
+
+    <!-- Score -->
+    <div class="score-wrap">
+      <div class="score-ring">
+        <svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="5"/>
+        <circle cx="32" cy="32" r="26" fill="none" stroke="${scoreColor}" stroke-width="5"
+          stroke-dasharray="${(score/100)*163} 163" stroke-linecap="round" transform="rotate(-90 32 32)"/></svg>
+        <div class="score-val" style="color:${scoreColor}">${score}</div>
+      </div>
+      <div>
+        <div class="score-info-title">${scoreLabel}</div>
+        <div class="score-info-sub">Folio: ${folio}<br>${CUR_SOP.service} · ${startTs?.toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'})}<br>Tecnico: ${SD['tec_id']||'—'} · Propiedad: ${SD['prop_id']||'—'}</div>
+      </div>
+    </div>
+
+    ${vitals.length?`<div class="vitals-grid">${vitals.map(v=>`<div class="vcard"><div class="vval ${v.state}">${v.display}</div><div class="vlabel">${v.label}</div>${v.norm?`<div class="vnorm">${v.norm}</div>`:''}</div>`).join('')}</div>`:''}
+
+    <div class="sec-div"><span class="sec-div-label">Hallazgos</span></div>
+    <div class="findings">${findings.map(f=>`<div class="finding ${f.t}"><div class="fdot"></div><span>${f.txt}</span><span class="fref">${f.ref}</span></div>`).join('')}</div>
+
+    <!-- Firma del tecnico -->
+    <div class="sec-div"><span class="sec-div-label">Firma del tecnico</span></div>
+    <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+        <div class="fblock">
+          <label class="flabel">Resultado final del servicio<span class="freq" style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--spec-color);margin-left:4px"></span></label>
+          <select class="finput" id="cierre_resultado" onchange="SD['cierre_resultado']=this.value;updateNextBtn()">
+            <option value="">Selecciona</option>
+            <option>Servicio completo — equipo operando correctamente</option>
+            <option>Completo con observaciones — ver notas</option>
+            <option>Requiere segunda visita — pendiente</option>
+            <option>Equipo requiere reemplazo — informado al cliente</option>
+          </select>
+        </div>
+        <div class="fblock">
+          <label class="flabel">Garantia del servicio</label>
+          <select class="finput" id="cierre_garantia" onchange="SD['cierre_garantia']=this.value">
+            <option value="">Sin garantia</option>
+            <option>30 dias</option>
+            <option>60 dias</option>
+            <option>90 dias</option>
+          </select>
+        </div>
+      </div>
+      <div class="fblock" style="margin-bottom:14px">
+        <label class="flabel">Proxima visita preventiva recomendada</label>
+        <select class="finput" id="cierre_proxima" onchange="SD['cierre_proxima']=this.value">
+          <option value="">Sin fecha definida</option>
+          <option>3 meses</option>
+          <option>6 meses</option>
+          <option>1 año</option>
+          <option>Antes del proximo verano</option>
+        </select>
+      </div>
+      <div class="fblock" style="margin-bottom:14px">
+        <label class="flabel">Observaciones finales para el cliente</label>
+        <textarea class="finput" id="cierre_notas" placeholder="Que se encontro, que se hizo, recomendaciones..." style="min-height:72px" oninput="SD['cierre_notas']=this.value"></textarea>
+      </div>
+
+      <!-- Firma canvas -->
+      <label class="flabel" style="margin-bottom:6px;display:block">Firma del tecnico<span class="freq" style="display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--spec-color);margin-left:4px"></span></label>
+      <div style="position:relative;background:var(--surface-2);border:1.5px solid var(--border);border-radius:var(--rs);overflow:hidden">
+        <canvas id="firma_canvas" style="display:block;width:100%;height:100px;cursor:crosshair;touch-action:none"></canvas>
+        <div id="firma_placeholder" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+          <span style="font-size:12px;color:var(--text-3)">Firma aqui con el dedo o el mouse</span>
+        </div>
+        <button onclick="clearFirma()" style="position:absolute;top:6px;right:8px;background:none;border:none;font-size:10px;color:var(--text-3);cursor:pointer;font-family:'DM Sans',sans-serif">Borrar</button>
+      </div>
+      <div id="firma_msg" style="font-size:10px;color:var(--text-3);margin-top:4px">La firma confirma que el servicio fue realizado y el cliente acepta el trabajo.</div>
+    </div>
+
+    <!-- Acciones finales -->
+    <div class="sec-div"><span class="sec-div-label">Reporte del expediente</span></div>
+    <div class="json-block" id="json_preview">${escHTML(JSON.stringify(json,null,2))}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
+      <button class="btn btn-ghost" onclick="nav(-1)" style="justify-content:center">← Editar</button>
+      <button class="btn btn-primary" onclick="dlJSON()" style="justify-content:center">Descargar JSON</button>
+      <button class="btn btn-export" id="btn_firmar" onclick="cerrarOrden()" style="justify-content:center">Cerrar orden</button>
+    </div>
+    <div style="font-size:11px;color:var(--text-3);text-align:center;margin-top:8px">Al cerrar la orden, el reporte queda sellado con la firma y la hora exacta. No se puede modificar.</div>`;
+
+  main.innerHTML=h;
+  initFirmaCanvas();
+}
+
+// ── FIRMA CANVAS ──────────────────────────────────────────────
+function initFirmaCanvas(){
+  const canvas=document.getElementById('firma_canvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  // Fix canvas resolution
+  const rect=canvas.getBoundingClientRect();
+  canvas.width=rect.width*window.devicePixelRatio||rect.width;
+  canvas.height=100*window.devicePixelRatio||100;
+  ctx.scale(window.devicePixelRatio||1,window.devicePixelRatio||1);
+  ctx.strokeStyle='#111110';
+  ctx.lineWidth=2;
+  ctx.lineCap='round';
+  ctx.lineJoin='round';
+
+  let drawing=false, hasSig=false;
+  function getPos(e){
+    const r=canvas.getBoundingClientRect();
+    const src=e.touches?e.touches[0]:e;
+    return{x:(src.clientX-r.left),y:(src.clientY-r.top)};
+  }
+  function start(e){e.preventDefault();drawing=true;const p=getPos(e);ctx.beginPath();ctx.moveTo(p.x,p.y);}
+  function move(e){e.preventDefault();if(!drawing)return;const p=getPos(e);ctx.lineTo(p.x,p.y);ctx.stroke();hasSig=true;document.getElementById('firma_placeholder').style.display='none';SD['firma_data']=canvas.toDataURL();}
+  function end(){drawing=false;}
+  canvas.addEventListener('mousedown',start);canvas.addEventListener('mousemove',move);canvas.addEventListener('mouseup',end);
+  canvas.addEventListener('touchstart',start,{passive:false});canvas.addEventListener('touchmove',move,{passive:false});canvas.addEventListener('touchend',end);
+}
+
+function clearFirma(){
+  const canvas=document.getElementById('firma_canvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  document.getElementById('firma_placeholder').style.display='flex';
+  delete SD['firma_data'];
+}
+
+// ── CERRAR ORDEN ──────────────────────────────────────────────
+function cerrarOrden(){
+  const resultado=document.getElementById('cierre_resultado')?.value;
+  if(!resultado){
+    document.getElementById('cierre_resultado').style.borderColor='var(--red)';
+    document.getElementById('cierre_resultado').focus();
+    setTimeout(()=>{const el=document.getElementById('cierre_resultado');if(el)el.style.borderColor='';},3000);
+    return;
+  }
+  if(!SD['firma_data']){
+    document.getElementById('firma_msg').textContent='⚠ Se requiere la firma del tecnico para cerrar la orden.';
+    document.getElementById('firma_msg').style.color='var(--red)';
+    document.getElementById('firma_canvas').style.borderColor='var(--red)';
+    return;
+  }
+
+  const vitals=buildVitals(),findings=buildFindings(vitals),score=calcScore(findings);
+  const json=buildJSON(vitals,findings,score);
+  json.cierre={
+    resultado:SD['cierre_resultado']||'',
+    garantia:SD['cierre_garantia']||'',
+    proxima_visita:SD['cierre_proxima']||'',
+    notas:SD['cierre_notas']||'',
+    firma_tecnico:'[firma digital registrada]',
+    cerrado_en:new Date().toISOString(),
+    cerrado_por:SD['tec_id']||folio
+  };
+
+  const main=document.getElementById('main_area');
+  main.innerHTML=`
+    <div style="text-align:center;padding:40px 20px">
+      <div style="width:64px;height:64px;border-radius:50%;background:var(--green-bg);border:2px solid #bbf7d0;display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.025em;margin-bottom:8px">Orden cerrada</div>
+      <div style="font-size:14px;color:var(--text-2);line-height:1.65;margin-bottom:24px">Folio <strong>${folio}</strong> cerrado a las ${new Date().toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})}.<br>El reporte queda sellado en el expediente de la propiedad.</div>
+      <div style="background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r);padding:14px;font-size:12px;text-align:left;margin-bottom:20px;line-height:1.8">
+        <strong>Score:</strong> ${score}/100 — ${score>=80?'Servicio en orden':score>=60?'Con observaciones':'Estado critico'}<br>
+        <strong>Resultado:</strong> ${SD['cierre_resultado']||'—'}<br>
+        ${SD['cierre_garantia']?`<strong>Garantia:</strong> ${SD['cierre_garantia']}<br>`:''}
+        ${SD['cierre_proxima']?`<strong>Proxima visita:</strong> ${SD['cierre_proxima']}<br>`:''}
+        ${SD['cierre_notas']?`<strong>Notas:</strong> ${SD['cierre_notas']}`:''}
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="dlJSONFinal(${JSON.stringify(json).replace(/</g,'\\u003c').replace(/>/g,'\\u003e').replace(/&/g,'\\u0026').replace(/'/g,'\\u0027')})" style="flex:1;justify-content:center">Descargar reporte final</button>
+        <button class="btn btn-ghost" onclick="location.reload()" style="flex:1;justify-content:center">Nueva orden</button>
+      </div>
+    </div>`;
+
+  // Update sidebar
+  CUR_SOP.steps.forEach((_,i)=>{
+    const el=document.getElementById('sbst_'+i);
+    const nd=document.getElementById('sbn_'+i);
+    if(el) el.className='sb-step complete';
+    if(nd) nd.innerHTML=`<svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`;
+  });
+  document.getElementById('rail').style.width='100%';
+  document.getElementById('sb_bar').style.width='100%';
+  document.getElementById('sb_pct').textContent='100%';
+}
+
+function dlJSONFinal(json){
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(json,null,2)],{type:'application/json'}));
+  a.download=folio+'_CERRADO.json'; a.click();
+}
+
+
+function buildVitals(){
+  if(CUR_SOP.id!=='sop_hvac_v1') return [];
+  const v1=parseFloat(SD['voltaje_l1']),nt=parseFloat(SD['neutro_tierra']);
+  const pb=parseFloat(SD['presion_baja']),pa=parseFloat(SD['presion_alta']);
+  const tr=parseFloat(SD['temp_retorno']),ts=parseFloat(SD['temp_suministro']);
+  const dt=(!isNaN(tr)&&!isNaN(ts))?+(tr-ts).toFixed(1):null;
+  const anio=parseInt(SD['anio_inst']),edad=anio?new Date().getFullYear()-anio:null;
+  const sv=THR.sv,sp=THR.sp;
+  return[
+    {label:'Voltaje L1',value:v1,display:isNaN(v1)?'—':v1+'V',state:isNaN(v1)?'neutral':v1>=sv.ok[0]&&v1<=sv.ok[1]?'ok':v1>=sv.block_lo?'warn':'err',norm:`Nominal ${THR.vn}V`},
+    {label:'Neutro–Tierra',value:nt,display:isNaN(nt)?'—':nt+'V',state:isNaN(nt)?'neutral':nt<1?'ok':nt<=2?'warn':'err',norm:'Opt: <1V'},
+    {label:'Presion baja',value:pb,display:isNaN(pb)?'—':pb+' PSI',state:isNaN(pb)?'neutral':pb>=sp.low.ok[0]&&pb<=sp.low.ok[1]?'ok':pb>=sp.low.warn_lo[0]?'warn':'err',norm:`${THR.ref.split(' ')[0]}`},
+    {label:'Presion alta',value:pa,display:isNaN(pa)?'—':pa+' PSI',state:isNaN(pa)?'neutral':pa>=sp.high.ok[0]&&pa<=sp.high.ok[1]?'ok':pa<=sp.high.warn_hi[1]?'warn':'err',norm:`${THR.ref.split(' ')[0]}`},
+    {label:'Delta T',value:dt,display:dt===null?'—':dt+'°C',state:dt===null?'neutral':dt>=10&&dt<=14?'ok':dt>=7?'warn':'err',norm:'Opt: 10–14°C'},
+    {label:'Edad equipo',value:edad,display:edad===null?'—':edad+' anos',state:edad===null?'neutral':edad<10?'ok':edad<15?'warn':'err',norm:'Vida util: 12–15a'},
+  ];
+}
+
+function buildFindings(vitals){
+  const f=[];
+  // Universal
+  const resuelto=SD['resuelto']||'';
+  if(resuelto.includes('completo')||resuelto.includes('Resuelto')) f.push({t:'ok',txt:'Servicio concluido satisfactoriamente.',ref:'Cierre de visita'});
+  else if(resuelto.includes('segunda')||resuelto.includes('seguimiento')) f.push({t:'warn',txt:'Requiere seguimiento o segunda visita.',ref:'Cierre de visita'});
+  // HVAC specific
+  if(CUR_SOP.id==='sop_hvac_v1'){
+    const v1=parseFloat(SD['voltaje_l1']),nt=parseFloat(SD['neutro_tierra']);
+    const sv=THR.sv;
+    if(!isNaN(v1)&&(v1<sv.block_lo||v1>sv.block_hi)) f.push({t:'err',txt:`Voltaje critico (${v1}V). Fuera de norma — revisar acometida.`,ref:'NOM-001-SEDE-2012'});
+    else if(!isNaN(v1)&&(v1<sv.ok[0]||v1>sv.ok[1])) f.push({t:'warn',txt:`Voltaje fuera del rango optimo (${v1}V).`,ref:'NOM-001-SEDE-2012'});
+    if(!isNaN(nt)&&nt>2) f.push({t:'err',txt:`N-T de ${nt}V. Causa directa de quema de tarjetas. Corregir tierra fisica.`,ref:'Dato predictivo'});
+    const edad=SD['anio_inst']?new Date().getFullYear()-parseInt(SD['anio_inst']):null;
+    if(edad&&edad>=12) f.push({t:'warn',txt:`Equipo con ${edad} anos. Evaluar reemplazo preventivo.`,ref:'Vida util 12–15 anos'});
+  }
+  // Check mandatory steps
+  const allSteps = CUR_SOP.steps.flatMap(s=>s.sections||[]).flatMap(sec=>sec.checklist||[]);
+  const mandatory = allSteps.filter(i=>i.mandatory).map(i=>i.id);
+  const missing = mandatory.filter(id=>!CHECKS.has(id));
+  if(missing.length) f.push({t:'warn',txt:`${missing.length} paso(s) obligatorio(s) sin confirmar en el protocolo.`,ref:'Protocolo SOP'});
+  if(!f.length) f.push({t:'ok',txt:'Sin hallazgos criticos. Servicio completado segun protocolo.',ref:'Score Thruver'});
+  return f;
+}
+
+function calcScore(findings){
+  const e=findings.filter(f=>f.t==='err').length;
+  const w=findings.filter(f=>f.t==='warn').length;
+  return Math.max(0,Math.min(100,100-e*25-w*8));
+}
+
+function buildJSON(vitals,findings,score){
+  const base={
+    sop_id:CUR_SOP.id, service:CUR_SOP.service, folio,
+    timestamp:new Date().toISOString(),
+    activo:{propiedad_id:SD['prop_id'],tecnico_id:SD['tec_id'],problema_reportado:PROBLEMA},
+    datos_capturados:Object.fromEntries(Object.entries(SD).filter(([k])=>!['prop_id','tec_id'].includes(k))),
+    protocolo:{pasos_obligatorios:CUR_SOP.steps.flatMap(s=>s.sections||[]).flatMap(sec=>(sec.checklist||[]).filter(i=>i.mandatory).map(i=>i.id)),pasos_completados:Array.from(CHECKS)},
+    score_salud:score, hallazgos:findings.map(f=>({tipo:f.t,texto:f.txt,ref:f.ref})),
+  };
+  if(CUR_SOP.id==='sop_hvac_v1'){
+    base.signos_vitales={voltaje_l1:SD['voltaje_l1'],neutro_tierra:SD['neutro_tierra'],presion_baja:SD['presion_baja'],presion_alta:SD['presion_alta'],delta_t_c:vitals.find(v=>v.label==='Delta T')?.value};
+    base.umbrales_placa={voltaje_nominal:THR.vn,refrigerante:THR.ref,amperaje_nominal:THR.an,presion_baja_optimo:THR.sp.low.ok,presion_alta_optimo:THR.sp.high.ok,fuente:'Placa del equipo'};
+  }
+  return base;
+}
+
+function dlJSON(){
+  const v=buildVitals(),fi=buildFindings(v),s=calcScore(fi);
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([JSON.stringify(buildJSON(v,fi,s),null,2)],{type:'application/json'}));
+  a.download=folio+'.json';a.click();
+}
+
+// firmar() replaced by cerrarOrden()
+
+function escHTML(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// URL params support (para cuando el dispatcher pase los datos)
+window.onload=()=>{
+  const p=new URLSearchParams(window.location.search);
+  if(p.get('service')&&SOPS[p.get('service')]){
+    document.getElementById('d_service').value=p.get('service');
+    if(p.get('prop')) document.getElementById('d_prop').value=p.get('prop');
+    if(p.get('tec'))  document.getElementById('d_tec').value=p.get('tec');
+    if(p.get('problema')) document.getElementById('d_problema').value=p.get('problema');
+    checkDispatch();
+    if(p.get('service')&&p.get('prop')&&p.get('tec')&&p.get('problema')) launchSOP();
+  }
+};
+</script>
+</body>
+</html>
