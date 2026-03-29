@@ -1,5 +1,5 @@
-var CACHE = 'thruver-v1';
-var ASSETS = ['/', '/index.html'];
+var CACHE = 'thruver-v2';
+var ASSETS = ['/', '/index.html', '/tecnico.html', '/manifest-tecnico.json', '/shared.css'];
 
 self.addEventListener('install', function(e) {
   e.waitUntil(

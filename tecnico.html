@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Thruver SOP">
+<link rel="manifest" href="/manifest-tecnico.json">
 <title>Thruver SOP</title>
 <link rel="stylesheet" href="shared.css">
 <style>
@@ -210,6 +211,13 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
 .star-off{color:var(--border-2);font-size:13px}
 /* Norm tag */
 .norm-tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:1px 5px}
+/* Location button */
+.loc-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--rs);border:1.5px solid var(--border);background:var(--surface-2);cursor:pointer;transition:all .2s;flex-shrink:0;position:relative}
+.loc-btn[data-active="true"]{background:#dcfce7;border-color:#86efac}
+.loc-btn[data-active="true"] svg{stroke:#16a34a}
+.loc-btn[data-active="true"]::after{content:'';position:absolute;inset:-4px;border-radius:calc(var(--rs)+4px);border:2px solid #86efac;animation:locPulse 1.5s ease infinite}
+@keyframes locPulse{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:0;transform:scale(1.25)}}
+
 /* Anim */
 
 .anim{animation:fadeUp .35s cubic-bezier(.25,1,.5,1) both}
@@ -313,6 +321,9 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
     <header class="topbar">
       <div class="topbar-title" id="topbar_title">Inicio</div>
       <div class="topbar-right">
+        <button id="loc_btn" class="loc-btn" data-active="false" title="Activar ubicación GPS" onclick="toggleLocation()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+        </button>
         <div class="topbar-notif" onclick="showNotif()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           <div class="topbar-notif-badge">2</div>
@@ -336,6 +347,9 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
+        <button id="loc_btn_mob" class="loc-btn" data-active="false" title="Activar GPS" onclick="toggleLocation()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
+        </button>
         <div style="position:relative;cursor:pointer" onclick="showNotif()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           <div style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--red);border:1.5px solid var(--surface)"></div>
@@ -1001,6 +1015,63 @@ function showNotif(){
         console.log('[Thruver] Tecnico: ' + ORDERS.length + ' ordenes');
       }, function(err){ console.error('[Thruver] Firestore tec error:', err); });
   };
+
+  // ── GEOLOCALIZACIÓN ──────────────────────────────────────────
+  var geoWatchId = null;
+
+  function setLocBtns(active) {
+    ['loc_btn','loc_btn_mob'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.setAttribute('data-active', active ? 'true' : 'false');
+      el.title = active ? 'Desactivar GPS' : 'Activar ubicación GPS';
+      el.querySelector('svg').setAttribute('stroke', active ? '#16a34a' : 'var(--text-3)');
+    });
+  }
+
+  window.toggleLocation = function() {
+    if (geoWatchId !== null) {
+      navigator.geolocation.clearWatch(geoWatchId);
+      geoWatchId = null;
+      if (CU && CU.id) db.collection('ubicaciones').doc(CU.id).set({ activo: false }, { merge: true });
+      setLocBtns(false);
+      showToast('Ubicación desactivada', 'var(--text-2)');
+      return;
+    }
+    if (!navigator.geolocation) { showToast('Tu dispositivo no tiene GPS', 'var(--red)'); return; }
+    setLocBtns(true);
+    geoWatchId = navigator.geolocation.watchPosition(
+      function(pos) {
+        if (!CU || !CU.id) return;
+        db.collection('ubicaciones').doc(CU.id).set({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          precision: Math.round(pos.coords.accuracy),
+          ts: firebase.firestore.FieldValue.serverTimestamp(),
+          nombre: CU.name,
+          tecnicoId: CU.id,
+          activo: true
+        });
+      },
+      function(err) {
+        console.warn('[Thruver] GPS:', err.message);
+        geoWatchId = null;
+        setLocBtns(false);
+        showToast('No se pudo obtener ubicación', 'var(--red)');
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 30000 }
+    );
+    showToast('Compartiendo ubicación en tiempo real', 'var(--green)');
+  };
+
+  function showToast(msg, color) {
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:'+color+';color:#fff;border-radius:var(--r);padding:11px 18px;font-size:12px;font-weight:700;z-index:600;box-shadow:0 4px 16px rgba(0,0,0,.15);white-space:nowrap;animation:fadeUp .25s ease;font-family:DM Sans,sans-serif;pointer-events:none';
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function(){ t.remove(); }, 3000);
+  }
+  window._showToast = showToast;
 
   window.fbCompleteOrder = function(orderId, score) {
     var order = ORDERS.find(function(o){ return o.id === orderId; });

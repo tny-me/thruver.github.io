@@ -3930,7 +3930,10 @@ function openOrderDrawer(orderId) {
         <div style="display:flex;align-items:center;gap:8px;padding:10px;background:var(--blue-bg);border:1px solid var(--blue-ring);border-radius:var(--rs)">
           <div style="width:28px;height:28px;border-radius:50%;background:${tech.color};display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#fff">${tech.initials}</div>
           <div style="flex:1"><div style="font-size:12px;font-weight:700">${tech.name}</div><div style="font-size:10px;color:var(--t3)">${tech.id} · ${tech.specs.map(s=>SPEC_META[s]?.label||s).join(', ')}</div></div>
-          <div style="text-align:right"><div style="font-size:10px;color:var(--green);font-weight:700">⭐ ${tech.rating}</div><div style="font-size:9px;color:var(--t3)">${tech.phone||''}</div></div>
+          <div style="text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:4px">
+            <div style="font-size:10px;color:var(--green);font-weight:700">⭐ ${tech.rating}</div>
+            <button onclick="verUbicacionTec('${tech.id}')" style="font-size:9px;font-weight:700;background:var(--blue);color:#fff;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;display:flex;align-items:center;gap:3px;white-space:nowrap"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>Ver GPS</button>
+          </div>
         </div>` : `<div style="padding:8px 10px;background:var(--red-bg);border:1px solid var(--red-ring);border-radius:var(--rs);font-size:11px;color:var(--red)">⚠ Sin técnico asignado</div>`}
     </div>
 
@@ -5814,6 +5817,16 @@ document.addEventListener('keydown', e => {
       if(window.fbInitDispatcher) window.fbInitDispatcher();
     });
   });
+
+  window.verUbicacionTec = function(tecId) {
+    db.collection('ubicaciones').doc(tecId).get().then(function(snap) {
+      if (!snap.exists) { alert('El técnico aún no ha compartido su ubicación.'); return; }
+      var d = snap.data();
+      if (!d.activo) { alert('El técnico tiene el GPS desactivado en este momento.'); return; }
+      var mapsUrl = 'https://www.google.com/maps?q=' + d.lat + ',' + d.lng;
+      window.open(mapsUrl, '_blank');
+    }).catch(function(){ alert('No se pudo obtener la ubicación.'); });
+  };
 
   window.fbAssignOrder = function(orderId, techId, partnerUid, scheduled, notes) {
     var order = ORDERS.find(function(o){ return o.id === orderId; });
