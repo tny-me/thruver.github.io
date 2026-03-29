@@ -4,10 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thruver — Infraestructura para el mantenimiento y operación de propiedades</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800;9..40,900&family=DM+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
 :root{
   --bg:#f2f3f5;
   --bg2:#eaebee;
@@ -38,7 +37,7 @@
   --grad-accent:linear-gradient(135deg, #c85a28 0%, #e8834a 100%);
   --grad-subtle:linear-gradient(180deg, rgba(200,90,40,.04) 0%, transparent 100%);
 }
-html{font-size:15px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+html{font-size:15px;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
 /* ── VERCEL-STYLE VERTICAL GRID LINES ─────────────────
@@ -68,7 +67,6 @@ body::before{
 }
 /* Ensure all sections sit above the grid lines */
 nav, section, footer, .hero{ position:relative; z-index:1; }
-a{color:inherit;text-decoration:none}
 
 /* ─── PRODUCTOS DROPDOWN ─── */
 .nav-productos-wrap{position:relative}
@@ -145,7 +143,7 @@ p.sp{font-size:15px;color:var(--text2);line-height:1.75;max-width:500px}
   text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:18px;
   background:var(--accent-light);border:1px solid var(--accent-ring);border-radius:100px;padding:4px 12px}
 .hero-tag-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s ease infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
 .hero-h1{font-size:clamp(36px,5.5vw,60px);font-weight:900;letter-spacing:-.055em;
   line-height:.95;color:var(--text);margin-bottom:20px}
 .hero-h1 .acc{color:var(--accent)}

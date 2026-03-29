@@ -8,9 +8,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Thruver SOP">
 <title>Thruver SOP</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
 :root{
   --canvas:#f7f7f5;
   --surface:#ffffff;
@@ -35,7 +35,7 @@
   --shadow-md:0 4px 16px rgba(0,0,0,0.08),0 0 0 1px rgba(0,0,0,0.04);
   --sidebar-w:220px;
 }
-html{font-size:14px;-webkit-text-size-adjust:100%}
+html{font-size:14px;}
 body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.55;min-height:100vh;overflow-x:hidden}
 
 /* ══════════════════════════════
@@ -211,7 +211,7 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
 /* Norm tag */
 .norm-tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--text-3);background:var(--surface-2);border:1px solid var(--border);border-radius:3px;padding:1px 5px}
 /* Anim */
-@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
 .anim{animation:fadeUp .35s cubic-bezier(.25,1,.5,1) both}
 .d1{animation-delay:.04s}.d2{animation-delay:.08s}.d3{animation-delay:.12s}.d4{animation-delay:.16s}
 </style>
