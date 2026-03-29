@@ -241,7 +241,7 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
     <div class="login-right">
       <div class="login-right-title">Acceder a Thruver SOP</div>
       <div class="login-right-sub">Ingresa con tu ID de tecnico y contrasena asignada por Thruver.</div>
-      <div class="lfield"><label class="llabel">ID de Tecnico</label><input class="linput" id="login_id" type="text" placeholder="TEC-0042" autocomplete="username"></div>
+      <div class="lfield"><label class="llabel">Correo electrónico</label><input class="linput" id="login_id" type="email" placeholder="tecnico@thruver.com" autocomplete="email"></div>
       <div class="lfield"><label class="llabel">Contrasena</label><input class="linput" id="login_pw" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
       <button class="lbtn" onclick="doLogin()">Ingresar <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
       <div class="lerror" id="login_err">ID o contrasena incorrectos.</div>
@@ -399,32 +399,28 @@ let CU=null, curTab='home';
 // LOGIN / LOGOUT
 // ═══════════════════════════════════════════════════════════════
 function doLogin(){
-  const id=document.getElementById('login_id').value.trim().toUpperCase();
+  const email=document.getElementById('login_id').value.trim();
   const pw=document.getElementById('login_pw').value;
-  const u=USERS[id];
-  if(!u||u.pw!==pw){
-    const err=document.getElementById('login_err');
-    err.style.display='block';
-    ['login_id','login_pw'].forEach(i=>{const el=document.getElementById(i);el.style.borderColor='var(--red)';});
-    setTimeout(()=>{err.style.display='none';['login_id','login_pw'].forEach(i=>{document.getElementById(i).style.borderColor='';});},3000);
-    return;
-  }
-  CU={...u,id};
-  document.getElementById('screen-login').style.display='none';
-  document.getElementById('app-shell').style.display='block';
-  // Populate user identity
-  ['sb_avatar','top_avatar','mob_avatar'].forEach(i=>{const el=document.getElementById(i);if(el)el.textContent=CU.initials;});
-  ['sb_name','top_name'].forEach(i=>{const el=document.getElementById(i);if(el)el.textContent=CU.name;});
-  document.getElementById('sb_id').textContent=CU.id;
-  initApp();
-  if(window.fbInitTecnico) window.fbInitTecnico(CU.id);
+  const err=document.getElementById('login_err');
+  const btn=document.querySelector('.lbtn');
+  if(!email||!pw){err.style.display='block';setTimeout(()=>err.style.display='none',3000);return;}
+  if(btn){btn.disabled=true;btn.textContent='Verificando…';}
+  firebase.auth().signInWithEmailAndPassword(email,pw)
+    .catch(function(e){
+      err.style.display='block';
+      setTimeout(()=>err.style.display='none',4000);
+      if(btn){btn.disabled=false;btn.innerHTML='Ingresar <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';}
+    });
 }
 function doLogout(){
-  CU=null;
-  document.getElementById('app-shell').style.display='none';
-  document.getElementById('screen-login').style.display='flex';
-  document.getElementById('login_id').value='';
-  document.getElementById('login_pw').value='';
+  firebase.auth().signOut().then(function(){
+    CU=null;
+    if(window.unsubTecnico){window.unsubTecnico();window.unsubTecnico=null;}
+    document.getElementById('app-shell').style.display='none';
+    document.getElementById('screen-login').style.display='flex';
+    document.getElementById('login_id').value='';
+    document.getElementById('login_pw').value='';
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -938,6 +934,7 @@ function showNotif(){
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script>
 (function(){
   const cfg = {
@@ -952,6 +949,35 @@ function showNotif(){
   const db = firebase.firestore();
 
   var unsubTecnico = null;
+
+  // Auth state listener — auto-login si hay sesión activa
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (!user) return;
+    firebase.firestore().collection('usuarios').doc(user.uid).get().then(function(snap) {
+      var data = snap.exists ? snap.data() : {};
+      var tecId = data.tecnicoId || null;
+      // Buscar datos extra en el objeto USERS local si existe
+      var localData = tecId && USERS[tecId] ? USERS[tecId] : {};
+      CU = Object.assign({}, localData, {
+        id: tecId || user.uid,
+        name: data.nombre || localData.name || user.email.split('@')[0],
+        initials: data.initials || (data.nombre ? data.nombre.split(' ').map(function(n){return n[0];}).join('').slice(0,2).toUpperCase() : user.email[0].toUpperCase()),
+        email: user.email
+      });
+      document.getElementById('screen-login').style.display='none';
+      document.getElementById('app-shell').style.display='block';
+      ['sb_avatar','top_avatar','mob_avatar'].forEach(function(i){var el=document.getElementById(i);if(el)el.textContent=CU.initials;});
+      ['sb_name','top_name'].forEach(function(i){var el=document.getElementById(i);if(el)el.textContent=CU.name;});
+      var sbId=document.getElementById('sb_id'); if(sbId) sbId.textContent=CU.id;
+      initApp();
+      if(window.fbInitTecnico && tecId) window.fbInitTecnico(tecId);
+    }).catch(function(e){
+      CU={ id:user.uid, name:user.email.split('@')[0], initials:user.email[0].toUpperCase(), email:user.email };
+      document.getElementById('screen-login').style.display='none';
+      document.getElementById('app-shell').style.display='block';
+      initApp();
+    });
+  });
 
   window.fbInitTecnico = function(tecId) {
     if (unsubTecnico) unsubTecnico();

@@ -1064,8 +1064,8 @@ textarea.finput-m{resize:none;min-height:72px}
       <div class="lr-sub">Ingresa con tus credenciales de operador Thruver.</div>
     </div>
     <div class="lf">
-      <label class="ll-label">ID de Operador</label>
-      <input class="li" id="login_id" type="text" placeholder="OPS-0001" autocomplete="off">
+      <label class="ll-label">Correo electrónico</label>
+      <input class="li" id="login_id" type="email" placeholder="ops@thruver.com" autocomplete="email">
     </div>
     <div class="lf">
       <label class="ll-label">Contraseña</label>
@@ -1076,7 +1076,7 @@ textarea.finput-m{resize:none;min-height:72px}
       Acceder al panel
     </button>
     <div class="lerr" id="login_err">Credenciales incorrectas.</div>
-    <div class="lhint">Demo: OPS-0001 / thruver2026</div>
+    
   </div>
 </div>
 
@@ -2357,30 +2357,30 @@ let ordersSearch = '';
 // LOGIN / LOGOUT
 // ═══════════════════════════════════════════════════════
 function doLogin() {
-  const id = document.getElementById('login_id').value.trim().toUpperCase();
-  const pw = document.getElementById('login_pw').value;
-  const u = OPERATORS[id];
-  if (!u || u.pw !== pw) {
-    const err = document.getElementById('login_err');
-    err.style.display = 'block';
-    setTimeout(() => err.style.display = 'none', 3000);
-    return;
-  }
-  CU = { ...u, id };
-  document.getElementById('screen-login').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('sb_av').textContent = CU.initials;
-  document.getElementById('sb_name').textContent = CU.name;
-  initApp();
-  if(window.fbInitDispatcher) window.fbInitDispatcher();
+  const email = document.getElementById('login_id').value.trim();
+  const pw    = document.getElementById('login_pw').value;
+  const err   = document.getElementById('login_err');
+  const btn   = document.querySelector('.lbtn');
+  if (!email || !pw) { err.style.display='block'; err.textContent='Ingresa correo y contraseña.'; setTimeout(()=>err.style.display='none',3000); return; }
+  if (btn) { btn.disabled=true; btn.textContent='Verificando…'; }
+  firebase.auth().signInWithEmailAndPassword(email, pw)
+    .catch(function(e) {
+      err.style.display='block';
+      err.textContent = e.code==='auth/invalid-credential'||e.code==='auth/wrong-password'||e.code==='auth/user-not-found' ? 'Correo o contraseña incorrectos.' : e.message;
+      setTimeout(()=>err.style.display='none',4000);
+      if (btn) { btn.disabled=false; btn.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Acceder al panel'; }
+    });
 }
 
 function doLogout() {
-  CU = null;
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('screen-login').style.display = 'flex';
-  document.getElementById('login_id').value = '';
-  document.getElementById('login_pw').value = '';
+  firebase.auth().signOut().then(function() {
+    CU = null;
+    if (window.unsubDispatcher) { window.unsubDispatcher(); window.unsubDispatcher=null; }
+    document.getElementById('app').style.display = 'none';
+    document.getElementById('screen-login').style.display = 'flex';
+    document.getElementById('login_id').value = '';
+    document.getElementById('login_pw').value = '';
+  });
 }
 
 document.getElementById('login_pw').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
@@ -5707,6 +5707,7 @@ document.addEventListener('keydown', e => {
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script>
 (function(){
   const cfg = {
@@ -5786,6 +5787,33 @@ document.addEventListener('keydown', e => {
       console.log('[Thruver] Orden creada:', ref.id);
     }).catch(function(e){ console.error('[Thruver] Error creando orden:', e); });
   };
+
+  // Auth state listener
+  firebase.auth().onAuthStateChanged(function(user) {
+    if (!user) return;
+    firebase.firestore().collection('usuarios').doc(user.uid).get().then(function(snap) {
+      var data = snap.exists ? snap.data() : {};
+      if (data.rol && data.rol !== 'dispatcher' && data.rol !== 'admin') {
+        firebase.auth().signOut(); return;
+      }
+      CU = { id: data.operadorId || user.uid, name: data.nombre || user.email.split('@')[0], initials: data.initials || user.email[0].toUpperCase(), email: user.email };
+      document.getElementById('screen-login').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('sb_av').textContent = CU.initials;
+      document.getElementById('sb_name').textContent = CU.name;
+      initApp();
+      if(window.fbInitDispatcher) window.fbInitDispatcher();
+    }).catch(function(e) {
+      // Si no hay documento en Firestore, usar datos básicos del auth
+      CU = { id: user.uid, name: user.email.split('@')[0], initials: user.email[0].toUpperCase(), email: user.email };
+      document.getElementById('screen-login').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      document.getElementById('sb_av').textContent = CU.initials;
+      document.getElementById('sb_name').textContent = CU.name;
+      initApp();
+      if(window.fbInitDispatcher) window.fbInitDispatcher();
+    });
+  });
 
   window.fbAssignOrder = function(orderId, techId, partnerUid, scheduled, notes) {
     var order = ORDERS.find(function(o){ return o.id === orderId; });
