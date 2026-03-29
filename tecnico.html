@@ -389,13 +389,7 @@ const USERS = {
   'TEC-0015':{pw:'carlos2026',name:'Carlos Mendoza',initials:'CM',specs:['Plomeria','Carpinteria'],zona:'Culiacan sur y Navolato',banco:{banco:'Banamex',tipo:'CLABE',clabe:'002320009876543210',tarjeta:'5256 **** **** 4490',titular:'Carlos Mendoza Torres',rfc:'METC850320CD5',saldo_disponible:3200,retirado_mes:1800},
     tools:[{name:'Manometro de agua',ok:true},{name:'Llave stilson',ok:true},{name:'Destapador mecanico',ok:true},{name:'Soplete para cobre',ok:false},{name:'Detector de humedad',ok:false}]},
 };
-const ORDERS=[
-  {id:'HVAC-2026-04812',spec:'HVAC',color:'#0ea5e9',status:'done',address:'Calle Madero 1542, Centro',time:'09:00',problem:'No enfria desde hace 3 dias, ruido al encender',monto:680,score:92,tec:'TEC-0042'},
-  {id:'HVAC-2026-04813',spec:'HVAC',color:'#0ea5e9',status:'active',address:'Blvd. Zapata 890, Las Quintas',time:'11:30',problem:'Mantenimiento preventivo — 2 minisplits Samsung',monto:750,score:null,tec:'TEC-0042'},
-  {id:'ELE-2026-02341',spec:'Electrico',color:'#f59e0b',status:'pending',address:'Av. Obregon 234, Tierra Blanca',time:'14:00',problem:'Breaker principal dispara al conectar AC. Sin luz en cocina',monto:450,score:null,tec:'TEC-0042'},
-  {id:'HVAC-2026-04810',spec:'HVAC',color:'#0ea5e9',status:'done',address:'Privada Gardenias 45, Humaya',time:'Ayer 10:00',problem:'Fuga de refrigerante, presion baja critica',monto:920,score:88,tec:'TEC-0042'},
-  {id:'ELE-2026-02335',spec:'Electrico',color:'#f59e0b',status:'done',address:'Calle Insurgentes 780, Hidalgo',time:'Ayer 15:30',problem:'Corto circuito en tomas de sala',monto:340,score:95,tec:'TEC-0042'},
-];
+const ORDERS=[]; // cargado desde Firestore
 const SPECS={HVAC:{color:'#0ea5e9',sop:'hvac'},Electrico:{color:'#f59e0b',sop:'electrico'},Plomeria:{color:'#16a34a',sop:'plomeria'},Carpinteria:{color:'#c27803',sop:'carpinteria'},Pintura:{color:'#7c3aed',sop:'pintura'},Impermeabilizacion:{color:'#0d9488',sop:'impermeabilizacion'}};
 const TABS={home:'Inicio',ordenes:'Ordenes',sop:'SOP de campo',ingresos:'Ingresos',perfil:'Mi perfil'};
 

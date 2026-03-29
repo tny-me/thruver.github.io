@@ -2190,18 +2190,7 @@ const SPEC_META = {
   Impermeabilizacion:{ color:'#0d9488',bg:'rgba(13,148,136,0.08)',border:'rgba(13,148,136,0.22)', label:'Impermeabilización' },
 };
 
-let ORDERS = [
-  { id:'HVAC-2026-04812', spec:'HVAC', priority:'urgente', address:'Calle Madero 1542, Centro', client:'Ramón Peña', phone:'667 123 4567', problem:'No enfría desde hace 3 días. Ruido al encender.', status:'done', partner:'PRT-0012', tech:'TEC-0042', scheduled:'2026-03-22 09:00', created:'08:12', sla:98 },
-  { id:'HVAC-2026-04813', spec:'HVAC', priority:'normal', address:'Blvd. Zapata 890, Las Quintas', client:'Mariana Solís', phone:'667 234 5678', problem:'Mantenimiento preventivo — 2 minisplits Samsung', status:'active', partner:'PRT-0012', tech:'TEC-0042', scheduled:'2026-03-22 11:30', created:'10:45', sla:85 },
-  { id:'ELE-2026-02341', spec:'Electrico', priority:'urgente', address:'Av. Obregón 234, Tierra Blanca', client:'Héctor Lima', phone:'667 345 6789', problem:'Breaker principal dispara al conectar AC. Sin luz en cocina.', status:'assigned', partner:'PRT-0021', tech:'TEC-0033', scheduled:'2026-03-22 14:00', created:'12:10', sla:72 },
-  { id:'PLO-2026-01122', spec:'Plomeria', priority:'alta', address:'Privada Gardenias 45, Humaya', client:'Elena Castro', phone:'667 456 7890', problem:'Fuga en tubería principal bajo lavabo. Goteo constante.', status:'active', partner:'PRT-0008', tech:'TEC-0015', scheduled:'2026-03-22 10:00', created:'09:30', sla:91 },
-  { id:'ELE-2026-02335', spec:'Electrico', priority:'normal', address:'Calle Insurgentes 780, Hidalgo', client:'Roberto Fierro', phone:'667 567 8901', problem:'Corto circuito en tomas de sala. Olor a quemado.', status:'done', partner:'PRT-0021', tech:'TEC-0033', scheduled:'2026-03-21 15:30', created:'Ayer', sla:100 },
-  { id:'HVAC-2026-04810', spec:'HVAC', priority:'urgente', address:'Privada Gardenias 45, Humaya', client:'Luis Angulo', phone:'667 678 9012', problem:'Fuga de refrigerante, presión baja crítica.', status:'done', partner:'PRT-0012', tech:'TEC-0043', scheduled:'2026-03-21 10:00', created:'Ayer', sla:95 },
-  { id:'PLO-2026-01130', spec:'Plomeria', priority:'normal', address:'Av. Constitución 330, Las Quintas', client:'Carmen Zavala', phone:'667 789 0123', problem:'Presión baja en regadera principal.', status:'pending', partner:null, tech:null, scheduled:null, created:'13:22', sla:null },
-  { id:'ELE-2026-02350', spec:'Electrico', priority:'alta', address:'Blvd. Rolando Arjona 1200, Recursos', client:'Felipe Uribe', phone:'667 890 1234', problem:'Instalación de toma trifásica para taller.', status:'pending', partner:null, tech:null, scheduled:null, created:'13:45', sla:null },
-  { id:'CAR-2026-00412', spec:'Carpinteria', priority:'normal', address:'Fraccionamiento Los Álamos 55, Rincones', client:'Patricia Dueñas', phone:'667 901 2345', problem:'Reparación de puerta principal — marco dañado.', status:'pending', partner:null, tech:null, scheduled:null, created:'14:01', sla:null },
-  { id:'HVAC-2026-04820', spec:'HVAC', priority:'urgente', address:'Calle Cedro 88, Semana Santa', client:'Arturo Meza', phone:'667 012 3456', problem:'Sistema central sin funcionar. Residencia de 4 pisos.', status:'pending', partner:null, tech:null, scheduled:null, created:'14:15', sla:null },
-];
+let ORDERS = []; // datos reales cargados desde Firestore
 
 const ACTIVITY_LOG = [
   { time:'14:15', type:'alerta', event:'Orden urgente recibida', detail:'HVAC-2026-04820 — Sin asignar · Arturo Meza · Calle Cedro 88', actor:'Sistema', folio:'HVAC-2026-04820', color:'#dc2626' },
@@ -2348,132 +2337,7 @@ const CLIENTES = [
   },
 ];
 
-let SOLICITUDES = [
-  {
-    id:'SOL-0001', folio:'TEC-APP-2026-001',
-    submitted:'2026-03-21 14:32', status:'pendiente',
-    // Step 1 — Datos personales
-    name:'Andrés Valenzuela', phone:'667 234 9900', email:'andres.v@gmail.com', ciudad:'Culiacán, Sin.',
-    // Step 2 — Especialidad + herramientas
-    specs:['hvac','electrico'],
-    tools:{
-      hvac:[
-        {id:'t_multimetro',   name:'Multímetro digital',              required:true,  tiene:true  },
-        {id:'t_pinza',        name:'Pinza amperimétrica',              required:true,  tiene:true  },
-        {id:'t_manifold',     name:'Manifold con manómetros',          required:true,  tiene:true  },
-        {id:'t_termometro',   name:'Termómetro infrarrojo',            required:true,  tiene:true  },
-        {id:'t_detector_gas', name:'Detector electrónico de fugas',    required:false, tiene:false },
-        {id:'t_bomba_vacio',  name:'Bomba de vacío',                   required:false, tiene:true  },
-      ],
-      electrico:[
-        {id:'t_multimetro_e', name:'Multímetro digital',               required:true,  tiene:true  },
-        {id:'t_pinza_e',      name:'Pinza amperimétrica',              required:true,  tiene:true  },
-        {id:'t_guantes_die',  name:'Guantes dieléctricos clase 0',     required:true,  tiene:true  },
-        {id:'t_herr_die',     name:'Herramienta con aislamiento',      required:true,  tiene:false },
-        {id:'t_detector_v',   name:'Detector de voltaje sin contacto', required:false, tiene:true  },
-      ],
-    },
-    tools_score:85,
-    // Step 3 — Experiencia, disponibilidad y referencias
-    anos_experiencia:'6-10 años',
-    disponibilidad:['lunes','martes','miércoles','jueves','viernes'],
-    zona_pref:'Culiacán Centro y Norte',
-    vehiculo:true,
-    ref1:{ nombre:'Carlos Medina', relacion:'Ex-empleador', telefono:'667 111 2222', tiempo:'4 años' },
-    ref2:{ nombre:'Ing. Roberto Soto', relacion:'Cliente frecuente', telefono:'667 333 4444', tiempo:'2 años' },
-    // Step 4 — Sobre tu trabajo
-    servicios_frecuentes:'Mantenimiento preventivo de minisplits, instalación de circuitos dedicados para AC, recarga de refrigerante R-32 y R-410A.',
-    situacion_laboral:'Independiente',
-    como_entero:'Recomendación de un técnico Thruver',
-    // Dispatcher fields
-    notas_revisor:'', rechazado_razon:'', partner_asignado:null,
-  },
-  {
-    id:'SOL-0002', folio:'TEC-APP-2026-002',
-    submitted:'2026-03-22 09:15', status:'pendiente',
-    name:'Fernanda Gastélum', phone:'667 890 4412', email:'fgastelum@hotmail.com', ciudad:'Culiacán, Sin.',
-    specs:['plomeria'],
-    tools:{
-      plomeria:[
-        {id:'t_manometro_p',  name:'Manómetro de agua',               required:true,  tiene:true  },
-        {id:'t_llave_st',     name:'Llave stilson / perico',          required:true,  tiene:true  },
-        {id:'t_destapador',   name:'Destapador mecánico (espiral)',    required:true,  tiene:false },
-        {id:'t_soplete',      name:'Soplete para soldadura de cobre',  required:false, tiene:false },
-        {id:'t_detector_h',   name:'Detector electrónico de humedad', required:false, tiene:false },
-      ],
-    },
-    tools_score:60,
-    anos_experiencia:'3-5 años',
-    disponibilidad:['lunes','miércoles','viernes','sábado'],
-    zona_pref:'Las Quintas / Humaya',
-    vehiculo:true,
-    ref1:{ nombre:'María López', relacion:'Cliente', telefono:'667 555 6666', tiempo:'1 año' },
-    ref2:{ nombre:'', relacion:'', telefono:'', tiempo:'' },
-    servicios_frecuentes:'Reparación de fugas, destapes, instalación de tinacos y calentadores.',
-    situacion_laboral:'Independiente',
-    como_entero:'Instagram de Thruver',
-    notas_revisor:'', rechazado_razon:'', partner_asignado:null,
-  },
-  {
-    id:'SOL-0003', folio:'TEC-APP-2026-003',
-    submitted:'2026-03-20 11:48', status:'rechazado',
-    name:'Marco Beltrán', phone:'667 112 3355', email:'marco.beltran@gmail.com', ciudad:'Culiacán, Sin.',
-    specs:['electrico'],
-    tools:{
-      electrico:[
-        {id:'t_multimetro_e', name:'Multímetro digital',               required:true,  tiene:false },
-        {id:'t_pinza_e',      name:'Pinza amperimétrica',              required:true,  tiene:false },
-        {id:'t_guantes_die',  name:'Guantes dieléctricos clase 0',     required:true,  tiene:false },
-        {id:'t_herr_die',     name:'Herramienta con aislamiento',      required:true,  tiene:false },
-      ],
-    },
-    tools_score:0,
-    anos_experiencia:'Menos de 1 año',
-    disponibilidad:['sábado','domingo'],
-    zona_pref:'Tierra Blanca',
-    vehiculo:false,
-    ref1:{ nombre:'', relacion:'', telefono:'', tiempo:'' },
-    ref2:{ nombre:'', relacion:'', telefono:'', tiempo:'' },
-    servicios_frecuentes:'Cambio de contactos y apagadores.',
-    situacion_laboral:'Empleado en empresa de construcción',
-    como_entero:'Facebook',
-    notas_revisor:'Perfil muy junior. Sin herramientas básicas. Recontactar en 1 año.',
-    rechazado_razon:'Experiencia insuficiente y sin herramientas requeridas. Se recomienda repostular con más experiencia.',
-    partner_asignado:null,
-  },
-  {
-    id:'SOL-0004', folio:'TEC-APP-2026-004',
-    submitted:'2026-03-22 13:40', status:'pendiente',
-    name:'Luis Alberto Osuna', phone:'667 445 8821', email:'losuna@icloud.com', ciudad:'Culiacán, Sin.',
-    specs:['carpinteria','pintura'],
-    tools:{
-      carpinteria:[
-        {id:'t_taladro',      name:'Taladro / atornillador',           required:true,  tiene:true  },
-        {id:'t_sierra_c',     name:'Sierra (manual o eléctrica)',      required:true,  tiene:true  },
-        {id:'t_nivel',        name:'Nivel de burbuja o láser',         required:true,  tiene:true  },
-        {id:'t_lija',         name:'Lijadora o papel de lija',         required:false, tiene:true  },
-        {id:'t_router',       name:'Router / fresadora',               required:false, tiene:true  },
-      ],
-      pintura:[
-        {id:'t_rodillos',     name:'Rodillos y brochas',               required:true,  tiene:true  },
-        {id:'t_escalera',     name:'Escalera / andamio',               required:true,  tiene:true  },
-        {id:'t_lija_p',       name:'Lija y espátula',                  required:true,  tiene:true  },
-        {id:'t_compresor_p',  name:'Compresor con pistola de pintura', required:false, tiene:true  },
-      ],
-    },
-    tools_score:100,
-    anos_experiencia:'Más de 10 años',
-    disponibilidad:['lunes','martes','miércoles','jueves','viernes','sábado'],
-    zona_pref:'Las Quintas / Tres Ríos / Jardines',
-    vehiculo:true,
-    ref1:{ nombre:'Arq. Patricia Dueñas', relacion:'Arquitecta cliente', telefono:'667 700 8800', tiempo:'5 años' },
-    ref2:{ nombre:'Constructora Noroeste SA', relacion:'Ex-empleador', telefono:'667 900 1100', tiempo:'8 años' },
-    servicios_frecuentes:'Muebles de baño y cocina en MDF, closets a medida, pintura de interiores de lujo, acabados en residencias.',
-    situacion_laboral:'Independiente',
-    como_entero:'Recomendación directa',
-    notas_revisor:'', rechazado_razon:'', partner_asignado:null,
-  },
-];
+let SOLICITUDES = [];
 
 
 
