@@ -5829,6 +5829,7 @@ document.addEventListener('keydown', e => {
       if (!fcmToken) { console.warn('[Thruver] Tecnico sin fcmToken:', tecnicoId); return; }
       fetch(PUSH_PROXY_URL, {
         method: 'POST',
+        mode: 'no-cors',
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({ token: fcmToken, title: title, body: body })
       }).then(function() {
