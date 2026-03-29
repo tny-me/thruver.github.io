@@ -5732,7 +5732,7 @@ document.addEventListener('keydown', e => {
     return {
       id: d.folio || snap.id,
       _docId: snap.id,
-      spec: d.servicio || 'HVAC',
+      spec: (function(s){ var m={'electrico':'Electrico','plomeria':'Plomeria','hvac':'HVAC','pintura':'Pintura','carpinteria':'Carpinteria','techo':'Impermeabilizacion'}; return m[s] || s || 'HVAC'; })(d.servicio),
       color: SPEC_COLORS[d.servicio] || '#888',
       priority: d.urgencia === 'urgente' ? 'urgente' : 'normal',
       status: ESTADO_MAP[d.estado] || 'pending',
