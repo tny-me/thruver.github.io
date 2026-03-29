@@ -117,16 +117,15 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
 /* ── MOBILE overrides ── */
 .mobile-topbar{display:none;position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;align-items:center;justify-content:space-between}
 .mobile-menu-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface-2);cursor:pointer}
-.mobile-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:var(--surface);border-top:1px solid var(--border);display:none;padding:4px 8px calc(env(safe-area-inset-bottom)+4px);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.mobile-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.95);border-top:1px solid var(--border);display:none;padding:6px 0 calc(env(safe-area-inset-bottom)+6px);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .mnav-items{display:flex}
-.mnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:6px 4px;border-radius:10px;transition:background .15s;position:relative;user-select:none}
-.mnav-item:active{opacity:.7;transform:scale(.95)}
-.mnav-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:all .2s;position:relative}
-.mnav-icon svg{stroke:var(--text-3);transition:stroke .2s}
-.mnav-label{font-size:9px;font-weight:600;color:var(--text-3);letter-spacing:.02em;transition:color .2s}
-.mnav-item.active .mnav-icon{background:rgba(29,107,243,.1)}
+.mnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer;padding:8px 4px;border-radius:0;transition:none;position:relative;user-select:none;min-height:56px;justify-content:center}
+.mnav-item:active .mnav-icon{transform:scale(.88)}
+.mnav-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:10px;transition:all .18s cubic-bezier(.25,1,.5,1);position:relative}
+.mnav-icon svg{stroke:var(--text-3);transition:stroke .18s;width:24px;height:24px}
+.mnav-label{display:none}
+.mnav-item.active .mnav-icon{background:rgba(29,107,243,.12);transform:scale(1.08)}
 .mnav-item.active .mnav-icon svg{stroke:var(--blue)}
-.mnav-item.active .mnav-label{color:var(--blue);font-weight:700}
 /* Sidebar overlay on mobile */
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
 
@@ -138,14 +137,17 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
   .topbar{display:none}
   .mobile-topbar{display:flex}
   .mobile-nav{display:block}
-  .content-area{padding:16px 16px calc(env(safe-area-inset-bottom)+76px)}
+  .content-area{padding:16px 16px calc(env(safe-area-inset-bottom)+72px)}
   .login-split{grid-template-columns:1fr;min-height:auto}
   .login-left{display:none}
   .login-right{padding:40px 28px;border-radius:0}
   #screen-login{padding:0;align-items:stretch;background:var(--canvas)}
   .login-split{border-radius:0;border:none;box-shadow:none;min-height:100vh}
   .ord-address{font-size:15px}
-  .grid-4{grid-template-columns:1fr 1fr}
+  .grid-2,.grid-3,.grid-4{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi{padding:12px}
+  .card{border-radius:12px}
+  .ord-card{border-radius:12px}
 }
 
 /* ══════════════════════════════
@@ -1058,10 +1060,29 @@ function showNotif(){
     });
   });
 
+  // ── NOTIFICACIONES PUSH ──────────────────────────────────────
+  var notifPermission = 'default';
+  function requestNotifPermission() {
+    if (!('Notification' in window)) return;
+    Notification.requestPermission().then(function(p){ notifPermission = p; });
+  }
+  function pushNotif(title, body, tag) {
+    if (!('Notification' in window)) return;
+    if (Notification.permission !== 'granted') { requestNotifPermission(); return; }
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ type:'SHOW_NOTIF', title:title, body:body, tag:tag||'orden' });
+    } else {
+      new Notification(title, { body:body, icon:'/Favicon.png', tag:tag||'orden', badge:'/Favicon.png' });
+    }
+  }
+
   window.fbInitTecnico = function(tecId) {
     if (unsubTecnico) unsubTecnico();
+    requestNotifPermission();
     var SPEC_COLORS = {HVAC:'#0ea5e9',Electrico:'#f59e0b',Plomeria:'#16a34a',Carpinteria:'#c27803',Pintura:'#7c3aed',Impermeabilizacion:'#0d9488'};
     var SM = {nueva:'pending',asignada:'pending',activo:'active',completado:'done',cancelado:'done'};
+    var isFirstLoad = true;
+    var knownIds = {};
     unsubTecnico = db.collection('solicitudes').where('tecnicoId','==',tecId)
       .onSnapshot(function(snap){
         var fromDb = snap.docs.map(function(s){
@@ -1070,8 +1091,15 @@ function showNotif(){
           var ts = d.creadoEn ? d.creadoEn.toDate() : now;
           var isToday = ts.toDateString() === now.toDateString();
           var t = ts.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+          // Detectar ordenes nuevas para notificacion
+          if (!isFirstLoad && !knownIds[s.id]) {
+            var addr = d.cliente&&d.cliente.direccion ? d.cliente.direccion : 'Nueva dirección';
+            pushNotif('¡Nueva orden asignada!', (d.servicio||'Servicio') + ' · ' + addr, s.id);
+          }
+          knownIds[s.id] = true;
           return { id: d.folio||s.id, _docId: s.id, spec: d.servicio||'HVAC', color: SPEC_COLORS[d.servicio]||'#888', status: SM[d.estado]||'pending', address: d.cliente&&d.cliente.direccion ? d.cliente.direccion+(d.cliente.colonia?', '+d.cliente.colonia:'') : '—', time: d.horario||(isToday?t:'Ayer '+t), problem: d.descripcion||'', monto: d.monto||0, score: d.calificacion||null, tec: d.tecnicoId||'' };
         });
+        isFirstLoad = false;
         ORDERS.splice(0, ORDERS.length);
         fromDb.forEach(function(o){ ORDERS.push(o); });
         if (typeof renderHome === 'function') renderHome();

@@ -17,6 +17,24 @@ self.addEventListener('activate', function(e) {
   self.clients.claim();
 });
 
+self.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'SHOW_NOTIF') {
+    self.registration.showNotification(e.data.title, {
+      body: e.data.body,
+      icon: '/Favicon.png',
+      badge: '/Favicon.png',
+      tag: e.data.tag || 'orden',
+      vibrate: [200, 100, 200],
+      requireInteraction: true
+    });
+  }
+});
+
+self.addEventListener('notificationclick', function(e) {
+  e.notification.close();
+  e.waitUntil(clients.openWindow('/tecnico.html'));
+});
+
 self.addEventListener('fetch', function(e) {
   /* Solo cachear GET del mismo origen */
   if (e.request.method !== 'GET' || !e.request.url.startsWith(self.location.origin)) return;
