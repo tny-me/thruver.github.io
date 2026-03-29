@@ -1018,6 +1018,7 @@ function showNotif(){
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
 <script>
 (function(){
   const cfg = {
@@ -1030,8 +1031,35 @@ function showNotif(){
   };
   if (!firebase.apps.length) firebase.initializeApp(cfg);
   const db = firebase.firestore();
+  const messaging = firebase.messaging();
 
   var unsubTecnico = null;
+
+  // ── FCM TOKEN — registra el dispositivo para recibir push en background ──
+  function initFCMToken(uid) {
+    if (!('Notification' in window)) return;
+    Notification.requestPermission().then(function(permission) {
+      if (permission !== 'granted') return;
+      messaging.getToken({ vapidKey: 'BBJuBYAzZbLyOiQpJGhAdErMAbVnWpQdMhgkK056XTcYgtYcKMwza6tuLXaiYhhufRDYcj-B33E_9V0FM7mlf5E' })
+        .then(function(token) {
+          if (token) {
+            db.collection('usuarios').doc(uid).update({ fcmToken: token });
+            console.log('[Thruver] FCM token registrado');
+          }
+        })
+        .catch(function(e) { console.warn('[Thruver] FCM token error:', e.message); });
+    });
+  }
+  // Notificación en foreground
+  messaging.onMessage(function(payload) {
+    var n = payload.notification || {};
+    var t = document.createElement('div');
+    t.style.cssText = 'position:fixed;top:72px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;border-radius:14px;padding:14px 20px;font-size:13px;font-weight:700;z-index:700;box-shadow:0 6px 24px rgba(0,0,0,.2);white-space:nowrap;animation:fadeUp .25s ease;font-family:DM Sans,sans-serif;max-width:90vw;text-align:center;cursor:pointer';
+    t.innerHTML = '<div style="font-size:11px;opacity:.7;margin-bottom:2px">NUEVA ORDEN ASIGNADA</div>' + (n.body || '');
+    t.onclick = function() { t.remove(); switchTab('ordenes'); };
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 7000);
+  });
 
   // Auth state listener — auto-login si hay sesión activa
   firebase.auth().onAuthStateChanged(function(user) {
@@ -1052,6 +1080,7 @@ function showNotif(){
       ['sb_avatar','top_avatar','mob_avatar'].forEach(function(i){var el=document.getElementById(i);if(el)el.textContent=CU.initials;});
       ['sb_name','top_name'].forEach(function(i){var el=document.getElementById(i);if(el)el.textContent=CU.name;});
       var sbId=document.getElementById('sb_id'); if(sbId) sbId.textContent=CU.id;
+      initFCMToken(user.uid);
       initApp();
       if(window.fbInitTecnico && tecId) window.fbInitTecnico(tecId);
     }).catch(function(e){

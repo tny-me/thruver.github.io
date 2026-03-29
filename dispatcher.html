@@ -5818,6 +5818,27 @@ document.addEventListener('keydown', e => {
     });
   });
 
+  // ── PUSH NOTIFICATIONS via Google Apps Script proxy ──────────
+  var PUSH_PROXY_URL = 'REEMPLAZAR_CON_URL_DE_APPS_SCRIPT';
+
+  window.sendPushToTec = function(tecnicoId, title, body) {
+    if (!PUSH_PROXY_URL || PUSH_PROXY_URL.startsWith('REEMPLAZAR')) return;
+    db.collection('usuarios').where('tecnicoId', '==', tecnicoId).get().then(function(snap) {
+      if (snap.empty) return;
+      var fcmToken = snap.docs[0].data().fcmToken;
+      if (!fcmToken) { console.warn('[Thruver] Tecnico sin fcmToken:', tecnicoId); return; }
+      fetch(PUSH_PROXY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify({ token: fcmToken, title: title, body: body })
+      }).then(function() {
+        console.log('[Thruver] Push enviado a', tecnicoId);
+      }).catch(function(e) {
+        console.warn('[Thruver] Push error:', e.message);
+      });
+    });
+  };
+
   window.verUbicacionTec = function(tecId) {
     db.collection('ubicaciones').doc(tecId).get().then(function(snap) {
       if (!snap.exists) { alert('El técnico aún no ha compartido su ubicación.'); return; }
@@ -5837,7 +5858,14 @@ document.addEventListener('keydown', e => {
       partnerUid: partnerUid || null,
       programado: scheduled || null,
       notas: notes || ''
-    }).then(function(){ console.log('[Thruver] Orden asignada:', orderId); })
+    }).then(function(){
+      console.log('[Thruver] Orden asignada:', orderId);
+      if (techId && window.sendPushToTec) {
+        var spec = order.spec || 'Servicio';
+        var addr = order.address || '';
+        window.sendPushToTec(techId, '¡Nueva orden asignada!', spec + ' · ' + addr.split(',')[0]);
+      }
+    })
       .catch(function(e){ console.error('[Thruver] Error asignando:', e); });
   };
 })();
