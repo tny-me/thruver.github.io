@@ -1191,6 +1191,7 @@ function rSucc(c){
   const MES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   const fd=S.fecha?`${S.fecha.d} de ${MES[S.fecha.m]}`:'pronto';
   const folio='FIX-'+Math.random().toString(36).substr(2,6).toUpperCase();
+  if(window.fbSaveSolicitud) window.fbSaveSolicitud(S, folio);
   c.innerHTML=`
     <div class="success-wrap">
       <div class="success-ring"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1776,6 +1777,54 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
   </button>
 </div>
+
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCJlo2i_MsotnrCJ9VnnXsZidGKospvw2k",
+    authDomain: "thruver-3de75.firebaseapp.com",
+    projectId: "thruver-3de75",
+    storageBucket: "thruver-3de75.firebasestorage.app",
+    messagingSenderId: "31613785682",
+    appId: "1:31613785682:web:10158e532742050689318b"
+  };
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+window.fbSaveSolicitud = async function(S, folio) {
+  try {
+    const ref = await addDoc(collection(db, 'solicitudes'), {
+      folio,
+      estado: 'nueva',
+      origen: 'web',
+      creadoEn: serverTimestamp(),
+      servicio: S.svc || '',
+      descripcion: S.desc || '',
+      urgencia: S.urgencia || 'normal',
+      fecha: S.fecha ? String(S.fecha.d) + '/' + String((S.fecha.m||0)+1) + '/' + String(S.fecha.y) : null,
+      horario: S.horario || null,
+      cliente: {
+        nombre: S.nombre || '',
+        telefono: S.telefono || '',
+        direccion: S.direccion || '',
+        colonia: S.colonia || '',
+        notas: S.notas || ''
+      },
+      tecnicoId: null,
+      partnerUid: null,
+      monto: null,
+      calificacion: null
+    });
+    console.log('[Thruver] Solicitud guardada en Firestore:', ref.id, folio);
+  } catch(e) {
+    console.error('[Thruver] Error guardando solicitud:', e);
+  }
+};
+</script>
 
 </body>
 </html>

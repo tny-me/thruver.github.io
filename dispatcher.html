@@ -2508,6 +2508,7 @@ function doLogin() {
   document.getElementById('sb_av').textContent = CU.initials;
   document.getElementById('sb_name').textContent = CU.name;
   initApp();
+  if(window.fbInitDispatcher) window.fbInitDispatcher();
 }
 
 function doLogout() {
@@ -3144,6 +3145,7 @@ function doAssign() {
     actor: CU?.id || 'OPS', folio: ORDERS[idx].id, color:'#f59e0b'
   });
 
+  if(window.fbAssignOrder) window.fbAssignOrder(ORDERS[idx].id, selectedTech, isPartnerMode ? selectedPartner : null, `${date} ${time}`, notes);
   clearSelection();
   renderOrdersTable();
   if (currentPage === 'cola') { renderOrderCards(); renderColaKPIs(); }
@@ -3909,6 +3911,7 @@ function createOrder() {
     sla: null
   };
   ORDERS.unshift(newOrder);
+  if(window.fbCreateOrder) window.fbCreateOrder(newOrder);
   ACTIVITY_LOG.unshift({
     time: now.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'}),
     type:'asignacion', event:'Orden creada', detail:`${id} — ${spec} · ${client}`,
@@ -5837,5 +5840,128 @@ document.addEventListener('keydown', e => {
   if (e.key === 'n' && e.metaKey) { e.preventDefault(); openNewOrderModal(); }
 });
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import {
+  getFirestore, collection, addDoc, updateDoc, doc,
+  onSnapshot, orderBy, query, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCJlo2i_MsotnrCJ9VnnXsZidGKospvw2k",
+    authDomain: "thruver-3de75.firebaseapp.com",
+    projectId: "thruver-3de75",
+    storageBucket: "thruver-3de75.firebasestorage.app",
+    messagingSenderId: "31613785682",
+    appId: "1:31613785682:web:10158e532742050689318b"
+  };
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const SPEC_COLORS = {
+  HVAC:'#0ea5e9', Electrico:'#f59e0b', Plomeria:'#16a34a',
+  Carpinteria:'#c27803', Pintura:'#7c3aed', Impermeabilizacion:'#0d9488'
+};
+const ESTADO_MAP = {
+  nueva:'pending', asignada:'assigned', activo:'active',
+  completado:'done', cancelado:'done'
+};
+
+function mapDoc(snap) {
+  const d = snap.data();
+  const now = new Date();
+  const ts = d.creadoEn?.toDate ? d.creadoEn.toDate() : now;
+  const isToday = ts.toDateString() === now.toDateString();
+  const timeStr = ts.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  return {
+    id: d.folio || snap.id,
+    _docId: snap.id,
+    spec: d.servicio || 'HVAC',
+    color: SPEC_COLORS[d.servicio] || '#888',
+    priority: d.urgencia === 'urgente' ? 'urgente' : 'normal',
+    status: ESTADO_MAP[d.estado] || 'pending',
+    address: d.cliente?.direccion
+      ? (d.cliente.direccion + (d.cliente.colonia ? ', ' + d.cliente.colonia : ''))
+      : '—',
+    client: d.cliente?.nombre || '—',
+    phone: d.cliente?.telefono || '',
+    problem: d.descripcion || '',
+    created: isToday ? timeStr : 'Ayer ' + timeStr,
+    scheduled: d.fecha ? (d.fecha + (d.horario ? ' ' + d.horario : '')) : null,
+    tech: d.tecnicoId || null,
+    partner: d.partnerUid || null,
+    monto: d.monto || null,
+    sla: null,
+    notes: d.notas || ''
+  };
+}
+
+let unsub = null;
+
+window.fbInitDispatcher = function() {
+  if (unsub) unsub();
+  const q = query(collection(db, 'solicitudes'), orderBy('creadoEn', 'desc'));
+  unsub = onSnapshot(q, (snap) => {
+    const fromFirestore = snap.docs.map(mapDoc);
+    const fsIds = new Set(fromFirestore.map(o => o.id));
+    // Keep local-only orders (created before Firebase, without _docId)
+    const localOnly = ORDERS.filter(o => !o._docId && !fsIds.has(o.id));
+    ORDERS.splice(0, ORDERS.length, ...fromFirestore, ...localOnly);
+    if (typeof updateBadges === 'function') updateBadges();
+    if (typeof renderCentro === 'function') renderCentro();
+    if (typeof renderOrdersTable === 'function') renderOrdersTable();
+    if (typeof renderOrderCards === 'function') renderOrderCards();
+    if (typeof renderColaKPIs === 'function') renderColaKPIs();
+  }, (err) => console.error('[Thruver] Firestore error:', err));
+};
+
+window.fbCreateOrder = async function(order) {
+  try {
+    const ref = await addDoc(collection(db, 'solicitudes'), {
+      folio: order.id,
+      estado: 'nueva',
+      origen: 'dispatcher',
+      creadoEn: serverTimestamp(),
+      servicio: order.spec || '',
+      urgencia: order.priority || 'normal',
+      descripcion: order.problem || '',
+      cliente: {
+        nombre: order.client || '',
+        telefono: order.phone || '',
+        direccion: order.address || '',
+        colonia: '',
+        notas: ''
+      },
+      tecnicoId: null,
+      partnerUid: null,
+      monto: null,
+      calificacion: null
+    });
+    const idx = ORDERS.findIndex(o => o.id === order.id);
+    if (idx >= 0) ORDERS[idx]._docId = ref.id;
+    console.log('[Thruver] Orden creada en Firestore:', ref.id);
+  } catch(e) { console.error('[Thruver] Error creando orden:', e); }
+};
+
+window.fbAssignOrder = async function(orderId, techId, partnerUid, scheduled, notes) {
+  const order = ORDERS.find(o => o.id === orderId);
+  if (!order?._docId) {
+    console.warn('[Thruver] Sin docId para asignación:', orderId);
+    return;
+  }
+  try {
+    await updateDoc(doc(db, 'solicitudes', order._docId), {
+      estado: 'asignada',
+      tecnicoId: techId || null,
+      partnerUid: partnerUid || null,
+      programado: scheduled || null,
+      notas: notes || ''
+    });
+    console.log('[Thruver] Orden asignada en Firestore:', orderId, techId);
+  } catch(e) { console.error('[Thruver] Error asignando orden:', e); }
+};
+</script>
+
 </body>
 </html>

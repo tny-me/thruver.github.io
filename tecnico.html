@@ -423,6 +423,7 @@ function doLogin(){
   ['sb_name','top_name'].forEach(i=>{const el=document.getElementById(i);if(el)el.textContent=CU.name;});
   document.getElementById('sb_id').textContent=CU.id;
   initApp();
+  if(window.fbInitTecnico) window.fbInitTecnico(CU.id);
 }
 function doLogout(){
   CU=null;
@@ -597,7 +598,8 @@ function openOrder(id){
         <div class="card-sm" style="text-align:center"><div style="font-size:14px;font-weight:600;color:${o.score?'var(--amber)':'var(--text-3)'}">${o.score||'—'}</div><div style="font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px">Score</div></div>
       </div>
       ${o.status!=='done'
-        ? `<button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:8px" onclick="launchSOP('${o.id}')">Abrir SOP para esta orden →</button>`
+        ? `<button class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:8px" onclick="launchSOP('${o.id}')">Abrir SOP para esta orden →</button>
+      <button class="btn btn-ghost" style="width:100%;justify-content:center;margin-bottom:8px;border-color:var(--green);color:var(--green)" onclick="(function(id){const sc=prompt('Score de calidad (0-100):');if(sc===null)return;if(window.fbCompleteOrder){window.fbCompleteOrder(id,parseInt(sc)||null).then(()=>{document.querySelectorAll('[style*=position\\:fixed]').forEach(e=>e.remove())});}})('${o.id}')">✓ Completar esta orden</button>`
         : `<div style="background:var(--green-bg);border:1px solid #bbf7d0;border-radius:var(--rs);padding:10px;text-align:center;font-size:13px;color:var(--green);font-weight:600;margin-bottom:8px">✓ Orden cerrada · Score ${o.score}</div>`}
       <button class="btn btn-ghost" style="width:100%;justify-content:center" onclick="this.closest('[style*=fixed]').remove()">Cerrar</button>
     </div>`;
@@ -939,5 +941,93 @@ function showNotif(){
   setTimeout(()=>s.remove(),5000);
 }
 </script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+import {
+  getFirestore, collection, query, where,
+  onSnapshot, updateDoc, doc, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCJlo2i_MsotnrCJ9VnnXsZidGKospvw2k",
+    authDomain: "thruver-3de75.firebaseapp.com",
+    projectId: "thruver-3de75",
+    storageBucket: "thruver-3de75.firebasestorage.app",
+    messagingSenderId: "31613785682",
+    appId: "1:31613785682:web:10158e532742050689318b"
+  };
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const SPEC_COLORS = {
+  HVAC:'#0ea5e9', Electrico:'#f59e0b', Plomeria:'#16a34a',
+  Carpinteria:'#c27803', Pintura:'#7c3aed', Impermeabilizacion:'#0d9488'
+};
+
+function mapTecDoc(snap) {
+  const d = snap.data();
+  const now = new Date();
+  const ts = d.creadoEn?.toDate ? d.creadoEn.toDate() : now;
+  const isToday = ts.toDateString() === now.toDateString();
+  const timeStr = ts.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+  const statusMap = {
+    nueva:'pending', asignada:'pending', activo:'active',
+    completado:'done', cancelado:'done'
+  };
+  return {
+    id: d.folio || snap.id,
+    _docId: snap.id,
+    spec: d.servicio || 'HVAC',
+    color: SPEC_COLORS[d.servicio] || '#888',
+    status: statusMap[d.estado] || 'pending',
+    address: d.cliente?.direccion
+      ? (d.cliente.direccion + (d.cliente.colonia ? ', ' + d.cliente.colonia : ''))
+      : '—',
+    time: d.horario || (isToday ? timeStr : 'Ayer ' + timeStr),
+    problem: d.descripcion || '',
+    monto: d.monto || 0,
+    score: d.calificacion || null,
+    tec: d.tecnicoId || ''
+  };
+}
+
+let unsubTec = null;
+
+window.fbInitTecnico = function(tecId) {
+  if (unsubTec) unsubTec();
+  const q = query(collection(db, 'solicitudes'), where('tecnicoId', '==', tecId));
+  unsubTec = onSnapshot(q, (snap) => {
+    const fromDb = snap.docs.map(mapTecDoc);
+    ORDERS.splice(0, ORDERS.length, ...fromDb);
+    if (typeof renderHome === 'function') renderHome();
+    if (typeof renderOrdenes === 'function') renderOrdenes();
+    if (typeof renderSOP === 'function') renderSOP();
+    if (typeof renderIngresos === 'function') renderIngresos();
+  }, (err) => console.error('[Thruver] Firestore tec error:', err));
+};
+
+window.fbCompleteOrder = async function(orderId, score) {
+  const order = ORDERS.find(o => o.id === orderId);
+  if (!order?._docId) {
+    console.warn('[Thruver] Sin docId para completar:', orderId);
+    return;
+  }
+  try {
+    await updateDoc(doc(db, 'solicitudes', order._docId), {
+      estado: 'completado',
+      calificacion: score != null ? Number(score) : null,
+      completadoEn: serverTimestamp()
+    });
+    order.status = 'done';
+    order.score = score;
+    if (typeof renderHome === 'function') renderHome();
+    if (typeof renderOrdenes === 'function') renderOrdenes();
+    if (typeof renderSOP === 'function') renderSOP();
+    console.log('[Thruver] Orden completada:', orderId);
+  } catch(e) { console.error('[Thruver] Error completando orden:', e); }
+};
+</script>
+
 </body>
 </html>
