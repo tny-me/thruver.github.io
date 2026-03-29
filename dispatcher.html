@@ -5819,7 +5819,7 @@ document.addEventListener('keydown', e => {
   });
 
   // ── PUSH NOTIFICATIONS via Google Apps Script proxy ──────────
-  var PUSH_PROXY_URL = 'REEMPLAZAR_CON_URL_DE_APPS_SCRIPT';
+  var PUSH_PROXY_URL = 'https://script.google.com/macros/s/AKfycbxSAB7L4hkV364Hwq6AQN30O2VsuWlo7gMe4ARmtrW8U3816TI_gzS7jmaJP5pywylt/exec';
 
   window.sendPushToTec = function(tecnicoId, title, body) {
     if (!PUSH_PROXY_URL || PUSH_PROXY_URL.startsWith('REEMPLAZAR')) return;
