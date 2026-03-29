@@ -145,9 +145,10 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
   .login-split{border-radius:0;border:none;box-shadow:none;min-height:100vh}
   .ord-address{font-size:15px}
   .grid-2,.grid-3,.grid-4{grid-template-columns:1fr 1fr;gap:8px}
-  .kpi{padding:12px}
-  .card{border-radius:12px}
-  .ord-card{border-radius:12px}
+  .kpi{padding:12px;border-radius:12px}
+  .card{border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06),0 0 0 1px rgba(0,0,0,.05)}
+  .card-sm{border-radius:10px}
+  .ord-card{border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06),0 0 0 1px rgba(0,0,0,.05)}
 }
 
 /* ══════════════════════════════
@@ -587,24 +588,25 @@ function ordCardHTML(o, full){
   const smap={done:'chip-done',active:'chip-active',pending:'chip-pending'};
   const slbl={done:'Completada',active:'En curso',pending:'Pendiente'};
   const sp=SPECS[o.spec]||{color:'#888'};
-  return `<div class="ord-card" onclick="openOrder('${o.id}')" style="padding:0;overflow:hidden;display:flex;gap:0;active:scale(.98)">
-    <div style="width:4px;flex-shrink:0;background:${sp.color};border-radius:var(--r) 0 0 var(--r)"></div>
-    <div style="flex:1;padding:14px 14px 14px 12px">
-      <div class="ord-spec-row">
-        <div class="ord-spec-dot"><span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:${sp.color}">${o.spec}</span></div>
-        <span class="chip ${smap[o.status]}">${slbl[o.status]}</span>
+  return `<div class="ord-card" onclick="openOrder('${o.id}')" style="border-left:4px solid ${sp.color};border-radius:12px">
+    <div style="display:flex;align-items:center;gap:0">
+      <div style="flex:1;padding:14px 10px 14px 12px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:${sp.color}">${o.spec}</span>
+          <span class="chip ${smap[o.status]}">${slbl[o.status]}</span>
+        </div>
+        <div class="ord-address" style="font-size:15px;font-weight:700;margin-bottom:6px;line-height:1.25">${o.address}</div>
+        <div class="ord-meta">
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span class="ord-meta-mono">${o.time}</span>
+          ${o.monto?`<span style="color:var(--green);font-weight:700;font-size:12px">$${o.monto}</span>`:''}
+          ${o.score?`<span class="norm-tag">★ ${o.score}</span>`:''}
+        </div>
+        ${full&&o.problem?`<div class="ord-problem">${o.problem.substring(0,100)}${o.problem.length>100?'…':''}</div>`:''}
       </div>
-      <div class="ord-address" style="font-size:15px;margin:4px 0 6px">${o.address}</div>
-      <div class="ord-meta">
-        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span class="ord-meta-mono">${o.time}</span>
-        ${o.monto?`<span style="color:var(--green);font-weight:700;font-size:13px">$${o.monto}</span>`:''}
-        ${o.score?`<span class="norm-tag">★ ${o.score}</span>`:''}
+      <div style="padding-right:14px;flex-shrink:0">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
       </div>
-      ${full&&o.problem?`<div class="ord-problem">${o.problem.substring(0,100)}${o.problem.length>100?'…':''}</div>`:''}
-    </div>
-    <div style="display:flex;align-items:center;padding-right:14px;flex-shrink:0">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
   </div>`;
 }
