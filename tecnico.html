@@ -936,14 +936,11 @@ function showNotif(){
 }
 </script>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import {
-  getFirestore, collection, query, where,
-  onSnapshot, updateDoc, doc, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-  const firebaseConfig = {
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const cfg = {
     apiKey: "AIzaSyCJlo2i_MsotnrCJ9VnnXsZidGKospvw2k",
     authDomain: "thruver-3de75.firebaseapp.com",
     projectId: "thruver-3de75",
@@ -951,76 +948,50 @@ import {
     messagingSenderId: "31613785682",
     appId: "1:31613785682:web:10158e532742050689318b"
   };
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+  if (!firebase.apps.length) firebase.initializeApp(cfg);
+  const db = firebase.firestore();
 
-const SPEC_COLORS = {
-  HVAC:'#0ea5e9', Electrico:'#f59e0b', Plomeria:'#16a34a',
-  Carpinteria:'#c27803', Pintura:'#7c3aed', Impermeabilizacion:'#0d9488'
-};
+  var unsubTecnico = null;
 
-function mapTecDoc(snap) {
-  const d = snap.data();
-  const now = new Date();
-  const ts = d.creadoEn?.toDate ? d.creadoEn.toDate() : now;
-  const isToday = ts.toDateString() === now.toDateString();
-  const timeStr = ts.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
-  const statusMap = {
-    nueva:'pending', asignada:'pending', activo:'active',
-    completado:'done', cancelado:'done'
+  window.fbInitTecnico = function(tecId) {
+    if (unsubTecnico) unsubTecnico();
+    var SPEC_COLORS = {HVAC:'#0ea5e9',Electrico:'#f59e0b',Plomeria:'#16a34a',Carpinteria:'#c27803',Pintura:'#7c3aed',Impermeabilizacion:'#0d9488'};
+    var SM = {nueva:'pending',asignada:'pending',activo:'active',completado:'done',cancelado:'done'};
+    unsubTecnico = db.collection('solicitudes').where('tecnicoId','==',tecId)
+      .onSnapshot(function(snap){
+        var fromDb = snap.docs.map(function(s){
+          var d = s.data();
+          var now = new Date();
+          var ts = d.creadoEn ? d.creadoEn.toDate() : now;
+          var isToday = ts.toDateString() === now.toDateString();
+          var t = ts.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+          return { id: d.folio||s.id, _docId: s.id, spec: d.servicio||'HVAC', color: SPEC_COLORS[d.servicio]||'#888', status: SM[d.estado]||'pending', address: d.cliente&&d.cliente.direccion ? d.cliente.direccion+(d.cliente.colonia?', '+d.cliente.colonia:'') : '—', time: d.horario||(isToday?t:'Ayer '+t), problem: d.descripcion||'', monto: d.monto||0, score: d.calificacion||null, tec: d.tecnicoId||'' };
+        });
+        ORDERS.splice(0, ORDERS.length);
+        fromDb.forEach(function(o){ ORDERS.push(o); });
+        if (typeof renderHome === 'function') renderHome();
+        if (typeof renderOrdenes === 'function') renderOrdenes();
+        if (typeof renderSOP === 'function') renderSOP();
+        console.log('[Thruver] Tecnico: ' + ORDERS.length + ' ordenes');
+      }, function(err){ console.error('[Thruver] Firestore tec error:', err); });
   };
-  return {
-    id: d.folio || snap.id,
-    _docId: snap.id,
-    spec: d.servicio || 'HVAC',
-    color: SPEC_COLORS[d.servicio] || '#888',
-    status: statusMap[d.estado] || 'pending',
-    address: d.cliente?.direccion
-      ? (d.cliente.direccion + (d.cliente.colonia ? ', ' + d.cliente.colonia : ''))
-      : '—',
-    time: d.horario || (isToday ? timeStr : 'Ayer ' + timeStr),
-    problem: d.descripcion || '',
-    monto: d.monto || 0,
-    score: d.calificacion || null,
-    tec: d.tecnicoId || ''
-  };
-}
 
-let unsubTec = null;
-
-window.fbInitTecnico = function(tecId) {
-  if (unsubTec) unsubTec();
-  const q = query(collection(db, 'solicitudes'), where('tecnicoId', '==', tecId));
-  unsubTec = onSnapshot(q, (snap) => {
-    const fromDb = snap.docs.map(mapTecDoc);
-    ORDERS.splice(0, ORDERS.length, ...fromDb);
-    if (typeof renderHome === 'function') renderHome();
-    if (typeof renderOrdenes === 'function') renderOrdenes();
-    if (typeof renderSOP === 'function') renderSOP();
-    if (typeof renderIngresos === 'function') renderIngresos();
-  }, (err) => console.error('[Thruver] Firestore tec error:', err));
-};
-
-window.fbCompleteOrder = async function(orderId, score) {
-  const order = ORDERS.find(o => o.id === orderId);
-  if (!order?._docId) {
-    console.warn('[Thruver] Sin docId para completar:', orderId);
-    return;
-  }
-  try {
-    await updateDoc(doc(db, 'solicitudes', order._docId), {
+  window.fbCompleteOrder = function(orderId, score) {
+    var order = ORDERS.find(function(o){ return o.id === orderId; });
+    if (!order || !order._docId) { console.warn('[Thruver] Sin docId:', orderId); return Promise.resolve(); }
+    return db.collection('solicitudes').doc(order._docId).update({
       estado: 'completado',
       calificacion: score != null ? Number(score) : null,
-      completadoEn: serverTimestamp()
-    });
-    order.status = 'done';
-    order.score = score;
-    if (typeof renderHome === 'function') renderHome();
-    if (typeof renderOrdenes === 'function') renderOrdenes();
-    if (typeof renderSOP === 'function') renderSOP();
-    console.log('[Thruver] Orden completada:', orderId);
-  } catch(e) { console.error('[Thruver] Error completando orden:', e); }
-};
+      completadoEn: firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function(){
+      order.status = 'done'; order.score = score;
+      if (typeof renderHome === 'function') renderHome();
+      if (typeof renderOrdenes === 'function') renderOrdenes();
+      if (typeof renderSOP === 'function') renderSOP();
+      console.log('[Thruver] Orden completada:', orderId);
+    }).catch(function(e){ console.error('[Thruver] Error completando:', e); });
+  };
+})();
 </script>
 
 </body>

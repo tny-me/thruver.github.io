@@ -1779,12 +1779,11 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 </div>
 
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, collection, addDoc, serverTimestamp }
-  from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-  const firebaseConfig = {
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const cfg = {
     apiKey: "AIzaSyCJlo2i_MsotnrCJ9VnnXsZidGKospvw2k",
     authDomain: "thruver-3de75.firebaseapp.com",
     projectId: "thruver-3de75",
@@ -1792,38 +1791,39 @@ import { getFirestore, collection, addDoc, serverTimestamp }
     messagingSenderId: "31613785682",
     appId: "1:31613785682:web:10158e532742050689318b"
   };
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+  if (!firebase.apps.length) firebase.initializeApp(cfg);
+  const db = firebase.firestore();
 
-window.fbSaveSolicitud = async function(S, folio) {
-  try {
-    const ref = await addDoc(collection(db, 'solicitudes'), {
-      folio,
-      estado: 'nueva',
-      origen: 'web',
-      creadoEn: serverTimestamp(),
-      servicio: S.svc || '',
-      descripcion: S.desc || '',
-      urgencia: S.urgencia || 'normal',
-      fecha: S.fecha ? String(S.fecha.d) + '/' + String((S.fecha.m||0)+1) + '/' + String(S.fecha.y) : null,
-      horario: S.horario || null,
-      cliente: {
-        nombre: S.nombre || '',
-        telefono: S.telefono || '',
-        direccion: S.direccion || '',
-        colonia: S.colonia || '',
-        notas: S.notas || ''
-      },
-      tecnicoId: null,
-      partnerUid: null,
-      monto: null,
-      calificacion: null
-    });
-    console.log('[Thruver] Solicitud guardada en Firestore:', ref.id, folio);
-  } catch(e) {
-    console.error('[Thruver] Error guardando solicitud:', e);
-  }
-};
+  window.fbSaveSolicitud = async function(S, folio) {
+    try {
+      const ref = await db.collection('solicitudes').add({
+        folio: folio,
+        estado: 'nueva',
+        origen: 'web',
+        creadoEn: firebase.firestore.FieldValue.serverTimestamp(),
+        servicio: S.svc || '',
+        descripcion: S.desc || '',
+        urgencia: S.urgencia || 'normal',
+        fecha: S.fecha ? (S.fecha.d + '/' + ((S.fecha.m||0)+1) + '/' + S.fecha.y) : null,
+        horario: S.horario || null,
+        cliente: {
+          nombre: S.nombre || '',
+          telefono: S.telefono || '',
+          direccion: S.direccion || '',
+          colonia: S.colonia || '',
+          notas: S.notas || ''
+        },
+        tecnicoId: null,
+        partnerUid: null,
+        monto: null,
+        calificacion: null
+      });
+      console.log('[Thruver] Solicitud guardada:', ref.id, folio);
+    } catch(e) {
+      console.error('[Thruver] Error guardando solicitud:', e);
+    }
+  };
+})();
 </script>
 
 </body>

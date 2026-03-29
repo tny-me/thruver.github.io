@@ -5705,14 +5705,11 @@ document.addEventListener('keydown', e => {
 });
 </script>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import {
-  getFirestore, collection, addDoc, updateDoc, doc,
-  onSnapshot, orderBy, query, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-
-  const firebaseConfig = {
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+(function(){
+  const cfg = {
     apiKey: "AIzaSyCJlo2i_MsotnrCJ9VnnXsZidGKospvw2k",
     authDomain: "thruver-3de75.firebaseapp.com",
     projectId: "thruver-3de75",
@@ -5720,111 +5717,89 @@ import {
     messagingSenderId: "31613785682",
     appId: "1:31613785682:web:10158e532742050689318b"
   };
-const app = initializeApp(firebaseConfig);
-const db  = getFirestore(app);
+  if (!firebase.apps.length) firebase.initializeApp(cfg);
+  const db = firebase.firestore();
 
-const SPEC_COLORS = {
-  HVAC:'#0ea5e9', Electrico:'#f59e0b', Plomeria:'#16a34a',
-  Carpinteria:'#c27803', Pintura:'#7c3aed', Impermeabilizacion:'#0d9488'
-};
-const ESTADO_MAP = {
-  nueva:'pending', asignada:'assigned', activo:'active',
-  completado:'done', cancelado:'done'
-};
+  const SPEC_COLORS = {HVAC:'#0ea5e9',Electrico:'#f59e0b',Plomeria:'#16a34a',Carpinteria:'#c27803',Pintura:'#7c3aed',Impermeabilizacion:'#0d9488'};
+  const ESTADO_MAP = {nueva:'pending',asignada:'assigned',activo:'active',completado:'done',cancelado:'done'};
 
-function mapDoc(snap) {
-  const d = snap.data();
-  const now = new Date();
-  const ts = d.creadoEn?.toDate ? d.creadoEn.toDate() : now;
-  const isToday = ts.toDateString() === now.toDateString();
-  const timeStr = ts.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
-  return {
-    id: d.folio || snap.id,
-    _docId: snap.id,
-    spec: d.servicio || 'HVAC',
-    color: SPEC_COLORS[d.servicio] || '#888',
-    priority: d.urgencia === 'urgente' ? 'urgente' : 'normal',
-    status: ESTADO_MAP[d.estado] || 'pending',
-    address: d.cliente?.direccion
-      ? (d.cliente.direccion + (d.cliente.colonia ? ', ' + d.cliente.colonia : ''))
-      : '—',
-    client: d.cliente?.nombre || '—',
-    phone: d.cliente?.telefono || '',
-    problem: d.descripcion || '',
-    created: isToday ? timeStr : 'Ayer ' + timeStr,
-    scheduled: d.fecha ? (d.fecha + (d.horario ? ' ' + d.horario : '')) : null,
-    tech: d.tecnicoId || null,
-    partner: d.partnerUid || null,
-    monto: d.monto || null,
-    sla: null,
-    notes: d.notas || ''
+  function mapDoc(snap) {
+    const d = snap.data();
+    const now = new Date();
+    const ts = d.creadoEn ? d.creadoEn.toDate() : now;
+    const isToday = ts.toDateString() === now.toDateString();
+    const timeStr = ts.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'});
+    return {
+      id: d.folio || snap.id,
+      _docId: snap.id,
+      spec: d.servicio || 'HVAC',
+      color: SPEC_COLORS[d.servicio] || '#888',
+      priority: d.urgencia === 'urgente' ? 'urgente' : 'normal',
+      status: ESTADO_MAP[d.estado] || 'pending',
+      address: d.cliente && d.cliente.direccion ? (d.cliente.direccion + (d.cliente.colonia ? ', ' + d.cliente.colonia : '')) : '—',
+      client: (d.cliente && d.cliente.nombre) || '—',
+      phone: (d.cliente && d.cliente.telefono) || '',
+      problem: d.descripcion || '',
+      created: isToday ? timeStr : 'Ayer ' + timeStr,
+      scheduled: d.fecha ? (d.fecha + (d.horario ? ' ' + d.horario : '')) : null,
+      tech: d.tecnicoId || null,
+      partner: d.partnerUid || null,
+      monto: d.monto || null,
+      sla: null,
+      notes: d.notas || ''
+    };
+  }
+
+  var unsubDispatcher = null;
+
+  window.fbInitDispatcher = function() {
+    if (unsubDispatcher) unsubDispatcher();
+    unsubDispatcher = db.collection('solicitudes')
+      .orderBy('creadoEn', 'desc')
+      .onSnapshot(function(snap) {
+        var fromDb = snap.docs.map(mapDoc);
+        ORDERS.splice(0, ORDERS.length);
+        fromDb.forEach(function(o){ ORDERS.push(o); });
+        if (typeof updateBadges === 'function') updateBadges();
+        if (typeof renderCentro === 'function') renderCentro();
+        if (typeof renderOrdersTable === 'function') renderOrdersTable();
+        if (typeof renderOrderCards === 'function') renderOrderCards();
+        if (typeof renderColaKPIs === 'function') renderColaKPIs();
+        console.log('[Thruver] Dispatcher: ' + ORDERS.length + ' ordenes cargadas');
+      }, function(err){ console.error('[Thruver] Firestore error:', err); });
   };
-}
 
-let unsub = null;
-
-window.fbInitDispatcher = function() {
-  if (unsub) unsub();
-  const q = query(collection(db, 'solicitudes'), orderBy('creadoEn', 'desc'));
-  unsub = onSnapshot(q, (snap) => {
-    const fromFirestore = snap.docs.map(mapDoc);
-    const fsIds = new Set(fromFirestore.map(o => o.id));
-    // Keep local-only orders (created before Firebase, without _docId)
-    const localOnly = ORDERS.filter(o => !o._docId && !fsIds.has(o.id));
-    ORDERS.splice(0, ORDERS.length, ...fromFirestore, ...localOnly);
-    if (typeof updateBadges === 'function') updateBadges();
-    if (typeof renderCentro === 'function') renderCentro();
-    if (typeof renderOrdersTable === 'function') renderOrdersTable();
-    if (typeof renderOrderCards === 'function') renderOrderCards();
-    if (typeof renderColaKPIs === 'function') renderColaKPIs();
-  }, (err) => console.error('[Thruver] Firestore error:', err));
-};
-
-window.fbCreateOrder = async function(order) {
-  try {
-    const ref = await addDoc(collection(db, 'solicitudes'), {
+  window.fbCreateOrder = function(order) {
+    db.collection('solicitudes').add({
       folio: order.id,
       estado: 'nueva',
       origen: 'dispatcher',
-      creadoEn: serverTimestamp(),
+      creadoEn: firebase.firestore.FieldValue.serverTimestamp(),
       servicio: order.spec || '',
       urgencia: order.priority || 'normal',
       descripcion: order.problem || '',
-      cliente: {
-        nombre: order.client || '',
-        telefono: order.phone || '',
-        direccion: order.address || '',
-        colonia: '',
-        notas: ''
-      },
-      tecnicoId: null,
-      partnerUid: null,
-      monto: null,
-      calificacion: null
-    });
-    const idx = ORDERS.findIndex(o => o.id === order.id);
-    if (idx >= 0) ORDERS[idx]._docId = ref.id;
-    console.log('[Thruver] Orden creada en Firestore:', ref.id);
-  } catch(e) { console.error('[Thruver] Error creando orden:', e); }
-};
+      cliente: { nombre: order.client||'', telefono: order.phone||'', direccion: order.address||'', colonia: '', notas: '' },
+      tecnicoId: null, partnerUid: null, monto: null, calificacion: null
+    }).then(function(ref){
+      var idx = ORDERS.findIndex(function(o){ return o.id === order.id; });
+      if (idx >= 0) ORDERS[idx]._docId = ref.id;
+      console.log('[Thruver] Orden creada:', ref.id);
+    }).catch(function(e){ console.error('[Thruver] Error creando orden:', e); });
+  };
 
-window.fbAssignOrder = async function(orderId, techId, partnerUid, scheduled, notes) {
-  const order = ORDERS.find(o => o.id === orderId);
-  if (!order?._docId) {
-    console.warn('[Thruver] Sin docId para asignación:', orderId);
-    return;
-  }
-  try {
-    await updateDoc(doc(db, 'solicitudes', order._docId), {
+  window.fbAssignOrder = function(orderId, techId, partnerUid, scheduled, notes) {
+    var order = ORDERS.find(function(o){ return o.id === orderId; });
+    if (!order || !order._docId) { console.warn('[Thruver] Sin docId para:', orderId); return; }
+    db.collection('solicitudes').doc(order._docId).update({
       estado: 'asignada',
       tecnicoId: techId || null,
       partnerUid: partnerUid || null,
       programado: scheduled || null,
       notas: notes || ''
-    });
-    console.log('[Thruver] Orden asignada en Firestore:', orderId, techId);
-  } catch(e) { console.error('[Thruver] Error asignando orden:', e); }
-};
+    }).then(function(){ console.log('[Thruver] Orden asignada:', orderId); })
+      .catch(function(e){ console.error('[Thruver] Error asignando:', e); });
+  };
+})();
 </script>
 
 </body>
