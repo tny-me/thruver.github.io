@@ -1068,8 +1068,8 @@ function showNotif(){
     if (!user) return;
     firebase.firestore().collection('usuarios').doc(user.uid).get().then(function(snap) {
       var data = snap.exists ? snap.data() : {};
-      // Verificar que sea técnico — si es dispatcher u otro rol, cerrar sesión
-      if (data.rol && data.rol !== 'tecnico') {
+      // Solo técnicos — cualquier otro rol (o sin rol) cierra sesión
+      if (data.rol !== 'tecnico') {
         firebase.auth().signOut();
         return;
       }
