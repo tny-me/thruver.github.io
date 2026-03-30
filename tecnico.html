@@ -329,9 +329,10 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
     <header class="topbar">
       <div class="topbar-title" id="topbar_title">Inicio</div>
       <div class="topbar-right">
-        <button id="loc_btn" class="loc-btn" data-active="false" title="Activar ubicación GPS" onclick="toggleLocation()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-        </button>
+        <div id="loc_btn" style="display:flex;align-items:center;gap:5px;padding:4px 9px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--rs)">
+          <div id="loc_dot" style="width:7px;height:7px;border-radius:50%;background:#a8a8a4;flex-shrink:0"></div>
+          <span id="loc_label" style="font-size:11px;font-weight:600;color:var(--text-3)">Sin GPS</span>
+        </div>
         <div class="topbar-notif" onclick="showNotif()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           <div class="topbar-notif-badge">2</div>
@@ -355,9 +356,10 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
-        <button id="loc_btn_mob" class="loc-btn" data-active="false" title="Activar GPS" onclick="toggleLocation()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="10" r="3"/><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
-        </button>
+        <div id="loc_btn_mob" style="display:flex;align-items:center;gap:5px;padding:4px 9px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--rs)">
+          <div id="loc_dot_mob" style="width:7px;height:7px;border-radius:50%;background:#a8a8a4;flex-shrink:0"></div>
+          <span id="loc_label_mob" style="font-size:11px;font-weight:600;color:var(--text-3)">Sin GPS</span>
+        </div>
         <div style="position:relative;cursor:pointer" onclick="showNotif()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
           <div style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--red);border:1.5px solid var(--surface)"></div>
@@ -1146,12 +1148,14 @@ function showNotif(){
   var geoWatchId = null;
 
   function setLocBtns(active) {
-    ['loc_btn','loc_btn_mob'].forEach(function(id) {
-      var el = document.getElementById(id);
-      if (!el) return;
-      el.setAttribute('data-active', active ? 'true' : 'false');
-      el.title = active ? 'Desactivar GPS' : 'Activar ubicación GPS';
-      el.querySelector('svg').setAttribute('stroke', active ? '#16a34a' : 'var(--text-3)');
+    var dotColor = active ? '#16a34a' : '#a8a8a4';
+    var labelText = active ? 'Activo' : 'Sin GPS';
+    var labelColor = active ? '#16a34a' : 'var(--text-3)';
+    [['loc_dot','loc_label'],['loc_dot_mob','loc_label_mob']].forEach(function(pair) {
+      var dot = document.getElementById(pair[0]);
+      var lbl = document.getElementById(pair[1]);
+      if (dot) dot.style.background = dotColor;
+      if (lbl) { lbl.textContent = labelText; lbl.style.color = labelColor; }
     });
   }
 
