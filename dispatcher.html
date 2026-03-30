@@ -5822,10 +5822,13 @@ document.addEventListener('keydown', e => {
   var PUSH_PROXY_URL = 'https://script.google.com/macros/s/AKfycbxSAB7L4hkV364Hwq6AQN30O2VsuWlo7gMe4ARmtrW8U3816TI_gzS7jmaJP5pywylt/exec';
 
   window.sendPushToTec = function(tecnicoId, title, body) {
+    console.log('[Thruver] sendPushToTec llamado:', tecnicoId);
     if (!PUSH_PROXY_URL || PUSH_PROXY_URL.startsWith('REEMPLAZAR')) return;
     db.collection('usuarios').where('tecnicoId', '==', tecnicoId).get().then(function(snap) {
-      if (snap.empty) return;
+      console.log('[Thruver] usuarios query:', snap.size, 'docs para tecnicoId=', tecnicoId);
+      if (snap.empty) { console.warn('[Thruver] No encontrado usuario con tecnicoId:', tecnicoId); return; }
       var fcmToken = snap.docs[0].data().fcmToken;
+      console.log('[Thruver] fcmToken:', fcmToken ? fcmToken.substring(0,20)+'...' : 'VACIO');
       if (!fcmToken) { console.warn('[Thruver] Tecnico sin fcmToken:', tecnicoId); return; }
       fetch(PUSH_PROXY_URL, {
         method: 'POST',
@@ -5837,7 +5840,7 @@ document.addEventListener('keydown', e => {
       }).catch(function(e) {
         console.warn('[Thruver] Push error:', e.message);
       });
-    });
+    }).catch(function(e) { console.error('[Thruver] Error query:', e.message); });
   };
 
   window.verUbicacionTec = function(tecId) {
