@@ -1,4 +1,4 @@
-var CACHE = 'thruver-v2';
+var CACHE = 'thruver-v3';
 var ASSETS = ['/', '/index.html', '/tecnico.html', '/manifest-tecnico.json', '/shared.css'];
 
 self.addEventListener('install', function(e) {
@@ -36,19 +36,37 @@ self.addEventListener('notificationclick', function(e) {
 });
 
 self.addEventListener('fetch', function(e) {
-  /* Solo cachear GET del mismo origen */
   if (e.request.method !== 'GET' || !e.request.url.startsWith(self.location.origin)) return;
-  e.respondWith(
-    caches.match(e.request).then(function(cached) {
-      var network = fetch(e.request).then(function(res) {
+
+  var url = e.request.url;
+  var isPage = url.endsWith('.html') || url.endsWith('/') || url === self.location.origin;
+  var isAsset = url.match(/\.(png|jpg|jpeg|svg|ico|woff2?)$/);
+
+  if (isAsset) {
+    // Cache-first para imágenes y fuentes
+    e.respondWith(
+      caches.match(e.request).then(function(cached) {
+        return cached || fetch(e.request).then(function(res) {
+          if (res && res.status === 200) {
+            var clone = res.clone();
+            caches.open(CACHE).then(function(c){ c.put(e.request, clone); });
+          }
+          return res;
+        });
+      })
+    );
+  } else {
+    // Network-first para HTML, CSS, JS — siempre intenta la red primero
+    e.respondWith(
+      fetch(e.request).then(function(res) {
         if (res && res.status === 200) {
           var clone = res.clone();
           caches.open(CACHE).then(function(c){ c.put(e.request, clone); });
         }
         return res;
-      });
-      /* Cache-first para el HTML, network-first para el resto */
-      return cached || network;
-    })
-  );
+      }).catch(function() {
+        return caches.match(e.request);
+      })
+    );
+  }
 });
