@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Thruver · Dispatcher Central</title>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 
 :root{
@@ -1404,28 +1406,12 @@ textarea.finput-m{resize:none;min-height:72px}
         </div>
         <div class="map-layout">
           <div class="map-container">
-            <div class="map-bg">
-              <div class="map-grid"></div>
-              <!-- Roads -->
-              <div class="map-road-h" style="top:30%"></div>
-              <div class="map-road-h" style="top:55%"></div>
-              <div class="map-road-h" style="top:75%"></div>
-              <div class="map-road-v" style="left:25%"></div>
-              <div class="map-road-v" style="left:50%"></div>
-              <div class="map-road-v" style="left:72%"></div>
-              <!-- Dynamic markers rendered by JS -->
-              <div id="map-markers"></div>
-            </div>
-            <div class="map-controls">
-              <div class="map-ctrl-btn">+</div>
-              <div class="map-ctrl-btn">−</div>
-            </div>
+            <div id="leaflet-map" style="width:100%;height:100%;border-radius:var(--r);z-index:0"></div>
             <div class="map-legend">
               <div class="map-legend-title">Leyenda</div>
               <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--green)"></div> Técnico disponible</div>
               <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--blue)"></div> En servicio</div>
-              <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--red)"></div> Orden urgente</div>
-              <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--amber)"></div> Orden pendiente</div>
+              <div class="map-legend-item"><div class="map-legend-dot" style="background:var(--red)"></div> Sin GPS activo</div>
             </div>
           </div>
 
@@ -2161,24 +2147,7 @@ const PARTNERS = [
 ];
 
 const TECNICOS = [
-  // ── Partner PRT-0012 flotilla ──
-  { id:'TEC-0042', name:'Miguel Rodríguez', initials:'MR', phone:'667 111 2233', partner:'PRT-0012', specs:['HVAC','Electrico'], status:'en-servicio', zone:'Culiacán Centro', rating:4.9, orders_month:47, current_order:'HVAC-2026-04813', color:'#0ea5e9', mapPos:{x:48,y:33} },
-  { id:'TEC-0043', name:'Lucía Flores', initials:'LF', phone:'667 222 3344', partner:'PRT-0012', specs:['HVAC'], status:'disponible', zone:'Culiacán Norte', rating:4.7, orders_month:38, current_order:null, color:'#0ea5e9', mapPos:{x:62,y:22} },
-  // ── Partner PRT-0008 flotilla ──
-  { id:'TEC-0015', name:'Carlos Mendoza', initials:'CM', phone:'667 333 4455', partner:'PRT-0008', specs:['Plomeria','Carpinteria'], status:'en-servicio', zone:'Las Quintas', rating:4.8, orders_month:52, current_order:'PLO-2026-01122', color:'#16a34a', mapPos:{x:35,y:55} },
-  { id:'TEC-0016', name:'Sofía Torres', initials:'ST', phone:'667 444 5566', partner:'PRT-0008', specs:['Plomeria'], status:'disponible', zone:'Humaya', rating:4.6, orders_month:29, current_order:null, color:'#16a34a', mapPos:{x:25,y:42} },
-  // ── Partner PRT-0021 flotilla ──
-  { id:'TEC-0031', name:'José Lugo', initials:'JL', phone:'667 555 6677', partner:'PRT-0021', specs:['Electrico'], status:'disponible', zone:'Tierra Blanca', rating:4.5, orders_month:33, current_order:null, color:'#f59e0b', mapPos:{x:70,y:68} },
-  { id:'TEC-0032', name:'Ana Guerrero', initials:'AG', phone:'667 666 7788', partner:'PRT-0021', specs:['Electrico','Plomeria'], status:'inactivo', zone:'Bachigualato', rating:4.3, orders_month:21, current_order:null, color:'#f59e0b', mapPos:{x:78,y:75} },
-  { id:'TEC-0033', name:'Pedro Ibarra', initials:'PI', phone:'667 777 8899', partner:'PRT-0021', specs:['Plomeria'], status:'en-servicio', zone:'Tierra Blanca', rating:4.7, orders_month:40, current_order:'ELE-2026-02341', color:'#f59e0b', mapPos:{x:65,y:72} },
-  // ── Partner PRT-0005 flotilla ──
-  { id:'TEC-0010', name:'Mario Cota', initials:'MC', phone:'667 888 9900', partner:'PRT-0005', specs:['Impermeabilizacion','Pintura'], status:'inactivo', zone:'Navolato', rating:4.1, orders_month:14, current_order:null, color:'#8b5cf6', mapPos:{x:18,y:80} },
-  // ── Técnicos independientes (sin partner) ──
-  { id:'TEC-IND-001', name:'Ramón Leyva', initials:'RL', phone:'667 901 1122', partner:null, specs:['HVAC','Plomeria'], status:'disponible', zone:'Culiacán Centro', rating:4.6, orders_month:22, current_order:null, color:'#e11d48', mapPos:{x:44,y:60} },
-  { id:'TEC-IND-002', name:'Verónica Soto', initials:'VS', phone:'667 902 2233', partner:null, specs:['Electrico'], status:'disponible', zone:'Las Quintas', rating:4.8, orders_month:31, current_order:null, color:'#e11d48', mapPos:{x:30,y:38} },
-  { id:'TEC-IND-003', name:'Ernesto Palma', initials:'EP', phone:'667 903 3344', partner:null, specs:['Carpinteria','Pintura'], status:'en-servicio', zone:'Culiacán Norte', rating:4.4, orders_month:18, current_order:null, color:'#e11d48', mapPos:{x:56,y:18} },
-  { id:'TEC-IND-004', name:'Daniela Ramos', initials:'DR', phone:'667 904 4455', partner:null, specs:['Plomeria'], status:'disponible', zone:'Humaya', rating:4.7, orders_month:27, current_order:null, color:'#e11d48', mapPos:{x:20,y:48} },
-  { id:'TEC-IND-005', name:'Omar Félix', initials:'OF', phone:'667 905 5566', partner:null, specs:['Impermeabilizacion','Carpinteria'], status:'inactivo', zone:'Navolato', rating:4.2, orders_month:9, current_order:null, color:'#e11d48', mapPos:{x:14,y:72} },
+  { id:'TEC-0042', name:'Miguel Rodríguez', initials:'MR', phone:'667 111 2233', partner:'PRT-0012', specs:['HVAC','Electrico'], status:'en-servicio', zone:'Culiacán Centro', rating:4.9, orders_month:47, current_order:null, color:'#0ea5e9' },
 ];
 
 const SPEC_META = {
@@ -3044,74 +3013,87 @@ function setMapFilter(f, btn) {
   renderMap();
 }
 
+// ── Leaflet map globals ──
+var _leafletMap = null;
+var _leafletMarkers = {}; // tecnicoId → L.marker
+var _ubicUnsubscribe = null;
+
 function renderMap() {
-  const container = document.getElementById('map-markers');
-  container.innerHTML = '';
-
-  if (mapFilter !== 'ord') {
-    TECNICOS.forEach(t => {
-      const color = t.status === 'disponible' ? '#16a34a' : t.status === 'en-servicio' ? '#1d6bf3' : '#a8a8a4';
-      const marker = document.createElement('div');
-      marker.className = 'map-marker';
-      marker.style.left = t.mapPos.x + '%';
-      marker.style.top = t.mapPos.y + '%';
-      marker.innerHTML = `
-        <div class="map-marker-pin" style="background:${color};width:28px;height:28px">${t.initials}</div>
-        <div class="map-marker-label">${t.name.split(' ')[0]}</div>
-      `;
-      container.appendChild(marker);
-    });
+  // Initialize Leaflet once
+  if (!_leafletMap) {
+    _leafletMap = L.map('leaflet-map', { zoomControl: true }).setView([24.7994, -107.3926], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19
+    }).addTo(_leafletMap);
   }
+  // Force Leaflet to recalculate size (panel may have been hidden)
+  setTimeout(function(){ _leafletMap.invalidateSize(); }, 100);
 
-  if (mapFilter !== 'tec') {
-    const pendingOrders = ORDERS.filter(o => ['pending','assigned'].includes(o.status));
-    const mapPositions = [
-      {x:50,y:30},{x:38,y:48},{x:72,y:40},{x:55,y:65},{x:20,y:55},
-      {x:65,y:22},{x:42,y:72},{x:80,y:58},{x:30,y:28},{x:60,y:80}
-    ];
-    pendingOrders.forEach((o, i) => {
-      const pos = mapPositions[i % mapPositions.length];
-      const color = o.priority === 'urgente' ? '#dc2626' : '#d97706';
-      const marker = document.createElement('div');
-      marker.className = 'map-marker';
-      marker.style.left = pos.x + '%';
-      marker.style.top = pos.y + '%';
-      const spec = SPEC_META[o.spec];
-      marker.innerHTML = `
-        <div class="map-marker-pin" style="background:${color};width:24px;height:24px;font-size:8px">${spec ? spec.label.slice(0,2).toUpperCase() : 'OR'}</div>
-        <div class="map-marker-label">${o.address.split(',')[1]?.trim() || o.address.split(',')[0]}</div>
-      `;
-      container.appendChild(marker);
+  // Subscribe to real-time ubicaciones
+  if (_ubicUnsubscribe) _ubicUnsubscribe();
+  _ubicUnsubscribe = db.collection('ubicaciones').onSnapshot(function(snap) {
+    snap.forEach(function(doc) {
+      var d = doc.data();
+      if (!d.lat || !d.lng) return;
+      var id = doc.id;
+      var color = d.activo ? '#1d6bf3' : '#a8a8a4';
+      var label = d.nombre || id;
+      var popupHtml = '<b>' + label + '</b><br>ID: ' + id +
+        '<br>Precisión: ' + (d.precision ? Math.round(d.precision) + ' m' : '—') +
+        (d.ts ? '<br>' + new Date(d.ts.toMillis()).toLocaleTimeString('es-MX') : '');
+
+      if (_leafletMarkers[id]) {
+        _leafletMarkers[id].setLatLng([d.lat, d.lng]);
+        _leafletMarkers[id].setPopupContent(popupHtml);
+        _leafletMarkers[id].setIcon(makeLeafletIcon(color, d.nombre || id));
+      } else {
+        var marker = L.marker([d.lat, d.lng], { icon: makeLeafletIcon(color, d.nombre || id) })
+          .addTo(_leafletMap)
+          .bindPopup(popupHtml);
+        _leafletMarkers[id] = marker;
+      }
     });
-  }
+    updateFieldTechsPanel(snap);
+  });
 
-  // Zones panel
-  const zones = [
-    { name:'Centro', count:3, color:'var(--blue)' },
-    { name:'Las Quintas', count:2, color:'var(--green)' },
-    { name:'Tierra Blanca', count:2, color:'var(--amber)' },
-    { name:'Humaya', count:1, color:'var(--gold)' },
-    { name:'Navolato', count:0, color:'var(--t4)' },
-  ];
-  document.getElementById('zones-panel').innerHTML = zones.map(z => `
-    <div class="zone-row">
-      <div><div style="font-size:11px;color:var(--t1);font-weight:500">${z.name}</div>
-        <div class="zone-bar" style="width:${z.count * 30}px;background:${z.color};max-width:80px"></div>
-      </div>
-      <span class="tag-mono">${z.count} órdenes</span>
-    </div>
-  `).join('');
+  // Zones panel (static info)
+  document.getElementById('zones-panel').innerHTML = '<div style="font-size:11px;color:var(--t3);padding:4px 0">Las zonas se calculan en base a las ubicaciones activas.</div>';
+}
 
-  // Field techs
-  const fieldTechs = TECNICOS.filter(t => t.status !== 'inactivo');
-  document.getElementById('field-techs-panel').innerHTML = fieldTechs.map(t => {
-    const color = t.status === 'disponible' ? 'var(--green)' : 'var(--blue)';
-    return `<div class="tec-map-row">
-      <div class="tec-av-sm" style="background:${t.color}">${t.initials}</div>
-      <div style="flex:1"><div style="font-size:11px;font-weight:600">${t.name}</div><div style="font-size:9px;color:var(--t3)">${t.zone}</div></div>
-      <div class="dot" style="background:${color}"></div>
-    </div>`;
-  }).join('');
+function makeLeafletIcon(color, label) {
+  var initials = label.split(' ').map(function(w){ return w[0]; }).join('').slice(0,2).toUpperCase();
+  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="36" height="44" viewBox="0 0 36 44">' +
+    '<path d="M18 0C8 0 0 8 0 18c0 12 18 26 18 26S36 30 36 18C36 8 28 0 18 0z" fill="' + color + '"/>' +
+    '<circle cx="18" cy="18" r="11" fill="rgba(255,255,255,0.25)"/>' +
+    '<text x="18" y="23" text-anchor="middle" font-size="10" font-weight="700" font-family="sans-serif" fill="#fff">' + initials + '</text>' +
+    '</svg>';
+  return L.divIcon({
+    html: svg,
+    className: '',
+    iconSize: [36, 44],
+    iconAnchor: [18, 44],
+    popupAnchor: [0, -44]
+  });
+}
+
+function updateFieldTechsPanel(snap) {
+  var rows = '';
+  snap.forEach(function(doc) {
+    var d = doc.data();
+    var color = d.activo ? 'var(--blue)' : 'var(--t4)';
+    var statusLabel = d.activo ? 'GPS activo' : 'Sin GPS';
+    rows += '<div class="tec-map-row" style="cursor:pointer" onclick="if(_leafletMarkers[\'' + doc.id + '\'])_leafletMarkers[\'' + doc.id + '\'].openPopup()">' +
+      '<div class="tec-av-sm" style="background:' + (d.activo ? '#0ea5e9' : '#a8a8a4') + '">' +
+        ((d.nombre || doc.id).split(' ').map(function(w){return w[0];}).join('').slice(0,2).toUpperCase()) +
+      '</div>' +
+      '<div style="flex:1"><div style="font-size:11px;font-weight:600">' + (d.nombre || doc.id) + '</div>' +
+      '<div style="font-size:9px;color:var(--t3)">' + statusLabel + '</div></div>' +
+      '<div class="dot" style="background:' + color + '"></div>' +
+    '</div>';
+  });
+  document.getElementById('field-techs-panel').innerHTML = rows ||
+    '<div style="font-size:11px;color:var(--t3);padding:4px 0">Ningún técnico con GPS activo.</div>';
 }
 
 // ═══════════════════════════════════════════════════════
