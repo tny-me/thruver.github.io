@@ -1063,9 +1063,10 @@ function showNotif(){
   // ── FCM TOKEN — registra el dispositivo para recibir push en background ──
   function initFCMToken(uid) {
     if (!('Notification' in window)) return;
+    var VAPID = 'BBJuBYAzZbLyOiQpJGhAdErMAbVnWpQdMhgkK056XTcYgtYcKMwza6tuLXaiYhhufRDYcj-B33E_9V0FM7mlf5E';
     Notification.requestPermission().then(function(permission) {
       if (permission !== 'granted') return;
-      messaging.getToken({ vapidKey: 'BBJuBYAzZbLyOiQpJGhAdErMAbVnWpQdMhgkK056XTcYgtYcKMwza6tuLXaiYhhufRDYcj-B33E_9V0FM7mlf5E' })
+      messaging.getToken({ vapidKey: VAPID })
         .then(function(token) {
           if (token) {
             db.collection('usuarios').doc(uid).update({ fcmToken: token });
@@ -1073,6 +1074,15 @@ function showNotif(){
           }
         })
         .catch(function(e) { console.warn('[Thruver] FCM token error:', e.message); });
+    });
+    // Cuando iOS (o cualquier OS) invalida el token, se renueva solo
+    messaging.onTokenRefresh(function() {
+      messaging.getToken({ vapidKey: VAPID }).then(function(token) {
+        if (token) {
+          db.collection('usuarios').doc(uid).update({ fcmToken: token });
+          console.log('[Thruver] FCM token renovado');
+        }
+      }).catch(function(e) { console.warn('[Thruver] Token refresh error:', e.message); });
     });
   }
   // Notificación en foreground
