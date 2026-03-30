@@ -1075,15 +1075,6 @@ function showNotif(){
         })
         .catch(function(e) { console.warn('[Thruver] FCM token error:', e.message); });
     });
-    // Cuando iOS (o cualquier OS) invalida el token, se renueva solo
-    messaging.onTokenRefresh(function() {
-      messaging.getToken({ vapidKey: VAPID }).then(function(token) {
-        if (token) {
-          db.collection('usuarios').doc(uid).update({ fcmToken: token });
-          console.log('[Thruver] FCM token renovado');
-        }
-      }).catch(function(e) { console.warn('[Thruver] Token refresh error:', e.message); });
-    });
   }
   // Notificación en foreground
   messaging.onMessage(function(payload) {
