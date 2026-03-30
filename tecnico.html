@@ -1064,8 +1064,7 @@ function showNotif(){
   function initFCMToken(uid) {
     if (!('Notification' in window)) return;
     var VAPID = 'BBJuBYAzZbLyOiQpJGhAdErMAbVnWpQdMhgkK056XTcYgtYcKMwza6tuLXaiYhhufRDYcj-B33E_9V0FM7mlf5E';
-    Notification.requestPermission().then(function(permission) {
-      if (permission !== 'granted') return;
+    function saveToken() {
       messaging.getToken({ vapidKey: VAPID })
         .then(function(token) {
           if (token) {
@@ -1074,6 +1073,16 @@ function showNotif(){
           }
         })
         .catch(function(e) { console.warn('[Thruver] FCM token error:', e.message); });
+    }
+    Notification.requestPermission().then(function(permission) {
+      if (permission !== 'granted') return;
+      saveToken();
+      // Re-registrar token cada vez que el service worker se actualiza (clave para iOS)
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.addEventListener('controllerchange', function() {
+          saveToken();
+        });
+      }
     });
   }
   // Notificación en foreground
