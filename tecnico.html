@@ -13,16 +13,16 @@
 <style>
 
 :root{
-  --canvas:#f7f7f5;
+  --canvas:#f5f5f7;
   --surface:#ffffff;
-  --surface-2:#f2f2f0;
-  --surface-3:#ebebea;
-  --border:#e4e4e0;
-  --border-2:#d0d0cc;
-  --text:#111110;
-  --text-2:#6b6b66;
-  --text-3:#a8a8a4;
-  --accent:#1a1a18;
+  --surface-2:#f0f0ee;
+  --surface-3:#e8e8e6;
+  --border:#e2e2e0;
+  --border-2:#c8c8c6;
+  --text:#0a0a08;
+  --text-2:#585854;
+  --text-3:#9898a0;
+  --accent:#0a0a08;
   --blue:#1d6bf3;
   --blue-bg:#dbeafe;
   --green:#16a34a;
@@ -31,9 +31,9 @@
   --amber-bg:#fef9c3;
   --red:#dc2626;
   --red-bg:#fee2e2;
-  --r:16px;--rs:10px;
-  --shadow:0 1px 3px rgba(0,0,0,0.07),0 0 0 1px rgba(0,0,0,0.04);
-  --shadow-md:0 4px 16px rgba(0,0,0,0.08),0 0 0 1px rgba(0,0,0,0.04);
+  --r:20px;--rs:12px;
+  --shadow:0 2px 8px rgba(0,0,0,.06),0 0 0 1px rgba(0,0,0,.04);
+  --shadow-md:0 8px 28px rgba(0,0,0,.10),0 0 0 1px rgba(0,0,0,.04);
   --sidebar-w:220px;
 }
 html{font-size:15px;}
@@ -115,16 +115,16 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
 .content-area{flex:1;padding:28px 32px;max-width:1200px;width:100%}
 
 /* ── MOBILE overrides ── */
-.mobile-topbar{display:none;position:sticky;top:0;z-index:100;background:var(--surface);border-bottom:1px solid var(--border);padding:12px 16px;align-items:center;justify-content:space-between}
-.mobile-menu-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:var(--rs);border:1px solid var(--border);background:var(--surface-2);cursor:pointer}
-.mobile-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.95);border-top:1px solid var(--border);display:none;padding:6px 0 calc(env(safe-area-inset-bottom)+6px);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.mnav-items{display:flex}
-.mnav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:0;cursor:pointer;padding:8px 4px;border-radius:0;transition:none;position:relative;user-select:none;min-height:56px;justify-content:center}
-.mnav-item:active .mnav-icon{transform:scale(.88)}
-.mnav-icon{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:10px;transition:all .18s cubic-bezier(.25,1,.5,1);position:relative}
-.mnav-icon svg{stroke:var(--text-3);transition:stroke .18s;width:24px;height:24px}
+.mobile-topbar{display:none;position:sticky;top:0;z-index:100;background:rgba(245,245,247,.92);border-bottom:1px solid rgba(0,0,0,.06);padding:13px 20px;align-items:center;justify-content:space-between;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+.mobile-menu-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:var(--surface-2);cursor:pointer;border:none}
+.mobile-nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.88);border-top:1px solid rgba(0,0,0,.07);display:none;padding:8px 12px calc(env(safe-area-inset-bottom)+8px);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
+.mnav-items{display:flex;align-items:center}
+.mnav-item{flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;padding:6px 4px;position:relative;user-select:none;min-height:52px;justify-content:center;-webkit-tap-highlight-color:transparent}
+.mnav-item:active .mnav-icon{transform:scale(.82)!important}
+.mnav-icon{width:46px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:12px;transition:all .2s cubic-bezier(.34,1.56,.64,1);position:relative}
+.mnav-icon svg{stroke:var(--text-3);transition:all .2s;width:22px;height:22px}
 .mnav-label{display:none}
-.mnav-item.active .mnav-icon{background:var(--blue);transform:scale(1.0);box-shadow:0 4px 12px rgba(29,107,243,.35)}
+.mnav-item.active .mnav-icon{background:var(--blue);transform:scaleX(1.1) scaleY(1.0);box-shadow:0 4px 14px rgba(29,107,243,.4)}
 .mnav-item.active .mnav-icon svg{stroke:#fff}
 /* Sidebar overlay on mobile */
 .sb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
@@ -137,7 +137,7 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
   .topbar{display:none}
   .mobile-topbar{display:flex}
   .mobile-nav{display:block}
-  .content-area{padding:16px 16px calc(env(safe-area-inset-bottom)+72px)}
+  .content-area{padding:20px 18px calc(env(safe-area-inset-bottom)+80px)}
   /* Login móvil: gradiente azul + card blanca */
   #screen-login{padding:0;align-items:stretch;background:linear-gradient(160deg,#1d6bf3 0%,#1452c8 55%,#0e3aad 100%)}
   .login-split{display:flex;flex-direction:column;min-height:100vh;grid-template-columns:1fr;border:none;border-radius:0;box-shadow:none;background:transparent}
@@ -232,9 +232,14 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
 @keyframes locPulse{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:0;transform:scale(1.25)}}
 
 /* Anim */
-
-.anim{animation:fadeUp .35s cubic-bezier(.25,1,.5,1) both}
-.d1{animation-delay:.04s}.d2{animation-delay:.08s}.d3{animation-delay:.12s}.d4{animation-delay:.16s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.anim{animation:fadeUp .4s cubic-bezier(.34,1.56,.64,1) both}
+.d1{animation-delay:.05s}.d2{animation-delay:.1s}.d3{animation-delay:.15s}.d4{animation-delay:.2s}
+/* Press feedback global */
+.pressable{transition:transform .12s,opacity .12s;-webkit-tap-highlight-color:transparent}
+.pressable:active{transform:scale(0.96);opacity:.88}
 
 /* ── Install banner ── */
 #install-banner{
@@ -374,25 +379,17 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
 
     <!-- Mobile topbar -->
     <header class="mobile-topbar">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div class="mobile-menu-btn" onclick="openSidebar()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </div>
-        <div style="display:flex;align-items:center;gap:7px">
-          <div style="width:22px;height:22px;background:var(--accent);border-radius:5px;display:flex;align-items:center;justify-content:center"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div>
-          <span style="font-size:13px;font-weight:700" id="mobile_topbar_title">Inicio</span>
-        </div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px">
-        <div id="loc_btn_mob" style="display:flex;align-items:center;gap:5px;padding:4px 9px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--rs)">
+      <span style="font-size:18px;font-weight:800;letter-spacing:-.03em" id="mobile_topbar_title">Inicio</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <div id="loc_btn_mob" style="display:flex;align-items:center;gap:5px;padding:5px 10px;background:var(--surface-2);border-radius:100px">
           <div id="loc_dot_mob" style="width:7px;height:7px;border-radius:50%;background:#a8a8a4;flex-shrink:0"></div>
-          <span id="loc_label_mob" style="font-size:11px;font-weight:600;color:var(--text-3)">Inactivo</span>
+          <span id="loc_label_mob" style="font-size:11px;font-weight:700;color:var(--text-3)">Inactivo</span>
         </div>
-        <div style="position:relative;cursor:pointer" onclick="showNotif()">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <div style="position:absolute;top:-2px;right:-2px;width:8px;height:8px;border-radius:50%;background:var(--red);border:1.5px solid var(--surface)"></div>
+        <div style="position:relative;cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--surface-2);border-radius:50%" onclick="showNotif()">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2" stroke-linecap="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <div style="position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--red);border:1.5px solid var(--canvas)"></div>
         </div>
-        <div class="sb-avatar" id="mob_avatar" style="width:28px;height:28px;font-size:11px">—</div>
+        <div class="sb-avatar" id="mob_avatar" style="width:34px;height:34px;font-size:12px;background:var(--blue)">—</div>
       </div>
     </header>
 
@@ -519,79 +516,66 @@ function initApp(){
 // ═══════════════════════════════════════════════════════════════
 function renderHome(){
   const h=new Date().getHours();
-  const gr=h<12?'Buenos dias,':h<19?'Buenas tardes,':'Buenas noches,';
+  const gr=h<12?'Buenos días,':h<19?'Buenas tardes,':'Buenas noches,';
   const todayOrds=ORDERS.filter(o=>!o.time.startsWith('Ayer')&&o.tec===CU.id);
   const done=todayOrds.filter(o=>o.status==='done').length;
   const active=todayOrds.filter(o=>o.status==='active').length;
   const pending=todayOrds.filter(o=>o.status==='pending').length;
-
-  const next = todayOrds.find(o=>o.status!=='done') || todayOrds[0];
-  const sp = next ? (SPECS[next.spec]||{color:'#888'}) : null;
-  const pctDone = todayOrds.length ? Math.round((done/todayOrds.length)*100) : 0;
+  const next=todayOrds.find(o=>o.status==='active')||todayOrds.find(o=>o.status==='pending')||todayOrds[0];
+  const sp=next?(SPECS[next.spec]||{color:'#888'}):null;
 
   document.getElementById('tab-home').innerHTML=`
-    <!-- Greeting header -->
-    <div class="anim" style="margin-bottom:20px">
-      <div style="font-size:11px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px">${gr}</div>
-      <div style="font-size:26px;font-weight:800;letter-spacing:-.04em;line-height:1.1">${CU.name.split(' ')[0]}</div>
+    <!-- Greeting -->
+    <div style="margin-bottom:22px">
+      <div style="font-size:13px;color:var(--text-3);font-weight:500;margin-bottom:2px">${gr}</div>
+      <div style="font-size:32px;font-weight:800;letter-spacing:-.05em;line-height:1">${CU.name.split(' ')[0]}</div>
     </div>
 
-    <!-- Próxima orden — hero card -->
-    ${next ? `
-    <div class="anim" style="margin-bottom:16px;border-radius:16px;overflow:hidden;box-shadow:0 6px 24px rgba(0,0,0,.1);cursor:pointer;border:1px solid var(--border)" onclick="openOrder('${next.id}')">
-      <!-- Color header -->
-      <div style="background:${sp.color};padding:16px 18px 14px;position:relative">
-        <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.7);margin-bottom:4px">Próxima orden</div>
-        <div style="font-size:17px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.2;margin-bottom:6px">${next.address}</div>
+    <!-- Status pills -->
+    <div style="display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch">
+      <div style="flex-shrink:0;background:${active>0?'var(--blue)':'var(--surface-2)'};color:${active>0?'#fff':'var(--text-3)'};border-radius:100px;padding:7px 16px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;transition:all .2s">
+        <span style="font-size:18px;font-weight:800;line-height:1">${active}</span>en curso
+      </div>
+      <div style="flex-shrink:0;background:${pending>0?'#fef3c7':'var(--surface-2)'};color:${pending>0?'#b45309':'var(--text-3)'};border-radius:100px;padding:7px 16px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;transition:all .2s">
+        <span style="font-size:18px;font-weight:800;line-height:1">${pending}</span>pendientes
+      </div>
+      <div style="flex-shrink:0;background:${done>0?'#dcfce7':'var(--surface-2)'};color:${done>0?'var(--green)':'var(--text-3)'};border-radius:100px;padding:7px 16px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:6px;transition:all .2s">
+        <span style="font-size:18px;font-weight:800;line-height:1">${done}</span>listas
+      </div>
+    </div>
+
+    <!-- Hero card -->
+    ${next?`
+    <div onclick="openOrder('${next.id}')" ontouchstart="this.style.transform='scale(0.97)';this.style.opacity='.92'" ontouchend="this.style.transform='';this.style.opacity='1'" style="background:${sp.color};border-radius:22px;padding:22px 20px;cursor:pointer;margin-bottom:16px;position:relative;overflow:hidden;transition:transform .15s,opacity .15s">
+      <div style="position:absolute;top:-24px;right:-24px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.09)"></div>
+      <div style="position:absolute;bottom:-28px;right:24px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.06)"></div>
+      <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.6);margin-bottom:8px">${next.status==='active'?'⚡ En curso ahora':'Próxima orden'}</div>
+      <div style="font-size:20px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.2;margin-bottom:14px">${next.address}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
         <div style="display:flex;align-items:center;gap:8px">
-          <span style="background:rgba(255,255,255,.2);border-radius:100px;padding:3px 10px;font-size:10px;font-weight:700;color:#fff">${next.spec}</span>
-          <span style="font-size:11px;color:rgba(255,255,255,.8)">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="2.5" stroke-linecap="round" style="display:inline;vertical-align:middle;margin-right:2px"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            ${next.time}
-          </span>
+          <span style="background:rgba(255,255,255,.22);border-radius:100px;padding:5px 13px;font-size:11px;font-weight:700;color:#fff">${next.spec}</span>
+          <span style="font-size:12px;color:rgba(255,255,255,.75);font-weight:500">${next.time}</span>
         </div>
+        <button onclick="event.stopPropagation();launchSOP('${next.id}')" style="background:rgba(255,255,255,.18);color:#fff;border:1.5px solid rgba(255,255,255,.3);border-radius:12px;padding:9px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)">SOP →</button>
       </div>
-      <!-- Body -->
-      <div style="background:var(--surface);padding:12px 18px;display:flex;align-items:center;justify-content:space-between">
-        <div style="font-size:12px;color:var(--text-2);line-height:1.4;flex:1;padding-right:12px">${next.problem?next.problem.substring(0,70)+(next.problem.length>70?'…':''):'Sin descripcion'}</div>
-        <button onclick="event.stopPropagation();launchSOP('${next.id}')" style="background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;flex-shrink:0">Abrir SOP →</button>
+    </div>`:`
+    <div style="background:var(--green-bg);border:1.5px solid #bbf7d0;border-radius:22px;padding:28px 20px;text-align:center;margin-bottom:16px">
+      <div style="width:48px;height:48px;background:#16a34a;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 12px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-    </div>` : `
-    <div class="card anim" style="margin-bottom:16px;text-align:center;padding:32px 20px;border-style:dashed">
-      <div style="font-size:28px;margin-bottom:8px">✓</div>
-      <div style="font-size:14px;font-weight:700;margin-bottom:4px">Sin ordenes pendientes</div>
-      <div style="font-size:12px;color:var(--text-2)">Todas las ordenes del dia estan completadas.</div>
+      <div style="font-size:17px;font-weight:800;color:var(--green);margin-bottom:4px">Todo al corriente</div>
+      <div style="font-size:13px;color:var(--green);opacity:.75">Sin órdenes pendientes hoy</div>
     </div>`}
 
-    <!-- Day progress -->
-    <div class="card anim d1" style="margin-bottom:16px;padding:14px 16px">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-size:12px;font-weight:700;color:var(--text-2)">Progreso del dia</div>
-        <div style="font-family:'DM Mono',monospace;font-size:12px;font-weight:700;color:var(--text)">${done}/${todayOrds.length} ordenes</div>
-      </div>
-      <div style="height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden;margin-bottom:10px">
-        <div style="height:100%;width:${pctDone}%;background:var(--green);border-radius:3px;transition:width .8s cubic-bezier(.25,1,.5,1)"></div>
-      </div>
-      <div style="display:flex;gap:16px">
-        <div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:800;letter-spacing:-.03em;color:var(--green)">${done}</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);font-weight:600">Completadas</div></div>
-        <div style="width:1px;background:var(--border)"></div>
-        <div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:800;letter-spacing:-.03em;color:var(--blue)">${active}</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);font-weight:600">En curso</div></div>
-        <div style="width:1px;background:var(--border)"></div>
-        <div style="text-align:center;flex:1"><div style="font-size:18px;font-weight:800;letter-spacing:-.03em;color:var(--amber)">${pending}</div><div style="font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--text-3);font-weight:600">Pendientes</div></div>
-      </div>
+    <!-- Resto del día -->
+    ${todayOrds.length>1?`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="font-size:14px;font-weight:700">Hoy</div>
+      <span onclick="switchTab('ordenes')" style="font-size:13px;color:var(--blue);font-weight:600;cursor:pointer">Ver todo</span>
     </div>
-
-    <!-- Semana KPIs -->
-    <div class="sh anim d2"><span class="sh-title">Esta semana</span></div>
-    <div class="grid-2 anim d2" style="margin-bottom:20px">
-      <div class="kpi"><div class="kpi-label">Ingresos</div><div class="kpi-val">$2,840</div><div class="kpi-sub kpi-up">↑ 18% vs anterior</div></div>
-      <div class="kpi"><div class="kpi-label">Servicios</div><div class="kpi-val">7</div><div class="kpi-sub kpi-neutral">4.8 ★ promedio</div></div>
-    </div>
-
-    <!-- All today's orders -->
-    ${todayOrds.length > 1 ? `
-    <div class="sh anim d3"><span class="sh-title">Agenda completa</span><span class="sh-action" onclick="switchTab('ordenes')">Ver todas →</span></div>
-    <div class="anim d3" style="display:flex;flex-direction:column;gap:8px">${todayOrds.map(o=>ordCardHTML(o)).join('')}</div>` : ''}`;
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${todayOrds.filter(o=>o.id!==next?.id).slice(0,3).map(o=>ordCardHTML(o)).join('')}
+    </div>`:''}`;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -603,35 +587,50 @@ function renderOrdenes(filter){
   if(filter==='pending') ords=ords.filter(o=>o.status==='pending');
   else if(filter==='active') ords=ords.filter(o=>o.status==='active');
   else if(filter==='done') ords=ords.filter(o=>o.status==='done');
-
+  const labels={all:'Todas',pending:'Pendiente',active:'En curso',done:'Listas'};
   document.getElementById('tab-ordenes').innerHTML=`
-    <div class="sh"><span class="sh-title">Mis Ordenes</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--text-3)">${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</span></div>
-    <div style="display:flex;gap:7px;margin-bottom:20px;flex-wrap:wrap">
-      ${['all','pending','active','done'].map(f=>`<button class="btn${filter===f?' btn-primary':' btn-ghost'}" onclick="renderOrdenes('${f}')" style="font-size:11px">${{all:'Todas',pending:'Pendientes',active:'En curso',done:'Completadas'}[f]}</button>`).join('')}
+    <div style="margin-bottom:18px">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.04em;margin-bottom:2px">Mis órdenes</div>
+      <div style="font-size:13px;color:var(--text-3)">${new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'})}</div>
+    </div>
+    <!-- Segmented control -->
+    <div style="background:#f0f0ee;border-radius:14px;padding:4px;display:flex;gap:3px;margin-bottom:20px">
+      ${['all','pending','active','done'].map(f=>`
+        <button onclick="renderOrdenes('${f}')" style="flex:1;padding:9px 4px;border-radius:11px;border:none;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .18s;background:${filter===f?'#fff':'transparent'};color:${filter===f?'var(--text)':'var(--text-3)'};box-shadow:${filter===f?'0 1px 6px rgba(0,0,0,.1)':'none'}">${labels[f]}</button>`).join('')}
     </div>
     ${ords.length
-      ? `<div style="display:flex;flex-direction:column;gap:8px">${ords.map(o=>ordCardHTML(o,true)).join('')}</div>`
-      : `<div class="empty"><div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M3 7h18l-1 13H4L3 7z"/></svg></div><div class="empty-title">Sin ordenes</div><div class="empty-sub">No hay ordenes con este filtro.</div></div>`}`;
+      ? `<div style="display:flex;flex-direction:column;gap:10px">${ords.map(o=>ordCardHTML(o,true)).join('')}</div>`
+      : `<div style="text-align:center;padding:60px 24px">
+          <div style="width:56px;height:56px;background:#f0f0ee;border-radius:18px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><rect x="9" y="2" width="6" height="4" rx="1"/><path d="M3 7h18l-1 13H4L3 7z"/></svg>
+          </div>
+          <div style="font-size:16px;font-weight:700;margin-bottom:6px">Sin órdenes</div>
+          <div style="font-size:14px;color:var(--text-3);line-height:1.5">No hay órdenes en esta categoría.</div>
+        </div>`}`;
 }
 
 function ordCardHTML(o, full){
-  const smap={done:'chip-done',active:'chip-active',pending:'chip-pending'};
-  const slbl={done:'Completada',active:'En curso',pending:'Pendiente'};
+  const sbg={done:'#f0fdf4',active:'#eff6ff',pending:'#fffbeb'};
+  const stc={done:'var(--green)',active:'var(--blue)',pending:'#b45309'};
+  const slbl={done:'Lista',active:'En curso',pending:'Pendiente'};
   const sp=SPECS[o.spec]||{color:'#888'};
-  return `<div class="ord-card" onclick="openOrder('${o.id}')" style="border-left:4px solid ${sp.color};border-radius:12px">
-    <div style="display:flex;align-items:center;gap:0">
-      <div style="flex:1;padding:14px 10px 14px 12px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-          <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:${sp.color}">${o.spec}</span>
-          <span class="chip ${smap[o.status]}">${slbl[o.status]}</span>
-        </div>
-        <div class="ord-address" style="font-size:15px;font-weight:700;margin-bottom:6px;line-height:1.25">${o.address}</div>
-        <div class="ord-meta">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span class="ord-meta-mono">${o.time}</span>
-          ${o.monto?`<span style="color:var(--green);font-weight:700;font-size:12px">$${o.monto}</span>`:''}
-          ${o.score?`<span class="norm-tag">★ ${o.score}</span>`:''}
-        </div>
+  return `<div onclick="openOrder('${o.id}')"
+    ontouchstart="this.style.transform='scale(0.97)';this.style.opacity='.9'"
+    ontouchend="this.style.transform='';this.style.opacity='1'"
+    onmousedown="this.style.transform='scale(0.97)'" onmouseup="this.style.transform=''"
+    style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 16px;cursor:pointer;transition:transform .12s,opacity .12s;position:relative;overflow:hidden">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${sp.color};border-radius:16px 0 0 16px"></div>
+    <div style="padding-left:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:7px">
+        <span style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.09em;color:${sp.color}">${o.spec}</span>
+        <span style="background:${sbg[o.status]||'var(--surface-2)'};color:${stc[o.status]||'var(--text-3)'};border-radius:100px;padding:3px 11px;font-size:11px;font-weight:700">${slbl[o.status]}</span>
+      </div>
+      <div style="font-size:15px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px;line-height:1.25;color:var(--text)">${o.address}</div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:var(--text-3)">
+        ${o.time?`<span>${o.time}</span>`:''}
+        ${o.monto?`<span style="color:var(--green);font-weight:700;font-size:13px">$${o.monto}</span>`:''}
+        ${o.score?`<span style="color:var(--amber);font-weight:700">★ ${o.score}</span>`:''}
+      </div>
         ${full&&o.problem?`<div class="ord-problem">${o.problem.substring(0,100)}${o.problem.length>100?'…':''}</div>`:''}
       </div>
       <div style="padding-right:14px;flex-shrink:0">
@@ -716,33 +715,40 @@ function openOrder(id){
 function renderSOP(){
   const actives=ORDERS.filter(o=>o.status!=='done'&&o.tec===CU.id);
   document.getElementById('tab-sop').innerHTML=`
-    <div class="sh"><span class="sh-title">Ordenes del dia — activas</span></div>
-    ${actives.length
-      ? actives.map(o=>{
-          const sp=SPECS[o.spec]||{color:'#888',sop:'hvac'};
-          return `<div class="card" style="margin-bottom:8px;cursor:pointer;transition:box-shadow .15s" onmouseenter="this.style.boxShadow='var(--shadow-md)'" onmouseleave="this.style.boxShadow='var(--shadow)'">
-            <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-              <div style="flex:1">
-                <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px"><div style="width:7px;height:7px;border-radius:50%;background:${sp.color}"></div><span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:${sp.color}">${o.spec}</span><span class="chip chip-active" style="margin-left:4px">${o.status==='active'?'En curso':'Pendiente'}</span></div>
-                <div style="font-size:14px;font-weight:600;margin-bottom:3px">${o.address}</div>
-                <div style="font-size:12px;color:var(--text-2);line-height:1.4">${o.problem}</div>
-                <div style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-3);margin-top:5px">${o.id} · ${o.time} hrs · <span style="color:var(--green)">$${o.monto}</span></div>
-              </div>
-              <button class="btn btn-primary btn-lg" onclick="launchSOP('${o.id}')">Abrir SOP →</button>
-            </div>
-          </div>`;}).join('')
-      : `<div class="empty"><div class="empty-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg></div><div class="empty-title">Sin ordenes activas</div><div class="empty-sub">Todas las ordenes del dia estan completadas.</div></div>`}
-
-    <div class="sh" style="margin-top:24px"><span class="sh-title">Lanzar SOP manual</span></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+    <div style="margin-bottom:20px">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.04em;margin-bottom:2px">SOP de campo</div>
+      <div style="font-size:13px;color:var(--text-3)">Protocolo estándar de operación</div>
+    </div>
+    ${actives.length ? `
+    <div style="margin-bottom:8px;font-size:13px;font-weight:700;color:var(--text)">Órdenes activas</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:24px">
+    ${actives.map(o=>{
+      const sp=SPECS[o.spec]||{color:'#888',sop:'hvac'};
+      return `<div ontouchstart="this.style.transform='scale(0.97)'" ontouchend="this.style.transform=''" style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;cursor:pointer;transition:transform .12s;display:flex;align-items:center;gap:14px">
+        <div style="width:46px;height:46px;border-radius:14px;background:${sp.color}22;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <div style="width:10px;height:10px;border-radius:50%;background:${sp.color}"></div>
+        </div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:${sp.color};margin-bottom:3px">${o.spec}</div>
+          <div style="font-size:14px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${o.address}</div>
+          <div style="font-size:12px;color:var(--text-3)">${o.time}${o.monto?' · $'+o.monto:''}</div>
+        </div>
+        <button onclick="launchSOP('${o.id}')" ontouchstart="event.stopPropagation()" style="background:var(--blue);color:#fff;border:none;border-radius:12px;padding:10px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;white-space:nowrap">Abrir →</button>
+      </div>`;}).join('')}
+    </div>` : ''}
+    <div style="margin-bottom:12px;font-size:13px;font-weight:700;color:var(--text)">Lanzar manual</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
       ${Object.entries(SPECS).map(([name,info])=>`
-        <div class="card-sm" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:border-color .15s" onclick="launchSOPManual('${info.sop}','${name}')" onmouseenter="this.style.borderColor='${info.color}60'" onmouseleave="this.style.borderColor=''">
-          <div style="display:flex;align-items:center;gap:8px">
-            <div style="width:7px;height:7px;border-radius:50%;background:${info.color};flex-shrink:0"></div>
-            <span style="font-size:13px;font-weight:500">${name}</span>
-            ${CU.specs.includes(name)?`<span class="norm-tag">Tu especialidad</span>`:''}
+        <div onclick="launchSOPManual('${info.sop}','${name}')"
+          ontouchstart="this.style.transform='scale(0.95)'" ontouchend="this.style.transform=''"
+          style="background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px 14px;cursor:pointer;transition:transform .12s;display:flex;flex-direction:column;gap:10px">
+          <div style="width:38px;height:38px;border-radius:12px;background:${info.color}18;display:flex;align-items:center;justify-content:center">
+            <div style="width:10px;height:10px;border-radius:50%;background:${info.color}"></div>
           </div>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-3)" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          <div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:1px">${name}</div>
+            ${CU.specs&&CU.specs.includes(name)?`<div style="font-size:10px;color:var(--blue);font-weight:600">Tu especialidad</div>`:'<div style="font-size:10px;color:var(--text-3)">Protocolo estándar</div>'}
+          </div>
         </div>`).join('')}
     </div>`;
 }
@@ -766,21 +772,20 @@ function renderIngresos(){
   const max=Math.max(...days.map(d=>d.v),1);
   const b=CU.banco||{};
   document.getElementById('tab-ingresos').innerHTML=`
+    <!-- Header -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:22px;font-weight:800;letter-spacing:-.04em;margin-bottom:2px">Ingresos</div>
+      <div style="font-size:13px;color:var(--text-3)">Junio 2026</div>
+    </div>
     <!-- Saldo disponible + Retirar -->
-    <div class="card anim" style="background:var(--accent);border-color:var(--accent);margin-bottom:12px">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-        <div style="flex:1">
-          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:6px">Saldo disponible para retiro</div>
-          <div style="font-size:36px;font-weight:800;letter-spacing:-.05em;font-family:'DM Mono',monospace;color:#fff;margin-bottom:5px">$${b.saldo_disponible?.toLocaleString()||'0'}</div>
-          <div style="display:flex;align-items:center;gap:8px;font-size:12px">
-            <span style="color:rgba(255,255,255,.4)">Total mes: $11,240</span>
-            <span style="color:rgba(255,255,255,.25)">·</span>
-            <span style="color:rgba(255,255,255,.4)">Retirado: $${b.retirado_mes?.toLocaleString()||'0'}</span>
-          </div>
-        </div>
-        <button onclick="openRetiro()" style="background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.25);border-radius:var(--rs);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;padding:10px 16px;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s" onmouseover="this.style.background='rgba(255,255,255,.22)'" onmouseout="this.style.background='rgba(255,255,255,.15)'">
-          Retirar fondos →
-        </button>
+    <div style="background:linear-gradient(135deg,#1d6bf3 0%,#0e3aad 100%);border-radius:22px;padding:22px 20px;margin-bottom:14px;position:relative;overflow:hidden">
+      <div style="position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
+      <div style="position:absolute;bottom:-30px;right:30px;width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,.05)"></div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.5);margin-bottom:8px">Saldo disponible</div>
+      <div style="font-size:40px;font-weight:800;letter-spacing:-.05em;font-family:'DM Mono',monospace;color:#fff;margin-bottom:14px">$${b.saldo_disponible?.toLocaleString()||'0'}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:12px;color:rgba(255,255,255,.5)">Total mes: <span style="color:rgba(255,255,255,.8);font-weight:600">$11,240</span></div>
+        <button onclick="openRetiro()" style="background:rgba(255,255,255,.18);border:1.5px solid rgba(255,255,255,.3);border-radius:12px;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;padding:10px 18px;cursor:pointer">Retirar →</button>
       </div>
     </div>
 
