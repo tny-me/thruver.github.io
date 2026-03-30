@@ -230,6 +230,29 @@ body{background:var(--canvas);color:var(--text);font-family:'DM Sans',sans-serif
 
 .anim{animation:fadeUp .35s cubic-bezier(.25,1,.5,1) both}
 .d1{animation-delay:.04s}.d2{animation-delay:.08s}.d3{animation-delay:.12s}.d4{animation-delay:.16s}
+
+/* ── Install banner ── */
+#install-banner{
+  display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;
+  padding:16px 20px 28px;
+  background:#fff;
+  border-top:1px solid var(--border);
+  box-shadow:0 -4px 24px rgba(0,0,0,.10);
+  border-radius:20px 20px 0 0;
+  animation:slideUp .3s cubic-bezier(.25,1,.5,1);
+}
+#install-banner.show{display:block}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.install-banner-row{display:flex;align-items:center;gap:14px}
+.install-banner-icon{width:52px;height:52px;background:#1a1a18;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.install-banner-text{flex:1}
+.install-banner-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:2px}
+.install-banner-sub{font-size:12px;color:var(--text-3);line-height:1.4}
+.install-banner-btn{display:block;width:100%;margin-top:14px;padding:13px;background:#1a1a18;color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:-.01em}
+.install-banner-dismiss{display:block;width:100%;margin-top:8px;padding:8px;background:none;border:none;color:var(--text-3);font-size:13px;cursor:pointer;font-family:inherit}
+.install-ios-steps{margin-top:12px;padding:12px 14px;background:var(--surface-2);border-radius:10px}
+.install-ios-step{display:flex;align-items:center;gap:10px;padding:5px 0;font-size:12px;color:var(--text-2)}
+.install-ios-step svg{flex-shrink:0}
 </style>
 </head>
 <body>
@@ -1223,6 +1246,85 @@ function showNotif(){
       console.log('[Thruver] Orden completada:', orderId);
     }).catch(function(e){ console.error('[Thruver] Error completando:', e); });
   };
+})();
+</script>
+
+<!-- ── PWA Install Banner ── -->
+<div id="install-banner">
+  <div class="install-banner-row">
+    <div class="install-banner-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+    </div>
+    <div class="install-banner-text">
+      <div class="install-banner-title">Instalar Thruver</div>
+      <div class="install-banner-sub" id="install-banner-sub">Agrega la app a tu pantalla de inicio</div>
+    </div>
+  </div>
+  <!-- Android: botón directo -->
+  <button class="install-banner-btn" id="install-btn" style="display:none">Instalar app</button>
+  <!-- iOS: instrucciones paso a paso -->
+  <div class="install-ios-steps" id="install-ios-steps" style="display:none">
+    <div class="install-ios-step">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+      Abre Safari si aún no estás en él
+    </div>
+    <div class="install-ios-step">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+      Toca el botón <strong style="color:var(--text)">Compartir</strong> (cuadro con flecha ↑)
+    </div>
+    <div class="install-ios-step">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Selecciona <strong style="color:var(--text)">Agregar a pantalla de inicio</strong>
+    </div>
+  </div>
+  <button class="install-banner-dismiss" id="install-dismiss">Ahora no</button>
+</div>
+
+<script>
+(function(){
+  // No mostrar si ya está instalada como PWA
+  if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) return;
+  // No mostrar si el usuario ya lo descartó
+  if (localStorage.getItem('install-dismissed')) return;
+
+  var banner = document.getElementById('install-banner');
+  var deferredPrompt = null;
+  var isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  var isAndroid = /android/i.test(navigator.userAgent);
+
+  function showBanner() {
+    banner.classList.add('show');
+  }
+
+  // Android: interceptar el evento nativo
+  window.addEventListener('beforeinstallprompt', function(e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('install-btn').style.display = 'block';
+    document.getElementById('install-banner-sub').textContent = 'Instala la app para acceso rápido y notificaciones';
+    showBanner();
+  });
+
+  document.getElementById('install-btn').addEventListener('click', function() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function() {
+      deferredPrompt = null;
+      banner.classList.remove('show');
+    });
+  });
+
+  // iOS: mostrar instrucciones manuales
+  if (isIOS) {
+    document.getElementById('install-ios-steps').style.display = 'block';
+    document.getElementById('install-banner-sub').textContent = 'Sigue estos pasos para instalar en tu iPhone';
+    setTimeout(showBanner, 2000);
+  }
+
+  document.getElementById('install-dismiss').addEventListener('click', function() {
+    banner.classList.remove('show');
+    localStorage.setItem('install-dismissed', '1');
+  });
 })();
 </script>
 
